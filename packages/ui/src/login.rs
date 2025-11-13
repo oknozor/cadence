@@ -4,7 +4,7 @@ use dioxus::prelude::*;
 
 #[component]
 pub fn Login(on_login: EventHandler<(String, String, String)>) -> Element {
-    let mut server_url = use_signal(|| String::new());
+    let mut server_url = use_signal(|| "https://music-api.hoohoot.org".to_string());
     let mut username = use_signal(|| String::new());
     let mut password = use_signal(|| String::new());
 
@@ -28,7 +28,7 @@ pub fn Login(on_login: EventHandler<(String, String, String)>) -> Element {
                     label { "Server URL:" }
                     input {
                         r#type: "text",
-                        placeholder: "https://demo.subsonic.org",
+                        placeholder: "https://music-api.hoohoot.org",
                         value: "{server_url}",
                         oninput: move |e| server_url.set(e.value().clone()),
                     }

@@ -1,93 +1,83 @@
 //! Library view for browsing music
 
-use dioxus::prelude::*;
-use ui::{Album, LibraryBrowser, Login, Player, SubsonicClient, Track};
+use std::future::Future;
+
+use dioxus::{CapturedError, prelude::*};
+
+use ui::{
+    Album, AlbumList, Player, PlayerTrack,
+    client::{AlbumListType, SUBSONIC_CLIENT},
+};
+
+use crate::Route;
 
 #[component]
 pub fn Library() -> Element {
-    let mut client = use_signal(|| None::<SubsonicClient>);
-    let albums = use_signal(|| Vec::<Album>::new());
-    let current_track = use_signal(|| None::<Track>);
-    let mut error_msg = use_signal(|| None::<String>);
+    let nav = navigator();
+    let current_track = use_signal(|| None::<PlayerTrack>);
 
-    let handle_login = move |(server_url, username, password): (String, String, String)| {
-        spawn(async move {
-            match SubsonicClient::new(&server_url, &username, &password) {
-                Ok(subsonic_client) => {
-                    match subsonic_client.ping().await {
-                        Ok(_) => {
-                            client.set(Some(subsonic_client));
-                            error_msg.set(None);
-                            // TODO: Fetch albums from the server
-                        }
-                        Err(e) => {
-                            error_msg.set(Some(format!("Connection failed: {:?}", e)));
-                        }
-                    }
-                }
-                Err(e) => {
-                    error_msg.set(Some(format!("Failed to create client: {:?}", e)));
-                }
-            }
-        });
+    let recently_released = use_resource(|| fetch_albums(AlbumListType::RecentlyReleased));
+    let recently_played = use_resource(|| fetch_albums(AlbumListType::RecentlyPlayed));
+
+    let recently_released = match recently_released() {
+        Some(Ok(recently_released)) => recently_released,
+        _ => {
+            return rsx!(p { "Failed to load recently released albums" });
+        }
     };
 
-    let handle_album_select = move |album_id: String| {
-        // TODO: Load album tracks and play first track
-        let _ = album_id; // Placeholder
-    };
-
-    let handle_play = move |_| {
-        // TODO: Implement play functionality
-    };
-
-    let handle_pause = move |_| {
-        // TODO: Implement pause functionality
-    };
-
-    let handle_next = move |_| {
-        // TODO: Implement next track functionality
-    };
-
-    let handle_previous = move |_| {
-        // TODO: Implement previous track functionality
+    let recently_played = match recently_played() {
+        Some(Ok(recently_played)) => recently_played,
+        _ => {
+            return rsx!(p { "Failed to load recently played albums" });
+        }
     };
 
     rsx! {
         div {
             class: "library-view",
+            div {
+                class: "music-content",
+                AlbumList {
+                    title: "Recently Played",
+                    albums: recently_played,
+                    on_album_select: move |album_id| {
+                        nav.push(Route::AlbumView { id: album_id });
+                    }
+                }
 
-            if let Some(err) = error_msg.read().as_ref() {
-                div {
-                    class: "error-message",
-                    "{err}"
+                AlbumList {
+                    title: "Recently Released",
+                    albums: recently_released,
+                    on_album_select: move |album_id| {
+                        nav.push(Route::AlbumView { id: album_id });
+                    }
                 }
             }
 
-            if client.read().is_none() {
-                Login {
-                    on_login: handle_login,
-                }
-            } else {
-                div {
-                    class: "music-content",
-                    LibraryBrowser {
-                        albums: albums.read().clone(),
-                        on_album_select: handle_album_select,
-                    }
-
-                    div {
-                        class: "player-section",
-                        Player {
-                            current_track: current_track.read().clone(),
-                            on_play: handle_play,
-                            on_pause: handle_pause,
-                            on_next: handle_next,
-                            on_previous: handle_previous,
-                        }
-                    }
+            div {
+                class: "player-section",
+                Player {
+                    current_track: current_track.read().clone(),
+                    on_play: || {},
+                    on_pause: || {},
+                    on_next: || {},
+                    on_previous: || {},
                 }
             }
         }
+    }
+}
+
+fn fetch_albums(
+    album_type: AlbumListType,
+) -> impl Future<Output = dioxus::Result<Vec<Album>, CapturedError>> {
+    async move {
+        let response = SUBSONIC_CLIENT()
+            .unwrap()
+            .list_album(album_type)
+            .await
+            .map_err(|err| CapturedError::from_display(format!("{err}")))?;
+        Ok(response)
     }
 }

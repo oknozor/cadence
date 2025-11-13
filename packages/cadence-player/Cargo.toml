@@ -1,0 +1,21 @@
+[package]
+name = "cadence-player"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+thiserror.workspace = true
+url.workspace = true
+tokio = { version = "1", features = ["rt"] }
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+howler-wasm.workspace = true
+web-time = "1"
+
+[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+rodio = { version =  "0.21.1", features = ["wasm-bindgen"] }
+stream-download = { version = "0.22.8", features = ["reqwest-rustls"] }
+
+[[bin]]
+name = "player"
+path = "src/bin.rs"

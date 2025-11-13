@@ -1,5 +1,4 @@
 //! This crate contains all shared UI for the workspace.
-
 mod hero;
 pub use hero::Hero;
 
@@ -13,7 +12,16 @@ mod login;
 pub use login::Login;
 
 mod player;
-pub use player::{Player, Track};
+pub use player::{Player, Track as PlayerTrack};
 
-mod library;
-pub use library::{Album, LibraryBrowser};
+mod album_list;
+pub use album_list::AlbumList;
+
+mod album_card;
+pub use album_card::{Album, AlbumCard};
+
+mod album;
+pub use album::AlbumView;
+
+mod track;
+pub use track::Track;

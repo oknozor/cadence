@@ -1,0 +1,10 @@
+{
+  "name": "cadence",
+  "version": "1.0.0",
+  "description": "howler bindings for Cadence",
+  "author": "Paul Delafosse <paul.delafosse@protonmail.com>",
+  "license": "GPL-3.0-only",
+  "dependencies": {
+    "howler": "^2.2.4"
+  }
+}
