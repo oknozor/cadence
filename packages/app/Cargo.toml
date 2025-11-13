@@ -1,12 +1,16 @@
 [package]
-name = "desktop"
+name = "web"
 version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+cadence-player.workspace = true
+tokio = { workspace = true, features = ["sync"] }
 dioxus = { workspace = true, features = ["router"] }
 ui = { workspace = true }
 
 [features]
-default = ["desktop"]
+default = ["web"]
+web = ["dioxus/web"]
 desktop = ["dioxus/desktop"]
+mobile = ["dioxus/mobile"]

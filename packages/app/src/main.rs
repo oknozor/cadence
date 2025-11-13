@@ -71,10 +71,6 @@ fn App() -> Element {
             type: "module",
             src: asset!("/assets/howler.min.js", JsAssetOptions::new().with_minify(true)),
         }
-        document::Script {
-            type: "module",
-            src: asset!("/assets/howler-import.js", JsAssetOptions::new().with_minify(true)),
-        }
         if logged_in() {
             Router::<Route> { }
         } else {
