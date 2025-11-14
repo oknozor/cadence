@@ -20,8 +20,8 @@ impl CadencePlayer {
         base_url: impl ToString,
         username: impl ToString,
         password: impl ToString,
-        tx: broadcast::Sender<u64>,
         rx: Arc<Mutex<mpsc::Receiver<PlayerCommand>>>,
+        tx: broadcast::Sender<u64>,
     ) -> Result<Self, MusicPlayerError> {
         howler_wasm::init();
 

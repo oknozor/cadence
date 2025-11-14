@@ -13,6 +13,7 @@ async-trait.workspace = true
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 howler-wasm.workspace = true
 web-time = "1"
+wasmtimer = "0.4.3"
 
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
 rodio = { version =  "0.21.1", features = ["wasm-bindgen"] }
