@@ -1,7 +1,7 @@
 use cadence_player::CadencePlayer;
 use dioxus::prelude::*;
 use std::sync::Arc;
-use tokio::sync::Mutex;
+use tokio::sync::{Mutex, broadcast};
 use ui::{
     AlbumView, IsPlaying, Login, Navbar, Player, Queue, SubsonicClient, client::SUBSONIC_CLIENT,
 };
@@ -30,7 +30,9 @@ fn main() {
 #[component]
 fn App() -> Element {
     let (tx, rx) = tokio::sync::mpsc::channel(10);
+    let (position_tx, _) = tokio::sync::broadcast::channel(10);
     let rx = use_signal(|| Arc::new(Mutex::new(rx)));
+    let _: broadcast::Sender<u64> = use_context_provider(|| position_tx);
     let _ = use_context_provider(|| tx);
     let _ = use_context_provider(Queue::default);
     let _ = use_context_provider(IsPlaying::default);
@@ -50,6 +52,7 @@ fn App() -> Element {
                                 &username,
                                 &password,
                                 rx.read().clone(),
+                                consume_context(),
                             )
                             .expect("Player start failed");
                             player.run().await.expect("Player run error");

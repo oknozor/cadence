@@ -15,6 +15,7 @@ impl Queue {
             self.current_track.set(Some(idx));
         }
     }
+
     pub fn get_current(&self) -> Option<Song> {
         let idx = *self.current_track.read();
         if let Some(idx) = idx {
@@ -52,6 +53,7 @@ impl Queue {
 
         self.get_current()
     }
+
     pub fn append_and_set_current(&mut self, song: Song) {
         self.queue.write().push(song);
         self.current_track.set(Some(self.queue.len() - 1));

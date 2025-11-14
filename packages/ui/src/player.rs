@@ -1,12 +1,25 @@
 use crate::components::progress::Progress;
+use crate::progress::ProgressIndicator;
 use crate::{IsPlaying, Queue};
 use cadence_player::PlayerCommand;
 use dioxus::prelude::*;
+use tokio::sync::broadcast;
 use tokio::sync::mpsc::Sender;
 
 #[component]
 pub fn Player() -> Element {
     let mut is_playing: IsPlaying = use_context();
+    let position_tx: broadcast::Sender<u64> = use_context();
+    let mut position = use_signal(|| None::<f64>);
+
+    use_effect(move || {
+        let mut tx = position_tx.subscribe();
+        spawn(async move {
+            while let Ok(new_progress) = tx.recv().await {
+                position.set(Some(new_progress as f64));
+            }
+        });
+    });
 
     rsx! {
         div {
@@ -72,9 +85,9 @@ pub fn Player() -> Element {
                     }
 
                     Progress {
-                        value: 30.0,
-                        max: 100.0,
-                        div {}
+                        value: position,
+                        max: track.duration.unwrap_or_default() as f64,
+                        ProgressIndicator {}
                     }
                 }
 

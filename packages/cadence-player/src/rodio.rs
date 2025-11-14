@@ -6,7 +6,11 @@ use stream_download::{
     source::DecodeError,
     storage::{adaptive::AdaptiveStorageProvider, temp::TempStorageProvider},
 };
-use tokio::sync::{Mutex, mpsc};
+use tokio::sync::{
+    Mutex,
+    broadcast::Sender,
+    mpsc::{self},
+};
 
 pub struct CadencePlayer {
     sink: Sink,
@@ -14,6 +18,7 @@ pub struct CadencePlayer {
     username: String,
     password: String,
     base_url: String,
+    pub(super) tx: Sender<u64>,
     _output_stream: OutputStream,
 }
 
@@ -23,6 +28,7 @@ impl CadencePlayer {
         username: impl ToString,
         password: impl ToString,
         rx: Arc<Mutex<mpsc::Receiver<PlayerCommand>>>,
+        tx: Sender<u64>,
     ) -> Result<Self, MusicPlayerError> {
         let _output_stream = OutputStreamBuilder::open_default_stream()?;
         let sink = Sink::connect_new(_output_stream.mixer());
@@ -34,6 +40,7 @@ impl CadencePlayer {
             base_url: base_url.to_string(),
             rx,
             _output_stream,
+            tx,
         })
     }
 
@@ -87,6 +94,10 @@ impl CadencePlayer {
         let source = Decoder::new(reader)?;
         self.sink.append(source);
         Ok(())
+    }
+
+    pub(super) fn get_pos(&self) -> Option<u64> {
+        Some(self.sink.get_pos().as_secs())
     }
 }
 

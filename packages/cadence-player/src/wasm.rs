@@ -3,11 +3,12 @@ use howler_wasm::JsHowl;
 use std::cell::RefCell;
 use std::collections::VecDeque;
 use std::sync::Arc;
-use tokio::sync::{Mutex, mpsc};
+use tokio::sync::{Mutex, broadcast, mpsc};
 use web_time::Duration;
 
 pub struct CadencePlayer {
     pub(super) rx: Arc<Mutex<mpsc::Receiver<PlayerCommand>>>,
+    pub(super) tx: broadcast::Sender<u64>,
     username: String,
     password: String,
     base_url: String,
@@ -19,6 +20,7 @@ impl CadencePlayer {
         base_url: impl ToString,
         username: impl ToString,
         password: impl ToString,
+        tx: broadcast::Sender<u64>,
         rx: Arc<Mutex<mpsc::Receiver<PlayerCommand>>>,
     ) -> Result<Self, MusicPlayerError> {
         howler_wasm::init();
@@ -28,6 +30,7 @@ impl CadencePlayer {
             password: password.to_string(),
             base_url: base_url.to_string(),
             queue: RefCell::new(VecDeque::new()),
+            tx,
             rx,
         })
     }
@@ -96,6 +99,11 @@ impl CadencePlayer {
         }
 
         Ok(())
+    }
+
+    pub(super) fn get_pos(&self) -> Option<u64> {
+        let queue = self.queue.borrow_mut();
+        queue.back().map(|howl| howl.position())
     }
 }
 

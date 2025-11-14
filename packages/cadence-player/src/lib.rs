@@ -23,24 +23,32 @@ pub enum PlayerCommand {
 impl CadencePlayer {
     pub async fn run(&mut self) -> Result<(), MusicPlayerError> {
         let mut rx = self.rx.lock().await;
-        while let Some(command) = rx.recv().await {
-            match command {
-                PlayerCommand::Play => self.play()?,
-                PlayerCommand::Queue(id) => self.queue(&id).await?,
-                PlayerCommand::QueueNow(id) => {
-                    if !self.is_empty() {
-                        self.queue(&id).await?;
-                        self.next()?
-                    } else {
-                        self.queue(&id).await?;
+
+        loop {
+            tokio::select! {
+                _ = tokio::time::sleep(Duration::from_secs(1)) => {
+                    if let Some(pos) = self.get_pos() {
+                        self.tx.send(pos).unwrap();
+                    }
+                },
+                Some(command) = rx.recv() => {
+                    match command {
+                        PlayerCommand::Play => self.play()?,
+                        PlayerCommand::Queue(id) => self.queue(&id).await?,
+                        PlayerCommand::QueueNow(id) => {
+                            if !self.is_empty() {
+                                self.queue(&id).await?;
+                                self.next()?
+                            } else {
+                                self.queue(&id).await?;
+                            }
+                        }
+                        PlayerCommand::Pause => self.pause()?,
+                        PlayerCommand::Seek(duration) => self.seek(duration)?,
                     }
                 }
-                PlayerCommand::Pause => self.pause()?,
-                PlayerCommand::Seek(duration) => self.seek(duration)?,
             }
         }
-
-        Ok(())
     }
 }
 

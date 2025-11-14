@@ -33,7 +33,7 @@ extern "C" {
     fn stop(this: &Howl) -> Howl;
 
     #[wasm_bindgen(method)]
-    fn seek(this: &Howl, seek: u64) -> JsValue;
+    fn seek(this: &Howl, seek: Option<u64>) -> JsValue;
 
     #[wasm_bindgen(method, js_name = loop_)]
     fn set_loop(this: &Howl, l: bool) -> Howl;
@@ -93,7 +93,12 @@ impl JsHowl {
 
     #[wasm_bindgen]
     pub fn seek(&self, seconds: u64) {
-        self.0.seek(seconds);
+        self.0.seek(Some(seconds));
+    }
+
+    #[wasm_bindgen]
+    pub fn position(&self) -> u64 {
+        self.0.seek(None).as_f64().unwrap() as u64
     }
 
     #[wasm_bindgen]
