@@ -14,6 +14,8 @@ pub use rodio::{CadencePlayer, MusicPlayerError};
 
 pub enum PlayerCommand {
     Play,
+    Next,
+    Previous,
     Queue(String),
     Pause,
     Seek(Duration),
@@ -28,6 +30,8 @@ impl CadencePlayer {
                 PlayerCommand::Queue(id) => self.queue(&id).await?,
                 PlayerCommand::Pause => self.pause()?,
                 PlayerCommand::Seek(duration) => self.seek(duration)?,
+                PlayerCommand::Next => todo!(),
+                PlayerCommand::Previous => todo!(),
             }
         }
 

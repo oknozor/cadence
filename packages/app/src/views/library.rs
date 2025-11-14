@@ -5,7 +5,7 @@ use std::future::Future;
 use dioxus::{CapturedError, prelude::*};
 
 use ui::{
-    Album, AlbumList, Player, PlayerTrack,
+    Album, AlbumList,
     client::{AlbumListType, SUBSONIC_CLIENT},
 };
 
@@ -14,7 +14,6 @@ use crate::Route;
 #[component]
 pub fn Library() -> Element {
     let nav = navigator();
-    let current_track = use_signal(|| None::<PlayerTrack>);
 
     let recently_released = use_resource(|| fetch_albums(AlbumListType::RecentlyReleased));
     let recently_played = use_resource(|| fetch_albums(AlbumListType::RecentlyPlayed));
@@ -52,17 +51,6 @@ pub fn Library() -> Element {
                     on_album_select: move |album_id| {
                         nav.push(Route::AlbumView { id: album_id });
                     }
-                }
-            }
-
-            div {
-                class: "player-section",
-                Player {
-                    current_track: current_track.read().clone(),
-                    on_play: || {},
-                    on_pause: || {},
-                    on_next: || {},
-                    on_previous: || {},
                 }
             }
         }

@@ -8,7 +8,7 @@ mod login;
 pub use login::Login;
 
 mod player;
-pub use player::{Player, Track as PlayerTrack};
+pub use player::Player;
 
 mod album_list;
 pub use album_list::AlbumList;
@@ -21,3 +21,6 @@ pub use album::AlbumView;
 
 mod track;
 pub use track::Track;
+
+mod context;
+pub use context::{CurrentTrack, IsPlaying, Queue};

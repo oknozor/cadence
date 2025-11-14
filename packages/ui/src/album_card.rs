@@ -14,15 +14,20 @@ pub struct Album {
 pub struct Song {
     pub id: String,
     pub title: String,
+    pub artist: String,
+    pub album: String,
     pub duration: Option<u32>,
 }
 
 impl From<opensubsonic_cli::types::AlbumId3WithSongs> for Album {
     fn from(response: opensubsonic_cli::types::AlbumId3WithSongs) -> Self {
+        let artist = response.artist.unwrap_or_default();
+        let album = response.name;
+
         Self {
             id: response.id,
-            name: response.name,
-            artist: response.artist.unwrap_or_default(),
+            name: album.clone(),
+            artist: artist.clone(),
             year: response.year.map(|y| y as u16),
             cover_art: response.cover_art,
             songs: response
@@ -32,6 +37,8 @@ impl From<opensubsonic_cli::types::AlbumId3WithSongs> for Album {
                     id: song.id,
                     title: song.title,
                     duration: song.duration.map(|d| d as u32),
+                    artist: artist.clone(),
+                    album: album.clone(),
                 })
                 .collect(),
         }
@@ -40,10 +47,13 @@ impl From<opensubsonic_cli::types::AlbumId3WithSongs> for Album {
 
 impl From<opensubsonic_cli::types::AlbumId3> for Album {
     fn from(response: opensubsonic_cli::types::AlbumId3) -> Self {
+        let artist = response.artist.unwrap_or_default();
+        let album = response.name;
+
         Self {
             id: response.id,
-            name: response.name,
-            artist: response.artist.unwrap_or_default(),
+            name: album.clone(),
+            artist: artist.clone(),
             year: response.year.map(|y| y as u16),
             cover_art: response.cover_art,
             songs: response
@@ -53,6 +63,8 @@ impl From<opensubsonic_cli::types::AlbumId3> for Album {
                     id: song.id,
                     title: song.title,
                     duration: song.duration.map(|d| d as u32),
+                    artist: artist.clone(),
+                    album: album.clone(),
                 })
                 .collect(),
         }

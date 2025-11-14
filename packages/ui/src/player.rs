@@ -1,31 +1,19 @@
-//! Music player component
-
+use crate::{CurrentTrack, IsPlaying};
+use cadence_player::PlayerCommand;
 use dioxus::prelude::*;
-
-#[derive(Clone, PartialEq)]
-pub struct Track {
-    pub id: String,
-    pub title: String,
-    pub artist: String,
-    pub album: String,
-    pub duration: Option<u32>,
-}
+use tokio::sync::mpsc::Sender;
 
 #[component]
-pub fn Player(
-    current_track: Option<Track>,
-    on_play: EventHandler<()>,
-    on_pause: EventHandler<()>,
-    on_next: EventHandler<()>,
-    on_previous: EventHandler<()>,
-) -> Element {
-    let mut is_playing = use_signal(|| false);
+pub fn Player() -> Element {
+    let mut is_playing: IsPlaying = use_context();
+    let sender: Sender<PlayerCommand> = use_context();
+    let current_track: CurrentTrack = use_context();
 
     rsx! {
         div {
             class: "player-container",
 
-            if let Some(track) = current_track {
+            if let Some(track) = current_track.track.read().as_ref() {
                 div {
                     class: "track-info",
                     h3 { "{track.title}" }
@@ -35,21 +23,24 @@ pub fn Player(
                 div {
                     class: "player-controls",
                     button {
-                        onclick: move |_| on_previous.call(()),
+                        onclick: move |_| {},
                         "⏮ Previous"
                     }
 
                     button {
                         onclick: move |_| {
-                            if *is_playing.read() {
-                                on_pause.call(());
-                                is_playing.set(false);
-                            } else {
-                                on_play.call(());
-                                is_playing.set(true);
-                            }
-                        },
-                        if *is_playing.read() {
+                                let sender = sender.clone();
+                                if is_playing.is_playing() {
+                                    let on_play_sender = sender.clone();
+                                    spawn(async move { on_play_sender.send(PlayerCommand::Pause).await.unwrap() });
+                                    is_playing.toggle();
+                                } else {
+                                    let on_pause_sender = sender.clone();
+                                    spawn(async move { on_pause_sender.send(PlayerCommand::Play).await.unwrap() });
+                                    is_playing.toggle();
+                                }
+                            },
+                        if is_playing.is_playing() {
                             "⏸ Pause"
                         } else {
                             "▶ Play"
@@ -57,7 +48,7 @@ pub fn Player(
                     }
 
                     button {
-                        onclick: move |_| on_next.call(()),
+                        onclick: move |_| {},
                         "Next ⏭"
                     }
                 }

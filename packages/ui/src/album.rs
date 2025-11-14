@@ -33,7 +33,7 @@ pub fn AlbumView(id: String) -> Element {
                     div {
                         class: "track-list",
                         for track in album.songs {
-                           crate::track::Track { title: track.title.clone(), track_id: track.id.clone() }
+                           crate::track::Track { track: track }
                         }
                     }
                 },

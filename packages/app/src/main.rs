@@ -3,7 +3,10 @@ use std::sync::{Arc, Mutex};
 use cadence_player::CadencePlayer;
 use dioxus::prelude::*;
 
-use ui::{AlbumView, Login, Navbar, SubsonicClient, client::SUBSONIC_CLIENT};
+use ui::{
+    AlbumView, CurrentTrack, IsPlaying, Login, Navbar, Player, Queue, SubsonicClient,
+    client::SUBSONIC_CLIENT,
+};
 use views::Library;
 
 mod views;
@@ -29,7 +32,10 @@ fn main() {
 fn App() -> Element {
     let (tx, rx) = tokio::sync::mpsc::channel(10);
     let rx = use_signal(|| Arc::new(Mutex::new(rx)));
-    let _tx = use_context_provider(|| tx);
+    let _ = use_context_provider(|| tx);
+    let _ = use_context_provider(|| Queue::default());
+    let _ = use_context_provider(|| CurrentTrack::default());
+    let _ = use_context_provider(|| IsPlaying::default());
     let logged_in = use_signal(|| false);
     let error_msg = use_signal(|| None::<String>);
 
@@ -73,6 +79,7 @@ fn App() -> Element {
         }
         if logged_in() {
             Router::<Route> { }
+            Player {}
         } else {
             Login {
                 on_login: handle_login,

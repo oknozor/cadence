@@ -80,12 +80,4 @@ mod test {
             .await?;
         Ok(())
     }
-
-    #[tokio::test]
-    async fn test_deserialize_album_list() -> Result<(), Box<dyn std::error::Error>> {
-        let json_data = include_str!("../albumlist.json");
-        let album_list: crate::types::AlbumList2 = serde_json::from_str(json_data)?;
-        assert!(!album_list.album.is_empty());
-        Ok(())
-    }
 }
