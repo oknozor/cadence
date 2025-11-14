@@ -1,4 +1,5 @@
-use crate::{CurrentTrack, IsPlaying};
+use crate::components::progress::Progress;
+use crate::{IsPlaying, Queue};
 use cadence_player::PlayerCommand;
 use dioxus::prelude::*;
 use tokio::sync::mpsc::Sender;
@@ -6,14 +7,12 @@ use tokio::sync::mpsc::Sender;
 #[component]
 pub fn Player() -> Element {
     let mut is_playing: IsPlaying = use_context();
-    let sender: Sender<PlayerCommand> = use_context();
-    let current_track: CurrentTrack = use_context();
 
     rsx! {
         div {
             class: "player-container",
 
-            if let Some(track) = current_track.track.read().as_ref() {
+            if let Some(track) = consume_context::<Queue>().get_current() {
                 div {
                     class: "track-info",
                     h3 { "{track.title}" }
@@ -23,20 +22,30 @@ pub fn Player() -> Element {
                 div {
                     class: "player-controls",
                     button {
-                        onclick: move |_| {},
+                        onclick: move |_| {
+                            let onprev_sender:Sender<PlayerCommand> = consume_context();
+                            let mut queue: Queue = consume_context();
+                            let song = queue.previous();
+
+                            if let Some(song) = song {
+                                spawn(async move {
+                                    onprev_sender.send(PlayerCommand::QueueNow(song.id.clone())).await.unwrap()
+                                });
+                            }
+
+                        },
                         "⏮ Previous"
                     }
 
                     button {
                         onclick: move |_| {
-                                let sender = sender.clone();
+                                let sender: Sender<PlayerCommand> = consume_context();
                                 if is_playing.is_playing() {
-                                    let on_play_sender = sender.clone();
-                                    spawn(async move { on_play_sender.send(PlayerCommand::Pause).await.unwrap() });
+                                    spawn(async move { sender.send(PlayerCommand::Pause).await.unwrap() });
                                     is_playing.toggle();
                                 } else {
-                                    let on_pause_sender = sender.clone();
-                                    spawn(async move { on_pause_sender.send(PlayerCommand::Play).await.unwrap() });
+                                    let sender = sender.clone();
+                                    spawn(async move { sender.send(PlayerCommand::Play).await.unwrap() });
                                     is_playing.toggle();
                                 }
                             },
@@ -48,10 +57,27 @@ pub fn Player() -> Element {
                     }
 
                     button {
-                        onclick: move |_| {},
+                        onclick: move |_| {
+                            let onnext_sender:Sender<PlayerCommand> = consume_context();
+                            let mut queue: Queue = consume_context();
+                            let song = queue.skip();
+
+                            if let Some(song) = song {
+                                spawn(async move {
+                                    onnext_sender.send(PlayerCommand::QueueNow(song.id.clone())).await.unwrap()
+                                });
+                            }
+                        },
                         "Next ⏭"
                     }
+
+                    Progress {
+                        value: 30.0,
+                        max: 100.0,
+                        div {}
+                    }
                 }
+
             } else {
                 div {
                     class: "no-track",

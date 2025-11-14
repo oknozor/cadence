@@ -1,8 +1,9 @@
 use crate::{PlayerCommand, stream_url};
 use howler_wasm::JsHowl;
 use std::cell::RefCell;
-use std::sync::{Arc, Mutex};
-use tokio::sync::mpsc;
+use std::collections::VecDeque;
+use std::sync::Arc;
+use tokio::sync::{Mutex, mpsc};
 use web_time::Duration;
 
 pub struct CadencePlayer {
@@ -10,7 +11,7 @@ pub struct CadencePlayer {
     username: String,
     password: String,
     base_url: String,
-    howler: RefCell<Option<JsHowl>>,
+    queue: RefCell<VecDeque<JsHowl>>,
 }
 
 impl CadencePlayer {
@@ -21,18 +22,20 @@ impl CadencePlayer {
         rx: Arc<Mutex<mpsc::Receiver<PlayerCommand>>>,
     ) -> Result<Self, MusicPlayerError> {
         howler_wasm::init();
-        let howler = RefCell::new(None);
 
         Ok(CadencePlayer {
             username: username.to_string(),
             password: password.to_string(),
             base_url: base_url.to_string(),
-            howler,
+            queue: RefCell::new(VecDeque::new()),
             rx,
         })
     }
 
     pub(super) fn play(&self) -> Result<(), MusicPlayerError> {
+        if let Some(howl) = self.queue.borrow_mut().back() {
+            howl.play();
+        }
         Ok(())
     }
 
@@ -42,20 +45,20 @@ impl CadencePlayer {
         let base_url = &self.base_url;
         let url = stream_url(base_url, username, password, id);
 
-        if let Some(howl) = self.howler.take() {
-            howl.unload();
+        let howl = JsHowl::new(url);
+        if self.is_empty() {
+            howl.play();
         }
 
-        let howl = JsHowl::new(url);
-        howl.play();
-        self.howler.borrow_mut().replace(howl);
-
+        self.queue.borrow_mut().push_back(howl);
         Ok(())
     }
 
     pub(super) fn pause(&self) -> Result<(), MusicPlayerError> {
-        let borrow_mut = self.howler.borrow_mut();
-        if let Some(howl) = borrow_mut.as_ref() {
+        let queue = self.queue.borrow_mut();
+        let current = queue.back();
+
+        if let Some(howl) = current.as_ref() {
             howl.pause();
         }
 
@@ -63,10 +66,35 @@ impl CadencePlayer {
     }
 
     pub(super) fn seek(&self, duration: Duration) -> Result<(), MusicPlayerError> {
-        let borrow_mut = self.howler.borrow_mut();
-        if let Some(howl) = borrow_mut.as_ref() {
+        let mut queue = self.queue.borrow_mut();
+        let current = queue.back();
+
+        if let Some(howl) = current.as_ref() {
             howl.seek(duration.as_secs());
         }
+        Ok(())
+    }
+
+    pub(super) fn is_empty(&self) -> bool {
+        self.queue.borrow().is_empty()
+    }
+
+    pub(super) fn next(&self) -> Result<(), MusicPlayerError> {
+        if self.is_empty() {
+            return Ok(());
+        }
+
+        let mut queue = self.queue.borrow_mut();
+
+        if let Some(howl) = queue.pop_front() {
+            howl.stop();
+            howl.unload();
+        }
+
+        if let Some(howl) = queue.back() {
+            howl.play();
+        }
+
         Ok(())
     }
 }

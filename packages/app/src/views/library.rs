@@ -1,7 +1,3 @@
-//! Library view for browsing music
-
-use std::future::Future;
-
 use dioxus::{CapturedError, prelude::*};
 
 use ui::{
@@ -57,15 +53,11 @@ pub fn Library() -> Element {
     }
 }
 
-fn fetch_albums(
-    album_type: AlbumListType,
-) -> impl Future<Output = dioxus::Result<Vec<Album>, CapturedError>> {
-    async move {
-        let response = SUBSONIC_CLIENT()
-            .unwrap()
-            .list_album(album_type)
-            .await
-            .map_err(|err| CapturedError::from_display(format!("{err}")))?;
-        Ok(response)
-    }
+async fn fetch_albums(album_type: AlbumListType) -> dioxus::Result<Vec<Album>, CapturedError> {
+    let response = SUBSONIC_CLIENT()
+        .unwrap()
+        .list_album(album_type)
+        .await
+        .map_err(|err| CapturedError::from_display(format!("{err}")))?;
+    Ok(response)
 }

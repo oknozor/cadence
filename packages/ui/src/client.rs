@@ -1,10 +1,10 @@
 use dioxus::signals::GlobalSignal;
 use opensubsonic_cli::{
+    Client,
     types::{
         GetAlbumList2ResponseSubsonicResponse, GetAlbumResponseSubsonicResponse,
         SubsonicFailureResponse,
     },
-    Client,
 };
 
 use crate::album_card::Album;
@@ -49,7 +49,7 @@ impl SubsonicClient {
         opensubsonic_cli::PASSWORD.get_or_init(|| password.to_string());
 
         Self {
-            client: Client::new(&server_url),
+            client: Client::new(server_url),
         }
     }
 

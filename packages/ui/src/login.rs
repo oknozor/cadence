@@ -5,8 +5,8 @@ use dioxus::prelude::*;
 #[component]
 pub fn Login(on_login: EventHandler<(String, String, String)>) -> Element {
     let mut server_url = use_signal(|| "https://music-api.hoohoot.org".to_string());
-    let mut username = use_signal(|| String::new());
-    let mut password = use_signal(|| String::new());
+    let mut username = use_signal(String::new);
+    let mut password = use_signal(String::new);
 
     rsx! {
         div {

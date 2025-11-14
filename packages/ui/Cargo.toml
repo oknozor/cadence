@@ -14,3 +14,4 @@ reqwest = { workspace = true }
 # [target.'cfg(target_arch = "wasm32")'.dependencies]
 web-sys.workspace = true
 wasm-bindgen-futures.workspace = true
+dioxus-primitives = { git = "https://github.com/DioxusLabs/components", version = "0.0.1", default-features = false }

@@ -23,4 +23,7 @@ mod track;
 pub use track::Track;
 
 mod context;
-pub use context::{CurrentTrack, IsPlaying, Queue};
+pub use context::{IsPlaying, Queue};
+
+mod components;
+pub use components::*;

@@ -1,11 +1,9 @@
-use std::sync::{Arc, Mutex};
-
 use cadence_player::CadencePlayer;
 use dioxus::prelude::*;
-
+use std::sync::Arc;
+use tokio::sync::Mutex;
 use ui::{
-    AlbumView, CurrentTrack, IsPlaying, Login, Navbar, Player, Queue, SubsonicClient,
-    client::SUBSONIC_CLIENT,
+    AlbumView, IsPlaying, Login, Navbar, Player, Queue, SubsonicClient, client::SUBSONIC_CLIENT,
 };
 use views::Library;
 
@@ -23,6 +21,7 @@ enum Route {
 
 const FAVICON: Asset = asset!("/assets/favicon.ico");
 const MAIN_CSS: Asset = asset!("/assets/main.css");
+const COMPONENT_CSS: Asset = asset!("/assets/dx-components-theme.css");
 
 fn main() {
     dioxus::launch(App);
@@ -33,17 +32,12 @@ fn App() -> Element {
     let (tx, rx) = tokio::sync::mpsc::channel(10);
     let rx = use_signal(|| Arc::new(Mutex::new(rx)));
     let _ = use_context_provider(|| tx);
-    let _ = use_context_provider(|| Queue::default());
-    let _ = use_context_provider(|| CurrentTrack::default());
-    let _ = use_context_provider(|| IsPlaying::default());
-    let logged_in = use_signal(|| false);
-    let error_msg = use_signal(|| None::<String>);
+    let _ = use_context_provider(Queue::default);
+    let _ = use_context_provider(IsPlaying::default);
+    let mut logged_in = use_signal(|| false);
+    let mut error_msg = use_signal(|| None::<String>);
 
     let handle_login = {
-        let mut logged_in = logged_in.clone();
-        let mut error_msg = error_msg.clone();
-        let rx = rx.clone();
-
         move |(server_url, username, password): (String, String, String)| {
             let subsonic_client = SubsonicClient::new(&server_url, &username, &password);
             *SUBSONIC_CLIENT.write() = Some(subsonic_client.clone());
@@ -73,6 +67,7 @@ fn App() -> Element {
     rsx! {
         document::Link { rel: "icon", href: FAVICON }
         document::Link { rel: "stylesheet", href: MAIN_CSS }
+        document::Link { rel: "stylesheet", href: COMPONENT_CSS }
         document::Script {
             type: "module",
             src: asset!("/assets/howler.min.js", JsAssetOptions::new().with_minify(true)),

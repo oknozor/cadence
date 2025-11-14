@@ -1,16 +1,12 @@
 use crate::{PlayerCommand, stream_url};
 use rodio::{Decoder, OutputStream, OutputStreamBuilder, Sink};
-use std::{
-    num::NonZeroUsize,
-    sync::{Arc, Mutex},
-    time::Duration,
-};
+use std::{num::NonZeroUsize, sync::Arc, time::Duration};
 use stream_download::{
     Settings, StreamDownload,
     source::DecodeError,
     storage::{adaptive::AdaptiveStorageProvider, temp::TempStorageProvider},
 };
-use tokio::sync::mpsc;
+use tokio::sync::{Mutex, mpsc};
 
 pub struct CadencePlayer {
     sink: Sink,
@@ -29,7 +25,7 @@ impl CadencePlayer {
         rx: Arc<Mutex<mpsc::Receiver<PlayerCommand>>>,
     ) -> Result<Self, MusicPlayerError> {
         let _output_stream = OutputStreamBuilder::open_default_stream()?;
-        let sink = Sink::connect_new(&_output_stream.mixer());
+        let sink = Sink::connect_new(_output_stream.mixer());
 
         Ok(CadencePlayer {
             sink,
@@ -39,6 +35,11 @@ impl CadencePlayer {
             rx,
             _output_stream,
         })
+    }
+
+    pub(super) fn next(&self) -> Result<(), MusicPlayerError> {
+        self.sink.skip_one();
+        Ok(())
     }
 
     pub(super) fn play(&self) -> Result<(), MusicPlayerError> {
@@ -63,6 +64,10 @@ impl CadencePlayer {
     pub(super) fn seek(&self, duration: Duration) -> Result<(), MusicPlayerError> {
         self.sink.try_seek(duration)?;
         Ok(())
+    }
+
+    pub(super) fn is_empty(&self) -> bool {
+        self.sink.empty()
     }
 
     async fn open_stream(&self, url: String) -> Result<(), MusicPlayerError> {
