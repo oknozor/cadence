@@ -6,3 +6,4 @@ pub mod navbar;
 pub mod player;
 pub mod progress;
 pub mod track;
+pub mod search;

@@ -1,3 +1,5 @@
+use std::time::Duration;
+
 use dioxus::prelude::*;
 
 use crate::{
@@ -7,10 +9,19 @@ use crate::{
 
 #[component]
 pub fn Navbar() -> Element {
-    let search_active = use_signal(|| false);
-    let plus_active = use_signal(|| false);
-    let home_active = use_signal(|| false);
-    let library_active = use_signal(|| false);
+    let mut search_active = use_signal(|| false);
+    let mut plus_active = use_signal(|| false);
+    let mut home_active = use_signal(|| false);
+    let mut library_active = use_signal(|| false);
+
+    let mut set_active = move |active_signal: &mut Signal<bool>| {
+        search_active.set(false);
+        plus_active.set(false);
+        home_active.set(false);
+        library_active.set(false);
+        active_signal.set(true);
+    };
+
     let nav = navigator();
 
     rsx! {
@@ -22,25 +33,32 @@ pub fn Navbar() -> Element {
                 active: home_active,
                 onclick: move || {
                     nav.replace(Route::Library {});
+                    set_active(&mut home_active);
                 },
                 HomeIcon { filled: home_active }
             }
             NavbarItem {
                 label: "Search".to_string(),
                 active: search_active,
-                onclick: || {},
+                onclick: move || {
+                    set_active(&mut search_active);
+                },
                 SearchIcon { filled: search_active }
             }
             NavbarItem {
                 label: "Library".to_string(),
                 active: library_active,
-                onclick: || {},
+                onclick: move || {
+                    set_active(&mut library_active);
+                },
                 LibraryIcon { filled: library_active }
             }
             NavbarItem {
                 label: "Create".to_string(),
                 active: plus_active,
-                onclick: || {},
+                onclick: move || {
+                    set_active(&mut plus_active);
+                },
                 PlusIcon { filled: plus_active }
             }
         }
@@ -54,15 +72,22 @@ pub fn NavbarItem(
     onclick: EventHandler<()>,
     children: Element,
 ) -> Element {
+    let mut animate = use_signal(|| false);
     rsx! {
         div {
             class: "navbar-item",
             onclick: move |_| {
                 active.set(!active());
+                animate.set(true);
+                spawn(async move {
+                   dioxus_sdk::time::sleep(Duration::from_millis(200)).await;
+                   animate.set(false);
+                });
+
                 onclick.call(())
             },
             div {
-                class: "navbar-item-icon",
+                class: if animate() { "navbar-item-icon active" } else { "navbar-item-icon" },
                 {children}
             },
             div {

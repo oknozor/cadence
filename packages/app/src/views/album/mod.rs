@@ -15,6 +15,12 @@ pub fn AlbumView(id: String) -> Element {
         }
     });
 
+    let cover = album
+        .read()
+        .as_ref()
+        .and_then(|album| album.cover_art.clone())
+        .unwrap_or_default();
+
     rsx! {
         document::Link { rel: "stylesheet", href: asset!("./style.css") }
         div {
@@ -23,12 +29,24 @@ pub fn AlbumView(id: String) -> Element {
                 Some(album) => rsx! {
                     div {
                         class: "album-info",
-                        h1 { "{album.name}" }
-                        p { "Artist: {album.artist}" }
-                        img {
-                            src: "{album.cover_art.as_ref().unwrap_or(&String::new())}",
-                            alt: "Album cover"
+                        div {
+                            class: "album-cover",
+                            background_image: "url({cover})",
+                            div {
+                                class: "album-cover-overlay",
+                                img {
+                                    src: "{cover}",
+                                    alt: "Album cover"
+                                }
+                            }
                         }
+                        if let Some(year) = album.year {
+                            h1 { "{album.name} ({year})" }
+                        } else {
+                            h1 { "{album.name}" }
+                        }
+                        h2 { "{album.artist}" }
+
                     }
 
                     div {

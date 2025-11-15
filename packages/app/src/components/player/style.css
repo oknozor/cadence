@@ -1,44 +1,49 @@
 .player-container {
-    padding: 10px 20px;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
+    flex-direction: row;
+    justify-content: space-between;
     width: 100%;
     position: fixed;
-    bottom: 60px;
-    left: 0;
-    right: 0;
+    bottom: 71px;
     background-color: #1a1d24;
-    border-top: 1px solid #374151;
+}
+
+.track-info {
+    display: flex;
+    flex-direction: column;
+    color: #ffffff;
 }
 
 .track-info h3 {
-    margin: 0 0 5px 0;
+    margin: 0;
     color: #ffffff;
+    font-size: 12px;
 }
 
 .track-info p {
     margin: 0;
     color: #9ca3af;
-    font-size: 14px;
+    font-size: 10px;
+}
+
+.progress-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
 }
 
 .player-controls {
-    display: flex;
-    gap: 10px;
-    width: 100%;
-    justify-content: center;
+    background-color: #1a1d24;
 }
 
 .player-controls button {
-    width: auto;
-    padding: 10px 20px;
-    background-color: #374151;
+    background-color: #1a1d24;
+}
+.player-controls button svg {
+    background-color: #1a1d24;
 }
 
 .player-controls button:hover {
-    background-color: #4b5563;
 }
 
 .no-track {

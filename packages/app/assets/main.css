@@ -8,3 +8,15 @@ body {
     display: flex;
     flex-direction: column;
 }
+
+button {
+    transition: none !important;
+    animation: none !important;
+    -webkit-tap-highlight-color: transparent;
+}
+
+button:active {
+    transform: none !important;
+    box-shadow: none !important;
+    background-color: inherit !important;
+}

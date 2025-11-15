@@ -1,0 +1,25 @@
+.track-row {
+    margin-left: 10px;
+    margin-right: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.track-row:hover {
+    background-color: #f9f9f9;
+}
+
+.track-row .track-title {
+    margin: 4px;
+    flex: 1;
+}
+
+.track-row .icon {
+    background-color: white;
+    fill: black;
+    color: black;
+    display: flex;
+    flex-direction: row;
+}

@@ -1,4 +1,7 @@
+use crate::components::album_card::Album;
+use crate::components::search::SearchResult;
 use dioxus::signals::GlobalSignal;
+use opensubsonic_cli::types::Search3ResponseSubsonicResponse;
 use opensubsonic_cli::{
     Client,
     types::{
@@ -6,8 +9,6 @@ use opensubsonic_cli::{
         SubsonicFailureResponse,
     },
 };
-
-use crate::components::album_card::Album;
 
 pub static SUBSONIC_CLIENT: GlobalSignal<Option<SubsonicClient>> = GlobalSignal::new(|| None);
 
@@ -53,11 +54,6 @@ impl SubsonicClient {
         }
     }
 
-    /// Get the underlying submarine client
-    pub fn client(&self) -> &opensubsonic_cli::Client {
-        &self.client
-    }
-
     /// Test connection to the Subsonic server
     pub async fn ping(&self) -> Result<(), ClientError> {
         self.client
@@ -69,7 +65,7 @@ impl SubsonicClient {
 
     fn cover_url(&self, id: &str) -> String {
         format!(
-            "http://music-api.hoohoot.org/rest/getCoverArt?id={}&f=json&u={}&v={}&p={}&c={}",
+            "https://music-api.hoohoot.org/rest/getCoverArt?id={}&f=json&u={}&v={}&p={}&c={}",
             id,
             opensubsonic_cli::USERNAME.get().unwrap(),
             "1.16.1",
@@ -140,6 +136,53 @@ impl SubsonicClient {
             GetAlbumList2ResponseSubsonicResponse::SubsonicFailureResponse(
                 subsonic_failure_response,
             ) => Err(ClientError::Failure(subsonic_failure_response)),
+        }
+    }
+
+    pub async fn search(&self, query: &str) -> Result<Vec<SearchResult>, ClientError> {
+        let response = self
+            .client
+            .search3(Some(15), None, Some(15), None, None, query, Some(15), None)
+            .await
+            .map(|response| response.into_inner())
+            .map_err(ClientError::OpenSubSonic)?;
+
+        let response = response
+            .subsonic_response
+            .ok_or_else(|| ClientError::Other("Empty response".to_string()))?;
+
+        match response {
+            Search3ResponseSubsonicResponse::Search3SuccessResponse(response) => {
+                let results: Vec<SearchResult> = response
+                    .search_result3
+                    .album
+                    .into_iter()
+                    .map(|album| SearchResult::Album {
+                        id: album.id,
+                        name: album.name,
+                    })
+                    .chain(
+                        response
+                            .search_result3
+                            .artist
+                            .into_iter()
+                            .map(|artist| SearchResult::Artist {
+                                id: artist.id,
+                                name: artist.name,
+                            })
+                            .chain(response.search_result3.song.into_iter().map(|song| {
+                                SearchResult::Song {
+                                    id: song.id,
+                                    name: song.title,
+                                }
+                            })),
+                    ).collect();
+                
+                Ok(results)
+            }
+            Search3ResponseSubsonicResponse::SubsonicFailureResponse(failure) => {
+                Err(ClientError::Failure(failure))
+            }
         }
     }
 }

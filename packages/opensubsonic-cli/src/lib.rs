@@ -31,7 +31,7 @@ impl ClientHooks<()> for Client {
 
 #[cfg(test)]
 mod test {
-    use crate::Client;
+    use crate::{Client, PASSWORD, USERNAME};
     use crate::types::AlbumListType;
 
     const ALBUM_ID: &str = "5imOrY1P5PnAYsaoM06BXf";
@@ -69,6 +69,13 @@ mod test {
     async fn test_get_artist_info2() -> Result<(), Box<dyn std::error::Error>> {
         let client = Client::new(API_URL);
         client.get_artist_info2(Some(1), ARTIST_ID, None).await?;
+        Ok(())
+    }
+
+    #[tokio::test]
+    async fn test_get_search3() -> Result<(), Box<dyn std::error::Error>> {
+        let client = Client::new(API_URL);
+        client.search3(Some(15), None, Some(15), None, None, "nirvana", Some(15), None).await?;
         Ok(())
     }
 

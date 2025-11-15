@@ -84,6 +84,10 @@ impl IsPlaying {
         *self.0.read()
     }
 
+    pub fn to_signal(&self) -> Signal<bool> {
+        self.0.clone()
+    }
+
     pub fn toggle(&mut self) {
         self.0.set(!self.is_playing());
     }

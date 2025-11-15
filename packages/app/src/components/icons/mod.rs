@@ -1,5 +1,7 @@
+pub mod dots;
 pub mod gear;
 pub mod home;
 pub mod library;
+pub mod play;
 pub mod plus;
 pub mod search;

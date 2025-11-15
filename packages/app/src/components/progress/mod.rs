@@ -16,7 +16,7 @@ pub fn Progress(props: ProgressProps) -> Element {
     let max_in_min_sec = use_memo(move || {
         let minutes = *props.max.read() / 60.0;
         let seconds = *props.max.read() % 60.0;
-        format!("{}:{}", minutes as u32, seconds as u32)
+        format!("{}:{:02}", minutes as u32, seconds as u32)
     });
 
     rsx! {

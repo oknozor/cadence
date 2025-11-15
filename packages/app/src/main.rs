@@ -6,7 +6,7 @@ use dioxus_sdk::storage::{LocalStorage, get_from_storage, use_storage};
 use services::subsonic_client::{SUBSONIC_CLIENT, SubsonicClient};
 use std::sync::Arc;
 use tokio::sync::{Mutex, broadcast};
-use views::{AlbumView, Library};
+use views::{AlbumView, Library, SearchView};
 
 mod components;
 mod context;
@@ -19,6 +19,8 @@ enum Route {
     #[layout(WebNavbar)]
     #[route("/")]
     Library { },
+    #[route("/search")]
+    SearchView { },
     #[route("/album/:id")]
     AlbumView { id: String },
 }

@@ -1,4 +1,5 @@
 use crate::components::album_card::Song;
+use crate::components::icons::dots::DotIcon;
 use crate::context::{IsPlaying, Queue};
 use cadence_player::PlayerCommand;
 use dioxus::prelude::*;
@@ -10,7 +11,7 @@ pub fn Track(track: Song) -> Element {
     rsx!(
         document::Link { rel: "stylesheet", href: asset!("./style.css") }
         div {
-            class: "track-item",
+            class: "track-row",
             onclick: move |_| {
                 let sender = sender.clone();
                 let track_id = track.id.clone();
@@ -21,7 +22,11 @@ pub fn Track(track: Song) -> Element {
                 consume_context::<Queue>().append_and_set_current(track.clone());
                 consume_context::<IsPlaying>().toggle();
             },
-            "{track.title}"
+            p {
+                class: "track-title",
+                "{track.title}"
+            },
+            DotIcon  { size: 18 }
         }
     )
 }
