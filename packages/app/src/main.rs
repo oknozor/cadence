@@ -94,13 +94,7 @@ fn App() -> Element {
 #[component]
 fn WebNavbar() -> Element {
     rsx! {
-        Navbar {
-            Link {
-                to: Route::Library {},
-                "Library"
-            }
-        }
-
+        Navbar {}
         Outlet::<Route> {}
     }
 }

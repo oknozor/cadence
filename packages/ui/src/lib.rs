@@ -1,5 +1,5 @@
 mod navbar;
-pub use navbar::Navbar;
+pub use navbar::{Navbar, NavbarItem};
 
 pub mod client;
 pub use client::SubsonicClient;

@@ -1,2 +1,2 @@
-// AUTOGENERTED Components module
+pub mod icons;
 pub mod progress;
