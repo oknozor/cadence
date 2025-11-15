@@ -1,13 +1,22 @@
 [package]
-name = "web"
+name = "app"
 version = "0.1.0"
 edition = "2024"
 
 [dependencies]
 cadence-player.workspace = true
 tokio = { workspace = true, features = ["sync"] }
+tracing.workspace = true
 dioxus = { workspace = true, features = ["router"] }
-ui = { workspace = true }
+dioxus-sdk = { workspace = true }
+serde = { workspace = true }
+opensubsonic-cli.workspace = true
+reqwest = { workspace = true }
+
+# [target.'cfg(target_arch = "wasm32")'.dependencies]
+web-sys.workspace = true
+wasm-bindgen-futures.workspace = true
+dioxus-primitives = { git = "https://github.com/DioxusLabs/components", version = "0.0.1", default-features = false }
 
 [features]
 default = ["web"]

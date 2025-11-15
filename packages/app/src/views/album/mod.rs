@@ -1,4 +1,4 @@
-use crate::client::SUBSONIC_CLIENT;
+use crate::services::subsonic_client::SUBSONIC_CLIENT;
 use dioxus::prelude::*;
 
 #[component]
@@ -16,6 +16,7 @@ pub fn AlbumView(id: String) -> Element {
     });
 
     rsx! {
+        document::Link { rel: "stylesheet", href: asset!("./style.css") }
         div {
             class: "album-view",
             match album() {
@@ -33,7 +34,7 @@ pub fn AlbumView(id: String) -> Element {
                     div {
                         class: "track-list",
                         for track in album.songs {
-                           crate::track::Track { track: track }
+                           crate::components::track::Track { track: track }
                         }
                     }
                 },

@@ -74,15 +74,18 @@ impl From<opensubsonic_cli::types::AlbumId3> for Album {
 #[component]
 pub fn AlbumCard(album: Album, on_album_select: EventHandler<String>) -> Element {
     rsx! {
+        document::Link { rel: "stylesheet", href: asset!("./style.css") }
         div {
             class: "album-card",
             key: "{album.id}",
             onclick: move |_| on_album_select.call(album.id.clone()),
 
-            if let Some(cover) = &album.cover_art {
+            if let Some(cover) = album.cover_art.as_ref() {
                 img {
                     src: "{cover}",
                     alt: "{album.name}",
+                    width: "100px",
+                    height: "100px"
                 }
             } else {
                 div {

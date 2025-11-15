@@ -7,7 +7,7 @@ use opensubsonic_cli::{
     },
 };
 
-use crate::album_card::Album;
+use crate::components::album_card::Album;
 
 pub static SUBSONIC_CLIENT: GlobalSignal<Option<SubsonicClient>> = GlobalSignal::new(|| None);
 

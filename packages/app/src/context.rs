@@ -1,6 +1,14 @@
 use dioxus::prelude::*;
+use serde::{Deserialize, Serialize};
 
-use crate::album_card::Song;
+use crate::components::album_card::Song;
+
+#[derive(Serialize, Deserialize, Clone, Eq, PartialEq)]
+pub struct SubSonicLogin {
+    pub username: String,
+    pub password: String,
+    pub server_url: String,
+}
 
 #[derive(Default, Clone)]
 pub struct Queue {

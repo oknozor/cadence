@@ -1,6 +1,6 @@
 use crate::components::progress::Progress;
-use crate::progress::ProgressIndicator;
-use crate::{IsPlaying, Queue};
+use crate::components::progress::ProgressIndicator;
+use crate::context::{IsPlaying, Queue};
 use cadence_player::PlayerCommand;
 use dioxus::prelude::*;
 use tokio::sync::broadcast;
@@ -22,9 +22,9 @@ pub fn Player() -> Element {
     });
 
     rsx! {
+        document::Link { rel: "stylesheet", href: asset!("./style.css") }
         div {
             class: "player-container",
-
             if let Some(track) = consume_context::<Queue>().get_current() {
                 div {
                     class: "track-info",

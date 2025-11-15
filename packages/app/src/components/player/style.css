@@ -1,0 +1,46 @@
+.player-container {
+    padding: 10px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    position: fixed;
+    bottom: 60px;
+    left: 0;
+    right: 0;
+    background-color: #1a1d24;
+    border-top: 1px solid #374151;
+}
+
+.track-info h3 {
+    margin: 0 0 5px 0;
+    color: #ffffff;
+}
+
+.track-info p {
+    margin: 0;
+    color: #9ca3af;
+    font-size: 14px;
+}
+
+.player-controls {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    justify-content: center;
+}
+
+.player-controls button {
+    width: auto;
+    padding: 10px 20px;
+    background-color: #374151;
+}
+
+.player-controls button:hover {
+    background-color: #4b5563;
+}
+
+.no-track {
+    color: #6b7280;
+}

@@ -1,8 +1,9 @@
 use dioxus::prelude::*;
 
-use crate::icons::{home::HomeIcon, library::LibraryIcon, plus::PlusIcon, search::SearchIcon};
-
-const NAVBAR_CSS: Asset = asset!("/assets/styling/navbar.css");
+use crate::{
+    Route,
+    components::icons::{home::HomeIcon, library::LibraryIcon, plus::PlusIcon, search::SearchIcon},
+};
 
 #[component]
 pub fn Navbar() -> Element {
@@ -10,16 +11,18 @@ pub fn Navbar() -> Element {
     let plus_active = use_signal(|| false);
     let home_active = use_signal(|| false);
     let library_active = use_signal(|| false);
+    let nav = navigator();
 
     rsx! {
-        document::Link { rel: "stylesheet", href: NAVBAR_CSS }
-
+        document::Link { rel: "stylesheet", href: asset!("./style.css") }
         div {
             id: "navbar",
             NavbarItem {
                 label: "Home".to_string(),
                 active: home_active,
-                onclick: || {},
+                onclick: move || {
+                    nav.replace(Route::Library {});
+                },
                 HomeIcon { filled: home_active }
             }
             NavbarItem {

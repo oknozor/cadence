@@ -1,12 +1,16 @@
+use crate::context::{IsPlaying, Queue, SubSonicLogin};
 use cadence_player::CadencePlayer;
+use components::{login::Login, navbar::Navbar, player::Player};
 use dioxus::prelude::*;
+use dioxus_sdk::storage::{LocalStorage, get_from_storage, use_storage};
+use services::subsonic_client::{SUBSONIC_CLIENT, SubsonicClient};
 use std::sync::Arc;
 use tokio::sync::{Mutex, broadcast};
-use ui::{
-    AlbumView, IsPlaying, Login, Navbar, Player, Queue, SubsonicClient, client::SUBSONIC_CLIENT,
-};
-use views::Library;
+use views::{AlbumView, Library};
 
+mod components;
+mod context;
+mod services;
 mod views;
 
 #[derive(Debug, Clone, Routable, PartialEq)]
@@ -29,6 +33,28 @@ fn main() {
 
 #[component]
 fn App() -> Element {
+    tracing::info!("Candence started");
+    let mut logged_in = use_signal(|| false);
+    #[cfg(not(feature = "mobile"))]
+    let mut saved_credentials = get_from_storage::<LocalStorage, Option<SubSonicLogin>>(
+        "subsonic_credentials".to_string(),
+        || None,
+    );
+
+    #[cfg(not(feature = "mobile"))]
+    if let Some(credentials) = saved_credentials.take() {
+        logged_in.set(true);
+        *SUBSONIC_CLIENT.write() = Some(SubsonicClient::new(
+            &credentials.server_url,
+            &credentials.username,
+            &credentials.password,
+        ));
+    }
+
+    #[cfg(not(feature = "mobile"))]
+    let mut saved_credentials =
+        use_storage::<LocalStorage, _>("subsonic_credentials".to_string(), || saved_credentials);
+
     let (tx, rx) = tokio::sync::mpsc::channel(10);
     let (position_tx, _) = tokio::sync::broadcast::channel(10);
     let rx = use_signal(|| Arc::new(Mutex::new(rx)));
@@ -36,12 +62,19 @@ fn App() -> Element {
     let _ = use_context_provider(|| tx);
     let _ = use_context_provider(Queue::default);
     let _ = use_context_provider(IsPlaying::default);
-    let mut logged_in = use_signal(|| false);
     let mut error_msg = use_signal(|| None::<String>);
 
     let handle_login = {
         move |(server_url, username, password): (String, String, String)| {
             let subsonic_client = SubsonicClient::new(&server_url, &username, &password);
+
+            #[cfg(not(feature = "mobile"))]
+            saved_credentials.set(Some(SubSonicLogin {
+                server_url: server_url.clone(),
+                username: username.clone(),
+                password: password.clone(),
+            }));
+
             *SUBSONIC_CLIENT.write() = Some(subsonic_client.clone());
             spawn(async move {
                 match subsonic_client.ping().await {
@@ -89,8 +122,6 @@ fn App() -> Element {
     }
 }
 
-/// A web-specific Router around the shared `Navbar` component
-/// which allows us to use the web-specific `Route` enum.
 #[component]
 fn WebNavbar() -> Element {
     rsx! {

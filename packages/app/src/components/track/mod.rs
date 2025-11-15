@@ -1,14 +1,14 @@
+use crate::components::album_card::Song;
+use crate::context::{IsPlaying, Queue};
 use cadence_player::PlayerCommand;
 use dioxus::prelude::*;
 use tokio::sync::mpsc::Sender;
 
-use crate::{IsPlaying, Queue, album_card::Song};
-
 #[component]
 pub fn Track(track: Song) -> Element {
     let sender = use_context::<Sender<PlayerCommand>>();
-
     rsx!(
+        document::Link { rel: "stylesheet", href: asset!("./style.css") }
         div {
             class: "track-item",
             onclick: move |_| {

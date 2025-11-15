@@ -5,11 +5,13 @@ members = [
 ]
 
 [workspace.dependencies]
+dioxus = { version = "0.7.1" }
+dioxus-sdk = { version = "0.7", features = ["storage"] }
+
 opensubsonic-cli = { path = "packages/opensubsonic-cli" }
 cadence-player = { path = "packages/cadence-player" }
-ui = { path = "packages/ui" }
 
-dioxus = { version = "0.7.1" }
+tracing = "0.1"
 serde = { version = "1.0", features = ["derive"] }
 reqwest = { version = "0.12", features = ["json"] }
 tokio = { version = "1.0", default-features = false  }

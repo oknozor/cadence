@@ -1,11 +1,12 @@
 use dioxus::{CapturedError, prelude::*};
 
-use ui::{
-    Album, AlbumList,
-    client::{AlbumListType, SUBSONIC_CLIENT},
+use crate::{
+    Route,
+    components::{album_card::Album, album_list::AlbumList},
+    services::subsonic_client::AlbumListType,
 };
 
-use crate::Route;
+use crate::services::subsonic_client::SUBSONIC_CLIENT;
 
 #[component]
 pub fn Library() -> Element {
@@ -29,6 +30,7 @@ pub fn Library() -> Element {
     };
 
     rsx! {
+        document::Link { rel: "stylesheet", href: asset!("./style.css") }
         div {
             class: "library-view",
             div {

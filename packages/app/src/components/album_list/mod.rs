@@ -2,7 +2,7 @@
 
 use dioxus::prelude::*;
 
-use crate::album_card::{Album, AlbumCard};
+use crate::components::album_card::{Album, AlbumCard};
 
 #[component]
 pub fn AlbumList(
@@ -11,6 +11,7 @@ pub fn AlbumList(
     on_album_select: EventHandler<String>,
 ) -> Element {
     rsx! {
+        document::Link { rel: "stylesheet", href: asset!("./style.css") }
         div {
             class: "library-container",
             h2 { "{title}" }
