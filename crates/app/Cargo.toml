@@ -6,13 +6,13 @@ edition = "2024"
 [dependencies]
 cadence-player.workspace = true
 tokio = { workspace = true, features = ["sync"] }
-tracing.workspace = true
 dioxus = { workspace = true, features = ["router"] }
 dioxus-sdk = { workspace = true }
+dioxus-primitives.workspace = true
+
 serde = { workspace = true }
 opensubsonic-cli.workspace = true
 reqwest = { workspace = true }
-dioxus-primitives = { git = "https://github.com/DioxusLabs/components", version = "0.0.1", default-features = false }
 
 cadence-storage-android= { workspace = true, optional = true}
 

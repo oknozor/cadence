@@ -5,7 +5,7 @@ mod wasm;
 use std::time::Duration;
 #[cfg(target_arch = "wasm32")]
 use std::time::Duration;
-
+use tracing::info;
 #[cfg(target_arch = "wasm32")]
 pub use wasm::{CadencePlayer, MusicPlayerError};
 
@@ -24,36 +24,12 @@ pub enum PlayerCommand {
 
 impl CadencePlayer {
     pub async fn run(&mut self) -> Result<(), MusicPlayerError> {
+        info!("Cadence player running");
         let mut rx = self.rx.lock().await;
 
         loop {
-            #[cfg(target_arch = "wasm32")]
             tokio::select! {
-                _ =  wasmtimer::tokio::sleep(Duration::from_secs(1)) => {
-                    if let Some(pos) = self.get_pos() {
-                        self.tx.send(pos).unwrap();
-                    }
-                },
-                Some(command) = rx.recv() => {
-                    match command {
-                        PlayerCommand::Play => self.play()?,
-                        PlayerCommand::Queue(id) => self.queue(&id).await?,
-                        PlayerCommand::QueueNow(id) => {
-                            if !self.is_empty() {
-                                self.queue(&id).await?;
-                                self.next()?
-                            } else {
-                                self.queue(&id).await?;
-                            }
-                        }
-                        PlayerCommand::Pause => self.pause()?,
-                        PlayerCommand::Seek(duration) => self.seek(duration)?,
-                    }
-                }
-            }
-            #[cfg(not(target_arch = "wasm32"))]
-            tokio::select! {
-                _ =  tokio::time::sleep(Duration::from_secs(1)) => {
+                _ =  dioxus_sdk::time::sleep(Duration::from_secs(1)) => {
                     if let Some(pos) = self.get_pos() {
                         self.tx.send(pos).unwrap();
                     }

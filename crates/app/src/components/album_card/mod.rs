@@ -96,10 +96,13 @@ pub fn AlbumCard(album: Album, on_album_select: EventHandler<String>) -> Element
 
             div {
                 class: "album-info",
-                h3 { "{album.name}" }
-                p { "{album.artist}" }
-                if let Some(year) = album.year {
-                    p { class: "year", "{year}" }
+                span {
+                    class: "album-name",
+                    "{album.name}"
+                }
+                span {
+                    class: "album-artist",
+                    "{album.artist}"
                 }
             }
         }

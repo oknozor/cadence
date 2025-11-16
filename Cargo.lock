@@ -73,7 +73,6 @@ dependencies = [
  "reqwest",
  "serde",
  "tokio",
- "tracing",
  "wasm-bindgen-futures",
  "web-sys",
 ]
@@ -342,12 +341,14 @@ dependencies = [
 name = "cadence-player"
 version = "0.1.0"
 dependencies = [
- "async-trait",
+ "dioxus-sdk",
  "howler-wasm",
+ "log",
  "rodio",
  "stream-download",
  "thiserror 1.0.69",
  "tokio",
+ "tracing",
  "url",
  "wasmtimer",
  "web-time",
@@ -2473,10 +2474,7 @@ name = "howler-wasm"
 version = "0.1.0"
 dependencies = [
  "js-sys",
- "serde",
- "serde-wasm-bindgen",
  "wasm-bindgen",
- "wasm-bindgen-futures",
  "web-sys",
 ]
 

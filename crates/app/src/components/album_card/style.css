@@ -1,8 +1,8 @@
 .album-card {
-    background-color: #1a1d24;
-    border-radius: 8px;
-    padding: 15px;
+    display: flex;
+    flex-direction: column;
     cursor: pointer;
+    gap: 3px;
     transition:
         transform 0.2s,
         box-shadow 0.2s;
@@ -14,27 +14,26 @@
 }
 
 .album-card img {
-    width: 100%;
-    height: auto;
-    border-radius: 4px;
-    margin-bottom: 10px;
+    width: 120px;
+    height: 120px;
+    border-radius: 3px;
+    margin-bottom: 4px;
 }
 
-.album-info h3 {
-    margin: 0 0 5px 0;
-    font-size: 16px;
-    color: #ffffff;
+.album-info {
+    display: flex;
+    flex-direction: column;
+    font-style: normal;
+    font-size: 10px;
+    gap: 3px;
 }
 
-.album-info p {
-    margin: 0;
-    font-size: 14px;
-    color: #9ca3af;
-}
-
-.album-info .year {
-    font-size: 12px;
-    color: #6b7280;
+.album-name, .album-artist{
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .no-cover {

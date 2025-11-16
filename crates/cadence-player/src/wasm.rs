@@ -4,6 +4,7 @@ use std::cell::RefCell;
 use std::collections::VecDeque;
 use std::sync::Arc;
 use tokio::sync::{Mutex, broadcast, mpsc};
+use log::debug;
 use web_time::Duration;
 
 pub struct CadencePlayer {
@@ -50,6 +51,7 @@ impl CadencePlayer {
 
         let howl = JsHowl::new(url);
         if self.is_empty() {
+            debug!("queue is empty, playing now");
             howl.play();
         }
 

@@ -14,6 +14,7 @@ use services::subsonic_client::{SUBSONIC_CLIENT, SubsonicClient};
 use std::sync::Arc;
 use tokio::sync::{Mutex, broadcast};
 use views::{AlbumView, Library, SearchView};
+use crate::components::topbar::TopBar;
 
 mod components;
 mod context;
@@ -50,6 +51,14 @@ fn App() -> Element {
 
     info!("Candence started");
     let mut logged_in = use_signal(|| false);
+    let mut error_msg = use_signal(|| None::<String>);
+    let (tx, rx) = tokio::sync::mpsc::channel(10);
+    let (position_tx, _) = tokio::sync::broadcast::channel(10);
+    let rx = use_signal(|| Arc::new(Mutex::new(rx)));
+    let _: broadcast::Sender<u64> = use_context_provider(|| position_tx);
+    let _ = use_context_provider(|| tx);
+    let _ = use_context_provider(Queue::default);
+    let _ = use_context_provider(IsPlaying::default);
 
     let mut saved_credentials = {
         let saved = get_from_storage::<LocalStorage, Option<SubSonicLogin>>(
@@ -60,47 +69,30 @@ fn App() -> Element {
         use_storage::<LocalStorage, _>("subsonic_credentials".to_string(), || saved)
     };
 
-    if let Some(credentials) = saved_credentials.read().cloned() {
-        logged_in.set(true);
-        *SUBSONIC_CLIENT.write() = Some(SubsonicClient::new(
-            &credentials.server_url,
-            &credentials.username,
-            &credentials.password,
-        ));
-    }
+    use_effect(move || {
+        if let Some(credentials) = saved_credentials.read().cloned() {
+            logged_in.set(true);
 
-    let (tx, rx) = tokio::sync::mpsc::channel(10);
-    let (position_tx, _) = tokio::sync::broadcast::channel(10);
-    let rx = use_signal(|| Arc::new(Mutex::new(rx)));
-    let _: broadcast::Sender<u64> = use_context_provider(|| position_tx);
-    let _ = use_context_provider(|| tx);
-    let _ = use_context_provider(Queue::default);
-    let _ = use_context_provider(IsPlaying::default);
-    let mut error_msg = use_signal(|| None::<String>);
+            let client = SubsonicClient::new(
+                &credentials.server_url,
+                &credentials.username,
+                &credentials.password,
+            );
+            *SUBSONIC_CLIENT.write() = Some(client.clone());
 
-    let handle_login = {
-        move |(server_url, username, password): (String, String, String)| {
-            let subsonic_client = SubsonicClient::new(&server_url, &username, &password);
 
-            saved_credentials.set(Some(SubSonicLogin {
-                server_url: server_url.clone(),
-                username: username.clone(),
-                password: password.clone(),
-            }));
-
-            *SUBSONIC_CLIENT.write() = Some(subsonic_client.clone());
             spawn(async move {
-                match subsonic_client.ping().await {
+                match client.ping().await {
                     Ok(_) => {
                         spawn(async move {
                             let mut player = CadencePlayer::build(
-                                &server_url,
-                                &username,
-                                &password,
+                                &credentials.server_url,
+                                &credentials.username,
+                                &credentials.password,
                                 rx.read().clone(),
                                 consume_context(),
                             )
-                            .expect("Player start failed");
+                                .expect("Player start failed");
                             player.run().await.expect("Player run error");
                         });
                         logged_in.set(true);
@@ -110,6 +102,16 @@ fn App() -> Element {
                     }
                 }
             });
+        }
+    });
+
+    let handle_login = {
+        move |(server_url, username, password): (String, String, String)| {
+            saved_credentials.set(Some(SubSonicLogin {
+                server_url: server_url.clone(),
+                username: username.clone(),
+                password: password.clone(),
+            }));
         }
     };
 
@@ -139,6 +141,7 @@ fn App() -> Element {
 fn WebNavbar() -> Element {
     rsx! {
         Navbar {}
+        TopBar {}
         Outlet::<Route> {}
     }
 }

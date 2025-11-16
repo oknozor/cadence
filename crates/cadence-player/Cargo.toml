@@ -7,9 +7,9 @@ edition = "2024"
 thiserror.workspace = true
 url.workspace = true
 tokio = { version = "1", features = ["rt", "macros", "time"] }
-async-trait.workspace = true
-
-
+dioxus-sdk.workspace = true
+tracing = "0.1"
+log = "0.4.28"
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 howler-wasm.workspace = true
 web-time = "1"
