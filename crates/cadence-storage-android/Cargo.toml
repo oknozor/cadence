@@ -1,0 +1,14 @@
+[package]
+name = "cadence-storage-android"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+dioxus = {workspace = true }
+thiserror.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+dioxus-sdk = { workspace = true }
+redb.workspace = true
+jni.workspace = true
+once_cell.workspace = true

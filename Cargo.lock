@@ -65,6 +65,7 @@ name = "app"
 version = "0.1.0"
 dependencies = [
  "cadence-player",
+ "cadence-storage-android",
  "dioxus",
  "dioxus-primitives",
  "dioxus-sdk",
@@ -350,6 +351,20 @@ dependencies = [
  "url",
  "wasmtimer",
  "web-time",
+]
+
+[[package]]
+name = "cadence-storage-android"
+version = "0.1.0"
+dependencies = [
+ "dioxus",
+ "dioxus-sdk",
+ "jni",
+ "once_cell",
+ "redb",
+ "serde",
+ "serde_json",
+ "thiserror 1.0.69",
 ]
 
 [[package]]
@@ -4282,6 +4297,15 @@ name = "raw-window-handle"
 version = "0.6.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "20675572f6f24e9e76ef639bc5552774ed45f1c30e2951e1e99c59888861c539"
+
+[[package]]
+name = "redb"
+version = "3.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ae323eb086579a3769daa2c753bb96deb95993c534711e0dbe881b5192906a06"
+dependencies = [
+ "libc",
+]
 
 [[package]]
 name = "redox_syscall"

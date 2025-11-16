@@ -176,8 +176,9 @@ impl SubsonicClient {
                                     name: song.title,
                                 }
                             })),
-                    ).collect();
-                
+                    )
+                    .collect();
+
                 Ok(results)
             }
             Search3ResponseSubsonicResponse::SubsonicFailureResponse(failure) => {

@@ -8,11 +8,13 @@ members = [
 dioxus = { version = "0.7.1" }
 dioxus-sdk = { version = "0.7", features = ["storage", "time"] }
 
-opensubsonic-cli = { path = "packages/opensubsonic-cli" }
-cadence-player = { path = "packages/cadence-player" }
+opensubsonic-cli = { path = "crates/opensubsonic-cli" }
+cadence-player = { path = "crates/cadence-player" }
+cadence-storage-android = { path = "crates/cadence-storage-android" }
 
 tracing = "0.1"
 serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
 reqwest = { version = "0.12", features = ["json"] }
 tokio = { version = "1.0", default-features = false  }
 async-trait = "0.1"
@@ -20,7 +22,11 @@ once_cell = "1.21.3"
 thiserror = "1.0"
 url = "2.5.7"
 
+# Android
+jni = "0.21.1"
+redb = "3.1.0"
+
 # web
-howler-wasm = { path = "packages/howler-wasm" }
+howler-wasm = { path = "crates/howler-wasm" }
 web-sys = { version = "0.3.82", features = ["Window", "AudioContext", "AudioContextState"] }
 wasm-bindgen-futures = "0.4.55"

@@ -2,7 +2,14 @@ use crate::context::{IsPlaying, Queue, SubSonicLogin};
 use cadence_player::CadencePlayer;
 use components::{login::Login, navbar::Navbar, player::Player};
 use dioxus::prelude::*;
-use dioxus_sdk::storage::{LocalStorage, get_from_storage, use_storage};
+use dioxus_sdk::storage::{get_from_storage, use_storage};
+
+#[cfg(feature = "mobile")]
+use cadence_storage_android::LocalStorage;
+
+#[cfg(not(feature = "mobile"))]
+use dioxus_sdk::storage::LocalStorage;
+
 use services::subsonic_client::{SUBSONIC_CLIENT, SubsonicClient};
 use std::sync::Arc;
 use tokio::sync::{Mutex, broadcast};
@@ -35,16 +42,25 @@ fn main() {
 
 #[component]
 fn App() -> Element {
-    tracing::info!("Candence started");
-    let mut logged_in = use_signal(|| false);
-    #[cfg(not(feature = "mobile"))]
-    let mut saved_credentials = get_from_storage::<LocalStorage, Option<SubSonicLogin>>(
-        "subsonic_credentials".to_string(),
-        || None,
-    );
+    #[cfg(feature = "desktop")]
+    dioxus_sdk::storage::set_dir!("/home/okno/.local/share/cadence");
 
-    #[cfg(not(feature = "mobile"))]
-    if let Some(credentials) = saved_credentials.take() {
+    #[cfg(feature = "mobile")]
+    let dir = cadence_storage_android::internal_storage_dir();
+
+    info!("Candence started");
+    let mut logged_in = use_signal(|| false);
+
+    let mut saved_credentials = {
+        let saved = get_from_storage::<LocalStorage, Option<SubSonicLogin>>(
+            "subsonic_credentials".to_string(),
+            || None,
+        );
+
+        use_storage::<LocalStorage, _>("subsonic_credentials".to_string(), || saved)
+    };
+
+    if let Some(credentials) = saved_credentials.read().cloned() {
         logged_in.set(true);
         *SUBSONIC_CLIENT.write() = Some(SubsonicClient::new(
             &credentials.server_url,
@@ -52,10 +68,6 @@ fn App() -> Element {
             &credentials.password,
         ));
     }
-
-    #[cfg(not(feature = "mobile"))]
-    let mut saved_credentials =
-        use_storage::<LocalStorage, _>("subsonic_credentials".to_string(), || saved_credentials);
 
     let (tx, rx) = tokio::sync::mpsc::channel(10);
     let (position_tx, _) = tokio::sync::broadcast::channel(10);
@@ -70,7 +82,6 @@ fn App() -> Element {
         move |(server_url, username, password): (String, String, String)| {
             let subsonic_client = SubsonicClient::new(&server_url, &username, &password);
 
-            #[cfg(not(feature = "mobile"))]
             saved_credentials.set(Some(SubSonicLogin {
                 server_url: server_url.clone(),
                 username: username.clone(),
