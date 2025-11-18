@@ -1,14 +1,30 @@
 @import url('https://fonts.googleapis.com/css2?family=Flow+Circular&display=swap');
 
-body {
-    background-color: #0f1116;
+:root {
+    --primary-color: white;
+    --color-primary-hover: #2563eb;
+    --color-text: #1f2937;
+    --color-background: #ffffff;
+    --border-radius: 6px;
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+}
+
+html, body {
+    background: #0a0a0a;
     color: #ffffff;
-    font-family: "Flow Circular", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
-    padding: 0;
+}
+
+#main {
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+    background: #0a0a0a;
+}
+
+body {
+    font-family: "Flow Circular", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
 }
 
 button {

@@ -41,6 +41,7 @@ pub fn Navbar() -> Element {
                 label: "Search".to_string(),
                 active: search_active,
                 onclick: move || {
+                    nav.replace(Route::SearchView {});
                     set_active(&mut search_active);
                 },
                 SearchIcon { filled: search_active }

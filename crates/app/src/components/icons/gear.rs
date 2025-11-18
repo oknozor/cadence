@@ -5,6 +5,7 @@ pub fn GearIcon(filled: ReadSignal<bool>) -> Element {
     rsx! {
         if filled() {
             svg {
+                class: "icon",
                 fill: "#000000",
                 height: "32",
                 view_box: "0 0 256 256",
@@ -14,6 +15,7 @@ pub fn GearIcon(filled: ReadSignal<bool>) -> Element {
             }
         } else {
             svg {
+                class: "icon",
                 fill: "#000000",
                 height: "32",
                 view_box: "0 0 256 256",

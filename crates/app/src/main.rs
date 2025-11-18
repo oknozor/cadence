@@ -10,11 +10,11 @@ use cadence_storage_android::LocalStorage;
 #[cfg(not(feature = "mobile"))]
 use dioxus_sdk::storage::LocalStorage;
 
+use crate::components::topbar::TopBar;
 use services::subsonic_client::{SUBSONIC_CLIENT, SubsonicClient};
 use std::sync::Arc;
 use tokio::sync::{Mutex, broadcast};
 use views::{AlbumView, Library, SearchView};
-use crate::components::topbar::TopBar;
 
 mod components;
 mod context;
@@ -80,7 +80,6 @@ fn App() -> Element {
             );
             *SUBSONIC_CLIENT.write() = Some(client.clone());
 
-
             spawn(async move {
                 match client.ping().await {
                     Ok(_) => {
@@ -92,7 +91,7 @@ fn App() -> Element {
                                 rx.read().clone(),
                                 consume_context(),
                             )
-                                .expect("Player start failed");
+                            .expect("Player start failed");
                             player.run().await.expect("Player run error");
                         });
                         logged_in.set(true);
@@ -140,8 +139,8 @@ fn App() -> Element {
 #[component]
 fn WebNavbar() -> Element {
     rsx! {
-        Navbar {}
         TopBar {}
         Outlet::<Route> {}
+        Navbar {}
     }
 }

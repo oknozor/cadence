@@ -1,19 +1,33 @@
 #topbar {
     background: #0a0a0a;
-}
-#header {
-    padding-top: 5px;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding: 10px;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    align-items: center;
+    gap: 6px;
 }
 
-#topbar-source-selector {
-    display: flex;
+#topbar .settings-icons {
+    max-height: 30px;
+    padding: 5px;
+    background-color: dodgerblue;
+    border-radius: 50%;
+}
+
+#topbar .settings-icons svg {
+    background-color: dodgerblue;
+    width: 20px;
+    height: 20px;
+}
+
+
+#topbar button {
+    background-color: mediumseagreen;
+    max-height: 30px;
+    border-radius: 14px;
+    border: 0;
     flex-direction: row;
     gap: 10px;
-    padding-left: 10px;
+    padding: 4px 10px 4px 10px;
 }
 

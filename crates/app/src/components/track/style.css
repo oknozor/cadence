@@ -17,9 +17,7 @@
 }
 
 .track-row .icon {
-    background-color: white;
-    fill: black;
-    color: black;
+    fill: lightgrey;
     display: flex;
     flex-direction: row;
 }

@@ -70,11 +70,8 @@ dependencies = [
  "dioxus-primitives",
  "dioxus-sdk",
  "opensubsonic-cli",
- "reqwest",
  "serde",
  "tokio",
- "wasm-bindgen-futures",
- "web-sys",
 ]
 
 [[package]]

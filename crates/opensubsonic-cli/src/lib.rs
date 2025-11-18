@@ -31,8 +31,8 @@ impl ClientHooks<()> for Client {
 
 #[cfg(test)]
 mod test {
+    use crate::Client;
     use crate::types::AlbumListType;
-    use crate::{Client, PASSWORD, USERNAME};
 
     const ALBUM_ID: &str = "5imOrY1P5PnAYsaoM06BXf";
     const ARTIST_ID: &str = "5imOrY1P5PnAYsaoM06BXf";

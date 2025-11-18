@@ -1,6 +1,7 @@
 .library-container {
     display: flex;
     flex-direction: column;
+    margin-left: 8px;
     gap: 6px;
 }
 
