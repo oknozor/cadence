@@ -1,18 +1,24 @@
 use crate::components::icons::search::SearchIcon;
 use crate::shared::thumbnails::{RoundedThumbnail, Thumbnail};
 use crate::{components::search::SearchResult, services::subsonic_client::SUBSONIC_CLIENT};
-use dioxus::prelude::*;
+use dioxus::{CapturedError, prelude::*};
 
 #[component]
 pub fn SearchView() -> Element {
-    let search_results = use_signal(|| vec![]);
+    let mut input = use_signal(|| String::new());
+    let mut search_results = use_action(move |input: String| async move {
+        if input.is_empty() {
+            return Ok(vec![]);
+        }
 
-    rsx! {
-        document::Link { rel: "stylesheet", href: asset!("./style.css") }
-        div {
-            class: "search-view",
-            SearchInput { search_results }
-            if search_results.read().is_empty() {
+        let client = SUBSONIC_CLIENT.cloned().unwrap();
+        client
+            .search(&input)
+            .await
+            .map_err(|err| CapturedError::new(err))
+    });
+
+    let empty = rsx! {
                 div {
                     class: "search-empty",
                     span {
@@ -24,40 +30,45 @@ pub fn SearchView() -> Element {
                         "Search for artists, albums, songs, or playlists"
                     }
                 }
-            } else {
-                SearchResults { search_results }
-            }
-        }
-    }
-}
+    };
 
-#[component]
-pub fn SearchInput(search_results: WriteSignal<Vec<SearchResult>>) -> Element {
-    let client = SUBSONIC_CLIENT.cloned().unwrap();
+    let content = match search_results.value() {
+        Some(Ok(search_results)) if search_results.read().is_empty() && input().is_empty() => empty,
+        None if input().is_empty() => empty,
+        Some(Ok(search_results)) => rsx! {
+            SearchResults {
+                search_results
+            }
+        },
+        Some(Err(err)) => rsx! {
+            div {
+                class: "col search-results",
+                "Error: {err}"
+            }
+        },
+        None => rsx! {
+            div { }
+        },
+    };
 
     rsx! {
         document::Link { rel: "stylesheet", href: asset!("./style.css") }
         div {
-            class: "search-input-container row",
-            SearchIcon { size: 18, filled: false }
-            input {
-                id: "search-input",
-                type: "search",
-                placeholder: "Search...",
-                oninput: move |event| {
-                    let client = client.clone();
-                    spawn(async move {
-                        match client.search(&event.value()).await {
-                            Ok(results) => {
-                                *search_results.write() = results;
-                            }
-                            Err(err) => {
-                                error!("Search error: {}", err);
-                            }
-                        }
-                    });
+            class: "search-view",
+            div {
+                class: "search-input-container row",
+                SearchIcon { size: 18, filled: false }
+                input {
+                    id: "search-input",
+                    type: "search",
+                    placeholder: "Search...",
+                    oninput: move |event| {
+                        input.set(event.value());
+                        search_results.call(event.value())
+                    }
                 }
             }
+            {content}
         }
     }
 }
