@@ -16,6 +16,7 @@ pub struct Song {
     pub title: String,
     pub artist: String,
     pub album: String,
+    pub cover_art: Option<String>,
     pub duration: Option<u32>,
 }
 
@@ -24,7 +25,7 @@ impl From<opensubsonic_cli::types::AlbumId3WithSongs> for Album {
         let artist = response.artist.unwrap_or_default();
         let album = response.name;
 
-        Self {
+        Album {
             id: response.id,
             name: album.clone(),
             artist: artist.clone(),
@@ -50,7 +51,7 @@ impl From<opensubsonic_cli::types::AlbumId3> for Album {
         let artist = response.artist.unwrap_or_default();
         let album = response.name;
 
-        Self {
+        Album {
             id: response.id,
             name: album.clone(),
             artist: artist.clone(),

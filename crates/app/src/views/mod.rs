@@ -1,5 +1,5 @@
-mod library;
-pub use library::Library;
+mod home;
+pub use home::Home;
 mod album;
 pub use album::AlbumView;
 mod search;

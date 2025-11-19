@@ -31,7 +31,7 @@ pub fn Navbar() -> Element {
                 label: "Home".to_string(),
                 active: home_active,
                 onclick: move || {
-                    nav.replace(Route::Library {});
+                    nav.replace(Route::Home {});
                     set_active(&mut home_active);
                 },
                 HomeIcon { filled: home_active }

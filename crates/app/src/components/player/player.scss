@@ -1,7 +1,6 @@
 .player-container {
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    flex-direction: column;
     width: 100%;
     position: fixed;
     bottom: 71px;

@@ -1,13 +1,12 @@
-use dioxus::prelude::*;
-use crate::components::icons::gear::GearIcon;
 use crate::Route;
+use crate::components::icons::gear::GearIcon;
+use dioxus::prelude::*;
 
 #[component]
 pub fn TopBar() -> Element {
     let nav = navigator();
 
     rsx! {
-        document::Link { rel: "stylesheet", href: asset!("./style.css") }
         div {
         id: "topbar",
             div {
@@ -18,19 +17,19 @@ pub fn TopBar() -> Element {
             }
             button {
                 onclick: move |_| {
-                    nav.replace(Route::Library {});
+                    nav.replace(Route::Home {});
                 },
                 "Music"
             }
             button {
                 onclick: move |_| {
-                    nav.replace(Route::Library {});
+                    nav.replace(Route::Home {});
                 },
                 "Podcasts"
             }
             button {
                 onclick: move |_| {
-                    nav.replace(Route::Library {});
+                    nav.replace(Route::Home {});
                 },
                 "Radio"
             }

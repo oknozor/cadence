@@ -22,7 +22,6 @@ pub fn AlbumView(id: String) -> Element {
         .unwrap_or_default();
 
     rsx! {
-        document::Link { rel: "stylesheet", href: asset!("./style.css") }
         div {
             class: "album-view",
             match album() {

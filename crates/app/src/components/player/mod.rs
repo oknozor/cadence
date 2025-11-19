@@ -23,49 +23,52 @@ pub fn Player() -> Element {
     });
 
     rsx! {
-        document::Link { rel: "stylesheet", href: asset!("./style.css") }
         div {
             class: "player-container",
             if let Some(track) = consume_context::<Queue>().get_current() {
                 div {
-                    class: "track-container",
-                    flex: "column",
-                    flex_grow: 1,
+                    display: "flex",
+                    flex_direction: "row",
+                    align_items: "center",
+                    padding_left: "10px",
                     div {
-                        class: "track-info",
-                        h3 { "{track.title}" },
-                        p { "{track.artist}" }
+                        class: "track-container",
+                        flex: "column",
+                        flex_grow: 1,
+                        div {
+                            class: "track-info",
+                            h3 { "{track.title}" },
+                            p { "{track.artist}" }
+                        }
                     }
-                    Progress {
-                        value: position,
-                        max: track.duration.unwrap_or_default() as f64,
-                        ProgressIndicator {}
-                    }
-                }
-                div {
-                    class: "player-controls",
-                    button {
-                        onclick: move |_| {
-                            let sender: Sender<PlayerCommand> = consume_context();
-                            if is_playing.is_playing() {
-                                spawn(async move { sender.send(PlayerCommand::Pause).await.unwrap() });
-                                is_playing.toggle();
-                            } else {
-                                let sender = sender.clone();
-                                spawn(async move { sender.send(PlayerCommand::Play).await.unwrap() });
-                                is_playing.toggle();
+                    div {
+                        class: "player-controls",
+                        button {
+                            onclick: move |_| {
+                                let sender: Sender<PlayerCommand> = consume_context();
+                                if is_playing.is_playing() {
+                                    spawn(async move { sender.send(PlayerCommand::Pause).await.unwrap() });
+                                    is_playing.toggle();
+                                } else {
+                                    let sender = sender.clone();
+                                    spawn(async move { sender.send(PlayerCommand::Play).await.unwrap() });
+                                    is_playing.toggle();
+                                }
+                            },
+                            PlayIcon {
+                                size: 24,
+                                is_playing: is_playing.to_signal()
                             }
-                        },
-                        PlayIcon {
-                            size: 24,
-                            is_playing: is_playing.to_signal()
                         }
                     }
                 }
+                Progress {
+                    value: position,
+                    max: track.duration.unwrap_or_default() as f64,
+                    ProgressIndicator {}
+                }
             } else {
                 div {
-                    class: "no-track",
-                    p { "No track loaded" }
                 }
             }
         }

@@ -9,7 +9,7 @@ use crate::{
 use crate::services::subsonic_client::SUBSONIC_CLIENT;
 
 #[component]
-pub fn Library() -> Element {
+pub fn Home() -> Element {
     let nav = navigator();
 
     let recently_released = use_resource(|| fetch_albums(AlbumListType::RecentlyReleased));
@@ -30,7 +30,6 @@ pub fn Library() -> Element {
     };
 
     rsx! {
-        document::Link { rel: "stylesheet", href: asset!("./style.css") }
         div {
             class: "library-view",
             TopBar {  }
