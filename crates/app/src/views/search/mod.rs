@@ -38,7 +38,7 @@ pub fn SearchInput(search_results: WriteSignal<Vec<SearchResult>>) -> Element {
     rsx! {
         document::Link { rel: "stylesheet", href: asset!("./style.css") }
         div {
-            class: "search-inputcontainer row",
+            class: "search-input-container row",
             SearchIcon { size: 18, filled: false }
             input {
                 id: "search-input",

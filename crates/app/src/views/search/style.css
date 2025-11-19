@@ -10,7 +10,7 @@
     gap: 15px;
 }
 
-.search-inputcontainer {
+.search-input-container {
     display: flex;
     align-items: center;
     padding: 8px;
@@ -19,12 +19,12 @@
     background-color: var(--primary-color-5);
 }
 
-.search-inputcontainer .icon {
+.search-input-container .icon {
     margin-right: 8px;
     background-color: var(--primary-color-5);
 }
 
-.search-inputcontainer input {
+.search-input-container input {
     border: none;
     outline: none;
     flex: 1;
