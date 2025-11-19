@@ -9,8 +9,5 @@ fn main() {
     let ast = syn::parse2(tokens).unwrap();
     let content = prettyplease::unparse(&ast);
 
-    let mut out_file = std::path::Path::new(&std::env::var("OUT_DIR").unwrap()).to_path_buf();
-    out_file.push("codegen.rs");
-
-    std::fs::write(out_file, content).unwrap();
+    std::fs::write("src/codegen.rs", content).unwrap();
 }

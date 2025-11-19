@@ -1,13 +1,13 @@
 use dioxus::prelude::*;
 
 #[component]
-pub fn SearchIcon(filled: ReadSignal<bool>) -> Element {
+pub fn SearchIcon(size: u32, filled: ReadSignal<bool>) -> Element {
     rsx! {
         if filled() {
             svg {
                 class: "icon",
                 fill: "#000000",
-                height: "32",
+                height: "{size}",
                 view_box: "0 0 256 256",
                 width: "32",
                 xmlns: "http://www.w3.org/2000/svg",
@@ -17,7 +17,7 @@ pub fn SearchIcon(filled: ReadSignal<bool>) -> Element {
             svg {
                 class: "icon",
                 fill: "#000000",
-                height: "32",
+                height: "{size}",
                 view_box: "0 0 256 256",
                 width: "32",
                 xmlns: "http://www.w3.org/2000/svg",

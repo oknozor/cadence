@@ -1,0 +1,11 @@
+.rounded-thumbnail {
+    object-fit: cover;
+    border-radius: 50%;
+    display: block;
+}
+
+.thumbnail {
+    object-fit: cover;
+    border-radius: 3px;
+    display: block;
+}

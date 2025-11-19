@@ -2,7 +2,7 @@ use dioxus::{CapturedError, prelude::*};
 
 use crate::{
     Route,
-    components::{album_card::Album, album_list::AlbumList},
+    components::{album_card::Album, album_list::AlbumList, topbar::TopBar},
     services::subsonic_client::AlbumListType,
 };
 
@@ -33,6 +33,7 @@ pub fn Library() -> Element {
         document::Link { rel: "stylesheet", href: asset!("./style.css") }
         div {
             class: "library-view",
+            TopBar {  }
             div {
                 class: "music-content",
                 AlbumList {

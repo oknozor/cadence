@@ -1,6 +1,8 @@
-include!(concat!(env!("OUT_DIR"), "/codegen.rs"));
+pub mod codegen;
+pub use codegen::*;
 
 use once_cell::sync::OnceCell;
+use progenitor_client::{ClientHooks, OperationInfo};
 
 pub static USERNAME: OnceCell<String> = OnceCell::new();
 pub static PASSWORD: OnceCell<String> = OnceCell::new();

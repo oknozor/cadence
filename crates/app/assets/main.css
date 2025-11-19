@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Flow+Circular:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
 
 :root {
     --primary-color: var(--dark, #000) var(--light, #fff);
@@ -31,17 +31,44 @@
     --primary-info-color: var(--dark, var(--primary-color-5)) var(--light, var(--primary-color));
     --secondary-info-color: var(--dark, var(--primary-color-7)) var(--light, var(--secondary-color-3));
 
+    /* Gap */
+    --gap-small: 2px;
+    --gap: 4px;
+
 }
 
 body {
-    padding: 0;
     margin: 0;
-    background-color: var(--primary-color);
+    background-color: var(--primary-color-2);
     color: var(--secondary-color-4);
-    font-family: "Flow Circular", system-ui;
+    font-family: 'Roboto', system-ui;
     font-optical-sizing: auto;
     font-style: normal;
     font-weight: 400;
+    min-height: 100vh;
+}
+
+.col {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-small);
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--gap);
+}
+
+.text-primary {
+    color: var(--secondary-color);
+    font-size: 16px;
+}
+
+.text-secondary {
+    color: var(--secondary-color-5);
+    font-size: 14px;
 }
 
 @media (prefers-color-scheme: dark) {

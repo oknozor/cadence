@@ -44,7 +44,7 @@ pub fn Navbar() -> Element {
                     nav.replace(Route::SearchView {});
                     set_active(&mut search_active);
                 },
-                SearchIcon { filled: search_active }
+                SearchIcon { size: 32, filled: search_active }
             }
             NavbarItem {
                 label: "Library".to_string(),

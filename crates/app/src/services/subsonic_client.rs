@@ -1,5 +1,6 @@
 use crate::components::album_card::Album;
 use crate::components::search::SearchResult;
+use dioxus::prelude::info;
 use dioxus::signals::GlobalSignal;
 use opensubsonic_cli::types::Search3ResponseSubsonicResponse;
 use opensubsonic_cli::{
@@ -73,6 +74,7 @@ impl SubsonicClient {
             "scrobz"
         )
     }
+
     /// Get album by ID
     pub async fn get_album(&self, id: &str) -> Result<Album, ClientError> {
         let response = self
@@ -160,6 +162,8 @@ impl SubsonicClient {
                     .map(|album| SearchResult::Album {
                         id: album.id,
                         name: album.name,
+                        cover: album.cover_art.as_ref().map(|id| self.cover_url(id)),
+                        artist: album.display_artist.or(album.artist),
                     })
                     .chain(
                         response
@@ -169,11 +173,14 @@ impl SubsonicClient {
                             .map(|artist| SearchResult::Artist {
                                 id: artist.id,
                                 name: artist.name,
+                                thumbnail: artist.artist_image_url.map(ensure_https),
                             })
                             .chain(response.search_result3.song.into_iter().map(|song| {
                                 SearchResult::Song {
                                     id: song.id,
                                     name: song.title,
+                                    cover: song.cover_art.as_ref().map(|id| self.cover_url(id)),
+                                    artist: song.display_artist.or(song.artist),
                                 }
                             })),
                     )
@@ -185,5 +192,15 @@ impl SubsonicClient {
                 Err(ClientError::Failure(failure))
             }
         }
+    }
+}
+
+fn ensure_https(url: String) -> String {
+    if url.starts_with("https://") {
+        url
+    } else if url.starts_with("http://") {
+        format!("https://{}", &url[7..])
+    } else {
+        format!("https://{}", url)
     }
 }

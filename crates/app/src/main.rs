@@ -19,6 +19,7 @@ use views::{AlbumView, Library, SearchView};
 mod components;
 mod context;
 mod services;
+mod shared;
 mod views;
 
 #[derive(Debug, Clone, Routable, PartialEq)]
@@ -137,7 +138,6 @@ fn App() -> Element {
 #[component]
 fn WebNavbar() -> Element {
     rsx! {
-        TopBar {}
         Outlet::<Route> {}
         Navbar {}
     }

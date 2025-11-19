@@ -1,3 +1,5 @@
+use crate::components::icons::search::SearchIcon;
+use crate::shared::thumbnails::{RoundedThumbnail, Thumbnail};
 use crate::{components::search::SearchResult, services::subsonic_client::SUBSONIC_CLIENT};
 use dioxus::prelude::*;
 
@@ -10,7 +12,21 @@ pub fn SearchView() -> Element {
         div {
             class: "search-view",
             SearchInput { search_results }
-            SearchResults { search_results }
+            if search_results.read().is_empty() {
+                div {
+                    class: "search-empty",
+                    span {
+                        class: "text-primary",
+                        "What do you want to listen to?"
+                    }
+                    span {
+                        class: "text-secondary",
+                        "Search for artists, albums, songs, or playlists"
+                    }
+                }
+            } else {
+                SearchResults { search_results }
+            }
         }
     }
 }
@@ -21,15 +37,26 @@ pub fn SearchInput(search_results: WriteSignal<Vec<SearchResult>>) -> Element {
 
     rsx! {
         document::Link { rel: "stylesheet", href: asset!("./style.css") }
-        input {
-            id: "search-input",
-            type: "search",
-            placeholder: "Search...",
-            oninput: move |event| {
-                let client = client.clone();
-                spawn(async move {
-                    *search_results.write() = client.search(&event.value()).await.unwrap();
-                });
+        div {
+            class: "search-inputcontainer row",
+            SearchIcon { size: 18, filled: false }
+            input {
+                id: "search-input",
+                type: "search",
+                placeholder: "Search...",
+                oninput: move |event| {
+                    let client = client.clone();
+                    spawn(async move {
+                        match client.search(&event.value()).await {
+                            Ok(results) => {
+                                *search_results.write() = results;
+                            }
+                            Err(err) => {
+                                error!("Search error: {}", err);
+                            }
+                        }
+                    });
+                }
             }
         }
     }
@@ -39,22 +66,53 @@ pub fn SearchInput(search_results: WriteSignal<Vec<SearchResult>>) -> Element {
 pub fn SearchResults(search_results: ReadSignal<Vec<SearchResult>>) -> Element {
     rsx! {
         div {
-            display: "flex",
-            flex_direction: "column",
+            class: "col search-results",
             for result in search_results.read().iter() {
-                if let SearchResult::Artist {name, .. } = result {
-                    p {
-                        "{name}"
+                if let SearchResult::Artist {id, name, thumbnail } = result {
+                    div {
+                        class: "row",
+                        if let Some(src) = thumbnail {
+                            RoundedThumbnail {size: 36, artist: name, src }
+                        }
+                        div {
+                            class: "col",
+                            span { class: "text-primary", "{name}" }
+                            span { class: "text-secondary", "Artist" }
+                        }
                     }
                 }
-                else if let SearchResult::Album {name, .. } = result {
-                    p {
-                        "{name}"
+                else if let SearchResult::Album { id, name, cover, artist} = result {
+                    div {
+                        class: "row",
+                        if let Some(src) = cover  {
+                            Thumbnail { size: 36, artist: name, src }
+                        }
+                        div {
+                            class: "col",
+                            span {  class: "text-primary", "{name}" }
+                            if let Some(artist) = artist {
+                                span {class: "text-secondary", "Album · {artist}" }
+                            } else {
+                                span {class: "text-secondary", "Album" }
+                            }
+                        }
                     }
                 }
-                else if let SearchResult::Song {name, .. } = result {
-                    p {
-                        "{name}"
+                else if let SearchResult::Song {id, name, cover, artist } = result {
+                    div {
+                        class: "row",
+                        if let Some(src) = cover  {
+                            Thumbnail { size: 36, artist: name, src }
+                        }
+                        div {
+                            class: "col",
+                            span { class: "text-primary", "{name}" }
+                            if let Some(artist) = artist {
+                                span {class: "text-secondary", "Song · {artist}" }
+                            } else {
+                                span {class: "text-secondary", "Song" }
+                            }
+                        }
                     }
                 }
             }
