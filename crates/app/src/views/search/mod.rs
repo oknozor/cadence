@@ -52,7 +52,7 @@ pub fn SearchView() -> Element {
     };
 
     rsx! {
-        document::Link { rel: "stylesheet", href: asset!("./style.css") }
+        document::Link { rel: "stylesheet", href: asset!("./style.scss") }
         div {
             class: "search-view",
             div {

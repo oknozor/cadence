@@ -9,7 +9,6 @@ pub fn Login(on_login: EventHandler<(String, String, String)>) -> Element {
     let mut password = use_signal(String::new);
 
     rsx! {
-        document::Link { rel: "stylesheet", href: asset!("./style.css") }
         div {
             class: "login-container",
             h1 { "Connect to Subsonic Server" }

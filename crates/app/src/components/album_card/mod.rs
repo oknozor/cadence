@@ -74,7 +74,6 @@ impl From<opensubsonic_cli::types::AlbumId3> for Album {
 #[component]
 pub fn AlbumCard(album: Album, on_album_select: EventHandler<String>) -> Element {
     rsx! {
-        document::Link { rel: "stylesheet", href: asset!("./style.css") }
         div {
             class: "album-card",
             key: "{album.id}",

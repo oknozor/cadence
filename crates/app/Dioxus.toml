@@ -1,0 +1,28 @@
+[application]
+name = "cadence"
+out_dir = "dist"
+asset_dir = "public"
+android_min_sdk_version = 35
+
+[web.app]
+title = "project_name"
+
+[web.watcher]
+reload_html = true
+watch_path = ["src", "public"]
+
+[web.resource]
+style = []
+script = []
+
+[web.resource.dev]
+style = []
+script = []
+
+[[web.proxy]]
+backend = "http://localhost:8000/api/"
+
+[bundle]
+identifier = "org.hoohoot"
+publisher = "Cadence"
+icon = ["assets/icon.png"]

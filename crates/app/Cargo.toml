@@ -18,4 +18,4 @@ cadence-storage-android= { workspace = true, optional = true}
 default = ["web"]
 web = ["dioxus/web"]
 desktop = ["dioxus/desktop"]
-mobile = ["dioxus/mobile", "cadence-storage-android"]
+mobile = ["dioxus/mobile", "cadence-storage-android" ]

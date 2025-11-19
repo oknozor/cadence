@@ -10,7 +10,6 @@ use cadence_storage_android::LocalStorage;
 #[cfg(not(feature = "mobile"))]
 use dioxus_sdk::storage::LocalStorage;
 
-use crate::components::topbar::TopBar;
 use services::subsonic_client::{SUBSONIC_CLIENT, SubsonicClient};
 use std::sync::Arc;
 use tokio::sync::{Mutex, broadcast};
@@ -35,7 +34,7 @@ enum Route {
 }
 
 const FAVICON: Asset = asset!("/assets/favicon.ico");
-const MAIN_CSS: Asset = asset!("/assets/main.css");
+const MAIN_CSS: Asset = asset!("/assets/main.scss");
 
 fn main() {
     dioxus::launch(App);
@@ -71,18 +70,19 @@ fn App() -> Element {
 
     use_effect(move || {
         if let Some(credentials) = saved_credentials.read().cloned() {
-            logged_in.set(true);
-
             let client = SubsonicClient::new(
                 &credentials.server_url,
                 &credentials.username,
                 &credentials.password,
             );
+
             *SUBSONIC_CLIENT.write() = Some(client.clone());
 
             spawn(async move {
                 match client.ping().await {
-                    Ok(_) => {
+                    Ok(ok) if ok => {
+                        info!("Logged in");
+                        logged_in.set(true);
                         spawn(async move {
                             let mut player = CadencePlayer::build(
                                 &credentials.server_url,
@@ -94,7 +94,9 @@ fn App() -> Element {
                             .expect("Player start failed");
                             player.run().await.expect("Player run error");
                         });
-                        logged_in.set(true);
+                    }
+                    Ok(ko) => {
+                        error_msg.set(Some(format!("Login failed: {}", ko)));
                     }
                     Err(err) => {
                         error_msg.set(Some(format!("Login failed: {}", err)));
@@ -115,11 +117,19 @@ fn App() -> Element {
     };
 
     rsx! {
+        document::Meta {
+              name: "viewport",
+              content: "width=device-width, initial-scale=1.0, viewport-fit=cover"
+        }
         document::Link { rel: "icon", href: FAVICON }
         document::Link { rel: "stylesheet", href: MAIN_CSS }
         document::Script {
             type: "module",
             src: asset!("/assets/howler.min.js", JsAssetOptions::new().with_minify(true)),
+        }
+        meta {
+            content: "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover",
+            name: "viewport",
         }
         if logged_in() {
             Router::<Route> { }

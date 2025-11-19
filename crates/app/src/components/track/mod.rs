@@ -1,4 +1,5 @@
 use crate::components::album_card::Song;
+use crate::components::icons::animated_bars::AnimatedBars;
 use crate::components::icons::dots::DotIcon;
 use crate::context::{IsPlaying, Queue};
 use cadence_player::PlayerCommand;
@@ -8,8 +9,9 @@ use tokio::sync::mpsc::Sender;
 #[component]
 pub fn Track(track: Song) -> Element {
     let sender = use_context::<Sender<PlayerCommand>>();
+    let is_playing = consume_context::<IsPlaying>().song().as_ref() == Some(&track.id);
+
     rsx!(
-        document::Link { rel: "stylesheet", href: asset!("./style.css") }
         div {
             class: "track-row",
             onclick: move |_| {
@@ -20,9 +22,12 @@ pub fn Track(track: Song) -> Element {
                     sender.send(PlayerCommand::QueueNow(track_id)).await.unwrap();
                 });
                 consume_context::<Queue>().append_and_set_current(track.clone());
-                consume_context::<IsPlaying>().toggle();
+                consume_context::<IsPlaying>().set_playing(track.id.clone());
             },
-            p {
+            if is_playing {
+                AnimatedBars { size: 18 }
+            }
+            span {
                 class: "track-title",
                 "{track.title}"
             },

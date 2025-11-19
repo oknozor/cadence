@@ -1,3 +1,10 @@
+@use '../src/components/track/track.scss';
+@use '../src/components/album_card/album_card.scss';
+@use '../src/components/album_list/album_list.scss';
+@use '../src/components/icons/icons.scss';
+@use '../src/components/login/login.scss';
+@use '../src/components/navbar/navbar.scss';
+
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
 
 :root {
@@ -37,7 +44,11 @@
 
 }
 
+
+
 body {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
     margin: 0;
     background-color: var(--primary-color-2);
     color: var(--secondary-color-4);

@@ -1,0 +1,39 @@
+.music-bars {
+    display: flex;
+    align-items: flex-end;
+    height: 24px;
+    gap: 3px;
+    width: 24px;
+    /* Optional for sizing */
+}
+
+.music-bars div {
+    width: 4px;
+    height: 10px;
+    background: #2196f3;
+    border-radius: 2px;
+    animation: bounce 0.8s infinite;
+    /* stagger the animation */
+}
+
+.music-bars div:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.music-bars div:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes bounce {
+    0% {
+        height: 10px;
+    }
+
+    50% {
+        height: 24px;
+    }
+
+    100% {
+        height: 10px;
+    }
+}

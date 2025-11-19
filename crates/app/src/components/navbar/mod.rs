@@ -25,7 +25,6 @@ pub fn Navbar() -> Element {
     let nav = navigator();
 
     rsx! {
-        document::Link { rel: "stylesheet", href: asset!("./style.css") }
         div {
             id: "navbar",
             NavbarItem {

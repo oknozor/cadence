@@ -1,3 +1,4 @@
+pub mod animated_bars;
 pub mod dots;
 pub mod gear;
 pub mod home;

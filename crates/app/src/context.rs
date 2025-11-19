@@ -77,18 +77,30 @@ impl Queue {
 }
 
 #[derive(Default, Clone)]
-pub struct IsPlaying(Signal<bool>);
+pub struct IsPlaying {
+    playing: Signal<bool>,
+    song_id: Signal<Option<String>>,
+}
 
 impl IsPlaying {
+    pub fn song(&self) -> Option<String> {
+        self.song_id.read().cloned()
+    }
+
     pub fn is_playing(&self) -> bool {
-        *self.0.read()
+        *self.playing.read()
     }
 
     pub fn to_signal(&self) -> Signal<bool> {
-        self.0.clone()
+        self.playing.clone()
+    }
+
+    pub fn set_playing(&mut self, id: String) {
+        self.playing.set(!self.is_playing());
+        self.song_id.set(Some(id));
     }
 
     pub fn toggle(&mut self) {
-        self.0.set(!self.is_playing());
+        self.playing.set(!self.is_playing());
     }
 }

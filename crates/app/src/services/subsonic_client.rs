@@ -2,7 +2,7 @@ use crate::components::album_card::Album;
 use crate::components::search::SearchResult;
 use dioxus::prelude::info;
 use dioxus::signals::GlobalSignal;
-use opensubsonic_cli::types::Search3ResponseSubsonicResponse;
+use opensubsonic_cli::types::{Search3ResponseSubsonicResponse, SubsonicResponse};
 use opensubsonic_cli::{
     Client,
     types::{
@@ -56,11 +56,23 @@ impl SubsonicClient {
     }
 
     /// Test connection to the Subsonic server
-    pub async fn ping(&self) -> Result<(), ClientError> {
+    pub async fn ping(&self) -> Result<bool, ClientError> {
         self.client
             .ping()
             .await
-            .map(|_| ())
+            .map(|response| {
+                let response = response.into_inner().subsonic_response;
+
+                info!("ping {:?}", response);
+                matches!(
+                    response,
+                    Some(
+                        opensubsonic_cli::types::SubsonicResponseSubsonicResponse::SuccessResponse(
+                            _
+                        )
+                    )
+                )
+            })
             .map_err(ClientError::OpenSubSonic)
     }
 
