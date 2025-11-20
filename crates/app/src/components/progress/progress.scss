@@ -1,17 +1,16 @@
 .progress-container {
     display: flex;
     flex-direction: column;
-    color: white;
+    color: var(--secondary-color-1);
 }
 
 .progress {
     position: relative;
     overflow: hidden;
     width: 100%;
-    height: 0.5rem;
+    height: 3px;
     box-sizing: border-box;
-    border-radius: 9999px;
-    background: white;
+    background-color: var(--secondary-color-1);
 }
 
 .progress-indicator {

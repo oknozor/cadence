@@ -7,6 +7,13 @@
     background-color: #1a1d24;
 }
 
+.track-container {
+    padding: 3px;
+    display: flex;
+    flex-direction: row;
+    gap: var(--gap);
+}
+
 .track-info {
     display: flex;
     flex-direction: column;

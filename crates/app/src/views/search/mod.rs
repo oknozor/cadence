@@ -15,7 +15,7 @@ pub fn SearchView() -> Element {
         client
             .search(&input)
             .await
-            .map_err(|err| CapturedError::new(err))
+            .map_err(|err| CapturedError::from_display(err))
     });
 
     let empty = rsx! {
@@ -82,7 +82,7 @@ pub fn SearchResults(search_results: ReadSignal<Vec<SearchResult>>) -> Element {
                     div {
                         class: "row",
                         if let Some(src) = thumbnail {
-                            RoundedThumbnail {size: 36, artist: name, src }
+                            RoundedThumbnail {size: 36, name: name, src }
                         }
                         div {
                             class: "col",
@@ -95,7 +95,7 @@ pub fn SearchResults(search_results: ReadSignal<Vec<SearchResult>>) -> Element {
                     div {
                         class: "row",
                         if let Some(src) = cover  {
-                            Thumbnail { size: 36, artist: name, src }
+                            Thumbnail { size: 36, name, src }
                         }
                         div {
                             class: "col",
@@ -112,7 +112,7 @@ pub fn SearchResults(search_results: ReadSignal<Vec<SearchResult>>) -> Element {
                     div {
                         class: "row",
                         if let Some(src) = cover  {
-                            Thumbnail { size: 36, artist: name, src }
+                            Thumbnail { size: 36, name, src }
                         }
                         div {
                             class: "col",

@@ -2,6 +2,7 @@ use crate::components::icons::play::PlayIcon;
 use crate::components::progress::Progress;
 use crate::components::progress::ProgressIndicator;
 use crate::context::{IsPlaying, Queue};
+use crate::shared::thumbnails::Thumbnail;
 use cadence_player::PlayerCommand;
 use dioxus::prelude::*;
 use tokio::sync::broadcast;
@@ -35,6 +36,13 @@ pub fn Player() -> Element {
                         class: "track-container",
                         flex: "column",
                         flex_grow: 1,
+                        if let Some(cover) = track.cover_art {
+                            Thumbnail {
+                                src: cover,
+                                name: &track.title,
+                                size: 32,
+                            }
+                        }
                         div {
                             class: "track-info",
                             h3 { "{track.title}" },

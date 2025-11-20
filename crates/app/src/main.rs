@@ -124,6 +124,9 @@ fn App() -> Element {
         document::Link { rel: "icon", href: FAVICON }
         document::Link { rel: "stylesheet", href: MAIN_CSS }
         document::Script {
+              src: asset!("/assets/js/getDominantColor.js"),
+        }
+        document::Script {
             type: "module",
             src: asset!("/assets/howler.min.js", JsAssetOptions::new().with_minify(true)),
         }

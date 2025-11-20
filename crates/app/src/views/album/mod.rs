@@ -21,6 +21,21 @@ pub fn AlbumView(id: String) -> Element {
         .and_then(|album| album.cover_art.clone())
         .unwrap_or_default();
 
+    let cover_clone = cover.clone();
+    let dominant_color = use_resource(move || {
+        let cover = cover_clone.clone();
+        async move {
+            let script = format!(
+                r#"
+                const color = await window.getDominantColor("{cover}");
+                dioxus.send(color);
+                "#,
+            );
+            let mut eval = document::eval(&script);
+            eval.recv::<String>().await.unwrap()
+        }
+    });
+
     rsx! {
         div {
             class: "album-view",
@@ -45,7 +60,14 @@ pub fn AlbumView(id: String) -> Element {
                             h1 { "{album.name}" }
                         }
                         h2 { "{album.artist}" }
-
+                        match dominant_color.read_unchecked().as_ref() {
+                            Some(v) => rsx! {
+                                p { "{v}" }
+                            },
+                            _ => rsx! {
+                                p { "hello" }
+                            },
+                        }
                     }
 
                     div {

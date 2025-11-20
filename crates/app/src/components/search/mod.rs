@@ -1,5 +1,3 @@
-use dioxus::prelude::*;
-
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum SearchResult {
     Artist {

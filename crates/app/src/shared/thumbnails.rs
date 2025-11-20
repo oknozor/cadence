@@ -1,13 +1,12 @@
 use dioxus::prelude::*;
 
 #[component]
-pub fn RoundedThumbnail(size: u32, artist: String, src: String) -> Element {
+pub fn RoundedThumbnail(size: u32, name: String, src: String) -> Element {
     rsx! {
-        document::Link { rel: "stylesheet", href: asset!("./style.css") }
         img {
             class: "thumbnail-rounded",
             src: "{src}",
-            alt: "{artist}",
+            alt: "{name}",
             width: "{size}px",
             height: "{size}px"
         }
@@ -15,13 +14,12 @@ pub fn RoundedThumbnail(size: u32, artist: String, src: String) -> Element {
 }
 
 #[component]
-pub fn Thumbnail(size: u32, artist: String, src: String) -> Element {
+pub fn Thumbnail(size: u32, name: String, src: String) -> Element {
     rsx! {
-        document::Link { rel: "stylesheet", href: asset!("./style.css") }
         img {
             class: "thumbnail",
             src: "{src}",
-            alt: "{artist}",
+            alt: "{name}",
             width: "{size}px",
             height: "{size}px"
         }
