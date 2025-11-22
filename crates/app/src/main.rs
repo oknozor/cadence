@@ -1,5 +1,6 @@
 use crate::context::{IsPlaying, Queue, SubSonicLogin};
 use cadence_player::CadencePlayer;
+use cadence_ui::UI_CSS;
 use components::{login::Login, navbar::Navbar, player::Player};
 use dioxus::prelude::*;
 use dioxus_sdk::storage::{get_from_storage, use_storage};
@@ -34,7 +35,7 @@ enum Route {
 }
 
 const FAVICON: Asset = asset!("/assets/favicon.ico");
-const MAIN_CSS: Asset = asset!("/assets/main.scss");
+const MAIN_CSS: Asset = asset!("/assets/styles/main.scss");
 
 fn main() {
     dioxus::launch(App);
@@ -43,7 +44,7 @@ fn main() {
 #[component]
 fn App() -> Element {
     #[cfg(feature = "desktop")]
-    dioxus_sdk::storage::set_dir!("/home/okno/.local/share/cadence");
+    dioxus_sdk::storage::set_dir("~/.local/share/cadence");
 
     #[cfg(feature = "mobile")]
     let dir = cadence_storage_android::internal_storage_dir();
@@ -123,9 +124,7 @@ fn App() -> Element {
         }
         document::Link { rel: "icon", href: FAVICON }
         document::Link { rel: "stylesheet", href: MAIN_CSS }
-        document::Script {
-              src: asset!("/assets/js/getDominantColor.js"),
-        }
+        document::Link { rel: "stylesheet", href: UI_CSS }
         document::Script {
             type: "module",
             src: asset!("/assets/howler.min.js", JsAssetOptions::new().with_minify(true)),

@@ -12,10 +12,11 @@ dioxus-primitives.workspace = true
 
 serde = { workspace = true }
 opensubsonic-cli.workspace = true
+cadence-ui.workspace = true
 cadence-storage-android= { workspace = true, optional = true}
 
 [features]
 default = ["web"]
 web = ["dioxus/web"]
-desktop = ["dioxus/desktop"]
+desktop = ["dioxus/desktop", "cadence-storage-android"]
 mobile = ["dioxus/mobile", "cadence-storage-android" ]

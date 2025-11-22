@@ -1,5 +1,5 @@
 use crate::Route;
-use crate::components::icons::gear::GearIcon;
+use cadence_ui::icons::gear::GearIcon;
 use dioxus::prelude::*;
 
 #[component]

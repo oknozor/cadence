@@ -1,23 +1,33 @@
 .track-row {
-    margin-left: 10px;
-    margin-right: 10px;
+    padding-right: 15px;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-}
 
-.track-row:hover {
-    background-color: #f9f9f9;
-}
 
-.track-row .track-title {
-    margin: 4px;
-    flex: 1;
-}
+    .track-info {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
 
-.track-row .icon {
-    fill: lightgrey;
-    display: flex;
-    flex-direction: row;
+        .track-title-line {
+            display: flex;
+            flex-direction: row;
+            gap: var(--gap);
+            flex-grow: 1;
+
+            .track-title {
+                font-size: 14px;
+                padding-top: 3px;
+                line-height: 0.8;
+            }
+        }
+    }
+
+
+    .icon {
+        background-color: inherit;
+    }
+
 }

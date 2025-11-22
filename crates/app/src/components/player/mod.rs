@@ -1,16 +1,16 @@
-use crate::components::icons::play::PlayIcon;
 use crate::components::progress::Progress;
 use crate::components::progress::ProgressIndicator;
 use crate::context::{IsPlaying, Queue};
 use crate::shared::thumbnails::Thumbnail;
 use cadence_player::PlayerCommand;
+use cadence_ui::icons::play::PlayIcon;
 use dioxus::prelude::*;
 use tokio::sync::broadcast;
 use tokio::sync::mpsc::Sender;
 
 #[component]
 pub fn Player() -> Element {
-    let mut is_playing: IsPlaying = use_context();
+    let mut playing: IsPlaying = use_context();
     let position_tx: broadcast::Sender<u64> = use_context();
     let mut position = use_signal(|| None::<f64>);
 
@@ -54,18 +54,18 @@ pub fn Player() -> Element {
                         button {
                             onclick: move |_| {
                                 let sender: Sender<PlayerCommand> = consume_context();
-                                if is_playing.is_playing() {
+                                if *playing.is_playing().read() {
                                     spawn(async move { sender.send(PlayerCommand::Pause).await.unwrap() });
-                                    is_playing.toggle();
+                                    playing.toggle();
                                 } else {
                                     let sender = sender.clone();
                                     spawn(async move { sender.send(PlayerCommand::Play).await.unwrap() });
-                                    is_playing.toggle();
+                                    playing.toggle();
                                 }
                             },
                             PlayIcon {
                                 size: 24,
-                                is_playing: is_playing.to_signal()
+                                is_playing: playing.is_playing(),
                             }
                         }
                     }

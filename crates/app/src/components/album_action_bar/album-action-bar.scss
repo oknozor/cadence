@@ -1,0 +1,14 @@
+.album-action-bar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  .album-action-bar-start {
+      display: flex;
+      flex-direction: row;
+  }
+  .album-action-bar-end {
+      display: flex;
+      flex-direction: row;
+  }
+}

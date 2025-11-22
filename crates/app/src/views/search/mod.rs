@@ -1,6 +1,6 @@
-use crate::components::icons::search::SearchIcon;
 use crate::shared::thumbnails::{RoundedThumbnail, Thumbnail};
 use crate::{components::search::SearchResult, services::subsonic_client::SUBSONIC_CLIENT};
+use cadence_ui::icons::search::SearchIcon;
 use dioxus::{CapturedError, prelude::*};
 
 #[component]
@@ -82,7 +82,7 @@ pub fn SearchResults(search_results: ReadSignal<Vec<SearchResult>>) -> Element {
                     div {
                         class: "row",
                         if let Some(src) = thumbnail {
-                            RoundedThumbnail {size: 36, name: name, src }
+                            RoundedThumbnail {size: 50, name: name, src }
                         }
                         div {
                             class: "col",
@@ -95,7 +95,7 @@ pub fn SearchResults(search_results: ReadSignal<Vec<SearchResult>>) -> Element {
                     div {
                         class: "row",
                         if let Some(src) = cover  {
-                            Thumbnail { size: 36, name, src }
+                            Thumbnail { size: 50, name, src }
                         }
                         div {
                             class: "col",
@@ -112,7 +112,7 @@ pub fn SearchResults(search_results: ReadSignal<Vec<SearchResult>>) -> Element {
                     div {
                         class: "row",
                         if let Some(src) = cover  {
-                            Thumbnail { size: 36, name, src }
+                            Thumbnail { size: 50, name, src }
                         }
                         div {
                             class: "col",

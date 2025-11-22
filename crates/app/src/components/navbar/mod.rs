@@ -1,11 +1,7 @@
-use std::time::Duration;
-
+use crate::Route;
+use cadence_ui::icons::{home::HomeIcon, library::LibraryIcon, plus::PlusIcon, search::SearchIcon};
 use dioxus::prelude::*;
-
-use crate::{
-    Route,
-    components::icons::{home::HomeIcon, library::LibraryIcon, plus::PlusIcon, search::SearchIcon},
-};
+use std::time::Duration;
 
 #[component]
 pub fn Navbar() -> Element {

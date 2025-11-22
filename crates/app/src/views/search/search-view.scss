@@ -5,9 +5,17 @@
 }
 
 .search-results {
-    margin-top: 10px;
-    margin-left: 10px;
+    display: flex;
+    flex-direction: column;
     gap: 15px;
+    margin-top: 15px;
+    margin-left: 15px;
+}
+
+.search-results .row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .search-input-container {

@@ -1,6 +1,6 @@
+pub mod album_action_bar;
 pub mod album_card;
 pub mod album_list;
-pub mod icons;
 pub mod login;
 pub mod navbar;
 pub mod player;
