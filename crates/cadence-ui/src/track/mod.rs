@@ -1,14 +1,13 @@
-use cadence_core::hooks::{use_player_state, use_queue_state};
+use crate::icons::dots::DotIcon;
+use crate::items::ItemInfo;
+use cadence_core::PlayerCommand;
+use cadence_core::hooks::{use_command_sender, use_player_state, use_queue_state};
 use cadence_core::model::Song;
-use cadence_player::PlayerCommand;
-use cadence_ui::icons::dots::DotIcon;
-use cadence_ui::items::ItemInfo;
 use dioxus::prelude::*;
-use tokio::sync::mpsc::Sender;
 
 #[component]
-pub fn Track(track: Song) -> Element {
-    let sender = use_context::<Sender<PlayerCommand>>();
+pub fn TrackRow(track: Song) -> Element {
+    let sender = use_command_sender();
     let mut player = use_player_state();
     let mut queue = use_queue_state();
     let active = player.song().as_ref() == Some(&track.id);

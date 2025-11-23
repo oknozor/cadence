@@ -6,3 +6,5 @@ edition = "2024"
 [dependencies]
 dioxus = { workspace = true }
 dioxus-sdk = { workspace = true }
+dioxus-primitives.workspace = true
+cadence-core = { workspace = true }

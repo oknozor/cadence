@@ -1,10 +1,10 @@
-use crate::components::progress::Progress;
-use crate::components::progress::ProgressIndicator;
 use cadence_core::hooks::use_command_sender;
 use cadence_core::hooks::use_player_state;
 use cadence_core::hooks::{use_current_track, use_playback_position};
 use cadence_player::PlayerCommand;
 use cadence_ui::icons::play::PlayIcon;
+use cadence_ui::progress::Progress;
+use cadence_ui::progress::ProgressIndicator;
 use cadence_ui::thumbnails::Thumbnail;
 use dioxus::prelude::*;
 

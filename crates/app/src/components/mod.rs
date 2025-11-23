@@ -4,6 +4,4 @@ pub mod album_list;
 pub mod login;
 pub mod navbar;
 pub mod player;
-pub mod progress;
 pub mod topbar;
-pub mod track;

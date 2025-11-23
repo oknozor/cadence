@@ -69,7 +69,6 @@ dependencies = [
  "cadence-storage-android",
  "cadence-ui",
  "dioxus",
- "dioxus-primitives",
  "dioxus-sdk",
  "opensubsonic-cli",
  "serde",
@@ -384,7 +383,9 @@ dependencies = [
 name = "cadence-ui"
 version = "0.1.0"
 dependencies = [
+ "cadence-core",
  "dioxus",
+ "dioxus-primitives",
  "dioxus-sdk",
 ]
 

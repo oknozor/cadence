@@ -12,7 +12,6 @@ cadence-storage-android= { workspace = true, optional = true}
 tokio = { workspace = true, features = ["sync"] }
 dioxus = { workspace = true, features = ["router"] }
 dioxus-sdk = { workspace = true }
-dioxus-primitives.workspace = true
 
 serde = { workspace = true }
 opensubsonic-cli.workspace = true
