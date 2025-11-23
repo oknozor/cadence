@@ -2,11 +2,13 @@ use dioxus::{CapturedError, prelude::*};
 
 use crate::{
     Route,
-    components::{album_card::Album, album_list::AlbumList, topbar::TopBar},
-    services::subsonic_client::AlbumListType,
+    components::{album_list::AlbumList, topbar::TopBar},
 };
 
-use crate::services::subsonic_client::SUBSONIC_CLIENT;
+use cadence_core::{
+    model::Album,
+    services::subsonic_client::{AlbumListType, SUBSONIC_CLIENT},
+};
 
 #[component]
 pub fn Home() -> Element {

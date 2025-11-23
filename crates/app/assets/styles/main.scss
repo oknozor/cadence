@@ -10,7 +10,6 @@
 @use '../../src/views/album/album-view.scss';
 @use '../../src/views/search/search-view.scss';
 @use '../../src/views/home/home-view.scss';
-@use '../../src/shared/shared.scss';
 
 @import url("https://fonts.googleapis.com/css2?Flow+Circular&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 
@@ -82,19 +81,6 @@ button {
     flex-direction: row;
     align-items: center;
     gap: var(--gap);
-}
-
-
-.text-primary {
-    font-weight: 600;
-    color: var(--secondary-color);
-    font-size: 16px;
-}
-
-.text-secondary {
-    font-weight: 500;
-    color: var(--secondary-color-5);
-    font-size: 14px;
 }
 
 @media (prefers-color-scheme: dark) {

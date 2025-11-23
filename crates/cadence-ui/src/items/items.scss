@@ -1,18 +1,22 @@
+@import '../../assets/mixins.scss';
+
 .item-info {
-    display: flex;
-    flex-direction: column;
+    @include column;
     justify-content: space-around;
 
     .item-line {
-        display: flex;
-        flex-direction: row;
+        @include row;
         gap: var(--gap);
         flex-grow: 1;
 
         .item-primary {
-            font-size: 14px;
+            @include text-primary;
             padding-top: 3px;
             line-height: 0.8;
         }
     }
+    .item-secondary {
+         @include text-secondary;
+         padding-top: 3px;
+     }
 }

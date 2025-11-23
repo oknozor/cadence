@@ -1,15 +1,5 @@
 @use '../src/icons/icons.scss';
-@use 'items.scss';
+@use '../src/items/items.scss';
+@use '../src/navbar/navbar.scss';
+@use '../src/thumbnails/thumbnails.scss';
 @import 'mixins.scss';
-
-.text-primary {
-    font-weight: 600;
-    color: var(--secondary-color);
-    font-size: 16px;
-}
-
-.text-secondary {
-    font-weight: 500;
-    color: var(--secondary-color-5);
-    font-size: 14px;
-}

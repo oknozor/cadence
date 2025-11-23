@@ -1,5 +1,3 @@
-use crate::components::album_card::Album;
-use crate::components::search::SearchResult;
 use dioxus::prelude::info;
 use dioxus::signals::GlobalSignal;
 use opensubsonic_cli::types::Search3ResponseSubsonicResponse;
@@ -10,6 +8,8 @@ use opensubsonic_cli::{
         SubsonicFailureResponse,
     },
 };
+
+use crate::model::{Album, SearchResult};
 
 pub static SUBSONIC_CLIENT: GlobalSignal<Option<SubsonicClient>> = GlobalSignal::new(|| None);
 

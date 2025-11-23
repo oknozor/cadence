@@ -1,32 +1,24 @@
 use crate::components::progress::Progress;
 use crate::components::progress::ProgressIndicator;
-use crate::context::{IsPlaying, Queue};
-use crate::shared::thumbnails::Thumbnail;
+use cadence_core::hooks::use_command_sender;
+use cadence_core::hooks::use_player_state;
+use cadence_core::hooks::{use_current_track, use_playback_position};
 use cadence_player::PlayerCommand;
 use cadence_ui::icons::play::PlayIcon;
+use cadence_ui::thumbnails::Thumbnail;
 use dioxus::prelude::*;
-use tokio::sync::broadcast;
-use tokio::sync::mpsc::Sender;
 
 #[component]
 pub fn Player() -> Element {
-    let mut playing: IsPlaying = use_context();
-    let position_tx: broadcast::Sender<u64> = use_context();
-    let mut position = use_signal(|| None::<f64>);
-
-    use_effect(move || {
-        let mut tx = position_tx.subscribe();
-        spawn(async move {
-            while let Ok(new_progress) = tx.recv().await {
-                position.set(Some(new_progress as f64));
-            }
-        });
-    });
+    let mut state = use_player_state();
+    let playback_position = use_playback_position();
+    let current_track = use_current_track();
+    let command_sender = use_command_sender();
 
     rsx! {
         div {
             class: "player-container",
-            if let Some(track) = consume_context::<Queue>().get_current() {
+            if let Some(track) = current_track() {
                 div {
                     display: "flex",
                     flex_direction: "row",
@@ -36,7 +28,7 @@ pub fn Player() -> Element {
                         class: "track-container",
                         flex: "column",
                         flex_grow: 1,
-                        if let Some(cover) = track.cover_art {
+                        if let Some(cover) = track.cover_art.as_ref() {
                             Thumbnail {
                                 src: cover,
                                 name: &track.title,
@@ -53,25 +45,25 @@ pub fn Player() -> Element {
                         class: "player-controls",
                         button {
                             onclick: move |_| {
-                                let sender: Sender<PlayerCommand> = consume_context();
-                                if *playing.is_playing().read() {
-                                    spawn(async move { sender.send(PlayerCommand::Pause).await.unwrap() });
-                                    playing.toggle();
+                                if *state.is_playing().read() {
+                                    let sender = command_sender.clone();
+                                    spawn(async move { sender.clone().send(PlayerCommand::Pause).await.unwrap() });
+                                    state.toggle();
                                 } else {
-                                    let sender = sender.clone();
+                                    let sender = command_sender.clone();
                                     spawn(async move { sender.send(PlayerCommand::Play).await.unwrap() });
-                                    playing.toggle();
+                                    state.toggle();
                                 }
                             },
                             PlayIcon {
                                 size: 24,
-                                is_playing: playing.is_playing(),
+                                is_playing: state.is_playing(),
                             }
                         }
                     }
                 }
                 Progress {
-                    value: position,
+                    value: playback_position,
                     max: track.duration.unwrap_or_default() as f64,
                     ProgressIndicator {}
                 }

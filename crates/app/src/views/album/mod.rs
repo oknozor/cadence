@@ -1,6 +1,5 @@
-use crate::{
-    components::album_action_bar::AlbumActionBar, services::subsonic_client::SUBSONIC_CLIENT,
-};
+use crate::components::album_action_bar::AlbumActionBar;
+use cadence_core::services::subsonic_client::SUBSONIC_CLIENT;
 use dioxus::prelude::*;
 
 #[component]

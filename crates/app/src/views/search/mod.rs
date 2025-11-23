@@ -1,6 +1,7 @@
-use crate::shared::thumbnails::{RoundedThumbnail, Thumbnail};
-use crate::{components::search::SearchResult, services::subsonic_client::SUBSONIC_CLIENT};
+use cadence_core::model::SearchResult;
+use cadence_core::services::subsonic_client::SUBSONIC_CLIENT;
 use cadence_ui::icons::search::SearchIcon;
+use cadence_ui::thumbnails::{RoundedThumbnail, Thumbnail};
 use dioxus::{CapturedError, prelude::*};
 
 #[component]

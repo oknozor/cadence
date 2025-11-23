@@ -1,4 +1,4 @@
-use crate::context::{IsPlaying, Queue, SubSonicLogin};
+use cadence_core::state::{PlayerState, QueueState, SubSonicLogin};
 use cadence_player::CadencePlayer;
 use cadence_ui::UI_CSS;
 use components::{login::Login, navbar::Navbar, player::Player};
@@ -11,15 +11,12 @@ use cadence_storage_android::LocalStorage;
 #[cfg(not(feature = "mobile"))]
 use dioxus_sdk::storage::LocalStorage;
 
-use services::subsonic_client::{SUBSONIC_CLIENT, SubsonicClient};
+use cadence_core::services::subsonic_client::{SUBSONIC_CLIENT, SubsonicClient};
 use std::sync::Arc;
 use tokio::sync::{Mutex, broadcast};
 use views::{AlbumView, Home, SearchView};
 
 mod components;
-mod context;
-mod services;
-mod shared;
 mod views;
 
 #[derive(Debug, Clone, Routable, PartialEq)]
@@ -57,8 +54,8 @@ fn App() -> Element {
     let rx = use_signal(|| Arc::new(Mutex::new(rx)));
     let _: broadcast::Sender<u64> = use_context_provider(|| position_tx);
     let _ = use_context_provider(|| tx);
-    let _ = use_context_provider(Queue::default);
-    let _ = use_context_provider(IsPlaying::default);
+    let _ = use_context_provider(QueueState::default);
+    let _ = use_context_provider(PlayerState::default);
 
     let mut saved_credentials = {
         let saved = get_from_storage::<LocalStorage, Option<SubSonicLogin>>(

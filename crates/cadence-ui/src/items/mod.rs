@@ -12,12 +12,12 @@ pub fn ItemInfo(primary: String, secondary: String, active: bool, paused: bool) 
                    AnimatedBars { size: 12, paused }
                }
                span {
-                   class: "item-primary text-primary",
+                   class: "item-primary",
                    "{primary}"
                }
             }
             span {
-                class: "item-secondary text-secondary",
+                class: "item-secondary",
                 "{secondary}"
             }
         }
