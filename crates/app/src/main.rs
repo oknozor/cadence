@@ -1,19 +1,9 @@
-use cadence_core::state::{PlayerState, QueueState, SubSonicLogin};
-use cadence_player::CadencePlayer;
+use cadence_core::hooks::init_global_context;
+use cadence_core::hooks::use_login_state;
+use cadence_core::{hooks::use_saved_credentials, state::SubSonicLogin};
 use cadence_ui::UI_CSS;
 use components::{login::Login, navbar::Navbar, player::Player};
 use dioxus::prelude::*;
-use dioxus_sdk::storage::{get_from_storage, use_storage};
-
-#[cfg(feature = "mobile")]
-use cadence_storage_android::LocalStorage;
-
-#[cfg(not(feature = "mobile"))]
-use dioxus_sdk::storage::LocalStorage;
-
-use cadence_core::services::subsonic_client::{SUBSONIC_CLIENT, SubsonicClient};
-use std::sync::Arc;
-use tokio::sync::{Mutex, broadcast};
 use views::{AlbumView, Home, SearchView};
 
 mod components;
@@ -47,62 +37,10 @@ fn App() -> Element {
     let dir = cadence_storage_android::internal_storage_dir();
 
     info!("Candence started");
-    let mut logged_in = use_signal(|| false);
-    let mut error_msg = use_signal(|| None::<String>);
-    let (tx, rx) = tokio::sync::mpsc::channel(10);
-    let (position_tx, _) = tokio::sync::broadcast::channel(10);
-    let rx = use_signal(|| Arc::new(Mutex::new(rx)));
-    let _: broadcast::Sender<u64> = use_context_provider(|| position_tx);
-    let _ = use_context_provider(|| tx);
-    let _ = use_context_provider(QueueState::default);
-    let _ = use_context_provider(PlayerState::default);
+    init_global_context();
 
-    let mut saved_credentials = {
-        let saved = get_from_storage::<LocalStorage, Option<SubSonicLogin>>(
-            "subsonic_credentials".to_string(),
-            || None,
-        );
-
-        use_storage::<LocalStorage, _>("subsonic_credentials".to_string(), || saved)
-    };
-
-    use_effect(move || {
-        if let Some(credentials) = saved_credentials.read().cloned() {
-            let client = SubsonicClient::new(
-                &credentials.server_url,
-                &credentials.username,
-                &credentials.password,
-            );
-
-            *SUBSONIC_CLIENT.write() = Some(client.clone());
-
-            spawn(async move {
-                match client.ping().await {
-                    Ok(ok) if ok => {
-                        info!("Logged in");
-                        logged_in.set(true);
-                        spawn(async move {
-                            let mut player = CadencePlayer::build(
-                                &credentials.server_url,
-                                &credentials.username,
-                                &credentials.password,
-                                rx.read().clone(),
-                                consume_context(),
-                            )
-                            .expect("Player start failed");
-                            player.run().await.expect("Player run error");
-                        });
-                    }
-                    Ok(ko) => {
-                        error_msg.set(Some(format!("Login failed: {}", ko)));
-                    }
-                    Err(err) => {
-                        error_msg.set(Some(format!("Login failed: {}", err)));
-                    }
-                }
-            });
-        }
-    });
+    let mut saved_credentials = use_saved_credentials();
+    let login_state = use_login_state();
 
     let handle_login = {
         move |(server_url, username, password): (String, String, String)| {
@@ -130,14 +68,14 @@ fn App() -> Element {
             content: "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover",
             name: "viewport",
         }
-        if logged_in() {
+        if *login_state.logged_in().read() {
             Router::<Route> { }
             Player {}
         } else {
             Login {
                 on_login: handle_login,
             }
-            if let Some(err) = error_msg() {
+            if let Some(err) = login_state.errored().read().as_ref() {
                 div { class: "error", "{err}" }
             }
         }

@@ -341,7 +341,9 @@ name = "cadence-core"
 version = "0.1.0"
 dependencies = [
  "cadence-player",
+ "cadence-storage-android",
  "dioxus",
+ "dioxus-sdk",
  "opensubsonic-cli",
  "serde",
  "tokio",

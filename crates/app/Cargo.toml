@@ -19,6 +19,6 @@ opensubsonic-cli.workspace = true
 
 [features]
 default = ["web"]
-web = ["dioxus/web"]
-desktop = ["dioxus/desktop", "cadence-storage-android"]
-mobile = ["dioxus/mobile", "cadence-storage-android" ]
+web = ["dioxus/web", "cadence-core/web"]
+desktop = ["dioxus/desktop", "cadence-storage-android", "cadence-core/desktop"]
+mobile = ["dioxus/mobile", "cadence-storage-android", "cadence-core/mobile"]

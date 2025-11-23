@@ -5,7 +5,15 @@ edition = "2024"
 
 [dependencies]
 dioxus.workspace = true
+dioxus-sdk.workspace = true
 tokio = { workspace = true, features = ["sync"] }
 opensubsonic-cli = { workspace = true }
 cadence-player = { workspace = true }
+cadence-storage-android = { workspace = true, optional = true }
 serde = { workspace = true }
+
+[features]
+default = ["web"]
+web = ["dioxus/web"]
+desktop = ["dioxus/desktop"]
+mobile = ["dioxus/mobile", "cadence-storage-android" ]
