@@ -1,0 +1,26 @@
+@import '../../assets/mixins.scss';
+@import '../../assets/theme.scss';
+
+.search-input-container {
+    @include row;
+    align-items: center;
+    padding: 8px;
+    border-radius: 4px;
+    height: 30px;
+    background-color: $primary-color-5;
+
+    .icon {
+        margin-right: 8px;
+    }
+
+    input {
+        border: none;
+        outline: none;
+        flex: 1;
+        font-size: 14px;
+        padding: 0;
+        color: $secondary-color;
+        background-color: inherit;
+        caret-color: $secondary-color;
+    }
+}

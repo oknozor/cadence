@@ -6,45 +6,6 @@
     min-height: 100vh;
 }
 
-.search-results {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    margin-top: 15px;
-    margin-left: 15px;
-}
-
-.search-results .row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.search-input-container {
-    display: flex;
-    align-items: center;
-    padding: 8px;
-    border-radius: 4px;
-    height: 30px;
-    background-color: $primary-color-5;
-}
-
-.search-input-container .icon {
-    margin-right: 8px;
-    background-color: $primary-color-5;
-}
-
-.search-input-container input {
-    border: none;
-    outline: none;
-    flex: 1;
-    font-size: 14px;
-    padding: 0;
-    color: $secondary-color;
-    background-color: $primary-color-5;
-    caret-color: $secondary-color;
-}
-
 .search-empty {
     display: flex;
     flex-direction: column;

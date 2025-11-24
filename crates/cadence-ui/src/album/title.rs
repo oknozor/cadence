@@ -3,8 +3,7 @@ use dioxus::prelude::*;
 #[component]
 pub fn AlbumTitle(name: String, artist: String, year: Option<i64>) -> Element {
     rsx! {
-        div {
-            class: "album-title-container",
+        div { class: "album-title-container",
             if let Some(year) = year {
                 h1 { class: "album-title", "{name} ({year})" }
             } else {

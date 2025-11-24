@@ -1,0 +1,15 @@
+@import '../../assets/mixins.scss';
+@import '../../assets/theme.scss';
+
+.search-results {
+    @include column;
+    gap: 15px;
+    margin-top: 15px;
+    margin-left: 15px;
+
+    .search-item {
+        @include row;
+        align-items: center;
+        gap: 10px;
+    }
+}

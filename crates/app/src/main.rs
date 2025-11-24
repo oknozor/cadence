@@ -44,14 +44,12 @@ fn App() -> Element {
     let mut saved_credentials = use_saved_credentials();
     let login_state = use_login_state();
 
-    let handle_login = {
-        move |(server_url, username, password): (String, String, String)| {
-            saved_credentials.set(Some(SubSonicLogin {
-                server_url: server_url.clone(),
-                username: username.clone(),
-                password: password.clone(),
-            }));
-        }
+    let handle_login = move |(server_url, username, password): (String, String, String)| {
+        saved_credentials.set(Some(SubSonicLogin {
+            server_url: server_url.clone(),
+            username: username.clone(),
+            password: password.clone(),
+        }));
     };
 
     rsx! {

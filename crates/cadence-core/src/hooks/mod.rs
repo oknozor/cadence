@@ -1,14 +1,14 @@
 use std::sync::Arc;
 
 use cadence_player::PlayerCommand;
-use dioxus::prelude::*;
+use dioxus::{CapturedError, prelude::*};
 use dioxus_sdk::storage::{get_from_storage, use_storage};
 use tokio::sync::{Mutex, broadcast, mpsc};
 
 use crate::{
     hooks::effects::use_on_login_effect,
-    model::Song,
-    services::subsonic_client::SubsonicClient,
+    model::{SearchResult, Song},
+    services::subsonic_client::{SUBSONIC_CLIENT, SubsonicClient},
     state::{LoginState, PlayerState, QueueState, SubSonicLogin},
 };
 
@@ -45,6 +45,20 @@ pub fn use_current_track() -> Memo<Option<Song>> {
 
 pub fn use_playback_position_sender() -> broadcast::Sender<u64> {
     consume_context()
+}
+
+pub fn use_search_results() -> Action<(String,), Vec<SearchResult>> {
+    use_action(move |input: String| async move {
+        if input.is_empty() {
+            return Ok(vec![]);
+        }
+
+        let client = SUBSONIC_CLIENT.cloned().unwrap();
+        client
+            .search(&input)
+            .await
+            .map_err(|err| CapturedError::from_display(err))
+    })
 }
 
 pub fn use_login_state() -> LoginState {

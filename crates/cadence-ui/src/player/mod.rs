@@ -31,13 +31,7 @@ pub fn Player() -> Element {
                         if let Some(cover) = track.cover_art.as_ref() {
                             Thumbnail { src: cover, name: &track.title, size: 32 }
                         }
-                        ItemInfo {
-                            primary: track.title,
-                            secondary: track.artist,
-                            active: false,
-                            paused: false,
-                        }
-                    
+                        ItemInfo { primary: track.title, secondary: track.artist }
                     }
                     div { class: "player-controls",
                         button {
