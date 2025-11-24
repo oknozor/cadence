@@ -1,4 +1,5 @@
 use crate::icons::play::PlayIcon;
+use crate::items::ItemInfo;
 use crate::progress::Progress;
 use crate::progress::ProgressIndicator;
 use crate::thumbnails::Thumbnail;
@@ -30,10 +31,13 @@ pub fn Player() -> Element {
                         if let Some(cover) = track.cover_art.as_ref() {
                             Thumbnail { src: cover, name: &track.title, size: 32 }
                         }
-                        div { class: "track-info",
-                            h3 { "{track.title}" }
-                            p { "{track.artist}" }
+                        ItemInfo {
+                            primary: track.title,
+                            secondary: track.artist,
+                            active: false,
+                            paused: false,
                         }
+                    
                     }
                     div { class: "player-controls",
                         button {

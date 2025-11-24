@@ -11,14 +11,14 @@
         flex-grow: 1;
 
         .item-primary {
-            @include ellipisis;
+            @include ellipsis;
             @include text-primary;
             padding-top: 3px;
             line-height: 0.8;
         }
     }
     .item-secondary {
-        @include ellipisis;
+        @include ellipsis;
         @include text-secondary;
          padding-top: 3px;
      }

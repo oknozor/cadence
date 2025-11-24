@@ -17,7 +17,7 @@
 
 .track-info {
     @include column;
-    color: #ffffff;
+    color: $secondary-color;
 }
 
 .track-info h3 {
@@ -26,7 +26,6 @@
 
 .track-info p {
     margin: 0;
-    color: #9ca3af;
     font-size: 10px;
 }
 

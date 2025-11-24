@@ -1,9 +1,17 @@
-.album-title {
-    margin: 0;
-    font-size: 24px;
-}
+@import '../../assets/mixins.scss'
+@import '../../assets/theme.scss'
 
-.album-artist {
-    margin: 0;
-    font-size: 16px;
+.album-title-container {
+    @include column;
+    gap: $gap;
+
+    .album-title {
+        @include ellipsis;
+        @include text-primary(24px);
+    }
+
+    .album-artist {
+        @include ellipsis;
+        @include text-secondary(16px);
+    }
 }
