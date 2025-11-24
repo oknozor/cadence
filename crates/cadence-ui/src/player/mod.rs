@@ -16,8 +16,7 @@ pub fn Player() -> Element {
     let command_sender = use_command_sender();
 
     rsx! {
-        div {
-            class: "player-container",
+        div { class: "player-container",
             if let Some(track) = current_track() {
                 div {
                     display: "flex",
@@ -29,25 +28,21 @@ pub fn Player() -> Element {
                         flex: "column",
                         flex_grow: 1,
                         if let Some(cover) = track.cover_art.as_ref() {
-                            Thumbnail {
-                                src: cover,
-                                name: &track.title,
-                                size: 32,
-                            }
+                            Thumbnail { src: cover, name: &track.title, size: 32 }
                         }
-                        div {
-                            class: "track-info",
-                            h3 { "{track.title}" },
+                        div { class: "track-info",
+                            h3 { "{track.title}" }
                             p { "{track.artist}" }
                         }
                     }
-                    div {
-                        class: "player-controls",
+                    div { class: "player-controls",
                         button {
                             onclick: move |_| {
                                 if *state.is_playing().read() {
                                     let sender = command_sender.clone();
-                                    spawn(async move { sender.clone().send(PlayerCommand::Pause).await.unwrap() });
+                                    spawn(async move {
+                                        sender.clone().send(PlayerCommand::Pause).await.unwrap()
+                                    });
                                     state.toggle();
                                 } else {
                                     let sender = command_sender.clone();
@@ -55,10 +50,7 @@ pub fn Player() -> Element {
                                     state.toggle();
                                 }
                             },
-                            PlayIcon {
-                                size: 24,
-                                is_playing: state.is_playing(),
-                            }
+                            PlayIcon { size: 24, is_playing: state.is_playing() }
                         }
                     }
                 }

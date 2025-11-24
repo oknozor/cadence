@@ -1,16 +1,17 @@
 @import '../../assets/mixins.scss';
+@import '../../assets/theme.scss';
 
 .library-container {
     @include column;
     margin-left: 8px;
     gap: 6px;
-}
 
-.library-container h2 {
-    padding-left: 10px;
-    margin: 0;
-    font-size: 16px;
-    color: #6366f1;
+    h2 {
+        margin: 0;
+        @include text-primary;
+        font-size: 16px;
+        color: $secondary-color-1;
+    }
 }
 
 .albums-grid {

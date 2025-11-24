@@ -4,3 +4,7 @@ mod card;
 pub use card::AlbumCard;
 mod list;
 pub use list::AlbumList;
+mod cover;
+pub use cover::AlbumCover;
+mod title;
+pub use title::AlbumTitle;

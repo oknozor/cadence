@@ -1,35 +1,26 @@
+@import '../../../../cadence-ui/assets/theme.scss';
+
 #navbar {
     padding-bottom: 10px;
     padding-top: 10px;
-    color: white;
-    background-color: black;
+    color: $secondary-color;
+    background-color: $primary-color;
     display: flex;
     flex-direction: row;
     gap: 20px;
     justify-content: center;
     width: 100%;
+    height: 50px;
     position: fixed;
     bottom: 0;
     left: 0;
-    z-index: 1000; /* Ensure it stays on top of other elements */
-}
+    z-index: 1000;
 
-.icon {
-    fill: white;
-    background-color: black;
-    color: white;
-    display: flex;
-    flex-direction: row;
-}
-
-#navbar a {
-    color: #ffffff;
-    margin-right: 20px;
-    text-decoration: none;
-    transition: color 0.2s ease;
-}
-
-#navbar a:hover {
-    cursor: pointer;
-    color: #91a4d2;
+    .icon {
+        fill: $secondary-color;
+        background-color: $primary-color;
+        color: $secondary-color;
+        display: flex;
+        flex-direction: row;
+    }
 }

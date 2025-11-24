@@ -5,3 +5,12 @@
 @use '../../src/views/home/home-view.scss';
 
 @import url("https://fonts.googleapis.com/css2?Flow+Circular&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+
+#main {
+    padding-bottom: 70px;
+}
+
+.view {
+    margin-left: 15px;
+    margin-right: 15px;
+}

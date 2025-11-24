@@ -1,0 +1,17 @@
+@import '../../assets/mixins.scss';
+@import '../../assets/theme.scss';
+
+.album-cover {
+    height: 30%;
+    @include column;
+    justify-content: center;
+    align-items: center;
+
+    img {
+        width: 250;
+        height: auto;
+        margin-top: 35px;
+        margin-bottom: 35px;
+        border-radius: 8px;
+    }
+}

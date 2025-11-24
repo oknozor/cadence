@@ -1,10 +1,10 @@
 use crate::{PlayerCommand, stream_url};
 use howler_wasm::JsHowl;
+use log::debug;
 use std::cell::RefCell;
 use std::collections::VecDeque;
 use std::sync::Arc;
 use tokio::sync::{Mutex, broadcast, mpsc};
-use log::debug;
 use web_time::Duration;
 
 pub struct CadencePlayer {

@@ -1,27 +1,13 @@
 @import '../../assets/mixins.scss';
 @import '../../assets/theme.scss';
 
+.track-list {
+    @include column;
+    gap: $gap-big;
+}
+
 .track-row {
     @include row;
-    padding-right: 15px;
     align-items: center;
     justify-content: space-between;
-
-
-    .track-info {
-        @include column;
-        justify-content: space-around;
-
-        .track-title-line {
-            @include row;
-            gap: $gap;
-            flex-grow: 1;
-
-            .track-title {
-                font-size: 14px;
-                padding-top: 3px;
-                line-height: 0.8;
-            }
-        }
-    }
 }

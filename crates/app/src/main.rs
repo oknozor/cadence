@@ -56,14 +56,14 @@ fn App() -> Element {
 
     rsx! {
         document::Meta {
-              name: "viewport",
-              content: "width=device-width, initial-scale=1.0, viewport-fit=cover"
+            name: "viewport",
+            content: "width=device-width, initial-scale=1.0, viewport-fit=cover",
         }
         document::Link { rel: "icon", href: FAVICON }
         document::Link { rel: "stylesheet", href: MAIN_CSS }
         document::Link { rel: "stylesheet", href: UI_CSS }
         document::Script {
-            type: "module",
+            r#type: "module",
             src: asset!("/assets/howler.min.js", JsAssetOptions::new().with_minify(true)),
         }
         meta {
@@ -71,12 +71,10 @@ fn App() -> Element {
             name: "viewport",
         }
         if *login_state.logged_in().read() {
-            Router::<Route> { }
+            Router::<Route> {}
             Player {}
         } else {
-            Login {
-                on_login: handle_login,
-            }
+            Login { on_login: handle_login }
             if let Some(err) = login_state.errored().read().as_ref() {
                 div { class: "error", "{err}" }
             }
@@ -87,7 +85,9 @@ fn App() -> Element {
 #[component]
 fn WebNavbar() -> Element {
     rsx! {
-        Outlet::<Route> {}
-        Navbar {}
+        main {
+            Outlet::<Route> {}
+            Navbar {}
+        }
     }
 }

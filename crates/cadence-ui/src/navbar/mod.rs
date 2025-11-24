@@ -16,20 +16,16 @@ pub fn NavbarItem(
                 active.set(!active());
                 animate.set(true);
                 spawn(async move {
-                   dioxus_sdk::time::sleep(Duration::from_millis(200)).await;
-                   animate.set(false);
+                    dioxus_sdk::time::sleep(Duration::from_millis(200)).await;
+                    animate.set(false);
                 });
 
                 onclick.call(())
             },
-            div {
-                class: if animate() { "navbar-item-icon active" } else { "navbar-item-icon" },
+            div { class: if animate() { "navbar-item-icon active" } else { "navbar-item-icon" },
                 {children}
-            },
-            div {
-                class: "navbar-item-label",
-                "{label}"
             }
+            div { class: "navbar-item-label", "{label}" }
         }
     }
 }

@@ -8,7 +8,7 @@ pub fn RoundedThumbnail(size: u32, name: String, src: String) -> Element {
             src: "{src}",
             alt: "{name}",
             width: "{size}px",
-            height: "{size}px"
+            height: "{size}px",
         }
     }
 }
@@ -21,7 +21,7 @@ pub fn Thumbnail(size: u32, name: String, src: String) -> Element {
             src: "{src}",
             alt: "{name}",
             width: "{size}px",
-            height: "{size}px"
+            height: "{size}px",
         }
     }
 }

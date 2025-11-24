@@ -1,3 +1,5 @@
+@import '../../assets/theme.scss';
+
 .music-bars {
     display: flex;
     align-items: flex-end;
@@ -40,4 +42,5 @@
 
 .icon {
     background-color: inherit;
+    fill: $secondary-color-1;
 }

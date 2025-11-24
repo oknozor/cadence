@@ -29,7 +29,13 @@ button {
   cursor: pointer;
   box-sizing: border-box; /* recommended for consistent sizing */
   color: $secondary-color-4;
+
+  &:hover {
+    all: unset;
+  }
 }
+
+
 
 @supports (scrollbar-width: auto) {
     :not(:hover) {

@@ -6,8 +6,12 @@
 
   .album-action-bar-start {
       @include row;
+      gap: $gap;
   }
+
   .album-action-bar-end {
       @include row;
+      align-items: center;
+      gap: $gap;
   }
 }

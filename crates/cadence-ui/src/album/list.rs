@@ -10,14 +10,12 @@ pub fn AlbumList(
     on_album_select: EventHandler<String>,
 ) -> Element {
     rsx! {
-        div {
-            class: "library-container",
+        div { class: "library-container",
             h2 { "{title}" }
 
-            div {
-                class: "albums-grid",
+            div { class: "albums-grid",
                 for album in albums {
-                   AlbumCard { album, on_album_select }
+                    AlbumCard { album, on_album_select }
                 }
             }
         }

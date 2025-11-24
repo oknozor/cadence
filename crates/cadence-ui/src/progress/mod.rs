@@ -4,8 +4,7 @@ use dioxus_primitives::progress::{self, ProgressIndicatorProps, ProgressProps};
 #[component]
 pub fn Progress(props: ProgressProps) -> Element {
     rsx! {
-        div {
-            class: "progress-container",
+        div { class: "progress-container",
             progress::Progress {
                 class: "progress",
                 value: props.value,

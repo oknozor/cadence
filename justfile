@@ -12,7 +12,3 @@ web:
 
 desktop:
     dx serve --hot-patch --package app --platform desktop
-
-css:
-    sass -w crates/app/assets/styles/main.scss crates/app/assets/styles/main.css
-    && sass -w crates/cadence-ui/assets/ui.scss crates/cadence-ui/assets/ui.css

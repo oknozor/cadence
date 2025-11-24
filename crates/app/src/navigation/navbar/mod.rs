@@ -23,8 +23,7 @@ pub fn Navbar() -> Element {
     let nav = navigator();
 
     rsx! {
-        div {
-            id: "navbar",
+        div { id: "navbar",
             NavbarItem {
                 label: "Home".to_string(),
                 active: home_active,
@@ -57,7 +56,7 @@ pub fn Navbar() -> Element {
                 onclick: move || {
                     set_active(&mut plus_active);
                 },
-                PlusIcon { filled: plus_active }
+                PlusIcon { size: 32, filled: plus_active }
             }
         }
     }

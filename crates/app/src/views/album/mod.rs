@@ -1,5 +1,8 @@
 use cadence_core::services::subsonic_client::SUBSONIC_CLIENT;
-use cadence_ui::{album::AlbumActionBar, track::TrackRow};
+use cadence_ui::{
+    album::{AlbumActionBar, AlbumCover, AlbumTitle},
+    track::TrackList,
+};
 use dioxus::prelude::*;
 
 #[component]
@@ -23,42 +26,22 @@ pub fn AlbumView(id: String) -> Element {
         .unwrap_or_default();
 
     rsx! {
-        div {
-            class: "album-view",
+        div { class: "album-view",
             match album() {
                 Some(album) => rsx! {
-                    div {
-                        class: "album-cover",
-                        div {
-                            class: "album-cover-overlay",
-                            img {
-                                src: "{cover}",
-                                alt: "Album cover"
-                            }
+                    AlbumCover { src: cover }
+                    div { class: "album-info view",
+                        AlbumTitle {
+                            name: album.name.clone(),
+                            artist: album.artist.clone(),
+                            year: album.year.clone(),
                         }
-                    }
-                    div {
-                        class: "album-info",
-                        if let Some(year) = album.year {
-                            h1 { "{album.name} ({year})" }
-                        } else {
-                            h1 { "{album.name}" }
-                        }
-                        h2 { "{album.artist}" }
-                        AlbumActionBar {  }
-                        div {
-                            class: "track-list",
-                            for track in album.songs {
-                                TrackRow { track: track }
-                            }
-                        }
+                        AlbumActionBar {}
+                        TrackList { album }
                     }
                 },
                 None => rsx! {
-                    div {
-                        class: "loading",
-                        "Loading album..."
-                    }
+                    div { class: "loading", "Loading album..." }
                 },
             }
         }

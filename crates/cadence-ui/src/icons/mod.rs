@@ -1,9 +1,11 @@
 pub mod animated_bars;
 pub mod dots;
+pub mod download;
 pub mod gear;
 pub mod home;
 pub mod library;
 pub mod play;
 pub mod plus;
 pub mod search;
+pub mod share;
 pub mod shuffle;

@@ -7,13 +7,9 @@ pub fn TopBar() -> Element {
     let nav = navigator();
 
     rsx! {
-        div {
-        id: "topbar",
-            div {
-                class: "settings-icons",
-                GearIcon {
-                    filled: false,
-                }
+        div { id: "topbar",
+            div { class: "settings-icons",
+                GearIcon { filled: false }
             }
             button {
                 onclick: move |_| {

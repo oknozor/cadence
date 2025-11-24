@@ -1,6 +1,8 @@
 use cadence_core::model::Album;
 use dioxus::prelude::*;
 
+use crate::items::ItemInfo;
+
 #[component]
 pub fn AlbumCard(album: Album, on_album_select: EventHandler<String>) -> Element {
     rsx! {
@@ -14,25 +16,17 @@ pub fn AlbumCard(album: Album, on_album_select: EventHandler<String>) -> Element
                     src: "{cover}",
                     alt: "{album.name}",
                     width: "100px",
-                    height: "100px"
+                    height: "100px",
                 }
             } else {
-                div {
-                    class: "no-cover",
-                    "🎵"
-                }
+                div { class: "no-cover", "🎵" }
             }
 
-            div {
-                class: "album-info",
-                span {
-                    class: "album-name",
-                    "{album.name}"
-                }
-                span {
-                    class: "album-artist",
-                    "{album.artist}"
-                }
+            ItemInfo {
+                primary: album.name,
+                secondary: album.artist,
+                active: false,
+                paused: false,
             }
         }
     }

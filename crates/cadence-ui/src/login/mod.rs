@@ -9,22 +9,21 @@ pub fn Login(on_login: EventHandler<(String, String, String)>) -> Element {
     let mut password = use_signal(String::new);
 
     rsx! {
-        div {
-            class: "login-container",
+        div { class: "login-container",
             h1 { "Connect to Subsonic Server" }
 
             form {
                 onsubmit: move |e| {
                     e.prevent_default();
-                    on_login.call((
-                        server_url.read().clone(),
-                        username.read().clone(),
-                        password.read().clone(),
-                    ));
+                    on_login
+                        .call((
+                            server_url.read().clone(),
+                            username.read().clone(),
+                            password.read().clone(),
+                        ));
                 },
 
-                div {
-                    class: "form-group",
+                div { class: "form-group",
                     label { "Server URL:" }
                     input {
                         r#type: "text",
@@ -34,8 +33,7 @@ pub fn Login(on_login: EventHandler<(String, String, String)>) -> Element {
                     }
                 }
 
-                div {
-                    class: "form-group",
+                div { class: "form-group",
                     label { "Username:" }
                     input {
                         r#type: "text",
@@ -45,8 +43,7 @@ pub fn Login(on_login: EventHandler<(String, String, String)>) -> Element {
                     }
                 }
 
-                div {
-                    class: "form-group",
+                div { class: "form-group",
                     label { "Password:" }
                     input {
                         r#type: "password",
@@ -56,10 +53,7 @@ pub fn Login(on_login: EventHandler<(String, String, String)>) -> Element {
                     }
                 }
 
-                button {
-                    r#type: "submit",
-                    "Connect"
-                }
+                button { r#type: "submit", "Connect" }
             }
         }
     }

@@ -18,29 +18,31 @@ pub fn Home() -> Element {
     let recently_released = match recently_released() {
         Some(Ok(recently_released)) => recently_released,
         _ => {
-            return rsx!(p { "Failed to load recently released albums" });
+            return rsx!(
+                p { "Failed to load recently released albums" }
+            );
         }
     };
 
     let recently_played = match recently_played() {
         Some(Ok(recently_played)) => recently_played,
         _ => {
-            return rsx!(p { "Failed to load recently played albums" });
+            return rsx!(
+                p { "Failed to load recently played albums" }
+            );
         }
     };
 
     rsx! {
-        div {
-            class: "library-view",
-            TopBar {  }
-            div {
-                class: "music-content",
+        div { class: "library-view",
+            TopBar {}
+            div { class: "music-content",
                 AlbumList {
                     title: "Recently Played",
                     albums: recently_played,
                     on_album_select: move |album_id| {
                         nav.push(Route::AlbumView { id: album_id });
-                    }
+                    },
                 }
 
                 AlbumList {
@@ -48,7 +50,7 @@ pub fn Home() -> Element {
                     albums: recently_released,
                     on_album_select: move |album_id| {
                         nav.push(Route::AlbumView { id: album_id });
-                    }
+                    },
                 }
             }
         }
