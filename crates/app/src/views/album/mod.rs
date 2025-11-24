@@ -1,6 +1,5 @@
-use crate::components::album_action_bar::AlbumActionBar;
 use cadence_core::services::subsonic_client::SUBSONIC_CLIENT;
-use cadence_ui::track::TrackRow;
+use cadence_ui::{album::AlbumActionBar, track::TrackRow};
 use dioxus::prelude::*;
 
 #[component]

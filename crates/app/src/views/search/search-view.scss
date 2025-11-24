@@ -1,3 +1,5 @@
+@import '../../../../cadence-ui/assets/theme.scss';
+
 .search-view {
     display: flex;
     flex-direction: column;
@@ -24,12 +26,12 @@
     padding: 8px;
     border-radius: 4px;
     height: 30px;
-    background-color: var(--primary-color-5);
+    background-color: $primary-color-5;
 }
 
 .search-input-container .icon {
     margin-right: 8px;
-    background-color: var(--primary-color-5);
+    background-color: $primary-color-5;
 }
 
 .search-input-container input {
@@ -38,9 +40,9 @@
     flex: 1;
     font-size: 14px;
     padding: 0;
-    color: var(--secondary-color);
-    background-color: var(--primary-color-5);
-    caret-color: var(--secondary-color);
+    color: $secondary-color;
+    background-color: $primary-color-5;
+    caret-color: $secondary-color;
 }
 
 .search-empty {

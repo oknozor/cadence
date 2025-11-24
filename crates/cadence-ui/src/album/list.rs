@@ -1,9 +1,7 @@
-//! Music library browser component
-
 use cadence_core::model::Album;
 use dioxus::prelude::*;
 
-use crate::components::album_card::AlbumCard;
+use crate::album::card::AlbumCard;
 
 #[component]
 pub fn AlbumList(

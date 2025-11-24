@@ -70,9 +70,6 @@ dependencies = [
  "cadence-ui",
  "dioxus",
  "dioxus-sdk",
- "opensubsonic-cli",
- "serde",
- "tokio",
 ]
 
 [[package]]
@@ -3642,7 +3639,6 @@ name = "opensubsonic-cli"
 version = "0.1.0"
 dependencies = [
  "chrono",
- "futures",
  "once_cell",
  "prettyplease",
  "progenitor",

@@ -1,9 +1,7 @@
+use cadence_ui::album::AlbumList;
 use dioxus::{CapturedError, prelude::*};
 
-use crate::{
-    Route,
-    components::{album_list::AlbumList, topbar::TopBar},
-};
+use crate::{Route, navigation::topbar::TopBar};
 
 use cadence_core::{
     model::Album,

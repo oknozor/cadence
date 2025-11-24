@@ -1,0 +1,13 @@
+@import '../../assets/mixins.scss';
+
+.album-action-bar {
+    @include row;
+    justify-content: space-between;
+
+  .album-action-bar-start {
+      @include row;
+  }
+  .album-action-bar-end {
+      @include row;
+  }
+}

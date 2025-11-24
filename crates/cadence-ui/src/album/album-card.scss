@@ -1,11 +1,10 @@
+@import '../../assets/mixins.scss';
+
 .album-card {
-    display: flex;
-    flex-direction: column;
+    @include column;
     cursor: pointer;
     gap: 3px;
-    transition:
-        transform 0.2s,
-        box-shadow 0.2s;
+    transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .album-card:hover {
@@ -21,14 +20,14 @@
 }
 
 .album-info {
-    display: flex;
-    flex-direction: column;
+    @include column;
+    padding: 0;
     font-style: normal;
     font-size: 10px;
     gap: 3px;
 }
 
-.album-name, .album-artist{
+.album-name, .album-artist {
     display: -webkit-box;
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;

@@ -1,6 +1,8 @@
+@use '../../assets/theme.scss';
+@import '../../assets/mixins.scss';
+
 .player-container {
-    display: flex;
-    flex-direction: column;
+    @include column;
     width: 100%;
     position: fixed;
     bottom: 71px;
@@ -9,14 +11,12 @@
 
 .track-container {
     padding: 3px;
-    display: flex;
-    flex-direction: row;
-    gap: var(--gap);
+    @include row;
+    gap: $gap;
 }
 
 .track-info {
-    display: flex;
-    flex-direction: column;
+    @include column;
     color: #ffffff;
 }
 

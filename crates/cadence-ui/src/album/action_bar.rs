@@ -1,5 +1,5 @@
+use crate::icons::{play::PlayIcon, shuffle::ShuffleIcon};
 use cadence_core::hooks::use_player_state;
-use cadence_ui::icons::{play::PlayIcon, shuffle::ShuffleIcon};
 use dioxus::prelude::*;
 
 #[component]

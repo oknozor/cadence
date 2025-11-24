@@ -8,13 +8,8 @@ cadence-player.workspace = true
 cadence-core.workspace = true
 cadence-ui.workspace = true
 cadence-storage-android= { workspace = true, optional = true}
-
-tokio = { workspace = true, features = ["sync"] }
 dioxus = { workspace = true, features = ["router"] }
 dioxus-sdk = { workspace = true }
-
-serde = { workspace = true }
-opensubsonic-cli.workspace = true
 
 [features]
 default = ["web"]

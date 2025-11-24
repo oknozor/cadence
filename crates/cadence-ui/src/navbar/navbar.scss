@@ -4,11 +4,11 @@
     @include column;
     align-items: center;
 
-    &.navbar-item-icon.active {
+    > .navbar-item-icon.active {
         animation: shrinkPulse 1s infinite;
     }
 
-    &.navbar-item-label {
+    > .navbar-item-label {
         @include text-primary;
     }
 }

@@ -1,3 +1,9 @@
+@import '../../../../cadence-ui/assets/theme.scss';
+
+.album-view {
+   margin: 20px;
+}
+
 .album-info {
     padding-left: 25px;
     display: flex;
@@ -34,7 +40,7 @@
         display: flex;
         flex-direction: column;
         margin-top: 15px;
-        gap: var(--gap-big);
+        gap: $gap-big;
 
     }
 }

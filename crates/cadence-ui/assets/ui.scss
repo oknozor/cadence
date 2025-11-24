@@ -4,4 +4,46 @@
 @use '../src/thumbnails/thumbnails.scss';
 @use '../src/track/track.scss';
 @use '../src/progress/progress.scss';
+@use '../src/player/player.scss';
+@use '../src/login/login.scss';
+@use '../src/album/album.scss';
+@use 'theme.scss';
 @import 'mixins.scss';
+
+
+body {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    margin: 0;
+    background-color: $primary-color-2;
+    color: $secondary-color-4;
+    font-family: 'Roboto', system-ui;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-weight: 440;
+    min-height: 100vh;
+}
+
+button {
+  all: unset;
+  cursor: pointer;
+  box-sizing: border-box; /* recommended for consistent sizing */
+  color: $secondary-color-4;
+}
+
+@supports (scrollbar-width: auto) {
+    :not(:hover) {
+        scrollbar-color: rgb(0 0 0 / 0%) rgb(0 0 0 / 0%);
+    }
+
+    :hover {
+        scrollbar-color: $secondary-color-2 rgb(0 0 0 / 0%);
+    }
+}
+
+/* Legacy browsers with `::-webkit-scrollbar-*` support */
+@supports selector(::-webkit-scrollbar) {
+    :root::-webkit-scrollbar-track {
+        background: transparent;
+    }
+}

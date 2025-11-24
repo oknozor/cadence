@@ -2,11 +2,13 @@ use cadence_core::hooks::init_global_context;
 use cadence_core::hooks::use_login_state;
 use cadence_core::{hooks::use_saved_credentials, state::SubSonicLogin};
 use cadence_ui::UI_CSS;
-use components::{login::Login, navbar::Navbar, player::Player};
+use cadence_ui::login::Login;
+use cadence_ui::player::Player;
 use dioxus::prelude::*;
+use navigation::navbar::Navbar;
 use views::{AlbumView, Home, SearchView};
 
-mod components;
+mod navigation;
 mod views;
 
 #[derive(Debug, Clone, Routable, PartialEq)]

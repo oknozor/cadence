@@ -43,7 +43,7 @@ pub fn SearchView() -> Element {
         },
         Some(Err(err)) => rsx! {
             div {
-                class: "col search-results",
+                class: "search-results",
                 "Error: {err}"
             }
         },
@@ -56,7 +56,7 @@ pub fn SearchView() -> Element {
         div {
             class: "search-view",
             div {
-                class: "search-input-container row",
+                class: "search-input-container",
                 SearchIcon { size: 18, filled: false }
                 input {
                     id: "search-input",
@@ -77,7 +77,7 @@ pub fn SearchView() -> Element {
 pub fn SearchResults(search_results: ReadSignal<Vec<SearchResult>>) -> Element {
     rsx! {
         div {
-            class: "col search-results",
+            class: "search-results",
             for result in search_results.read().iter() {
                 if let SearchResult::Artist {id, name, thumbnail } = result {
                     div {

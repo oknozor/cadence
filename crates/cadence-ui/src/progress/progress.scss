@@ -1,8 +1,9 @@
 @import '../../assets/mixins.scss';
+@import '../../assets/theme.scss';
 
 .progress-container {
     @include column;
-    background-color: var(--secondary-color-1);
+    background-color: $secondary-color-1;
     height: 6px;
 }
 

@@ -1,4 +1,5 @@
 @import '../../assets/mixins.scss';
+@import '../../assets/theme.scss';
 
 .track-row {
     @include row;
@@ -13,7 +14,7 @@
 
         .track-title-line {
             @include row;
-            gap: var(--gap);
+            gap: $gap;
             flex-grow: 1;
 
             .track-title {
