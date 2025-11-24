@@ -1,5 +1,4 @@
 use cadence_core::hooks::use_search_results;
-use cadence_ui::icons::search::SearchIcon;
 use cadence_ui::search::{SearchInput, SearchResults};
 use dioxus::prelude::*;
 
@@ -35,12 +34,7 @@ pub fn SearchView() -> Element {
     };
 
     rsx! {
-        div { class: "search-view",
-            div { class: "search-input-container",
-                SearchIcon { size: 18, filled: false }
-                SearchInput { oninput }
-            }
-            {content}
-        }
+        SearchInput { oninput }
+        div { class: "view", {content} }
     }
 }

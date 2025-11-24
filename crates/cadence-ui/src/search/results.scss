@@ -9,7 +9,17 @@
 
     .search-item {
         @include row;
-        align-items: center;
-        gap: 10px;
+        justify-content: space-between;
+        .search-item-start {
+            @include row;
+            align-items: center;
+            gap: $gap-medium;
+        }
+
+        .search-item-action {
+            @include row;
+            align-items: center;
+            gap: $gap;
+        }
     }
 }
