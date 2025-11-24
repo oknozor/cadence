@@ -25,6 +25,16 @@ pub fn SearchResults(search_results: ReadSignal<Vec<SearchResult>>) -> Element {
 }
 
 #[component]
+pub fn SearchResultsEmpty() -> Element {
+    rsx! {
+        div { class: "search-empty",
+            span { "What do you want to listen to?" }
+            span { "Search for artists, albums, songs, or playlists" }
+        }
+    }
+}
+
+#[component]
 pub fn SearchResultRow(
     thumbnail: Option<Element>,
     content: Element,

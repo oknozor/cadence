@@ -23,6 +23,8 @@ body {
     font-style: normal;
     font-weight: 440;
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 button {
