@@ -14,9 +14,13 @@ pub fn SearchView() -> Element {
 
     let content = match search_results.value() {
         Some(Ok(search_results)) if search_results.read().is_empty() && input().is_empty() => {
-            rsx! { SearchResultsEmpty {} }
+            rsx! {
+                SearchResultsEmpty {}
+            }
         }
-        None if input().is_empty() => rsx! { SearchResultsEmpty {} },
+        None if input().is_empty() => rsx! {
+            SearchResultsEmpty {}
+        },
         Some(Ok(search_results)) => rsx! {
             SearchResults { search_results }
         },

@@ -1,4 +1,5 @@
 pub mod album;
+pub mod button;
 pub mod icons;
 pub mod items;
 pub mod login;

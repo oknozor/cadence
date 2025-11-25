@@ -1,4 +1,6 @@
 pub mod animated_bars;
+pub mod back;
+pub mod close;
 pub mod dots;
 pub mod download;
 pub mod gear;

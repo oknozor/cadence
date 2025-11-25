@@ -46,6 +46,7 @@ pub fn Navbar() -> Element {
                 label: "Library".to_string(),
                 active: library_active,
                 onclick: move || {
+                    nav.replace(Route::LibraryView {});
                     set_active(&mut library_active);
                 },
                 LibraryIcon { filled: library_active }

@@ -6,7 +6,7 @@ use cadence_ui::login::Login;
 use cadence_ui::player::Player;
 use dioxus::prelude::*;
 use navigation::navbar::Navbar;
-use views::{AlbumView, Home, SearchView};
+use views::{AlbumView, Home, LibraryView, SearchView};
 
 mod navigation;
 mod views;
@@ -19,6 +19,8 @@ enum Route {
     Home { },
     #[route("/search")]
     SearchView { },
+    #[route("/library")]
+    LibraryView { },
     #[route("/album/:id")]
     AlbumView { id: String },
 }

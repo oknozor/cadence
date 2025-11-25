@@ -7,8 +7,8 @@ use tokio::sync::{Mutex, broadcast, mpsc};
 
 use crate::{
     hooks::effects::use_on_login_effect,
-    model::{SearchResult, Song},
-    services::subsonic_client::{SUBSONIC_CLIENT, SubsonicClient},
+    model::{Album, SearchResult, Song},
+    services::subsonic_client::{AlbumListType, SUBSONIC_CLIENT, SubsonicClient},
     state::{LoginState, PlayerState, QueueState, SubSonicLogin},
 };
 
@@ -99,4 +99,21 @@ pub fn use_saved_credentials() -> Signal<Option<SubSonicLogin>> {
     );
 
     use_storage::<LocalStorage, _>("subsonic_credentials".to_string(), || saved)
+}
+
+pub fn use_recently_released() -> Resource<Result<Vec<Album>, CapturedError>> {
+    use_resource(|| fetch_albums(AlbumListType::RecentlyReleased))
+}
+
+pub fn use_recently_played() -> Resource<Result<Vec<Album>, CapturedError>> {
+    use_resource(|| fetch_albums(AlbumListType::RecentlyPlayed))
+}
+
+async fn fetch_albums(album_type: AlbumListType) -> dioxus::Result<Vec<Album>, CapturedError> {
+    let response = SUBSONIC_CLIENT()
+        .unwrap()
+        .list_album(album_type)
+        .await
+        .map_err(|err| CapturedError::from_display(format!("{err}")))?;
+    Ok(response)
 }

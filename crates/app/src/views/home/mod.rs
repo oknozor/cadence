@@ -1,19 +1,14 @@
-use cadence_ui::album::AlbumList;
-use dioxus::{CapturedError, prelude::*};
-
 use crate::{Route, navigation::topbar::TopBar};
-
-use cadence_core::{
-    model::Album,
-    services::subsonic_client::{AlbumListType, SUBSONIC_CLIENT},
-};
+use cadence_core::hooks::{use_recently_played, use_recently_released};
+use cadence_ui::album::AlbumList;
+use dioxus::prelude::*;
 
 #[component]
 pub fn Home() -> Element {
     let nav = navigator();
 
-    let recently_released = use_resource(|| fetch_albums(AlbumListType::RecentlyReleased));
-    let recently_played = use_resource(|| fetch_albums(AlbumListType::RecentlyPlayed));
+    let recently_released = use_recently_released();
+    let recently_played = use_recently_played();
 
     let recently_released = match recently_released() {
         Some(Ok(recently_released)) => recently_released,
@@ -34,7 +29,7 @@ pub fn Home() -> Element {
     };
 
     rsx! {
-        div { class: "library-view",
+        div {
             TopBar {}
             div { class: "music-content",
                 AlbumList {
@@ -55,13 +50,4 @@ pub fn Home() -> Element {
             }
         }
     }
-}
-
-async fn fetch_albums(album_type: AlbumListType) -> dioxus::Result<Vec<Album>, CapturedError> {
-    let response = SUBSONIC_CLIENT()
-        .unwrap()
-        .list_album(album_type)
-        .await
-        .map_err(|err| CapturedError::from_display(format!("{err}")))?;
-    Ok(response)
 }
