@@ -183,7 +183,7 @@ class KeepAliveService : Service() {
                 .setContentTitle(title)
                 .setContentText(artist)
                 .setLargeIcon(bitmap)
-                .setSmallIcon(iconId)
+                .setSmallIcon(if (iconId != 0) iconId else android.R.drawable.ic_media_play)
                 .setContentIntent(pendingIntent)
                 .setVisibility(Notification.VISIBILITY_PUBLIC)
                 .setStyle(

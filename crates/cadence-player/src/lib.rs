@@ -1,7 +1,7 @@
 #[cfg(target_arch = "wasm32")]
 mod wasm;
 
-#[cfg(target_os = "android")]
+// #[cfg(target_os = "android")]
 pub mod android_backend;
 
 #[cfg(target_os = "android")]
@@ -9,8 +9,10 @@ pub use android_backend::*;
 
 #[cfg(not(target_arch = "wasm32"))]
 use std::time::Duration;
+
 #[cfg(target_arch = "wasm32")]
 use std::time::Duration;
+
 use tracing::info;
 #[cfg(target_arch = "wasm32")]
 pub use wasm::{CadencePlayer, MusicPlayerError};
@@ -20,10 +22,17 @@ mod rodio;
 #[cfg(not(target_arch = "wasm32"))]
 pub use rodio::{CadencePlayer, MusicPlayerError};
 
+use crate::android_backend::update_media_notification;
+
 pub enum PlayerCommand {
     Play,
     Queue(String),
-    QueueNow(String),
+    QueueNow {
+        track_id: String,
+        track_name: String,
+        track_artist: String,
+        playing: bool,
+    },
     Pause,
     Seek(Duration),
 }
@@ -44,12 +53,20 @@ impl CadencePlayer {
                     match command {
                         PlayerCommand::Play => self.play()?,
                         PlayerCommand::Queue(id) => self.queue(&id).await?,
-                        PlayerCommand::QueueNow(id) => {
+                        PlayerCommand::QueueNow { track_id, track_name, track_artist, playing } => {
+                            let _ = update_media_notification(
+                                &track_name,
+                                &track_artist,
+                                123000,
+                                3000,
+                                playing,
+                                None,
+                            );
                             if !self.is_empty() {
-                                self.queue(&id).await?;
+                                self.queue(&track_id).await?;
                                 self.next()?
                             } else {
-                                self.queue(&id).await?;
+                                self.queue(&track_id).await?;
                             }
                         }
                         PlayerCommand::Pause => self.pause()?,

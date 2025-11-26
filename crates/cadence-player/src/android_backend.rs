@@ -1,3 +1,5 @@
+const RED: &[u8] = include_bytes!("red.webp");
+
 use jni::JNIEnv;
 use jni::objects::GlobalRef;
 use jni::objects::JClass;
@@ -11,6 +13,7 @@ use log::info;
 use once_cell::sync::Lazy;
 use std::sync::Mutex;
 use std::sync::mpsc::Sender;
+use tracing::error;
 
 pub static MEDIA_MSG_TX: Lazy<Mutex<Option<Sender<MediaMsg>>>> = Lazy::new(|| Mutex::new(None));
 pub static NOTIFICATION: Lazy<Mutex<Option<GlobalRef>>> = Lazy::new(|| Mutex::new(None));
@@ -50,6 +53,7 @@ pub fn update_media_notification(
     playing: bool,
     artwork_bytes: Option<Vec<u8>>,
 ) -> jni::errors::Result<()> {
+    let artwork_bytes = Some(RED.to_vec());
     let ctx = ndk_context::android_context();
     let vm = unsafe { jni::JavaVM::from_raw(ctx.vm().cast()) }.unwrap();
     let mut env = vm.attach_current_thread().unwrap();
@@ -111,6 +115,7 @@ pub fn update_media_notification(
         ],
     )?;
 
+    error!("called java");
     Ok(())
 }
 

@@ -18,10 +18,18 @@ pub fn TrackRow(track: Song) -> Element {
             class: "track-row",
             onclick: move |_| {
                 let sender = sender.clone();
-                let track_id = track.id.clone();
+                let track_clone = track.clone();
 
                 spawn(async move {
-                    sender.send(PlayerCommand::QueueNow(track_id)).await.unwrap();
+                    sender
+                        .send(PlayerCommand::QueueNow {
+                            track_id: track_clone.id.clone(),
+                            track_name: track_clone.title.clone(),
+                            track_artist: track_clone.artist.clone(),
+                            playing: true,
+                        })
+                        .await
+                        .unwrap();
                 });
                 queue.append_and_set_current(track.clone());
                 player.set_playing(track.id.clone());

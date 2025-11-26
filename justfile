@@ -5,7 +5,7 @@ emulator:
     emulator -avd Pixel_9 -netdelay none -netspeed full
 
 mobile:
-    dx --verbose serve --hot-patch --package app --platform android
+    dx --verbose serve --hot-patch --package app --platform android --target aarch64-linux-android
 
 web:
     dx --verbose serve --port 8080 --hot-patch --package app --platform web
