@@ -70,6 +70,7 @@ dependencies = [
  "cadence-ui",
  "dioxus",
  "dioxus-sdk",
+ "jni",
 ]
 
 [[package]]
@@ -351,7 +352,10 @@ version = "0.1.0"
 dependencies = [
  "dioxus-sdk",
  "howler-wasm",
+ "jni",
  "log",
+ "ndk-context",
+ "once_cell",
  "rodio",
  "stream-download",
  "thiserror 1.0.69",

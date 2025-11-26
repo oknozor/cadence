@@ -1,7 +1,6 @@
 {
   "file_scan_exclusions": [
     "crates/app/assets/howler.min.js",
-    "target/"
   ],
   "file_scan_inclusions": [
     "target/x86_64-linux-android/android-dev/build/opensubsonic-cli-1298760b14e0af47/out/codegen.rs"

@@ -89,3 +89,20 @@ fn WebNavbar() -> Element {
         Navbar {}
     }
 }
+
+#[allow(non_snake_case)]
+#[unsafe(no_mangle)]
+pub extern "C" fn Java_dev_dioxus_main_MainActivity_notifyOnNewIntent(
+    mut env: jni::JNIEnv,
+    _class: jni::objects::JClass,
+    data: jni::objects::JString,
+) {
+    let string: String = match env.get_string(&data) {
+        Ok(s) => s.into(),
+        Err(e) => {
+            eprintln!("Failed to convert Java string: {:?}", e);
+            return;
+        }
+    };
+    error!("New intent received: {}", string);
+}

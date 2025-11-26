@@ -1,6 +1,12 @@
 #[cfg(target_arch = "wasm32")]
 mod wasm;
 
+#[cfg(target_os = "android")]
+pub mod android_backend;
+
+#[cfg(target_os = "android")]
+pub use android_backend::*;
+
 #[cfg(not(target_arch = "wasm32"))]
 use std::time::Duration;
 #[cfg(target_arch = "wasm32")]
