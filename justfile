@@ -4,6 +4,9 @@ export ANDROID_NDK_HOME := "/opt/android-ndk"
 emulator:
     emulator -avd Pixel_9 -netdelay none -netspeed full
 
+logcat:
+    adb logcat --pid=$(adb shell pidof org.hoohoot) -v color
+
 mobile:
     dx --verbose serve --hot-patch --package app --platform android --target aarch64-linux-android
 

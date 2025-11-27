@@ -1,4 +1,5 @@
 use cadence_core::hooks::init_global_context;
+use cadence_core::hooks::use_command_sender;
 use cadence_core::hooks::use_login_state;
 use cadence_core::{hooks::use_saved_credentials, state::SubSonicLogin};
 use cadence_ui::UI_CSS;

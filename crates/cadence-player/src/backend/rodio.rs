@@ -14,11 +14,11 @@ use tokio::sync::{
 
 pub struct CadencePlayer {
     sink: Sink,
-    pub(super) rx: Arc<Mutex<mpsc::Receiver<PlayerCommand>>>,
+    pub rx: Arc<Mutex<mpsc::Receiver<PlayerCommand>>>,
     username: String,
     password: String,
     base_url: String,
-    pub(super) tx: Sender<u64>,
+    pub tx: Sender<u64>,
     _output_stream: OutputStream,
 }
 
@@ -44,17 +44,21 @@ impl CadencePlayer {
         })
     }
 
-    pub(super) fn next(&self) -> Result<(), MusicPlayerError> {
+    pub(crate) fn is_paused(&self) -> bool {
+        self.sink.is_paused()
+    }
+
+    pub(crate) fn next(&self) -> Result<(), MusicPlayerError> {
         self.sink.skip_one();
         Ok(())
     }
 
-    pub(super) fn play(&self) -> Result<(), MusicPlayerError> {
+    pub(crate) fn play(&self) -> Result<(), MusicPlayerError> {
         self.sink.play();
         Ok(())
     }
 
-    pub(super) async fn queue(&self, id: &str) -> Result<(), MusicPlayerError> {
+    pub(crate) async fn queue(&self, id: &str) -> Result<(), MusicPlayerError> {
         let username = &self.username;
         let password = &self.password;
         let base_url = &self.base_url;
@@ -63,17 +67,17 @@ impl CadencePlayer {
         Ok(())
     }
 
-    pub(super) fn pause(&self) -> Result<(), MusicPlayerError> {
+    pub(crate) fn pause(&self) -> Result<(), MusicPlayerError> {
         self.sink.pause();
         Ok(())
     }
 
-    pub(super) fn seek(&self, duration: Duration) -> Result<(), MusicPlayerError> {
+    pub(crate) fn seek(&self, duration: Duration) -> Result<(), MusicPlayerError> {
         self.sink.try_seek(duration)?;
         Ok(())
     }
 
-    pub(super) fn is_empty(&self) -> bool {
+    pub(crate) fn is_empty(&self) -> bool {
         self.sink.empty()
     }
 
@@ -96,7 +100,7 @@ impl CadencePlayer {
         Ok(())
     }
 
-    pub(super) fn get_pos(&self) -> Option<u64> {
+    pub(crate) fn get_pos(&self) -> Option<u64> {
         Some(self.sink.get_pos().as_secs())
     }
 }

@@ -26,7 +26,6 @@ pub fn TrackRow(track: Song) -> Element {
                             track_id: track_clone.id.clone(),
                             track_name: track_clone.title.clone(),
                             track_artist: track_clone.artist.clone(),
-                            playing: true,
                         })
                         .await
                         .unwrap();

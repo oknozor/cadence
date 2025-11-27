@@ -2,7 +2,10 @@ use cadence_player::CadencePlayer;
 use dioxus::prelude::*;
 
 use crate::{
-    hooks::{use_command_receiver, use_playback_position_sender, use_saved_credentials},
+    hooks::{
+        use_command_receiver, use_command_sender, use_playback_position_sender,
+        use_saved_credentials,
+    },
     services::subsonic_client::{SUBSONIC_CLIENT, SubsonicClient},
     state::LoginState,
 };

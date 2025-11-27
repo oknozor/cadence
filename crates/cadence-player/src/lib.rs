@@ -1,29 +1,13 @@
-#[cfg(target_arch = "wasm32")]
-mod wasm;
+mod backend;
+pub use backend::{CadencePlayer, MusicPlayerError};
 
-// #[cfg(target_os = "android")]
-pub mod android_backend;
+mod notification;
+pub use notification::NotificationControl;
 
-#[cfg(target_os = "android")]
-pub use android_backend::*;
-
-#[cfg(not(target_arch = "wasm32"))]
 use std::time::Duration;
-
-#[cfg(target_arch = "wasm32")]
-use std::time::Duration;
-
 use tracing::info;
-#[cfg(target_arch = "wasm32")]
-pub use wasm::{CadencePlayer, MusicPlayerError};
 
-#[cfg(not(target_arch = "wasm32"))]
-mod rodio;
-#[cfg(not(target_arch = "wasm32"))]
-pub use rodio::{CadencePlayer, MusicPlayerError};
-
-use crate::android_backend::update_media_notification;
-
+#[derive(Debug, Clone)]
 pub enum PlayerCommand {
     Play,
     Queue(String),
@@ -31,9 +15,10 @@ pub enum PlayerCommand {
         track_id: String,
         track_name: String,
         track_artist: String,
-        playing: bool,
     },
     Pause,
+    Next,
+    Previous,
     Seek(Duration),
 }
 
@@ -53,24 +38,28 @@ impl CadencePlayer {
                     match command {
                         PlayerCommand::Play => self.play()?,
                         PlayerCommand::Queue(id) => self.queue(&id).await?,
-                        PlayerCommand::QueueNow { track_id, track_name, track_artist, playing } => {
-                            let _ = update_media_notification(
-                                &track_name,
-                                &track_artist,
-                                123000,
-                                3000,
-                                playing,
-                                None,
-                            );
+                        PlayerCommand::QueueNow { track_id, track_name, track_artist } => {
                             if !self.is_empty() {
                                 self.queue(&track_id).await?;
                                 self.next()?
                             } else {
                                 self.queue(&track_id).await?;
                             }
+
+                            let _ = NotificationControl::update_media_notification(
+                                       &track_name,
+                                       &track_artist,
+                                       123000,
+                                       3000,
+                                       !self.is_paused(),
+                                       None,
+                                   );
                         }
+
                         PlayerCommand::Pause => self.pause()?,
                         PlayerCommand::Seek(duration) => self.seek(duration)?,
+                        PlayerCommand::Next => unimplemented!(),
+                        PlayerCommand::Previous => unimplemented!(),
                     }
                 }
             }

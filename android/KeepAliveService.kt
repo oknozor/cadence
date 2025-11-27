@@ -135,7 +135,7 @@ class KeepAliveService : Service() {
             abandonAudioFocus()
         }
 
-        Logger.warn("com.example.Music", "requested media notification with playing state " + isPlaying)
+        Logger.warn("org.hoohoot.Cadence", "requested media notification with playing state " + isPlaying)
 
         // Update MediaSession playback state
         val state = android.media.session.PlaybackState.Builder()
@@ -277,6 +277,7 @@ class KeepAliveService : Service() {
     external fun nativeOnAudioFocusLost(focusChange: Int)
     external fun nativeOnAudioFocusGained()
 
+    private external fun startRustBackground()
     private external fun startRustBackground()
 }
 

@@ -1,5 +1,3 @@
-const RED: &[u8] = include_bytes!("red.webp");
-
 use jni::JNIEnv;
 use jni::objects::GlobalRef;
 use jni::objects::JClass;
@@ -11,13 +9,38 @@ use jni::sys::jobject;
 use log::info;
 
 use once_cell::sync::Lazy;
+use once_cell::sync::OnceCell;
 use std::sync::Mutex;
-use std::sync::mpsc::Sender;
+use std::time::Duration;
+use tokio::runtime::Runtime;
+use tokio::spawn;
+use tokio::sync::mpsc::Sender;
 use tracing::error;
 
-pub static MEDIA_MSG_TX: Lazy<Mutex<Option<Sender<MediaMsg>>>> = Lazy::new(|| Mutex::new(None));
+use crate::PlayerCommand;
+
+static RT: OnceCell<Runtime> = OnceCell::new();
+pub static MEDIA_MSG_TX: OnceCell<Sender<PlayerCommand>> = OnceCell::new();
 pub static NOTIFICATION: Lazy<Mutex<Option<GlobalRef>>> = Lazy::new(|| Mutex::new(None));
 
+pub fn init(sender: Sender<PlayerCommand>) {
+    MEDIA_MSG_TX.get_or_init(|| sender);
+}
+
+pub fn send_media_message(msg: PlayerCommand) {
+    let tx = MEDIA_MSG_TX
+        .get()
+        .expect("Notification backend sender should be initialized")
+        .clone();
+
+    let runtime = RT
+        .get()
+        .expect("android Tokio runtime should be initialized");
+
+    runtime.spawn(async move {
+        tx.send(msg).await.expect("Failed to send media message");
+    });
+}
 #[derive(Debug)]
 pub enum MediaMsg {
     Play,
@@ -27,14 +50,6 @@ pub enum MediaMsg {
     SeekTo(i64),
 }
 
-// Send message from notification callback to control
-fn send_media_msg(msg: MediaMsg) {
-    if let Some(tx) = MEDIA_MSG_TX.lock().unwrap().as_ref() {
-        info!("{msg:?}");
-        tx.send(msg).unwrap();
-    }
-}
-
 // Runs background management through foreground service ran function
 #[unsafe(no_mangle)]
 pub extern "C" fn Java_dev_dioxus_main_KeepAliveService_startRustBackground(
@@ -42,6 +57,7 @@ pub extern "C" fn Java_dev_dioxus_main_KeepAliveService_startRustBackground(
     _class: jni::objects::JClass,
 ) {
     tracing::info!("Starting Rust background");
+    RT.set(Runtime::new().unwrap()).unwrap();
 }
 
 /// Updates media notification through foreground service connected function
@@ -53,7 +69,6 @@ pub fn update_media_notification(
     playing: bool,
     artwork_bytes: Option<Vec<u8>>,
 ) -> jni::errors::Result<()> {
-    let artwork_bytes = Some(RED.to_vec());
     let ctx = ndk_context::android_context();
     let vm = unsafe { jni::JavaVM::from_raw(ctx.vm().cast()) }.unwrap();
     let mut env = vm.attach_current_thread().unwrap();
@@ -115,7 +130,6 @@ pub fn update_media_notification(
         ],
     )?;
 
-    error!("called java");
     Ok(())
 }
 
@@ -125,7 +139,7 @@ pub extern "system" fn Java_dev_dioxus_main_MediaCallbackKt_nativeOnPlay(
     _class: JClass,
 ) {
     log::info!("Rust received Play");
-    send_media_msg(MediaMsg::Play)
+    send_media_message(PlayerCommand::Play)
 }
 
 #[unsafe(no_mangle)]
@@ -134,7 +148,7 @@ pub extern "system" fn Java_dev_dioxus_main_MediaCallbackKt_nativeOnPause(
     _class: JClass,
 ) {
     log::info!("Rust received Pause");
-    send_media_msg(MediaMsg::Pause)
+    send_media_message(PlayerCommand::Pause)
 }
 
 #[unsafe(no_mangle)]
@@ -143,7 +157,7 @@ pub extern "system" fn Java_dev_dioxus_main_MediaCallbackKt_nativeOnNext(
     _class: JClass,
 ) {
     log::info!("Rust received Next");
-    send_media_msg(MediaMsg::Next)
+    send_media_message(PlayerCommand::Pause)
 }
 
 #[unsafe(no_mangle)]
@@ -152,7 +166,7 @@ pub extern "system" fn Java_dev_dioxus_main_MediaCallbackKt_nativeOnPrevious(
     _class: JClass,
 ) {
     log::info!("Rust received Previous");
-    send_media_msg(MediaMsg::Previous)
+    send_media_message(PlayerCommand::Previous)
 }
 
 #[unsafe(no_mangle)]
@@ -162,7 +176,9 @@ pub extern "system" fn Java_dev_dioxus_main_MediaCallbackKt_nativeOnSeekTo(
     pos: jint,
 ) {
     log::info!("Rust received Seek To {:?}", pos);
-    send_media_msg(MediaMsg::SeekTo(pos.into()));
+    let pos: i64 = pos.into();
+    let pos = Duration::from_millis(pos as u64);
+    send_media_message(PlayerCommand::Seek(pos));
 }
 
 #[unsafe(no_mangle)]
@@ -195,7 +211,6 @@ pub extern "system" fn Java_dev_dioxus_main_KeepAliveService_nativeOnAudioFocusL
     focus_change: jint,
 ) {
     info!("Audio focus lost: {focus_change}");
-    send_media_msg(MediaMsg::Pause)
 }
 
 #[unsafe(no_mangle)]

@@ -6,7 +6,7 @@ edition = "2024"
 [dependencies]
 thiserror.workspace = true
 url.workspace = true
-tokio = { version = "1", features = ["rt", "macros", "time"] }
+tokio = { version = "1", features = ["rt", "macros", "time", "rt-multi-thread"] }
 dioxus-sdk.workspace = true
 tracing = "0.1"
 log = "0.4.28"
