@@ -7,8 +7,8 @@ use crate::track::TrackRow;
 pub fn TrackList(album: Album) -> Element {
     rsx! {
         div { class: "track-list",
-            for track in album.songs {
-                TrackRow { track }
+            for song in album.songs {
+                TrackRow { song }
             }
         }
     }

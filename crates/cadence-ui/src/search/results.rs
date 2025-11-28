@@ -12,11 +12,11 @@ pub fn SearchResults(search_results: ReadSignal<Vec<SearchResult>>) -> Element {
     rsx! {
         div { class: "search-results",
             for result in search_results.read().iter().cloned() {
-                if let SearchResult::Artist { id, name, thumbnail } = result {
+                if let SearchResult::Artist { name, thumbnail, .. } = result {
                     ArtistItemInfo { name, thumbnail }
-                } else if let SearchResult::Album { id, name, cover, artist } = result {
+                } else if let SearchResult::Album { name, cover, artist, .. } = result {
                     AlbumItemInfo { name, cover, artist }
-                } else if let SearchResult::Song { id, name, cover, artist } = result {
+                } else if let SearchResult::Song { name, cover, artist, .. } = result {
                     SongItemInfo { name, cover, artist }
                 }
             }

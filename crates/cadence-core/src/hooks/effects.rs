@@ -1,11 +1,8 @@
-use cadence_player::CadencePlayer;
+use crate::player::AudioBackend;
 use dioxus::prelude::*;
 
 use crate::{
-    hooks::{
-        use_command_receiver, use_command_sender, use_playback_position_sender,
-        use_saved_credentials,
-    },
+    hooks::{use_command_receiver, use_playback_position_sender, use_saved_credentials},
     services::subsonic_client::{SUBSONIC_CLIENT, SubsonicClient},
     state::LoginState,
 };
@@ -30,7 +27,7 @@ pub fn use_on_login_effect() {
                         info!("Logged in");
                         login_state.set(true);
                         spawn(async move {
-                            let mut player = CadencePlayer::build(
+                            let mut player = AudioBackend::build(
                                 &credentials.server_url,
                                 &credentials.username,
                                 &credentials.password,

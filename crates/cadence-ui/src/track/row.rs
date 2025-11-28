@@ -6,11 +6,11 @@ use cadence_core::model::Song;
 use dioxus::prelude::*;
 
 #[component]
-pub fn TrackRow(track: Song) -> Element {
+pub fn TrackRow(song: Song) -> Element {
     let sender = use_command_sender();
     let mut player = use_player_state();
     let mut queue = use_queue_state();
-    let active = player.song().as_ref() == Some(&track.id);
+    let active = player.song().as_ref() == Some(&song.id);
     let paused = !*player.is_playing().read();
 
     rsx!(
@@ -18,24 +18,20 @@ pub fn TrackRow(track: Song) -> Element {
             class: "track-row",
             onclick: move |_| {
                 let sender = sender.clone();
-                let track_clone = track.clone();
 
+                let track = song.clone();
                 spawn(async move {
                     sender
-                        .send(PlayerCommand::QueueNow {
-                            track_id: track_clone.id.clone(),
-                            track_name: track_clone.title.clone(),
-                            track_artist: track_clone.artist.clone(),
-                        })
+                        .send(PlayerCommand::QueueNow(track))
                         .await
                         .unwrap();
                 });
-                queue.append_and_set_current(track.clone());
-                player.set_playing(track.id.clone());
+                queue.append_and_set_current(song.clone());
+                player.set_playing(song.id.clone());
             },
             ItemInfo {
-                primary: track.title.clone(),
-                secondary: track.artist.clone(),
+                primary: song.title.clone(),
+                secondary: song.artist.clone(),
                 active,
                 paused,
             }

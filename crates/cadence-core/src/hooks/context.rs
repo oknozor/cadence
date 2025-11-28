@@ -1,4 +1,4 @@
-use cadence_player::{NotificationControl, PlayerCommand};
+use crate::player::{NotificationControl, PlayerCommand};
 use dioxus::prelude::*;
 use std::sync::Arc;
 use tokio::sync::{Mutex, broadcast};

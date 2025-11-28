@@ -65,7 +65,6 @@ name = "app"
 version = "0.1.0"
 dependencies = [
  "cadence-core",
- "cadence-player",
  "cadence-storage-android",
  "cadence-ui",
  "dioxus",
@@ -337,26 +336,17 @@ dependencies = [
 name = "cadence-core"
 version = "0.1.0"
 dependencies = [
- "cadence-player",
  "cadence-storage-android",
  "dioxus",
- "dioxus-sdk",
- "opensubsonic-cli",
- "serde",
- "tokio",
-]
-
-[[package]]
-name = "cadence-player"
-version = "0.1.0"
-dependencies = [
  "dioxus-sdk",
  "howler-wasm",
  "jni",
  "log",
  "ndk-context",
  "once_cell",
+ "opensubsonic-cli",
  "rodio",
+ "serde",
  "stream-download",
  "thiserror 1.0.69",
  "tokio",

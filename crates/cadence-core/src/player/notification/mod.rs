@@ -1,8 +1,8 @@
-// #[cfg(target_os = "android")]
+#[cfg(target_os = "android")]
 mod android;
 
 #[cfg(not(target_os = "android"))]
-mod mrpis;
+mod mpris;
 
 use crate::PlayerCommand;
 use tokio::sync::mpsc::Sender;
@@ -23,7 +23,7 @@ impl NotificationControl {
         android::send_media_message(command);
 
         #[cfg(not(target_os = "android"))]
-        mpris::send_media_message(command);
+        mpris::send_media_message(command).await;
     }
 
     pub fn update_media_notification(

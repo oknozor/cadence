@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use cadence_player::PlayerCommand;
+use crate::player::PlayerCommand;
 use dioxus::{CapturedError, prelude::*};
 use dioxus_sdk::storage::{get_from_storage, use_storage};
 use tokio::sync::{Mutex, broadcast, mpsc};

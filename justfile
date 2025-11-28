@@ -8,7 +8,7 @@ logcat:
     adb logcat --pid=$(adb shell pidof org.hoohoot) -v color
 
 mobile:
-    dx --verbose serve --hot-patch --package app --platform android --target aarch64-linux-android
+    dx --verbose serve --hot-patch --package app --platform android
 
 web:
     dx --verbose serve --port 8080 --hot-patch --package app --platform web

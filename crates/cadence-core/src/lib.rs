@@ -1,6 +1,7 @@
 pub mod hooks;
 pub mod model;
+pub mod player;
 pub mod services;
 pub mod state;
 
-pub use cadence_player::PlayerCommand;
+pub use crate::player::PlayerCommand;

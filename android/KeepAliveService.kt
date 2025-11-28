@@ -278,7 +278,6 @@ class KeepAliveService : Service() {
     external fun nativeOnAudioFocusGained()
 
     private external fun startRustBackground()
-    private external fun startRustBackground()
 }
 
 object NativeLoader {

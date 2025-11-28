@@ -36,7 +36,8 @@ pub fn AlbumView(id: String) -> Element {
                             artist: album.artist.clone(),
                             year: album.year.clone(),
                         }
-                        AlbumActionBar {}
+                        // TODO: songs should probably be behind a singal ?
+                        AlbumActionBar { songs: album.songs.clone() }
                         TrackList { album }
                     }
                 },
