@@ -4,11 +4,11 @@ use log::debug;
 use std::cell::RefCell;
 use std::collections::VecDeque;
 use std::sync::Arc;
-use tokio::sync::{Mutex, broadcast, mpsc};
+use tokio::sync::{Mutex, broadcast};
 use web_time::Duration;
 
 pub struct CadencePlayer {
-    pub(super) rx: Arc<Mutex<mpsc::Receiver<PlayerCommand>>>,
+    pub(super) rx: Arc<Mutex<broadcast::Receiver<PlayerCommand>>>,
     pub(super) tx: broadcast::Sender<u64>,
     username: String,
     password: String,
@@ -21,7 +21,7 @@ impl CadencePlayer {
         base_url: impl ToString,
         username: impl ToString,
         password: impl ToString,
-        rx: Arc<Mutex<mpsc::Receiver<PlayerCommand>>>,
+        rx: Arc<Mutex<broadcast::Receiver<PlayerCommand>>>,
         tx: broadcast::Sender<u64>,
     ) -> Result<Self, MusicPlayerError> {
         howler_wasm::init();

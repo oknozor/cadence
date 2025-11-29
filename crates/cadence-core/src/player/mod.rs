@@ -23,9 +23,9 @@ pub enum PlayerCommand {
 
 impl AudioBackend {
     pub async fn run(&mut self) -> Result<(), MusicPlayerError> {
-        info!("Cadence player running");
-        let mut rx = self.rx.lock().await;
-
+        info!("Audio backend starting...");
+        let rx = self.command_rx.clone();
+        tracing::error!("receiver has disconnected: {:?}", rx.is_disconnected());
         loop {
             tokio::select! {
                 _ =  dioxus_sdk::time::sleep(Duration::from_secs(1)) => {
@@ -33,7 +33,7 @@ impl AudioBackend {
                         self.tx.send(pos).unwrap();
                     }
                 },
-                Some(command) = rx.recv() => {
+                Ok(command) = rx.recv_async() => {
                     match command {
                         PlayerCommand::Play => self.play()?,
                         PlayerCommand::Queue(song) => self.queue(song).await?,

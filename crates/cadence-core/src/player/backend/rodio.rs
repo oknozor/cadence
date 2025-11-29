@@ -13,18 +13,14 @@ use stream_download::{
     source::DecodeError,
     storage::{adaptive::AdaptiveStorageProvider, temp::TempStorageProvider},
 };
-use tokio::sync::{
-    Mutex,
-    broadcast::Sender,
-    mpsc::{self},
-};
+use tokio::sync::broadcast::Sender;
 use tracing::info;
 
 use crate::{PlayerCommand, model::Song, player::stream_url};
 
 pub struct AudioBackend {
     sink: Sink,
-    pub rx: Arc<Mutex<mpsc::Receiver<PlayerCommand>>>,
+    pub command_rx: flume::Receiver<PlayerCommand>,
     username: String,
     password: String,
     base_url: String,
@@ -40,7 +36,7 @@ impl AudioBackend {
         base_url: impl ToString,
         username: impl ToString,
         password: impl ToString,
-        rx: Arc<Mutex<mpsc::Receiver<PlayerCommand>>>,
+        command_rx: flume::Receiver<PlayerCommand>,
         tx: Sender<u64>,
     ) -> Result<Self, MusicPlayerError> {
         let _output_stream = OutputStreamBuilder::open_default_stream()?;
@@ -54,7 +50,7 @@ impl AudioBackend {
             password: password.to_string(),
             base_url: base_url.to_string(),
             current,
-            rx,
+            command_rx,
             _output_stream,
             tx,
             next_queued,
@@ -62,11 +58,8 @@ impl AudioBackend {
         })
     }
 
-    pub(crate) fn is_paused(&self) -> bool {
-        self.sink.is_paused()
-    }
-
     pub(crate) fn next(&self) -> Result<(), MusicPlayerError> {
+        tracing::error!("Next functionality not implemented");
         self.sink.skip_one();
         Ok(())
     }

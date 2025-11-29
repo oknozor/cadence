@@ -1,5 +1,4 @@
 use cadence_core::hooks::init_global_context;
-use cadence_core::hooks::use_command_sender;
 use cadence_core::hooks::use_login_state;
 use cadence_core::{hooks::use_saved_credentials, state::SubSonicLogin};
 use cadence_ui::UI_CSS;
@@ -41,7 +40,6 @@ fn App() -> Element {
     #[cfg(feature = "mobile")]
     let dir = cadence_storage_android::internal_storage_dir();
 
-    info!("Candence started");
     init_global_context();
 
     let mut saved_credentials = use_saved_credentials();

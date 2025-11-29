@@ -63,7 +63,6 @@ impl SubsonicClient {
             .map(|response| {
                 let response = response.into_inner().subsonic_response;
 
-                info!("ping {:?}", response);
                 matches!(
                     response,
                     Some(

@@ -1,4 +1,3 @@
-use crate::Route;
 use cadence_ui::{
     button::{Button, ExpandableButton},
     icons::{close::CloseIcon, gear::GearIcon},
@@ -7,7 +6,6 @@ use dioxus::prelude::*;
 
 #[component]
 pub fn TopBar() -> Element {
-    let nav = navigator();
     let mut all_active = use_signal(|| true);
     let mut music_active = use_signal(|| false);
     let mut music_followed_active = use_signal(|| false);

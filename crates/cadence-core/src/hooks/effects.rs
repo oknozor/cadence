@@ -1,8 +1,12 @@
-use crate::player::AudioBackend;
+use crate::{
+    hooks::{use_command_receiver, use_command_sender},
+    player::AudioBackend,
+    state::{CONTROLLER, ControllerExt},
+};
 use dioxus::prelude::*;
 
 use crate::{
-    hooks::{use_command_receiver, use_playback_position_sender, use_saved_credentials},
+    hooks::{use_playback_position_sender, use_saved_credentials},
     services::subsonic_client::{SUBSONIC_CLIENT, SubsonicClient},
     state::LoginState,
 };
@@ -26,17 +30,19 @@ pub fn use_on_login_effect() {
                     Ok(ok) if ok => {
                         info!("Logged in");
                         login_state.set(true);
-                        spawn(async move {
-                            let mut player = AudioBackend::build(
-                                &credentials.server_url,
-                                &credentials.username,
-                                &credentials.password,
-                                use_command_receiver(),
-                                use_playback_position_sender(),
-                            )
-                            .expect("Player start failed");
-                            player.run().await.expect("Player run error");
-                        });
+                        let mut player = AudioBackend::build(
+                            &credentials.server_url,
+                            &credentials.username,
+                            &credentials.password,
+                            use_command_receiver(),
+                            use_playback_position_sender(),
+                        )
+                        .expect("Player start failed");
+
+                        CONTROLLER.resolve().attach_sender(use_command_sender());
+                        if let Err(err) = player.run().await {
+                            error!("Audio backend error: {}", err);
+                        }
                     }
                     Ok(ko) => {
                         login_state.set_error(Some(format!("Login failed: {}", ko)));

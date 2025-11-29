@@ -3,22 +3,18 @@ use crate::items::ItemInfo;
 use crate::progress::Progress;
 use crate::progress::ProgressIndicator;
 use crate::thumbnails::Thumbnail;
-use cadence_core::PlayerCommand;
-use cadence_core::hooks::use_command_sender;
-use cadence_core::hooks::use_player_state;
-use cadence_core::hooks::{use_current_track, use_playback_position};
+use cadence_core::hooks::use_playback_position;
+use cadence_core::state::{CONTROLLER, ControllerExt, ControllerStoreExt};
 use dioxus::prelude::*;
 
 #[component]
 pub fn Player() -> Element {
-    let mut state = use_player_state();
     let playback_position = use_playback_position();
-    let current_track = use_current_track();
-    let command_sender = use_command_sender();
+    let mut controller = CONTROLLER.resolve();
 
     rsx! {
         div { class: "player-container",
-            if let Some(track) = current_track() {
+            if let Some(track) = controller.current() {
                 div {
                     display: "flex",
                     flex_direction: "row",
@@ -36,19 +32,9 @@ pub fn Player() -> Element {
                     div { class: "player-controls",
                         button {
                             onclick: move |_| {
-                                if *state.is_playing().read() {
-                                    let sender = command_sender.clone();
-                                    spawn(async move {
-                                        sender.clone().send(PlayerCommand::Pause).await.unwrap()
-                                    });
-                                    state.toggle();
-                                } else {
-                                    let sender = command_sender.clone();
-                                    spawn(async move { sender.send(PlayerCommand::Play).await.unwrap() });
-                                    state.toggle();
-                                }
+                                controller.toggle_play();
                             },
-                            PlayIcon { size: 24, is_playing: state.is_playing() }
+                            PlayIcon { size: 24, is_playing: controller.is_playing() }
                         }
                     }
                 }

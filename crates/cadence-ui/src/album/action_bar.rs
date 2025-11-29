@@ -1,19 +1,12 @@
 use crate::icons::{
     download::DownloadIcon, play::PlayIcon, plus::PlusIcon, share::ShareIcon, shuffle::ShuffleIcon,
 };
-use cadence_core::{
-    PlayerCommand,
-    hooks::{use_command_sender, use_player_state, use_queue_state},
-    model::Song,
-};
+use cadence_core::state::{ControllerExt, ControllerStoreExt};
+use cadence_core::{model::Song, state::CONTROLLER};
 use dioxus::prelude::*;
 
 #[component]
 pub fn AlbumActionBar(songs: Vec<Song>) -> Element {
-    let mut player = use_player_state();
-    let mut queue = use_queue_state();
-    let command_sender = use_command_sender();
-
     rsx! {
         div { class: "album-action-bar",
             div { class: "album-action-bar-start",
@@ -32,29 +25,18 @@ pub fn AlbumActionBar(songs: Vec<Song>) -> Element {
 
             div { class: "album-action-bar-end",
                 button {
-                    ShuffleIcon { size: 36, filled: player.is_shuffle() }
+                    ShuffleIcon { size: 36, filled: CONTROLLER.resolve().shuffle() }
                 }
 
                 button {
                     onclick: move |_| {
-                        let sender = command_sender.clone();
-                        if *player.is_playing().read() {
-                            spawn(async move {
-                                sender.send(PlayerCommand::Pause).await.unwrap();
-                            });
-                        }
-                        else if let Some(first) = songs.get(0).cloned() {
-                            let sender = command_sender.clone();
-                            let tracks = songs.clone();
-                            spawn(async move {
-                                sender.send(PlayerCommand::QueueAll(tracks)).await.unwrap();
-                            });
-
-                            queue.queue_all(songs.clone());
-                            player.set_playing(first.id);
+                        if *CONTROLLER.resolve().is_playing().read() {
+                            CONTROLLER.resolve().toggle_play();
+                        } else {
+                            CONTROLLER.resolve().queue_all(songs.clone());
                         }
                     },
-                    PlayIcon { size: 48, is_playing: player.is_playing() }
+                    PlayIcon { size: 48, is_playing: CONTROLLER.resolve().is_playing() }
                 }
             }
         }

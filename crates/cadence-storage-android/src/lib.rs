@@ -120,6 +120,7 @@ pub fn internal_storage_dir() -> PathBuf {
         Ok(PathBuf::from(files_dir))
     }
 
+    #[cfg(target_os = "android")]
     dioxus::mobile::wry::prelude::dispatch(move |env, activity, _webview| {
         tx.send(run(env, activity).unwrap()).unwrap()
     });

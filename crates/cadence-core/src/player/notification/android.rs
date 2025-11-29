@@ -13,7 +13,7 @@ use once_cell::sync::OnceCell;
 use std::sync::Mutex;
 use std::time::Duration;
 use tokio::runtime::Runtime;
-use tokio::sync::mpsc::Sender;
+use tokio::sync::broadcast::Sender;
 
 use crate::PlayerCommand;
 
@@ -31,14 +31,9 @@ pub fn send_media_message(msg: PlayerCommand) {
         .expect("Notification backend sender should be initialized")
         .clone();
 
-    let runtime = RT
-        .get()
-        .expect("android Tokio runtime should be initialized");
-
-    runtime.spawn(async move {
-        tx.send(msg).await.expect("Failed to send media message");
-    });
+    tx.send(msg).expect("Failed to send media message");
 }
+
 #[derive(Debug)]
 pub enum MediaMsg {
     Play,

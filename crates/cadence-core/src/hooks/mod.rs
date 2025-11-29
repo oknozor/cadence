@@ -1,15 +1,13 @@
-use std::sync::Arc;
-
 use crate::player::PlayerCommand;
 use dioxus::{CapturedError, prelude::*};
 use dioxus_sdk::storage::{get_from_storage, use_storage};
-use tokio::sync::{Mutex, broadcast, mpsc};
+use tokio::sync::broadcast;
 
 use crate::{
     hooks::effects::use_on_login_effect,
-    model::{Album, SearchResult, Song},
+    model::{Album, SearchResult},
     services::subsonic_client::{AlbumListType, SUBSONIC_CLIENT, SubsonicClient},
-    state::{LoginState, PlayerState, QueueState, SubSonicLogin},
+    state::{LoginState, SubSonicLogin},
 };
 
 mod context;
@@ -31,16 +29,6 @@ pub fn use_playback_position() -> Signal<Option<f64>> {
     });
 
     position
-}
-
-pub fn use_current_track() -> Memo<Option<Song>> {
-    let queue = consume_context::<QueueState>();
-    use_memo(move || {
-        queue
-            .current_track_idx()
-            .map(|idx| queue.songs().get(idx).cloned())
-            .flatten()
-    })
 }
 
 pub fn use_playback_position_sender() -> broadcast::Sender<u64> {
@@ -66,19 +54,11 @@ pub fn use_login_state() -> LoginState {
     consume_context()
 }
 
-pub fn use_command_sender() -> mpsc::Sender<PlayerCommand> {
+pub fn use_command_sender() -> flume::Sender<PlayerCommand> {
     consume_context()
 }
 
-pub fn use_command_receiver() -> Arc<Mutex<mpsc::Receiver<PlayerCommand>>> {
-    consume_context()
-}
-
-pub fn use_player_state() -> PlayerState {
-    consume_context()
-}
-
-pub fn use_queue_state() -> QueueState {
+pub fn use_command_receiver() -> flume::Receiver<PlayerCommand> {
     consume_context()
 }
 

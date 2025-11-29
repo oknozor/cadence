@@ -5,7 +5,7 @@ mod android;
 mod mpris;
 
 use crate::PlayerCommand;
-use tokio::sync::mpsc::Sender;
+use tokio::sync::broadcast::Sender;
 
 pub struct NotificationControl;
 

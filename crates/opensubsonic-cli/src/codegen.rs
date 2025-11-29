@@ -1,7 +1,7 @@
 #[allow(unused_imports)]
 pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
 #[allow(unused_imports)]
-use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderExt};
+use progenitor_client::{ClientHooks, OperationInfo, RequestBuilderExt, encode_path};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
@@ -11,18 +11,12 @@ pub mod types {
         pub struct ConversionError(::std::borrow::Cow<'static, str>);
         impl ::std::error::Error for ConversionError {}
         impl ::std::fmt::Display for ConversionError {
-            fn fmt(
-                &self,
-                f: &mut ::std::fmt::Formatter<'_>,
-            ) -> Result<(), ::std::fmt::Error> {
+            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
                 ::std::fmt::Display::fmt(&self.0, f)
             }
         }
         impl ::std::fmt::Debug for ConversionError {
-            fn fmt(
-                &self,
-                f: &mut ::std::fmt::Formatter<'_>,
-            ) -> Result<(), ::std::fmt::Error> {
+            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
                 ::std::fmt::Debug::fmt(&self.0, f)
             }
         }
@@ -655,7 +649,9 @@ pub mod types {
     }
     impl ::std::default::Default for AlbumList {
         fn default() -> Self {
-            Self { album: Default::default() }
+            Self {
+                album: Default::default(),
+            }
         }
     }
     ///`AlbumList2`
@@ -690,7 +686,9 @@ pub mod types {
     }
     impl ::std::default::Default for AlbumList2 {
         fn default() -> Self {
-            Self { album: Default::default() }
+            Self {
+                album: Default::default(),
+            }
         }
     }
     ///The list type. Must be one of the following: random, newest, highest, frequent, recent. Since 1.8.0 you can also use alphabeticalByName or alphabeticalByArtist to page through all albums alphabetically, and starred to retrieve starred albums. Since 1.10.1 you can use byYear and byGenre to list albums in a given year range or genre.
@@ -726,7 +724,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum AlbumListType {
         #[serde(rename = "random")]
@@ -773,9 +771,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for AlbumListType {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "random" => Ok(Self::Random),
                 "newest" => Ok(Self::Newest),
@@ -793,9 +789,7 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for AlbumListType {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -2152,9 +2146,7 @@ pub mod types {
             default,
             skip_serializing_if = "::std::option::Option::is_none"
         )]
-        pub subsonic_response: ::std::option::Option<
-            CreatePlaylistResponseSubsonicResponse,
-        >,
+        pub subsonic_response: ::std::option::Option<CreatePlaylistResponseSubsonicResponse>,
     }
     impl ::std::convert::From<&CreatePlaylistResponse> for CreatePlaylistResponse {
         fn from(value: &CreatePlaylistResponse) -> Self {
@@ -2197,13 +2189,13 @@ pub mod types {
         }
     }
     impl ::std::convert::From<CreatePlaylistSuccessResponse>
-    for CreatePlaylistResponseSubsonicResponse {
+        for CreatePlaylistResponseSubsonicResponse
+    {
         fn from(value: CreatePlaylistSuccessResponse) -> Self {
             Self::CreatePlaylistSuccessResponse(value)
         }
     }
-    impl ::std::convert::From<SubsonicFailureResponse>
-    for CreatePlaylistResponseSubsonicResponse {
+    impl ::std::convert::From<SubsonicFailureResponse> for CreatePlaylistResponseSubsonicResponse {
         fn from(value: SubsonicFailureResponse) -> Self {
             Self::SubsonicFailureResponse(value)
         }
@@ -2254,8 +2246,7 @@ pub mod types {
         ///The server supported Subsonic API version.
         pub version: ::std::string::String,
     }
-    impl ::std::convert::From<&CreatePlaylistSuccessResponse>
-    for CreatePlaylistSuccessResponse {
+    impl ::std::convert::From<&CreatePlaylistSuccessResponse> for CreatePlaylistSuccessResponse {
         fn from(value: &CreatePlaylistSuccessResponse) -> Self {
             value.clone()
         }
@@ -2284,7 +2275,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum CreatePlaylistSuccessResponseStatus {
         #[serde(rename = "ok")]
@@ -2304,9 +2295,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for CreatePlaylistSuccessResponseStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ok" => Ok(Self::Ok),
                 _ => Err("invalid value".into()),
@@ -2315,14 +2304,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for CreatePlaylistSuccessResponseStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for CreatePlaylistSuccessResponseStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for CreatePlaylistSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -2330,8 +2316,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for CreatePlaylistSuccessResponseStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for CreatePlaylistSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -2369,9 +2354,7 @@ pub mod types {
             default,
             skip_serializing_if = "::std::option::Option::is_none"
         )]
-        pub subsonic_response: ::std::option::Option<
-            CreateSharesResponseSubsonicResponse,
-        >,
+        pub subsonic_response: ::std::option::Option<CreateSharesResponseSubsonicResponse>,
     }
     impl ::std::convert::From<&CreateSharesResponse> for CreateSharesResponse {
         fn from(value: &CreateSharesResponse) -> Self {
@@ -2413,14 +2396,12 @@ pub mod types {
             value.clone()
         }
     }
-    impl ::std::convert::From<CreateSharesSuccessResponse>
-    for CreateSharesResponseSubsonicResponse {
+    impl ::std::convert::From<CreateSharesSuccessResponse> for CreateSharesResponseSubsonicResponse {
         fn from(value: CreateSharesSuccessResponse) -> Self {
             Self::CreateSharesSuccessResponse(value)
         }
     }
-    impl ::std::convert::From<SubsonicFailureResponse>
-    for CreateSharesResponseSubsonicResponse {
+    impl ::std::convert::From<SubsonicFailureResponse> for CreateSharesResponseSubsonicResponse {
         fn from(value: SubsonicFailureResponse) -> Self {
             Self::SubsonicFailureResponse(value)
         }
@@ -2471,8 +2452,7 @@ pub mod types {
         ///The server supported Subsonic API version.
         pub version: ::std::string::String,
     }
-    impl ::std::convert::From<&CreateSharesSuccessResponse>
-    for CreateSharesSuccessResponse {
+    impl ::std::convert::From<&CreateSharesSuccessResponse> for CreateSharesSuccessResponse {
         fn from(value: &CreateSharesSuccessResponse) -> Self {
             value.clone()
         }
@@ -2501,7 +2481,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum CreateSharesSuccessResponseStatus {
         #[serde(rename = "ok")]
@@ -2521,9 +2501,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for CreateSharesSuccessResponseStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ok" => Ok(Self::Ok),
                 _ => Err("invalid value".into()),
@@ -2532,14 +2510,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for CreateSharesSuccessResponseStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for CreateSharesSuccessResponseStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for CreateSharesSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -2547,8 +2522,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for CreateSharesSuccessResponseStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for CreateSharesSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -2717,7 +2691,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum ExplicitStatus {
         #[serde(rename = "clean")]
@@ -2743,9 +2717,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for ExplicitStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "clean" => Ok(Self::Clean),
                 "explicit" => Ok(Self::Explicit),
@@ -2756,9 +2728,7 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for ExplicitStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -2805,7 +2775,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum GenericMediaType {
         #[serde(rename = "music")]
@@ -2834,9 +2804,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for GenericMediaType {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "music" => Ok(Self::Music),
                 "video" => Ok(Self::Video),
@@ -2848,9 +2816,7 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for GenericMediaType {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -2949,7 +2915,9 @@ pub mod types {
     }
     impl ::std::default::Default for Genres {
         fn default() -> Self {
-            Self { genre: Default::default() }
+            Self {
+                genre: Default::default(),
+            }
         }
     }
     ///A subsonic-response element with a nested albumInfo element on success.
@@ -2982,9 +2950,7 @@ pub mod types {
             default,
             skip_serializing_if = "::std::option::Option::is_none"
         )]
-        pub subsonic_response: ::std::option::Option<
-            GetAlbumInfoResponseSubsonicResponse,
-        >,
+        pub subsonic_response: ::std::option::Option<GetAlbumInfoResponseSubsonicResponse>,
     }
     impl ::std::convert::From<&GetAlbumInfoResponse> for GetAlbumInfoResponse {
         fn from(value: &GetAlbumInfoResponse) -> Self {
@@ -3026,14 +2992,12 @@ pub mod types {
             value.clone()
         }
     }
-    impl ::std::convert::From<GetAlbumInfoSuccessResponse>
-    for GetAlbumInfoResponseSubsonicResponse {
+    impl ::std::convert::From<GetAlbumInfoSuccessResponse> for GetAlbumInfoResponseSubsonicResponse {
         fn from(value: GetAlbumInfoSuccessResponse) -> Self {
             Self::GetAlbumInfoSuccessResponse(value)
         }
     }
-    impl ::std::convert::From<SubsonicFailureResponse>
-    for GetAlbumInfoResponseSubsonicResponse {
+    impl ::std::convert::From<SubsonicFailureResponse> for GetAlbumInfoResponseSubsonicResponse {
         fn from(value: SubsonicFailureResponse) -> Self {
             Self::SubsonicFailureResponse(value)
         }
@@ -3085,8 +3049,7 @@ pub mod types {
         ///The server supported Subsonic API version.
         pub version: ::std::string::String,
     }
-    impl ::std::convert::From<&GetAlbumInfoSuccessResponse>
-    for GetAlbumInfoSuccessResponse {
+    impl ::std::convert::From<&GetAlbumInfoSuccessResponse> for GetAlbumInfoSuccessResponse {
         fn from(value: &GetAlbumInfoSuccessResponse) -> Self {
             value.clone()
         }
@@ -3115,7 +3078,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum GetAlbumInfoSuccessResponseStatus {
         #[serde(rename = "ok")]
@@ -3135,9 +3098,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for GetAlbumInfoSuccessResponseStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ok" => Ok(Self::Ok),
                 _ => Err("invalid value".into()),
@@ -3146,14 +3107,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for GetAlbumInfoSuccessResponseStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for GetAlbumInfoSuccessResponseStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for GetAlbumInfoSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -3161,8 +3119,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for GetAlbumInfoSuccessResponseStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for GetAlbumInfoSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -3200,9 +3157,7 @@ pub mod types {
             default,
             skip_serializing_if = "::std::option::Option::is_none"
         )]
-        pub subsonic_response: ::std::option::Option<
-            GetAlbumList2ResponseSubsonicResponse,
-        >,
+        pub subsonic_response: ::std::option::Option<GetAlbumList2ResponseSubsonicResponse>,
     }
     impl ::std::convert::From<&GetAlbumList2Response> for GetAlbumList2Response {
         fn from(value: &GetAlbumList2Response) -> Self {
@@ -3244,14 +3199,12 @@ pub mod types {
             value.clone()
         }
     }
-    impl ::std::convert::From<GetAlbumList2SuccessResponse>
-    for GetAlbumList2ResponseSubsonicResponse {
+    impl ::std::convert::From<GetAlbumList2SuccessResponse> for GetAlbumList2ResponseSubsonicResponse {
         fn from(value: GetAlbumList2SuccessResponse) -> Self {
             Self::GetAlbumList2SuccessResponse(value)
         }
     }
-    impl ::std::convert::From<SubsonicFailureResponse>
-    for GetAlbumList2ResponseSubsonicResponse {
+    impl ::std::convert::From<SubsonicFailureResponse> for GetAlbumList2ResponseSubsonicResponse {
         fn from(value: SubsonicFailureResponse) -> Self {
             Self::SubsonicFailureResponse(value)
         }
@@ -3303,8 +3256,7 @@ pub mod types {
         ///The server supported Subsonic API version.
         pub version: ::std::string::String,
     }
-    impl ::std::convert::From<&GetAlbumList2SuccessResponse>
-    for GetAlbumList2SuccessResponse {
+    impl ::std::convert::From<&GetAlbumList2SuccessResponse> for GetAlbumList2SuccessResponse {
         fn from(value: &GetAlbumList2SuccessResponse) -> Self {
             value.clone()
         }
@@ -3333,7 +3285,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum GetAlbumList2SuccessResponseStatus {
         #[serde(rename = "ok")]
@@ -3353,9 +3305,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for GetAlbumList2SuccessResponseStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ok" => Ok(Self::Ok),
                 _ => Err("invalid value".into()),
@@ -3364,14 +3314,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for GetAlbumList2SuccessResponseStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for GetAlbumList2SuccessResponseStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for GetAlbumList2SuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -3379,8 +3326,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for GetAlbumList2SuccessResponseStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for GetAlbumList2SuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -3418,9 +3364,7 @@ pub mod types {
             default,
             skip_serializing_if = "::std::option::Option::is_none"
         )]
-        pub subsonic_response: ::std::option::Option<
-            GetAlbumListResponseSubsonicResponse,
-        >,
+        pub subsonic_response: ::std::option::Option<GetAlbumListResponseSubsonicResponse>,
     }
     impl ::std::convert::From<&GetAlbumListResponse> for GetAlbumListResponse {
         fn from(value: &GetAlbumListResponse) -> Self {
@@ -3462,14 +3406,12 @@ pub mod types {
             value.clone()
         }
     }
-    impl ::std::convert::From<GetAlbumListSuccessResponse>
-    for GetAlbumListResponseSubsonicResponse {
+    impl ::std::convert::From<GetAlbumListSuccessResponse> for GetAlbumListResponseSubsonicResponse {
         fn from(value: GetAlbumListSuccessResponse) -> Self {
             Self::GetAlbumListSuccessResponse(value)
         }
     }
-    impl ::std::convert::From<SubsonicFailureResponse>
-    for GetAlbumListResponseSubsonicResponse {
+    impl ::std::convert::From<SubsonicFailureResponse> for GetAlbumListResponseSubsonicResponse {
         fn from(value: SubsonicFailureResponse) -> Self {
             Self::SubsonicFailureResponse(value)
         }
@@ -3521,8 +3463,7 @@ pub mod types {
         ///The server supported Subsonic API version.
         pub version: ::std::string::String,
     }
-    impl ::std::convert::From<&GetAlbumListSuccessResponse>
-    for GetAlbumListSuccessResponse {
+    impl ::std::convert::From<&GetAlbumListSuccessResponse> for GetAlbumListSuccessResponse {
         fn from(value: &GetAlbumListSuccessResponse) -> Self {
             value.clone()
         }
@@ -3551,7 +3492,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum GetAlbumListSuccessResponseStatus {
         #[serde(rename = "ok")]
@@ -3571,9 +3512,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for GetAlbumListSuccessResponseStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ok" => Ok(Self::Ok),
                 _ => Err("invalid value".into()),
@@ -3582,14 +3521,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for GetAlbumListSuccessResponseStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for GetAlbumListSuccessResponseStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for GetAlbumListSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -3597,8 +3533,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for GetAlbumListSuccessResponseStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for GetAlbumListSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -3678,14 +3613,12 @@ pub mod types {
             value.clone()
         }
     }
-    impl ::std::convert::From<GetAlbumSuccessResponse>
-    for GetAlbumResponseSubsonicResponse {
+    impl ::std::convert::From<GetAlbumSuccessResponse> for GetAlbumResponseSubsonicResponse {
         fn from(value: GetAlbumSuccessResponse) -> Self {
             Self::GetAlbumSuccessResponse(value)
         }
     }
-    impl ::std::convert::From<SubsonicFailureResponse>
-    for GetAlbumResponseSubsonicResponse {
+    impl ::std::convert::From<SubsonicFailureResponse> for GetAlbumResponseSubsonicResponse {
         fn from(value: SubsonicFailureResponse) -> Self {
             Self::SubsonicFailureResponse(value)
         }
@@ -3765,7 +3698,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum GetAlbumSuccessResponseStatus {
         #[serde(rename = "ok")]
@@ -3785,9 +3718,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for GetAlbumSuccessResponseStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ok" => Ok(Self::Ok),
                 _ => Err("invalid value".into()),
@@ -3796,14 +3727,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for GetAlbumSuccessResponseStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for GetAlbumSuccessResponseStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for GetAlbumSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -3811,8 +3739,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for GetAlbumSuccessResponseStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for GetAlbumSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -3850,9 +3777,7 @@ pub mod types {
             default,
             skip_serializing_if = "::std::option::Option::is_none"
         )]
-        pub subsonic_response: ::std::option::Option<
-            GetArtistInfo2ResponseSubsonicResponse,
-        >,
+        pub subsonic_response: ::std::option::Option<GetArtistInfo2ResponseSubsonicResponse>,
     }
     impl ::std::convert::From<&GetArtistInfo2Response> for GetArtistInfo2Response {
         fn from(value: &GetArtistInfo2Response) -> Self {
@@ -3895,13 +3820,13 @@ pub mod types {
         }
     }
     impl ::std::convert::From<GetArtistInfo2SuccessResponse>
-    for GetArtistInfo2ResponseSubsonicResponse {
+        for GetArtistInfo2ResponseSubsonicResponse
+    {
         fn from(value: GetArtistInfo2SuccessResponse) -> Self {
             Self::GetArtistInfo2SuccessResponse(value)
         }
     }
-    impl ::std::convert::From<SubsonicFailureResponse>
-    for GetArtistInfo2ResponseSubsonicResponse {
+    impl ::std::convert::From<SubsonicFailureResponse> for GetArtistInfo2ResponseSubsonicResponse {
         fn from(value: SubsonicFailureResponse) -> Self {
             Self::SubsonicFailureResponse(value)
         }
@@ -3953,8 +3878,7 @@ pub mod types {
         ///The server supported Subsonic API version.
         pub version: ::std::string::String,
     }
-    impl ::std::convert::From<&GetArtistInfo2SuccessResponse>
-    for GetArtistInfo2SuccessResponse {
+    impl ::std::convert::From<&GetArtistInfo2SuccessResponse> for GetArtistInfo2SuccessResponse {
         fn from(value: &GetArtistInfo2SuccessResponse) -> Self {
             value.clone()
         }
@@ -3983,7 +3907,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum GetArtistInfo2SuccessResponseStatus {
         #[serde(rename = "ok")]
@@ -4003,9 +3927,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for GetArtistInfo2SuccessResponseStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ok" => Ok(Self::Ok),
                 _ => Err("invalid value".into()),
@@ -4014,14 +3936,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for GetArtistInfo2SuccessResponseStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for GetArtistInfo2SuccessResponseStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for GetArtistInfo2SuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -4029,8 +3948,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for GetArtistInfo2SuccessResponseStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for GetArtistInfo2SuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -4068,9 +3986,7 @@ pub mod types {
             default,
             skip_serializing_if = "::std::option::Option::is_none"
         )]
-        pub subsonic_response: ::std::option::Option<
-            GetArtistInfoResponseSubsonicResponse,
-        >,
+        pub subsonic_response: ::std::option::Option<GetArtistInfoResponseSubsonicResponse>,
     }
     impl ::std::convert::From<&GetArtistInfoResponse> for GetArtistInfoResponse {
         fn from(value: &GetArtistInfoResponse) -> Self {
@@ -4112,14 +4028,12 @@ pub mod types {
             value.clone()
         }
     }
-    impl ::std::convert::From<GetArtistInfoSuccessResponse>
-    for GetArtistInfoResponseSubsonicResponse {
+    impl ::std::convert::From<GetArtistInfoSuccessResponse> for GetArtistInfoResponseSubsonicResponse {
         fn from(value: GetArtistInfoSuccessResponse) -> Self {
             Self::GetArtistInfoSuccessResponse(value)
         }
     }
-    impl ::std::convert::From<SubsonicFailureResponse>
-    for GetArtistInfoResponseSubsonicResponse {
+    impl ::std::convert::From<SubsonicFailureResponse> for GetArtistInfoResponseSubsonicResponse {
         fn from(value: SubsonicFailureResponse) -> Self {
             Self::SubsonicFailureResponse(value)
         }
@@ -4171,8 +4085,7 @@ pub mod types {
         ///The server supported Subsonic API version.
         pub version: ::std::string::String,
     }
-    impl ::std::convert::From<&GetArtistInfoSuccessResponse>
-    for GetArtistInfoSuccessResponse {
+    impl ::std::convert::From<&GetArtistInfoSuccessResponse> for GetArtistInfoSuccessResponse {
         fn from(value: &GetArtistInfoSuccessResponse) -> Self {
             value.clone()
         }
@@ -4201,7 +4114,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum GetArtistInfoSuccessResponseStatus {
         #[serde(rename = "ok")]
@@ -4221,9 +4134,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for GetArtistInfoSuccessResponseStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ok" => Ok(Self::Ok),
                 _ => Err("invalid value".into()),
@@ -4232,14 +4143,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for GetArtistInfoSuccessResponseStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for GetArtistInfoSuccessResponseStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for GetArtistInfoSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -4247,8 +4155,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for GetArtistInfoSuccessResponseStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for GetArtistInfoSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -4328,14 +4235,12 @@ pub mod types {
             value.clone()
         }
     }
-    impl ::std::convert::From<GetArtistSuccessResponse>
-    for GetArtistResponseSubsonicResponse {
+    impl ::std::convert::From<GetArtistSuccessResponse> for GetArtistResponseSubsonicResponse {
         fn from(value: GetArtistSuccessResponse) -> Self {
             Self::GetArtistSuccessResponse(value)
         }
     }
-    impl ::std::convert::From<SubsonicFailureResponse>
-    for GetArtistResponseSubsonicResponse {
+    impl ::std::convert::From<SubsonicFailureResponse> for GetArtistResponseSubsonicResponse {
         fn from(value: SubsonicFailureResponse) -> Self {
             Self::SubsonicFailureResponse(value)
         }
@@ -4415,7 +4320,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum GetArtistSuccessResponseStatus {
         #[serde(rename = "ok")]
@@ -4435,9 +4340,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for GetArtistSuccessResponseStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ok" => Ok(Self::Ok),
                 _ => Err("invalid value".into()),
@@ -4446,14 +4349,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for GetArtistSuccessResponseStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for GetArtistSuccessResponseStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for GetArtistSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -4461,8 +4361,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for GetArtistSuccessResponseStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for GetArtistSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -4542,14 +4441,12 @@ pub mod types {
             value.clone()
         }
     }
-    impl ::std::convert::From<GetArtistsSuccessResponse>
-    for GetArtistsResponseSubsonicResponse {
+    impl ::std::convert::From<GetArtistsSuccessResponse> for GetArtistsResponseSubsonicResponse {
         fn from(value: GetArtistsSuccessResponse) -> Self {
             Self::GetArtistsSuccessResponse(value)
         }
     }
-    impl ::std::convert::From<SubsonicFailureResponse>
-    for GetArtistsResponseSubsonicResponse {
+    impl ::std::convert::From<SubsonicFailureResponse> for GetArtistsResponseSubsonicResponse {
         fn from(value: SubsonicFailureResponse) -> Self {
             Self::SubsonicFailureResponse(value)
         }
@@ -4629,7 +4526,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum GetArtistsSuccessResponseStatus {
         #[serde(rename = "ok")]
@@ -4649,9 +4546,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for GetArtistsSuccessResponseStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ok" => Ok(Self::Ok),
                 _ => Err("invalid value".into()),
@@ -4660,14 +4555,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for GetArtistsSuccessResponseStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for GetArtistsSuccessResponseStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for GetArtistsSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -4675,8 +4567,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for GetArtistsSuccessResponseStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for GetArtistsSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -4714,9 +4605,7 @@ pub mod types {
             default,
             skip_serializing_if = "::std::option::Option::is_none"
         )]
-        pub subsonic_response: ::std::option::Option<
-            GetBookmarksResponseSubsonicResponse,
-        >,
+        pub subsonic_response: ::std::option::Option<GetBookmarksResponseSubsonicResponse>,
     }
     impl ::std::convert::From<&GetBookmarksResponse> for GetBookmarksResponse {
         fn from(value: &GetBookmarksResponse) -> Self {
@@ -4758,14 +4647,12 @@ pub mod types {
             value.clone()
         }
     }
-    impl ::std::convert::From<GetBookmarksSuccessResponse>
-    for GetBookmarksResponseSubsonicResponse {
+    impl ::std::convert::From<GetBookmarksSuccessResponse> for GetBookmarksResponseSubsonicResponse {
         fn from(value: GetBookmarksSuccessResponse) -> Self {
             Self::GetBookmarksSuccessResponse(value)
         }
     }
-    impl ::std::convert::From<SubsonicFailureResponse>
-    for GetBookmarksResponseSubsonicResponse {
+    impl ::std::convert::From<SubsonicFailureResponse> for GetBookmarksResponseSubsonicResponse {
         fn from(value: SubsonicFailureResponse) -> Self {
             Self::SubsonicFailureResponse(value)
         }
@@ -4816,8 +4703,7 @@ pub mod types {
         ///The server supported Subsonic API version.
         pub version: ::std::string::String,
     }
-    impl ::std::convert::From<&GetBookmarksSuccessResponse>
-    for GetBookmarksSuccessResponse {
+    impl ::std::convert::From<&GetBookmarksSuccessResponse> for GetBookmarksSuccessResponse {
         fn from(value: &GetBookmarksSuccessResponse) -> Self {
             value.clone()
         }
@@ -4846,7 +4732,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum GetBookmarksSuccessResponseStatus {
         #[serde(rename = "ok")]
@@ -4866,9 +4752,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for GetBookmarksSuccessResponseStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ok" => Ok(Self::Ok),
                 _ => Err("invalid value".into()),
@@ -4877,14 +4761,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for GetBookmarksSuccessResponseStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for GetBookmarksSuccessResponseStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for GetBookmarksSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -4892,8 +4773,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for GetBookmarksSuccessResponseStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for GetBookmarksSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -4925,7 +4805,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum GetCaptionsFormat {
         #[serde(rename = "srt")]
@@ -4948,9 +4828,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for GetCaptionsFormat {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "srt" => Ok(Self::Srt),
                 "vtt" => Ok(Self::Vtt),
@@ -4960,9 +4838,7 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for GetCaptionsFormat {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -5012,9 +4888,7 @@ pub mod types {
             default,
             skip_serializing_if = "::std::option::Option::is_none"
         )]
-        pub subsonic_response: ::std::option::Option<
-            GetChatMessagesResponseSubsonicResponse,
-        >,
+        pub subsonic_response: ::std::option::Option<GetChatMessagesResponseSubsonicResponse>,
     }
     impl ::std::convert::From<&GetChatMessagesResponse> for GetChatMessagesResponse {
         fn from(value: &GetChatMessagesResponse) -> Self {
@@ -5057,13 +4931,13 @@ pub mod types {
         }
     }
     impl ::std::convert::From<GetChatMessagesSuccessResponse>
-    for GetChatMessagesResponseSubsonicResponse {
+        for GetChatMessagesResponseSubsonicResponse
+    {
         fn from(value: GetChatMessagesSuccessResponse) -> Self {
             Self::GetChatMessagesSuccessResponse(value)
         }
     }
-    impl ::std::convert::From<SubsonicFailureResponse>
-    for GetChatMessagesResponseSubsonicResponse {
+    impl ::std::convert::From<SubsonicFailureResponse> for GetChatMessagesResponseSubsonicResponse {
         fn from(value: SubsonicFailureResponse) -> Self {
             Self::SubsonicFailureResponse(value)
         }
@@ -5115,8 +4989,7 @@ pub mod types {
         ///The server supported Subsonic API version.
         pub version: ::std::string::String,
     }
-    impl ::std::convert::From<&GetChatMessagesSuccessResponse>
-    for GetChatMessagesSuccessResponse {
+    impl ::std::convert::From<&GetChatMessagesSuccessResponse> for GetChatMessagesSuccessResponse {
         fn from(value: &GetChatMessagesSuccessResponse) -> Self {
             value.clone()
         }
@@ -5145,7 +5018,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum GetChatMessagesSuccessResponseStatus {
         #[serde(rename = "ok")]
@@ -5165,9 +5038,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for GetChatMessagesSuccessResponseStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ok" => Ok(Self::Ok),
                 _ => Err("invalid value".into()),
@@ -5176,14 +5047,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for GetChatMessagesSuccessResponseStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for GetChatMessagesSuccessResponseStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for GetChatMessagesSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -5191,8 +5059,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for GetChatMessagesSuccessResponseStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for GetChatMessagesSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -5272,14 +5139,12 @@ pub mod types {
             value.clone()
         }
     }
-    impl ::std::convert::From<GetGenresSuccessResponse>
-    for GetGenresResponseSubsonicResponse {
+    impl ::std::convert::From<GetGenresSuccessResponse> for GetGenresResponseSubsonicResponse {
         fn from(value: GetGenresSuccessResponse) -> Self {
             Self::GetGenresSuccessResponse(value)
         }
     }
-    impl ::std::convert::From<SubsonicFailureResponse>
-    for GetGenresResponseSubsonicResponse {
+    impl ::std::convert::From<SubsonicFailureResponse> for GetGenresResponseSubsonicResponse {
         fn from(value: SubsonicFailureResponse) -> Self {
             Self::SubsonicFailureResponse(value)
         }
@@ -5359,7 +5224,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum GetGenresSuccessResponseStatus {
         #[serde(rename = "ok")]
@@ -5379,9 +5244,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for GetGenresSuccessResponseStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ok" => Ok(Self::Ok),
                 _ => Err("invalid value".into()),
@@ -5390,14 +5253,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for GetGenresSuccessResponseStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for GetGenresSuccessResponseStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for GetGenresSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -5405,8 +5265,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for GetGenresSuccessResponseStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for GetGenresSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -5486,14 +5345,12 @@ pub mod types {
             value.clone()
         }
     }
-    impl ::std::convert::From<GetIndexesSuccessResponse>
-    for GetIndexesResponseSubsonicResponse {
+    impl ::std::convert::From<GetIndexesSuccessResponse> for GetIndexesResponseSubsonicResponse {
         fn from(value: GetIndexesSuccessResponse) -> Self {
             Self::GetIndexesSuccessResponse(value)
         }
     }
-    impl ::std::convert::From<SubsonicFailureResponse>
-    for GetIndexesResponseSubsonicResponse {
+    impl ::std::convert::From<SubsonicFailureResponse> for GetIndexesResponseSubsonicResponse {
         fn from(value: SubsonicFailureResponse) -> Self {
             Self::SubsonicFailureResponse(value)
         }
@@ -5573,7 +5430,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum GetIndexesSuccessResponseStatus {
         #[serde(rename = "ok")]
@@ -5593,9 +5450,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for GetIndexesSuccessResponseStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ok" => Ok(Self::Ok),
                 _ => Err("invalid value".into()),
@@ -5604,14 +5459,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for GetIndexesSuccessResponseStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for GetIndexesSuccessResponseStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for GetIndexesSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -5619,8 +5471,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for GetIndexesSuccessResponseStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for GetIndexesSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -5658,12 +5509,10 @@ pub mod types {
             default,
             skip_serializing_if = "::std::option::Option::is_none"
         )]
-        pub subsonic_response: ::std::option::Option<
-            GetInternetRadioStationsResponseSubsonicResponse,
-        >,
+        pub subsonic_response:
+            ::std::option::Option<GetInternetRadioStationsResponseSubsonicResponse>,
     }
-    impl ::std::convert::From<&GetInternetRadioStationsResponse>
-    for GetInternetRadioStationsResponse {
+    impl ::std::convert::From<&GetInternetRadioStationsResponse> for GetInternetRadioStationsResponse {
         fn from(value: &GetInternetRadioStationsResponse) -> Self {
             value.clone()
         }
@@ -5698,20 +5547,21 @@ pub mod types {
         GetInternetRadioStationsSuccessResponse(GetInternetRadioStationsSuccessResponse),
         SubsonicFailureResponse(SubsonicFailureResponse),
     }
-    impl ::std::convert::From<&Self>
-    for GetInternetRadioStationsResponseSubsonicResponse {
+    impl ::std::convert::From<&Self> for GetInternetRadioStationsResponseSubsonicResponse {
         fn from(value: &GetInternetRadioStationsResponseSubsonicResponse) -> Self {
             value.clone()
         }
     }
     impl ::std::convert::From<GetInternetRadioStationsSuccessResponse>
-    for GetInternetRadioStationsResponseSubsonicResponse {
+        for GetInternetRadioStationsResponseSubsonicResponse
+    {
         fn from(value: GetInternetRadioStationsSuccessResponse) -> Self {
             Self::GetInternetRadioStationsSuccessResponse(value)
         }
     }
     impl ::std::convert::From<SubsonicFailureResponse>
-    for GetInternetRadioStationsResponseSubsonicResponse {
+        for GetInternetRadioStationsResponseSubsonicResponse
+    {
         fn from(value: SubsonicFailureResponse) -> Self {
             Self::SubsonicFailureResponse(value)
         }
@@ -5764,7 +5614,8 @@ pub mod types {
         pub version: ::std::string::String,
     }
     impl ::std::convert::From<&GetInternetRadioStationsSuccessResponse>
-    for GetInternetRadioStationsSuccessResponse {
+        for GetInternetRadioStationsSuccessResponse
+    {
         fn from(value: &GetInternetRadioStationsSuccessResponse) -> Self {
             value.clone()
         }
@@ -5793,7 +5644,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum GetInternetRadioStationsSuccessResponseStatus {
         #[serde(rename = "ok")]
@@ -5813,26 +5664,22 @@ pub mod types {
     }
     impl ::std::str::FromStr for GetInternetRadioStationsSuccessResponseStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ok" => Ok(Self::Ok),
                 _ => Err("invalid value".into()),
             }
         }
     }
-    impl ::std::convert::TryFrom<&str>
-    for GetInternetRadioStationsSuccessResponseStatus {
+    impl ::std::convert::TryFrom<&str> for GetInternetRadioStationsSuccessResponseStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
     impl ::std::convert::TryFrom<&::std::string::String>
-    for GetInternetRadioStationsSuccessResponseStatus {
+        for GetInternetRadioStationsSuccessResponseStatus
+    {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -5841,7 +5688,8 @@ pub mod types {
         }
     }
     impl ::std::convert::TryFrom<::std::string::String>
-    for GetInternetRadioStationsSuccessResponseStatus {
+        for GetInternetRadioStationsSuccessResponseStatus
+    {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -5921,14 +5769,12 @@ pub mod types {
             value.clone()
         }
     }
-    impl ::std::convert::From<GetLicenseSuccessResponse>
-    for GetLicenseResponseSubsonicResponse {
+    impl ::std::convert::From<GetLicenseSuccessResponse> for GetLicenseResponseSubsonicResponse {
         fn from(value: GetLicenseSuccessResponse) -> Self {
             Self::GetLicenseSuccessResponse(value)
         }
     }
-    impl ::std::convert::From<SubsonicFailureResponse>
-    for GetLicenseResponseSubsonicResponse {
+    impl ::std::convert::From<SubsonicFailureResponse> for GetLicenseResponseSubsonicResponse {
         fn from(value: SubsonicFailureResponse) -> Self {
             Self::SubsonicFailureResponse(value)
         }
@@ -6008,7 +5854,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum GetLicenseSuccessResponseStatus {
         #[serde(rename = "ok")]
@@ -6028,9 +5874,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for GetLicenseSuccessResponseStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ok" => Ok(Self::Ok),
                 _ => Err("invalid value".into()),
@@ -6039,14 +5883,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for GetLicenseSuccessResponseStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for GetLicenseSuccessResponseStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for GetLicenseSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -6054,8 +5895,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for GetLicenseSuccessResponseStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for GetLicenseSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -6093,9 +5933,7 @@ pub mod types {
             default,
             skip_serializing_if = "::std::option::Option::is_none"
         )]
-        pub subsonic_response: ::std::option::Option<
-            GetLyricsBySongIdResponseSubsonicResponse,
-        >,
+        pub subsonic_response: ::std::option::Option<GetLyricsBySongIdResponseSubsonicResponse>,
     }
     impl ::std::convert::From<&GetLyricsBySongIdResponse> for GetLyricsBySongIdResponse {
         fn from(value: &GetLyricsBySongIdResponse) -> Self {
@@ -6138,13 +5976,13 @@ pub mod types {
         }
     }
     impl ::std::convert::From<GetLyricsBySongIdSuccessResponse>
-    for GetLyricsBySongIdResponseSubsonicResponse {
+        for GetLyricsBySongIdResponseSubsonicResponse
+    {
         fn from(value: GetLyricsBySongIdSuccessResponse) -> Self {
             Self::GetLyricsBySongIdSuccessResponse(value)
         }
     }
-    impl ::std::convert::From<SubsonicFailureResponse>
-    for GetLyricsBySongIdResponseSubsonicResponse {
+    impl ::std::convert::From<SubsonicFailureResponse> for GetLyricsBySongIdResponseSubsonicResponse {
         fn from(value: SubsonicFailureResponse) -> Self {
             Self::SubsonicFailureResponse(value)
         }
@@ -6196,8 +6034,7 @@ pub mod types {
         ///The server supported Subsonic API version.
         pub version: ::std::string::String,
     }
-    impl ::std::convert::From<&GetLyricsBySongIdSuccessResponse>
-    for GetLyricsBySongIdSuccessResponse {
+    impl ::std::convert::From<&GetLyricsBySongIdSuccessResponse> for GetLyricsBySongIdSuccessResponse {
         fn from(value: &GetLyricsBySongIdSuccessResponse) -> Self {
             value.clone()
         }
@@ -6226,7 +6063,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum GetLyricsBySongIdSuccessResponseStatus {
         #[serde(rename = "ok")]
@@ -6246,9 +6083,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for GetLyricsBySongIdSuccessResponseStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ok" => Ok(Self::Ok),
                 _ => Err("invalid value".into()),
@@ -6257,14 +6092,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for GetLyricsBySongIdSuccessResponseStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for GetLyricsBySongIdSuccessResponseStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for GetLyricsBySongIdSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -6272,8 +6104,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for GetLyricsBySongIdSuccessResponseStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for GetLyricsBySongIdSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -6353,14 +6184,12 @@ pub mod types {
             value.clone()
         }
     }
-    impl ::std::convert::From<GetLyricsSuccessResponse>
-    for GetLyricsResponseSubsonicResponse {
+    impl ::std::convert::From<GetLyricsSuccessResponse> for GetLyricsResponseSubsonicResponse {
         fn from(value: GetLyricsSuccessResponse) -> Self {
             Self::GetLyricsSuccessResponse(value)
         }
     }
-    impl ::std::convert::From<SubsonicFailureResponse>
-    for GetLyricsResponseSubsonicResponse {
+    impl ::std::convert::From<SubsonicFailureResponse> for GetLyricsResponseSubsonicResponse {
         fn from(value: SubsonicFailureResponse) -> Self {
             Self::SubsonicFailureResponse(value)
         }
@@ -6440,7 +6269,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum GetLyricsSuccessResponseStatus {
         #[serde(rename = "ok")]
@@ -6460,9 +6289,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for GetLyricsSuccessResponseStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ok" => Ok(Self::Ok),
                 _ => Err("invalid value".into()),
@@ -6471,14 +6298,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for GetLyricsSuccessResponseStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for GetLyricsSuccessResponseStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for GetLyricsSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -6486,8 +6310,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for GetLyricsSuccessResponseStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for GetLyricsSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -6525,9 +6348,7 @@ pub mod types {
             default,
             skip_serializing_if = "::std::option::Option::is_none"
         )]
-        pub subsonic_response: ::std::option::Option<
-            GetMusicDirectoryResponseSubsonicResponse,
-        >,
+        pub subsonic_response: ::std::option::Option<GetMusicDirectoryResponseSubsonicResponse>,
     }
     impl ::std::convert::From<&GetMusicDirectoryResponse> for GetMusicDirectoryResponse {
         fn from(value: &GetMusicDirectoryResponse) -> Self {
@@ -6570,13 +6391,13 @@ pub mod types {
         }
     }
     impl ::std::convert::From<GetMusicDirectorySuccessResponse>
-    for GetMusicDirectoryResponseSubsonicResponse {
+        for GetMusicDirectoryResponseSubsonicResponse
+    {
         fn from(value: GetMusicDirectorySuccessResponse) -> Self {
             Self::GetMusicDirectorySuccessResponse(value)
         }
     }
-    impl ::std::convert::From<SubsonicFailureResponse>
-    for GetMusicDirectoryResponseSubsonicResponse {
+    impl ::std::convert::From<SubsonicFailureResponse> for GetMusicDirectoryResponseSubsonicResponse {
         fn from(value: SubsonicFailureResponse) -> Self {
             Self::SubsonicFailureResponse(value)
         }
@@ -6627,8 +6448,7 @@ pub mod types {
         ///The server supported Subsonic API version.
         pub version: ::std::string::String,
     }
-    impl ::std::convert::From<&GetMusicDirectorySuccessResponse>
-    for GetMusicDirectorySuccessResponse {
+    impl ::std::convert::From<&GetMusicDirectorySuccessResponse> for GetMusicDirectorySuccessResponse {
         fn from(value: &GetMusicDirectorySuccessResponse) -> Self {
             value.clone()
         }
@@ -6657,7 +6477,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum GetMusicDirectorySuccessResponseStatus {
         #[serde(rename = "ok")]
@@ -6677,9 +6497,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for GetMusicDirectorySuccessResponseStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ok" => Ok(Self::Ok),
                 _ => Err("invalid value".into()),
@@ -6688,14 +6506,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for GetMusicDirectorySuccessResponseStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for GetMusicDirectorySuccessResponseStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for GetMusicDirectorySuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -6703,8 +6518,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for GetMusicDirectorySuccessResponseStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for GetMusicDirectorySuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -6742,9 +6556,7 @@ pub mod types {
             default,
             skip_serializing_if = "::std::option::Option::is_none"
         )]
-        pub subsonic_response: ::std::option::Option<
-            GetMusicFoldersResponseSubsonicResponse,
-        >,
+        pub subsonic_response: ::std::option::Option<GetMusicFoldersResponseSubsonicResponse>,
     }
     impl ::std::convert::From<&GetMusicFoldersResponse> for GetMusicFoldersResponse {
         fn from(value: &GetMusicFoldersResponse) -> Self {
@@ -6787,13 +6599,13 @@ pub mod types {
         }
     }
     impl ::std::convert::From<GetMusicFoldersSuccessResponse>
-    for GetMusicFoldersResponseSubsonicResponse {
+        for GetMusicFoldersResponseSubsonicResponse
+    {
         fn from(value: GetMusicFoldersSuccessResponse) -> Self {
             Self::GetMusicFoldersSuccessResponse(value)
         }
     }
-    impl ::std::convert::From<SubsonicFailureResponse>
-    for GetMusicFoldersResponseSubsonicResponse {
+    impl ::std::convert::From<SubsonicFailureResponse> for GetMusicFoldersResponseSubsonicResponse {
         fn from(value: SubsonicFailureResponse) -> Self {
             Self::SubsonicFailureResponse(value)
         }
@@ -6845,8 +6657,7 @@ pub mod types {
         ///The server supported Subsonic API version.
         pub version: ::std::string::String,
     }
-    impl ::std::convert::From<&GetMusicFoldersSuccessResponse>
-    for GetMusicFoldersSuccessResponse {
+    impl ::std::convert::From<&GetMusicFoldersSuccessResponse> for GetMusicFoldersSuccessResponse {
         fn from(value: &GetMusicFoldersSuccessResponse) -> Self {
             value.clone()
         }
@@ -6875,7 +6686,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum GetMusicFoldersSuccessResponseStatus {
         #[serde(rename = "ok")]
@@ -6895,9 +6706,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for GetMusicFoldersSuccessResponseStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ok" => Ok(Self::Ok),
                 _ => Err("invalid value".into()),
@@ -6906,14 +6715,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for GetMusicFoldersSuccessResponseStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for GetMusicFoldersSuccessResponseStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for GetMusicFoldersSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -6921,8 +6727,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for GetMusicFoldersSuccessResponseStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for GetMusicFoldersSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -6960,9 +6765,7 @@ pub mod types {
             default,
             skip_serializing_if = "::std::option::Option::is_none"
         )]
-        pub subsonic_response: ::std::option::Option<
-            GetNewestPodcastsResponseSubsonicResponse,
-        >,
+        pub subsonic_response: ::std::option::Option<GetNewestPodcastsResponseSubsonicResponse>,
     }
     impl ::std::convert::From<&GetNewestPodcastsResponse> for GetNewestPodcastsResponse {
         fn from(value: &GetNewestPodcastsResponse) -> Self {
@@ -7005,13 +6808,13 @@ pub mod types {
         }
     }
     impl ::std::convert::From<GetNewestPodcastsSuccessResponse>
-    for GetNewestPodcastsResponseSubsonicResponse {
+        for GetNewestPodcastsResponseSubsonicResponse
+    {
         fn from(value: GetNewestPodcastsSuccessResponse) -> Self {
             Self::GetNewestPodcastsSuccessResponse(value)
         }
     }
-    impl ::std::convert::From<SubsonicFailureResponse>
-    for GetNewestPodcastsResponseSubsonicResponse {
+    impl ::std::convert::From<SubsonicFailureResponse> for GetNewestPodcastsResponseSubsonicResponse {
         fn from(value: SubsonicFailureResponse) -> Self {
             Self::SubsonicFailureResponse(value)
         }
@@ -7063,8 +6866,7 @@ pub mod types {
         ///The server supported Subsonic API version.
         pub version: ::std::string::String,
     }
-    impl ::std::convert::From<&GetNewestPodcastsSuccessResponse>
-    for GetNewestPodcastsSuccessResponse {
+    impl ::std::convert::From<&GetNewestPodcastsSuccessResponse> for GetNewestPodcastsSuccessResponse {
         fn from(value: &GetNewestPodcastsSuccessResponse) -> Self {
             value.clone()
         }
@@ -7093,7 +6895,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum GetNewestPodcastsSuccessResponseStatus {
         #[serde(rename = "ok")]
@@ -7113,9 +6915,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for GetNewestPodcastsSuccessResponseStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ok" => Ok(Self::Ok),
                 _ => Err("invalid value".into()),
@@ -7124,14 +6924,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for GetNewestPodcastsSuccessResponseStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for GetNewestPodcastsSuccessResponseStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for GetNewestPodcastsSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -7139,8 +6936,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for GetNewestPodcastsSuccessResponseStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for GetNewestPodcastsSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -7178,9 +6974,7 @@ pub mod types {
             default,
             skip_serializing_if = "::std::option::Option::is_none"
         )]
-        pub subsonic_response: ::std::option::Option<
-            GetNowPlayingResponseSubsonicResponse,
-        >,
+        pub subsonic_response: ::std::option::Option<GetNowPlayingResponseSubsonicResponse>,
     }
     impl ::std::convert::From<&GetNowPlayingResponse> for GetNowPlayingResponse {
         fn from(value: &GetNowPlayingResponse) -> Self {
@@ -7222,14 +7016,12 @@ pub mod types {
             value.clone()
         }
     }
-    impl ::std::convert::From<GetNowPlayingSuccessResponse>
-    for GetNowPlayingResponseSubsonicResponse {
+    impl ::std::convert::From<GetNowPlayingSuccessResponse> for GetNowPlayingResponseSubsonicResponse {
         fn from(value: GetNowPlayingSuccessResponse) -> Self {
             Self::GetNowPlayingSuccessResponse(value)
         }
     }
-    impl ::std::convert::From<SubsonicFailureResponse>
-    for GetNowPlayingResponseSubsonicResponse {
+    impl ::std::convert::From<SubsonicFailureResponse> for GetNowPlayingResponseSubsonicResponse {
         fn from(value: SubsonicFailureResponse) -> Self {
             Self::SubsonicFailureResponse(value)
         }
@@ -7281,8 +7073,7 @@ pub mod types {
         ///The server supported Subsonic API version.
         pub version: ::std::string::String,
     }
-    impl ::std::convert::From<&GetNowPlayingSuccessResponse>
-    for GetNowPlayingSuccessResponse {
+    impl ::std::convert::From<&GetNowPlayingSuccessResponse> for GetNowPlayingSuccessResponse {
         fn from(value: &GetNowPlayingSuccessResponse) -> Self {
             value.clone()
         }
@@ -7311,7 +7102,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum GetNowPlayingSuccessResponseStatus {
         #[serde(rename = "ok")]
@@ -7331,9 +7122,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for GetNowPlayingSuccessResponseStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ok" => Ok(Self::Ok),
                 _ => Err("invalid value".into()),
@@ -7342,14 +7131,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for GetNowPlayingSuccessResponseStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for GetNowPlayingSuccessResponseStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for GetNowPlayingSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -7357,8 +7143,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for GetNowPlayingSuccessResponseStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for GetNowPlayingSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -7396,12 +7181,12 @@ pub mod types {
             default,
             skip_serializing_if = "::std::option::Option::is_none"
         )]
-        pub subsonic_response: ::std::option::Option<
-            GetOpenSubsonicExtensionsResponseSubsonicResponse,
-        >,
+        pub subsonic_response:
+            ::std::option::Option<GetOpenSubsonicExtensionsResponseSubsonicResponse>,
     }
     impl ::std::convert::From<&GetOpenSubsonicExtensionsResponse>
-    for GetOpenSubsonicExtensionsResponse {
+        for GetOpenSubsonicExtensionsResponse
+    {
         fn from(value: &GetOpenSubsonicExtensionsResponse) -> Self {
             value.clone()
         }
@@ -7433,25 +7218,24 @@ pub mod types {
     #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     #[serde(untagged)]
     pub enum GetOpenSubsonicExtensionsResponseSubsonicResponse {
-        GetOpenSubsonicExtensionsSuccessResponse(
-            GetOpenSubsonicExtensionsSuccessResponse,
-        ),
+        GetOpenSubsonicExtensionsSuccessResponse(GetOpenSubsonicExtensionsSuccessResponse),
         SubsonicFailureResponse(SubsonicFailureResponse),
     }
-    impl ::std::convert::From<&Self>
-    for GetOpenSubsonicExtensionsResponseSubsonicResponse {
+    impl ::std::convert::From<&Self> for GetOpenSubsonicExtensionsResponseSubsonicResponse {
         fn from(value: &GetOpenSubsonicExtensionsResponseSubsonicResponse) -> Self {
             value.clone()
         }
     }
     impl ::std::convert::From<GetOpenSubsonicExtensionsSuccessResponse>
-    for GetOpenSubsonicExtensionsResponseSubsonicResponse {
+        for GetOpenSubsonicExtensionsResponseSubsonicResponse
+    {
         fn from(value: GetOpenSubsonicExtensionsSuccessResponse) -> Self {
             Self::GetOpenSubsonicExtensionsSuccessResponse(value)
         }
     }
     impl ::std::convert::From<SubsonicFailureResponse>
-    for GetOpenSubsonicExtensionsResponseSubsonicResponse {
+        for GetOpenSubsonicExtensionsResponseSubsonicResponse
+    {
         fn from(value: SubsonicFailureResponse) -> Self {
             Self::SubsonicFailureResponse(value)
         }
@@ -7507,7 +7291,8 @@ pub mod types {
         pub version: ::std::string::String,
     }
     impl ::std::convert::From<&GetOpenSubsonicExtensionsSuccessResponse>
-    for GetOpenSubsonicExtensionsSuccessResponse {
+        for GetOpenSubsonicExtensionsSuccessResponse
+    {
         fn from(value: &GetOpenSubsonicExtensionsSuccessResponse) -> Self {
             value.clone()
         }
@@ -7536,7 +7321,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum GetOpenSubsonicExtensionsSuccessResponseStatus {
         #[serde(rename = "ok")]
@@ -7556,26 +7341,22 @@ pub mod types {
     }
     impl ::std::str::FromStr for GetOpenSubsonicExtensionsSuccessResponseStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ok" => Ok(Self::Ok),
                 _ => Err("invalid value".into()),
             }
         }
     }
-    impl ::std::convert::TryFrom<&str>
-    for GetOpenSubsonicExtensionsSuccessResponseStatus {
+    impl ::std::convert::TryFrom<&str> for GetOpenSubsonicExtensionsSuccessResponseStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
     impl ::std::convert::TryFrom<&::std::string::String>
-    for GetOpenSubsonicExtensionsSuccessResponseStatus {
+        for GetOpenSubsonicExtensionsSuccessResponseStatus
+    {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -7584,7 +7365,8 @@ pub mod types {
         }
     }
     impl ::std::convert::TryFrom<::std::string::String>
-    for GetOpenSubsonicExtensionsSuccessResponseStatus {
+        for GetOpenSubsonicExtensionsSuccessResponseStatus
+    {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -7622,12 +7404,9 @@ pub mod types {
             default,
             skip_serializing_if = "::std::option::Option::is_none"
         )]
-        pub subsonic_response: ::std::option::Option<
-            GetPlayQueueByIndexResponseSubsonicResponse,
-        >,
+        pub subsonic_response: ::std::option::Option<GetPlayQueueByIndexResponseSubsonicResponse>,
     }
-    impl ::std::convert::From<&GetPlayQueueByIndexResponse>
-    for GetPlayQueueByIndexResponse {
+    impl ::std::convert::From<&GetPlayQueueByIndexResponse> for GetPlayQueueByIndexResponse {
         fn from(value: &GetPlayQueueByIndexResponse) -> Self {
             value.clone()
         }
@@ -7668,13 +7447,13 @@ pub mod types {
         }
     }
     impl ::std::convert::From<GetPlayQueueByIndexSuccessResponse>
-    for GetPlayQueueByIndexResponseSubsonicResponse {
+        for GetPlayQueueByIndexResponseSubsonicResponse
+    {
         fn from(value: GetPlayQueueByIndexSuccessResponse) -> Self {
             Self::GetPlayQueueByIndexSuccessResponse(value)
         }
     }
-    impl ::std::convert::From<SubsonicFailureResponse>
-    for GetPlayQueueByIndexResponseSubsonicResponse {
+    impl ::std::convert::From<SubsonicFailureResponse> for GetPlayQueueByIndexResponseSubsonicResponse {
         fn from(value: SubsonicFailureResponse) -> Self {
             Self::SubsonicFailureResponse(value)
         }
@@ -7727,7 +7506,8 @@ pub mod types {
         pub version: ::std::string::String,
     }
     impl ::std::convert::From<&GetPlayQueueByIndexSuccessResponse>
-    for GetPlayQueueByIndexSuccessResponse {
+        for GetPlayQueueByIndexSuccessResponse
+    {
         fn from(value: &GetPlayQueueByIndexSuccessResponse) -> Self {
             value.clone()
         }
@@ -7756,7 +7536,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum GetPlayQueueByIndexSuccessResponseStatus {
         #[serde(rename = "ok")]
@@ -7776,9 +7556,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for GetPlayQueueByIndexSuccessResponseStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ok" => Ok(Self::Ok),
                 _ => Err("invalid value".into()),
@@ -7787,14 +7565,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for GetPlayQueueByIndexSuccessResponseStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for GetPlayQueueByIndexSuccessResponseStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for GetPlayQueueByIndexSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -7802,8 +7577,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for GetPlayQueueByIndexSuccessResponseStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for GetPlayQueueByIndexSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -7841,9 +7615,7 @@ pub mod types {
             default,
             skip_serializing_if = "::std::option::Option::is_none"
         )]
-        pub subsonic_response: ::std::option::Option<
-            GetPlayQueueResponseSubsonicResponse,
-        >,
+        pub subsonic_response: ::std::option::Option<GetPlayQueueResponseSubsonicResponse>,
     }
     impl ::std::convert::From<&GetPlayQueueResponse> for GetPlayQueueResponse {
         fn from(value: &GetPlayQueueResponse) -> Self {
@@ -7885,14 +7657,12 @@ pub mod types {
             value.clone()
         }
     }
-    impl ::std::convert::From<GetPlayQueueSuccessResponse>
-    for GetPlayQueueResponseSubsonicResponse {
+    impl ::std::convert::From<GetPlayQueueSuccessResponse> for GetPlayQueueResponseSubsonicResponse {
         fn from(value: GetPlayQueueSuccessResponse) -> Self {
             Self::GetPlayQueueSuccessResponse(value)
         }
     }
-    impl ::std::convert::From<SubsonicFailureResponse>
-    for GetPlayQueueResponseSubsonicResponse {
+    impl ::std::convert::From<SubsonicFailureResponse> for GetPlayQueueResponseSubsonicResponse {
         fn from(value: SubsonicFailureResponse) -> Self {
             Self::SubsonicFailureResponse(value)
         }
@@ -7944,8 +7714,7 @@ pub mod types {
         ///The server supported Subsonic API version.
         pub version: ::std::string::String,
     }
-    impl ::std::convert::From<&GetPlayQueueSuccessResponse>
-    for GetPlayQueueSuccessResponse {
+    impl ::std::convert::From<&GetPlayQueueSuccessResponse> for GetPlayQueueSuccessResponse {
         fn from(value: &GetPlayQueueSuccessResponse) -> Self {
             value.clone()
         }
@@ -7974,7 +7743,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum GetPlayQueueSuccessResponseStatus {
         #[serde(rename = "ok")]
@@ -7994,9 +7763,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for GetPlayQueueSuccessResponseStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ok" => Ok(Self::Ok),
                 _ => Err("invalid value".into()),
@@ -8005,14 +7772,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for GetPlayQueueSuccessResponseStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for GetPlayQueueSuccessResponseStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for GetPlayQueueSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -8020,8 +7784,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for GetPlayQueueSuccessResponseStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for GetPlayQueueSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -8059,9 +7822,7 @@ pub mod types {
             default,
             skip_serializing_if = "::std::option::Option::is_none"
         )]
-        pub subsonic_response: ::std::option::Option<
-            GetPlaylistResponseSubsonicResponse,
-        >,
+        pub subsonic_response: ::std::option::Option<GetPlaylistResponseSubsonicResponse>,
     }
     impl ::std::convert::From<&GetPlaylistResponse> for GetPlaylistResponse {
         fn from(value: &GetPlaylistResponse) -> Self {
@@ -8103,14 +7864,12 @@ pub mod types {
             value.clone()
         }
     }
-    impl ::std::convert::From<GetPlaylistSuccessResponse>
-    for GetPlaylistResponseSubsonicResponse {
+    impl ::std::convert::From<GetPlaylistSuccessResponse> for GetPlaylistResponseSubsonicResponse {
         fn from(value: GetPlaylistSuccessResponse) -> Self {
             Self::GetPlaylistSuccessResponse(value)
         }
     }
-    impl ::std::convert::From<SubsonicFailureResponse>
-    for GetPlaylistResponseSubsonicResponse {
+    impl ::std::convert::From<SubsonicFailureResponse> for GetPlaylistResponseSubsonicResponse {
         fn from(value: SubsonicFailureResponse) -> Self {
             Self::SubsonicFailureResponse(value)
         }
@@ -8161,8 +7920,7 @@ pub mod types {
         ///The server supported Subsonic API version.
         pub version: ::std::string::String,
     }
-    impl ::std::convert::From<&GetPlaylistSuccessResponse>
-    for GetPlaylistSuccessResponse {
+    impl ::std::convert::From<&GetPlaylistSuccessResponse> for GetPlaylistSuccessResponse {
         fn from(value: &GetPlaylistSuccessResponse) -> Self {
             value.clone()
         }
@@ -8191,7 +7949,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum GetPlaylistSuccessResponseStatus {
         #[serde(rename = "ok")]
@@ -8211,9 +7969,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for GetPlaylistSuccessResponseStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ok" => Ok(Self::Ok),
                 _ => Err("invalid value".into()),
@@ -8222,14 +7978,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for GetPlaylistSuccessResponseStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for GetPlaylistSuccessResponseStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for GetPlaylistSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -8237,8 +7990,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for GetPlaylistSuccessResponseStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for GetPlaylistSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -8276,9 +8028,7 @@ pub mod types {
             default,
             skip_serializing_if = "::std::option::Option::is_none"
         )]
-        pub subsonic_response: ::std::option::Option<
-            GetPlaylistsResponseSubsonicResponse,
-        >,
+        pub subsonic_response: ::std::option::Option<GetPlaylistsResponseSubsonicResponse>,
     }
     impl ::std::convert::From<&GetPlaylistsResponse> for GetPlaylistsResponse {
         fn from(value: &GetPlaylistsResponse) -> Self {
@@ -8320,14 +8070,12 @@ pub mod types {
             value.clone()
         }
     }
-    impl ::std::convert::From<GetPlaylistsSuccessResponse>
-    for GetPlaylistsResponseSubsonicResponse {
+    impl ::std::convert::From<GetPlaylistsSuccessResponse> for GetPlaylistsResponseSubsonicResponse {
         fn from(value: GetPlaylistsSuccessResponse) -> Self {
             Self::GetPlaylistsSuccessResponse(value)
         }
     }
-    impl ::std::convert::From<SubsonicFailureResponse>
-    for GetPlaylistsResponseSubsonicResponse {
+    impl ::std::convert::From<SubsonicFailureResponse> for GetPlaylistsResponseSubsonicResponse {
         fn from(value: SubsonicFailureResponse) -> Self {
             Self::SubsonicFailureResponse(value)
         }
@@ -8378,8 +8126,7 @@ pub mod types {
         ///The server supported Subsonic API version.
         pub version: ::std::string::String,
     }
-    impl ::std::convert::From<&GetPlaylistsSuccessResponse>
-    for GetPlaylistsSuccessResponse {
+    impl ::std::convert::From<&GetPlaylistsSuccessResponse> for GetPlaylistsSuccessResponse {
         fn from(value: &GetPlaylistsSuccessResponse) -> Self {
             value.clone()
         }
@@ -8408,7 +8155,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum GetPlaylistsSuccessResponseStatus {
         #[serde(rename = "ok")]
@@ -8428,9 +8175,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for GetPlaylistsSuccessResponseStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ok" => Ok(Self::Ok),
                 _ => Err("invalid value".into()),
@@ -8439,14 +8184,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for GetPlaylistsSuccessResponseStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for GetPlaylistsSuccessResponseStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for GetPlaylistsSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -8454,8 +8196,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for GetPlaylistsSuccessResponseStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for GetPlaylistsSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -8493,9 +8234,7 @@ pub mod types {
             default,
             skip_serializing_if = "::std::option::Option::is_none"
         )]
-        pub subsonic_response: ::std::option::Option<
-            GetPodcastEpisodeResponseSubsonicResponse,
-        >,
+        pub subsonic_response: ::std::option::Option<GetPodcastEpisodeResponseSubsonicResponse>,
     }
     impl ::std::convert::From<&GetPodcastEpisodeResponse> for GetPodcastEpisodeResponse {
         fn from(value: &GetPodcastEpisodeResponse) -> Self {
@@ -8538,13 +8277,13 @@ pub mod types {
         }
     }
     impl ::std::convert::From<GetPodcastEpisodeSuccessResponse>
-    for GetPodcastEpisodeResponseSubsonicResponse {
+        for GetPodcastEpisodeResponseSubsonicResponse
+    {
         fn from(value: GetPodcastEpisodeSuccessResponse) -> Self {
             Self::GetPodcastEpisodeSuccessResponse(value)
         }
     }
-    impl ::std::convert::From<SubsonicFailureResponse>
-    for GetPodcastEpisodeResponseSubsonicResponse {
+    impl ::std::convert::From<SubsonicFailureResponse> for GetPodcastEpisodeResponseSubsonicResponse {
         fn from(value: SubsonicFailureResponse) -> Self {
             Self::SubsonicFailureResponse(value)
         }
@@ -8596,8 +8335,7 @@ pub mod types {
         ///The server supported Subsonic API version.
         pub version: ::std::string::String,
     }
-    impl ::std::convert::From<&GetPodcastEpisodeSuccessResponse>
-    for GetPodcastEpisodeSuccessResponse {
+    impl ::std::convert::From<&GetPodcastEpisodeSuccessResponse> for GetPodcastEpisodeSuccessResponse {
         fn from(value: &GetPodcastEpisodeSuccessResponse) -> Self {
             value.clone()
         }
@@ -8626,7 +8364,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum GetPodcastEpisodeSuccessResponseStatus {
         #[serde(rename = "ok")]
@@ -8646,9 +8384,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for GetPodcastEpisodeSuccessResponseStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ok" => Ok(Self::Ok),
                 _ => Err("invalid value".into()),
@@ -8657,14 +8393,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for GetPodcastEpisodeSuccessResponseStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for GetPodcastEpisodeSuccessResponseStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for GetPodcastEpisodeSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -8672,8 +8405,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for GetPodcastEpisodeSuccessResponseStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for GetPodcastEpisodeSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -8711,9 +8443,7 @@ pub mod types {
             default,
             skip_serializing_if = "::std::option::Option::is_none"
         )]
-        pub subsonic_response: ::std::option::Option<
-            GetPodcastsResponseSubsonicResponse,
-        >,
+        pub subsonic_response: ::std::option::Option<GetPodcastsResponseSubsonicResponse>,
     }
     impl ::std::convert::From<&GetPodcastsResponse> for GetPodcastsResponse {
         fn from(value: &GetPodcastsResponse) -> Self {
@@ -8755,14 +8485,12 @@ pub mod types {
             value.clone()
         }
     }
-    impl ::std::convert::From<GetPodcastsSuccessResponse>
-    for GetPodcastsResponseSubsonicResponse {
+    impl ::std::convert::From<GetPodcastsSuccessResponse> for GetPodcastsResponseSubsonicResponse {
         fn from(value: GetPodcastsSuccessResponse) -> Self {
             Self::GetPodcastsSuccessResponse(value)
         }
     }
-    impl ::std::convert::From<SubsonicFailureResponse>
-    for GetPodcastsResponseSubsonicResponse {
+    impl ::std::convert::From<SubsonicFailureResponse> for GetPodcastsResponseSubsonicResponse {
         fn from(value: SubsonicFailureResponse) -> Self {
             Self::SubsonicFailureResponse(value)
         }
@@ -8813,8 +8541,7 @@ pub mod types {
         ///The server supported Subsonic API version.
         pub version: ::std::string::String,
     }
-    impl ::std::convert::From<&GetPodcastsSuccessResponse>
-    for GetPodcastsSuccessResponse {
+    impl ::std::convert::From<&GetPodcastsSuccessResponse> for GetPodcastsSuccessResponse {
         fn from(value: &GetPodcastsSuccessResponse) -> Self {
             value.clone()
         }
@@ -8843,7 +8570,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum GetPodcastsSuccessResponseStatus {
         #[serde(rename = "ok")]
@@ -8863,9 +8590,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for GetPodcastsSuccessResponseStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ok" => Ok(Self::Ok),
                 _ => Err("invalid value".into()),
@@ -8874,14 +8599,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for GetPodcastsSuccessResponseStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for GetPodcastsSuccessResponseStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for GetPodcastsSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -8889,8 +8611,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for GetPodcastsSuccessResponseStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for GetPodcastsSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -8928,9 +8649,7 @@ pub mod types {
             default,
             skip_serializing_if = "::std::option::Option::is_none"
         )]
-        pub subsonic_response: ::std::option::Option<
-            GetRandomSongsResponseSubsonicResponse,
-        >,
+        pub subsonic_response: ::std::option::Option<GetRandomSongsResponseSubsonicResponse>,
     }
     impl ::std::convert::From<&GetRandomSongsResponse> for GetRandomSongsResponse {
         fn from(value: &GetRandomSongsResponse) -> Self {
@@ -8973,13 +8692,13 @@ pub mod types {
         }
     }
     impl ::std::convert::From<GetRandomSongsSuccessResponse>
-    for GetRandomSongsResponseSubsonicResponse {
+        for GetRandomSongsResponseSubsonicResponse
+    {
         fn from(value: GetRandomSongsSuccessResponse) -> Self {
             Self::GetRandomSongsSuccessResponse(value)
         }
     }
-    impl ::std::convert::From<SubsonicFailureResponse>
-    for GetRandomSongsResponseSubsonicResponse {
+    impl ::std::convert::From<SubsonicFailureResponse> for GetRandomSongsResponseSubsonicResponse {
         fn from(value: SubsonicFailureResponse) -> Self {
             Self::SubsonicFailureResponse(value)
         }
@@ -9031,8 +8750,7 @@ pub mod types {
         ///The server supported Subsonic API version.
         pub version: ::std::string::String,
     }
-    impl ::std::convert::From<&GetRandomSongsSuccessResponse>
-    for GetRandomSongsSuccessResponse {
+    impl ::std::convert::From<&GetRandomSongsSuccessResponse> for GetRandomSongsSuccessResponse {
         fn from(value: &GetRandomSongsSuccessResponse) -> Self {
             value.clone()
         }
@@ -9061,7 +8779,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum GetRandomSongsSuccessResponseStatus {
         #[serde(rename = "ok")]
@@ -9081,9 +8799,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for GetRandomSongsSuccessResponseStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ok" => Ok(Self::Ok),
                 _ => Err("invalid value".into()),
@@ -9092,14 +8808,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for GetRandomSongsSuccessResponseStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for GetRandomSongsSuccessResponseStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for GetRandomSongsSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -9107,8 +8820,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for GetRandomSongsSuccessResponseStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for GetRandomSongsSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -9146,9 +8858,7 @@ pub mod types {
             default,
             skip_serializing_if = "::std::option::Option::is_none"
         )]
-        pub subsonic_response: ::std::option::Option<
-            GetScanStatusResponseSubsonicResponse,
-        >,
+        pub subsonic_response: ::std::option::Option<GetScanStatusResponseSubsonicResponse>,
     }
     impl ::std::convert::From<&GetScanStatusResponse> for GetScanStatusResponse {
         fn from(value: &GetScanStatusResponse) -> Self {
@@ -9190,14 +8900,12 @@ pub mod types {
             value.clone()
         }
     }
-    impl ::std::convert::From<GetScanStatusSuccessResponse>
-    for GetScanStatusResponseSubsonicResponse {
+    impl ::std::convert::From<GetScanStatusSuccessResponse> for GetScanStatusResponseSubsonicResponse {
         fn from(value: GetScanStatusSuccessResponse) -> Self {
             Self::GetScanStatusSuccessResponse(value)
         }
     }
-    impl ::std::convert::From<SubsonicFailureResponse>
-    for GetScanStatusResponseSubsonicResponse {
+    impl ::std::convert::From<SubsonicFailureResponse> for GetScanStatusResponseSubsonicResponse {
         fn from(value: SubsonicFailureResponse) -> Self {
             Self::SubsonicFailureResponse(value)
         }
@@ -9249,8 +8957,7 @@ pub mod types {
         ///The server supported Subsonic API version.
         pub version: ::std::string::String,
     }
-    impl ::std::convert::From<&GetScanStatusSuccessResponse>
-    for GetScanStatusSuccessResponse {
+    impl ::std::convert::From<&GetScanStatusSuccessResponse> for GetScanStatusSuccessResponse {
         fn from(value: &GetScanStatusSuccessResponse) -> Self {
             value.clone()
         }
@@ -9279,7 +8986,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum GetScanStatusSuccessResponseStatus {
         #[serde(rename = "ok")]
@@ -9299,9 +9006,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for GetScanStatusSuccessResponseStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ok" => Ok(Self::Ok),
                 _ => Err("invalid value".into()),
@@ -9310,14 +9015,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for GetScanStatusSuccessResponseStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for GetScanStatusSuccessResponseStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for GetScanStatusSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -9325,8 +9027,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for GetScanStatusSuccessResponseStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for GetScanStatusSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -9406,14 +9107,12 @@ pub mod types {
             value.clone()
         }
     }
-    impl ::std::convert::From<GetSharesSuccessResponse>
-    for GetSharesResponseSubsonicResponse {
+    impl ::std::convert::From<GetSharesSuccessResponse> for GetSharesResponseSubsonicResponse {
         fn from(value: GetSharesSuccessResponse) -> Self {
             Self::GetSharesSuccessResponse(value)
         }
     }
-    impl ::std::convert::From<SubsonicFailureResponse>
-    for GetSharesResponseSubsonicResponse {
+    impl ::std::convert::From<SubsonicFailureResponse> for GetSharesResponseSubsonicResponse {
         fn from(value: SubsonicFailureResponse) -> Self {
             Self::SubsonicFailureResponse(value)
         }
@@ -9493,7 +9192,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum GetSharesSuccessResponseStatus {
         #[serde(rename = "ok")]
@@ -9513,9 +9212,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for GetSharesSuccessResponseStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ok" => Ok(Self::Ok),
                 _ => Err("invalid value".into()),
@@ -9524,14 +9221,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for GetSharesSuccessResponseStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for GetSharesSuccessResponseStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for GetSharesSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -9539,8 +9233,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for GetSharesSuccessResponseStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for GetSharesSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -9578,9 +9271,7 @@ pub mod types {
             default,
             skip_serializing_if = "::std::option::Option::is_none"
         )]
-        pub subsonic_response: ::std::option::Option<
-            GetSimilarSongs2ResponseSubsonicResponse,
-        >,
+        pub subsonic_response: ::std::option::Option<GetSimilarSongs2ResponseSubsonicResponse>,
     }
     impl ::std::convert::From<&GetSimilarSongs2Response> for GetSimilarSongs2Response {
         fn from(value: &GetSimilarSongs2Response) -> Self {
@@ -9623,13 +9314,13 @@ pub mod types {
         }
     }
     impl ::std::convert::From<GetSimilarSongs2SuccessResponse>
-    for GetSimilarSongs2ResponseSubsonicResponse {
+        for GetSimilarSongs2ResponseSubsonicResponse
+    {
         fn from(value: GetSimilarSongs2SuccessResponse) -> Self {
             Self::GetSimilarSongs2SuccessResponse(value)
         }
     }
-    impl ::std::convert::From<SubsonicFailureResponse>
-    for GetSimilarSongs2ResponseSubsonicResponse {
+    impl ::std::convert::From<SubsonicFailureResponse> for GetSimilarSongs2ResponseSubsonicResponse {
         fn from(value: SubsonicFailureResponse) -> Self {
             Self::SubsonicFailureResponse(value)
         }
@@ -9681,8 +9372,7 @@ pub mod types {
         ///The server supported Subsonic API version.
         pub version: ::std::string::String,
     }
-    impl ::std::convert::From<&GetSimilarSongs2SuccessResponse>
-    for GetSimilarSongs2SuccessResponse {
+    impl ::std::convert::From<&GetSimilarSongs2SuccessResponse> for GetSimilarSongs2SuccessResponse {
         fn from(value: &GetSimilarSongs2SuccessResponse) -> Self {
             value.clone()
         }
@@ -9711,7 +9401,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum GetSimilarSongs2SuccessResponseStatus {
         #[serde(rename = "ok")]
@@ -9731,9 +9421,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for GetSimilarSongs2SuccessResponseStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ok" => Ok(Self::Ok),
                 _ => Err("invalid value".into()),
@@ -9742,14 +9430,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for GetSimilarSongs2SuccessResponseStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for GetSimilarSongs2SuccessResponseStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for GetSimilarSongs2SuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -9757,8 +9442,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for GetSimilarSongs2SuccessResponseStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for GetSimilarSongs2SuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -9796,9 +9480,7 @@ pub mod types {
             default,
             skip_serializing_if = "::std::option::Option::is_none"
         )]
-        pub subsonic_response: ::std::option::Option<
-            GetSimilarSongsResponseSubsonicResponse,
-        >,
+        pub subsonic_response: ::std::option::Option<GetSimilarSongsResponseSubsonicResponse>,
     }
     impl ::std::convert::From<&GetSimilarSongsResponse> for GetSimilarSongsResponse {
         fn from(value: &GetSimilarSongsResponse) -> Self {
@@ -9841,13 +9523,13 @@ pub mod types {
         }
     }
     impl ::std::convert::From<GetSimilarSongsSuccessResponse>
-    for GetSimilarSongsResponseSubsonicResponse {
+        for GetSimilarSongsResponseSubsonicResponse
+    {
         fn from(value: GetSimilarSongsSuccessResponse) -> Self {
             Self::GetSimilarSongsSuccessResponse(value)
         }
     }
-    impl ::std::convert::From<SubsonicFailureResponse>
-    for GetSimilarSongsResponseSubsonicResponse {
+    impl ::std::convert::From<SubsonicFailureResponse> for GetSimilarSongsResponseSubsonicResponse {
         fn from(value: SubsonicFailureResponse) -> Self {
             Self::SubsonicFailureResponse(value)
         }
@@ -9899,8 +9581,7 @@ pub mod types {
         ///The server supported Subsonic API version.
         pub version: ::std::string::String,
     }
-    impl ::std::convert::From<&GetSimilarSongsSuccessResponse>
-    for GetSimilarSongsSuccessResponse {
+    impl ::std::convert::From<&GetSimilarSongsSuccessResponse> for GetSimilarSongsSuccessResponse {
         fn from(value: &GetSimilarSongsSuccessResponse) -> Self {
             value.clone()
         }
@@ -9929,7 +9610,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum GetSimilarSongsSuccessResponseStatus {
         #[serde(rename = "ok")]
@@ -9949,9 +9630,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for GetSimilarSongsSuccessResponseStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ok" => Ok(Self::Ok),
                 _ => Err("invalid value".into()),
@@ -9960,14 +9639,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for GetSimilarSongsSuccessResponseStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for GetSimilarSongsSuccessResponseStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for GetSimilarSongsSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -9975,8 +9651,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for GetSimilarSongsSuccessResponseStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for GetSimilarSongsSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -10056,14 +9731,12 @@ pub mod types {
             value.clone()
         }
     }
-    impl ::std::convert::From<GetSongSuccessResponse>
-    for GetSongResponseSubsonicResponse {
+    impl ::std::convert::From<GetSongSuccessResponse> for GetSongResponseSubsonicResponse {
         fn from(value: GetSongSuccessResponse) -> Self {
             Self::GetSongSuccessResponse(value)
         }
     }
-    impl ::std::convert::From<SubsonicFailureResponse>
-    for GetSongResponseSubsonicResponse {
+    impl ::std::convert::From<SubsonicFailureResponse> for GetSongResponseSubsonicResponse {
         fn from(value: SubsonicFailureResponse) -> Self {
             Self::SubsonicFailureResponse(value)
         }
@@ -10143,7 +9816,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum GetSongSuccessResponseStatus {
         #[serde(rename = "ok")]
@@ -10163,9 +9836,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for GetSongSuccessResponseStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ok" => Ok(Self::Ok),
                 _ => Err("invalid value".into()),
@@ -10174,14 +9845,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for GetSongSuccessResponseStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for GetSongSuccessResponseStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for GetSongSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -10189,8 +9857,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for GetSongSuccessResponseStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for GetSongSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -10228,9 +9895,7 @@ pub mod types {
             default,
             skip_serializing_if = "::std::option::Option::is_none"
         )]
-        pub subsonic_response: ::std::option::Option<
-            GetSongsByGenreResponseSubsonicResponse,
-        >,
+        pub subsonic_response: ::std::option::Option<GetSongsByGenreResponseSubsonicResponse>,
     }
     impl ::std::convert::From<&GetSongsByGenreResponse> for GetSongsByGenreResponse {
         fn from(value: &GetSongsByGenreResponse) -> Self {
@@ -10273,13 +9938,13 @@ pub mod types {
         }
     }
     impl ::std::convert::From<GetSongsByGenreSuccessResponse>
-    for GetSongsByGenreResponseSubsonicResponse {
+        for GetSongsByGenreResponseSubsonicResponse
+    {
         fn from(value: GetSongsByGenreSuccessResponse) -> Self {
             Self::GetSongsByGenreSuccessResponse(value)
         }
     }
-    impl ::std::convert::From<SubsonicFailureResponse>
-    for GetSongsByGenreResponseSubsonicResponse {
+    impl ::std::convert::From<SubsonicFailureResponse> for GetSongsByGenreResponseSubsonicResponse {
         fn from(value: SubsonicFailureResponse) -> Self {
             Self::SubsonicFailureResponse(value)
         }
@@ -10331,8 +9996,7 @@ pub mod types {
         ///The server supported Subsonic API version.
         pub version: ::std::string::String,
     }
-    impl ::std::convert::From<&GetSongsByGenreSuccessResponse>
-    for GetSongsByGenreSuccessResponse {
+    impl ::std::convert::From<&GetSongsByGenreSuccessResponse> for GetSongsByGenreSuccessResponse {
         fn from(value: &GetSongsByGenreSuccessResponse) -> Self {
             value.clone()
         }
@@ -10361,7 +10025,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum GetSongsByGenreSuccessResponseStatus {
         #[serde(rename = "ok")]
@@ -10381,9 +10045,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for GetSongsByGenreSuccessResponseStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ok" => Ok(Self::Ok),
                 _ => Err("invalid value".into()),
@@ -10392,14 +10054,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for GetSongsByGenreSuccessResponseStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for GetSongsByGenreSuccessResponseStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for GetSongsByGenreSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -10407,8 +10066,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for GetSongsByGenreSuccessResponseStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for GetSongsByGenreSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -10446,9 +10104,7 @@ pub mod types {
             default,
             skip_serializing_if = "::std::option::Option::is_none"
         )]
-        pub subsonic_response: ::std::option::Option<
-            GetStarred2ResponseSubsonicResponse,
-        >,
+        pub subsonic_response: ::std::option::Option<GetStarred2ResponseSubsonicResponse>,
     }
     impl ::std::convert::From<&GetStarred2Response> for GetStarred2Response {
         fn from(value: &GetStarred2Response) -> Self {
@@ -10490,14 +10146,12 @@ pub mod types {
             value.clone()
         }
     }
-    impl ::std::convert::From<GetStarred2SuccessResponse>
-    for GetStarred2ResponseSubsonicResponse {
+    impl ::std::convert::From<GetStarred2SuccessResponse> for GetStarred2ResponseSubsonicResponse {
         fn from(value: GetStarred2SuccessResponse) -> Self {
             Self::GetStarred2SuccessResponse(value)
         }
     }
-    impl ::std::convert::From<SubsonicFailureResponse>
-    for GetStarred2ResponseSubsonicResponse {
+    impl ::std::convert::From<SubsonicFailureResponse> for GetStarred2ResponseSubsonicResponse {
         fn from(value: SubsonicFailureResponse) -> Self {
             Self::SubsonicFailureResponse(value)
         }
@@ -10548,8 +10202,7 @@ pub mod types {
         ///The server supported Subsonic API version.
         pub version: ::std::string::String,
     }
-    impl ::std::convert::From<&GetStarred2SuccessResponse>
-    for GetStarred2SuccessResponse {
+    impl ::std::convert::From<&GetStarred2SuccessResponse> for GetStarred2SuccessResponse {
         fn from(value: &GetStarred2SuccessResponse) -> Self {
             value.clone()
         }
@@ -10578,7 +10231,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum GetStarred2SuccessResponseStatus {
         #[serde(rename = "ok")]
@@ -10598,9 +10251,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for GetStarred2SuccessResponseStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ok" => Ok(Self::Ok),
                 _ => Err("invalid value".into()),
@@ -10609,14 +10260,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for GetStarred2SuccessResponseStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for GetStarred2SuccessResponseStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for GetStarred2SuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -10624,8 +10272,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for GetStarred2SuccessResponseStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for GetStarred2SuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -10705,14 +10352,12 @@ pub mod types {
             value.clone()
         }
     }
-    impl ::std::convert::From<GetStarredSuccessResponse>
-    for GetStarredResponseSubsonicResponse {
+    impl ::std::convert::From<GetStarredSuccessResponse> for GetStarredResponseSubsonicResponse {
         fn from(value: GetStarredSuccessResponse) -> Self {
             Self::GetStarredSuccessResponse(value)
         }
     }
-    impl ::std::convert::From<SubsonicFailureResponse>
-    for GetStarredResponseSubsonicResponse {
+    impl ::std::convert::From<SubsonicFailureResponse> for GetStarredResponseSubsonicResponse {
         fn from(value: SubsonicFailureResponse) -> Self {
             Self::SubsonicFailureResponse(value)
         }
@@ -10792,7 +10437,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum GetStarredSuccessResponseStatus {
         #[serde(rename = "ok")]
@@ -10812,9 +10457,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for GetStarredSuccessResponseStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ok" => Ok(Self::Ok),
                 _ => Err("invalid value".into()),
@@ -10823,14 +10466,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for GetStarredSuccessResponseStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for GetStarredSuccessResponseStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for GetStarredSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -10838,8 +10478,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for GetStarredSuccessResponseStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for GetStarredSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -10877,9 +10516,7 @@ pub mod types {
             default,
             skip_serializing_if = "::std::option::Option::is_none"
         )]
-        pub subsonic_response: ::std::option::Option<
-            GetTokenInfoResponseSubsonicResponse,
-        >,
+        pub subsonic_response: ::std::option::Option<GetTokenInfoResponseSubsonicResponse>,
     }
     impl ::std::convert::From<&GetTokenInfoResponse> for GetTokenInfoResponse {
         fn from(value: &GetTokenInfoResponse) -> Self {
@@ -10921,14 +10558,12 @@ pub mod types {
             value.clone()
         }
     }
-    impl ::std::convert::From<GetTokenInfoSuccessResponse>
-    for GetTokenInfoResponseSubsonicResponse {
+    impl ::std::convert::From<GetTokenInfoSuccessResponse> for GetTokenInfoResponseSubsonicResponse {
         fn from(value: GetTokenInfoSuccessResponse) -> Self {
             Self::GetTokenInfoSuccessResponse(value)
         }
     }
-    impl ::std::convert::From<SubsonicFailureResponse>
-    for GetTokenInfoResponseSubsonicResponse {
+    impl ::std::convert::From<SubsonicFailureResponse> for GetTokenInfoResponseSubsonicResponse {
         fn from(value: SubsonicFailureResponse) -> Self {
             Self::SubsonicFailureResponse(value)
         }
@@ -10980,8 +10615,7 @@ pub mod types {
         ///The server supported Subsonic API version.
         pub version: ::std::string::String,
     }
-    impl ::std::convert::From<&GetTokenInfoSuccessResponse>
-    for GetTokenInfoSuccessResponse {
+    impl ::std::convert::From<&GetTokenInfoSuccessResponse> for GetTokenInfoSuccessResponse {
         fn from(value: &GetTokenInfoSuccessResponse) -> Self {
             value.clone()
         }
@@ -11010,7 +10644,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum GetTokenInfoSuccessResponseStatus {
         #[serde(rename = "ok")]
@@ -11030,9 +10664,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for GetTokenInfoSuccessResponseStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ok" => Ok(Self::Ok),
                 _ => Err("invalid value".into()),
@@ -11041,14 +10673,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for GetTokenInfoSuccessResponseStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for GetTokenInfoSuccessResponseStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for GetTokenInfoSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -11056,8 +10685,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for GetTokenInfoSuccessResponseStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for GetTokenInfoSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -11095,9 +10723,7 @@ pub mod types {
             default,
             skip_serializing_if = "::std::option::Option::is_none"
         )]
-        pub subsonic_response: ::std::option::Option<
-            GetTopSongsResponseSubsonicResponse,
-        >,
+        pub subsonic_response: ::std::option::Option<GetTopSongsResponseSubsonicResponse>,
     }
     impl ::std::convert::From<&GetTopSongsResponse> for GetTopSongsResponse {
         fn from(value: &GetTopSongsResponse) -> Self {
@@ -11139,14 +10765,12 @@ pub mod types {
             value.clone()
         }
     }
-    impl ::std::convert::From<GetTopSongsSuccessResponse>
-    for GetTopSongsResponseSubsonicResponse {
+    impl ::std::convert::From<GetTopSongsSuccessResponse> for GetTopSongsResponseSubsonicResponse {
         fn from(value: GetTopSongsSuccessResponse) -> Self {
             Self::GetTopSongsSuccessResponse(value)
         }
     }
-    impl ::std::convert::From<SubsonicFailureResponse>
-    for GetTopSongsResponseSubsonicResponse {
+    impl ::std::convert::From<SubsonicFailureResponse> for GetTopSongsResponseSubsonicResponse {
         fn from(value: SubsonicFailureResponse) -> Self {
             Self::SubsonicFailureResponse(value)
         }
@@ -11198,8 +10822,7 @@ pub mod types {
         ///The server supported Subsonic API version.
         pub version: ::std::string::String,
     }
-    impl ::std::convert::From<&GetTopSongsSuccessResponse>
-    for GetTopSongsSuccessResponse {
+    impl ::std::convert::From<&GetTopSongsSuccessResponse> for GetTopSongsSuccessResponse {
         fn from(value: &GetTopSongsSuccessResponse) -> Self {
             value.clone()
         }
@@ -11228,7 +10851,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum GetTopSongsSuccessResponseStatus {
         #[serde(rename = "ok")]
@@ -11248,9 +10871,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for GetTopSongsSuccessResponseStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ok" => Ok(Self::Ok),
                 _ => Err("invalid value".into()),
@@ -11259,14 +10880,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for GetTopSongsSuccessResponseStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for GetTopSongsSuccessResponseStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for GetTopSongsSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -11274,8 +10892,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for GetTopSongsSuccessResponseStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for GetTopSongsSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -11355,14 +10972,12 @@ pub mod types {
             value.clone()
         }
     }
-    impl ::std::convert::From<GetUserSuccessResponse>
-    for GetUserResponseSubsonicResponse {
+    impl ::std::convert::From<GetUserSuccessResponse> for GetUserResponseSubsonicResponse {
         fn from(value: GetUserSuccessResponse) -> Self {
             Self::GetUserSuccessResponse(value)
         }
     }
-    impl ::std::convert::From<SubsonicFailureResponse>
-    for GetUserResponseSubsonicResponse {
+    impl ::std::convert::From<SubsonicFailureResponse> for GetUserResponseSubsonicResponse {
         fn from(value: SubsonicFailureResponse) -> Self {
             Self::SubsonicFailureResponse(value)
         }
@@ -11442,7 +11057,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum GetUserSuccessResponseStatus {
         #[serde(rename = "ok")]
@@ -11462,9 +11077,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for GetUserSuccessResponseStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ok" => Ok(Self::Ok),
                 _ => Err("invalid value".into()),
@@ -11473,14 +11086,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for GetUserSuccessResponseStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for GetUserSuccessResponseStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for GetUserSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -11488,8 +11098,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for GetUserSuccessResponseStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for GetUserSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -11569,14 +11178,12 @@ pub mod types {
             value.clone()
         }
     }
-    impl ::std::convert::From<GetUsersSuccessResponse>
-    for GetUsersResponseSubsonicResponse {
+    impl ::std::convert::From<GetUsersSuccessResponse> for GetUsersResponseSubsonicResponse {
         fn from(value: GetUsersSuccessResponse) -> Self {
             Self::GetUsersSuccessResponse(value)
         }
     }
-    impl ::std::convert::From<SubsonicFailureResponse>
-    for GetUsersResponseSubsonicResponse {
+    impl ::std::convert::From<SubsonicFailureResponse> for GetUsersResponseSubsonicResponse {
         fn from(value: SubsonicFailureResponse) -> Self {
             Self::SubsonicFailureResponse(value)
         }
@@ -11656,7 +11263,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum GetUsersSuccessResponseStatus {
         #[serde(rename = "ok")]
@@ -11676,9 +11283,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for GetUsersSuccessResponseStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ok" => Ok(Self::Ok),
                 _ => Err("invalid value".into()),
@@ -11687,14 +11292,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for GetUsersSuccessResponseStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for GetUsersSuccessResponseStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for GetUsersSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -11702,8 +11304,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for GetUsersSuccessResponseStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for GetUsersSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -11741,9 +11342,7 @@ pub mod types {
             default,
             skip_serializing_if = "::std::option::Option::is_none"
         )]
-        pub subsonic_response: ::std::option::Option<
-            GetVideoInfoResponseSubsonicResponse,
-        >,
+        pub subsonic_response: ::std::option::Option<GetVideoInfoResponseSubsonicResponse>,
     }
     impl ::std::convert::From<&GetVideoInfoResponse> for GetVideoInfoResponse {
         fn from(value: &GetVideoInfoResponse) -> Self {
@@ -11785,14 +11384,12 @@ pub mod types {
             value.clone()
         }
     }
-    impl ::std::convert::From<GetVideoInfoSuccessResponse>
-    for GetVideoInfoResponseSubsonicResponse {
+    impl ::std::convert::From<GetVideoInfoSuccessResponse> for GetVideoInfoResponseSubsonicResponse {
         fn from(value: GetVideoInfoSuccessResponse) -> Self {
             Self::GetVideoInfoSuccessResponse(value)
         }
     }
-    impl ::std::convert::From<SubsonicFailureResponse>
-    for GetVideoInfoResponseSubsonicResponse {
+    impl ::std::convert::From<SubsonicFailureResponse> for GetVideoInfoResponseSubsonicResponse {
         fn from(value: SubsonicFailureResponse) -> Self {
             Self::SubsonicFailureResponse(value)
         }
@@ -11844,8 +11441,7 @@ pub mod types {
         #[serde(rename = "videoInfo")]
         pub video_info: VideoInfo,
     }
-    impl ::std::convert::From<&GetVideoInfoSuccessResponse>
-    for GetVideoInfoSuccessResponse {
+    impl ::std::convert::From<&GetVideoInfoSuccessResponse> for GetVideoInfoSuccessResponse {
         fn from(value: &GetVideoInfoSuccessResponse) -> Self {
             value.clone()
         }
@@ -11874,7 +11470,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum GetVideoInfoSuccessResponseStatus {
         #[serde(rename = "ok")]
@@ -11894,9 +11490,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for GetVideoInfoSuccessResponseStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ok" => Ok(Self::Ok),
                 _ => Err("invalid value".into()),
@@ -11905,14 +11499,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for GetVideoInfoSuccessResponseStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for GetVideoInfoSuccessResponseStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for GetVideoInfoSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -11920,8 +11511,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for GetVideoInfoSuccessResponseStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for GetVideoInfoSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -12001,14 +11591,12 @@ pub mod types {
             value.clone()
         }
     }
-    impl ::std::convert::From<GetVideosSuccessResponse>
-    for GetVideosResponseSubsonicResponse {
+    impl ::std::convert::From<GetVideosSuccessResponse> for GetVideosResponseSubsonicResponse {
         fn from(value: GetVideosSuccessResponse) -> Self {
             Self::GetVideosSuccessResponse(value)
         }
     }
-    impl ::std::convert::From<SubsonicFailureResponse>
-    for GetVideosResponseSubsonicResponse {
+    impl ::std::convert::From<SubsonicFailureResponse> for GetVideosResponseSubsonicResponse {
         fn from(value: SubsonicFailureResponse) -> Self {
             Self::SubsonicFailureResponse(value)
         }
@@ -12088,7 +11676,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum GetVideosSuccessResponseStatus {
         #[serde(rename = "ok")]
@@ -12108,9 +11696,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for GetVideosSuccessResponseStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ok" => Ok(Self::Ok),
                 _ => Err("invalid value".into()),
@@ -12119,14 +11705,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for GetVideosSuccessResponseStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for GetVideosSuccessResponseStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for GetVideosSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -12134,8 +11717,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for GetVideosSuccessResponseStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for GetVideosSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -12469,7 +12051,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum JukeboxAction {
         #[serde(rename = "get")]
@@ -12519,9 +12101,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for JukeboxAction {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "get" => Ok(Self::Get),
                 "status" => Ok(Self::Status),
@@ -12540,9 +12120,7 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for JukeboxAction {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -12564,8 +12142,8 @@ pub mod types {
     }
     /**A subsonic-response element with a nested :
 
-- jukeboxStatus for all actions but get
-- jukeboxPlaylist for get action*/
+    - jukeboxStatus for all actions but get
+    - jukeboxPlaylist for get action*/
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -12595,9 +12173,7 @@ pub mod types {
             default,
             skip_serializing_if = "::std::option::Option::is_none"
         )]
-        pub subsonic_response: ::std::option::Option<
-            JukeboxControlResponseSubsonicResponse,
-        >,
+        pub subsonic_response: ::std::option::Option<JukeboxControlResponseSubsonicResponse>,
     }
     impl ::std::convert::From<&JukeboxControlResponse> for JukeboxControlResponse {
         fn from(value: &JukeboxControlResponse) -> Self {
@@ -12640,13 +12216,13 @@ pub mod types {
         }
     }
     impl ::std::convert::From<JukeboxControlSuccessResponse>
-    for JukeboxControlResponseSubsonicResponse {
+        for JukeboxControlResponseSubsonicResponse
+    {
         fn from(value: JukeboxControlSuccessResponse) -> Self {
             Self::JukeboxControlSuccessResponse(value)
         }
     }
-    impl ::std::convert::From<SubsonicFailureResponse>
-    for JukeboxControlResponseSubsonicResponse {
+    impl ::std::convert::From<SubsonicFailureResponse> for JukeboxControlResponseSubsonicResponse {
         fn from(value: SubsonicFailureResponse) -> Self {
             Self::SubsonicFailureResponse(value)
         }
@@ -12708,8 +12284,7 @@ pub mod types {
         ///The server supported Subsonic API version.
         pub version: ::std::string::String,
     }
-    impl ::std::convert::From<&JukeboxControlSuccessResponse>
-    for JukeboxControlSuccessResponse {
+    impl ::std::convert::From<&JukeboxControlSuccessResponse> for JukeboxControlSuccessResponse {
         fn from(value: &JukeboxControlSuccessResponse) -> Self {
             value.clone()
         }
@@ -12738,7 +12313,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum JukeboxControlSuccessResponseStatus {
         #[serde(rename = "ok")]
@@ -12758,9 +12333,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for JukeboxControlSuccessResponseStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ok" => Ok(Self::Ok),
                 _ => Err("invalid value".into()),
@@ -12769,14 +12342,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for JukeboxControlSuccessResponseStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for JukeboxControlSuccessResponseStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for JukeboxControlSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -12784,8 +12354,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for JukeboxControlSuccessResponseStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for JukeboxControlSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -12940,18 +12509,14 @@ pub mod types {
             default,
             skip_serializing_if = "::std::option::Option::is_none"
         )]
-        pub license_expires: ::std::option::Option<
-            ::chrono::DateTime<::chrono::offset::Utc>,
-        >,
+        pub license_expires: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         ///End of trial date. [ISO 8601]
         #[serde(
             rename = "trialExpires",
             default,
             skip_serializing_if = "::std::option::Option::is_none"
         )]
-        pub trial_expires: ::std::option::Option<
-            ::chrono::DateTime<::chrono::offset::Utc>,
-        >,
+        pub trial_expires: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         ///The status of the license
         pub valid: bool,
     }
@@ -13108,7 +12673,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum MediaType {
         #[serde(rename = "song")]
@@ -13134,9 +12699,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for MediaType {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "song" => Ok(Self::Song),
                 "album" => Ok(Self::Album),
@@ -13147,9 +12710,7 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for MediaType {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -14400,9 +13961,7 @@ pub mod types {
             default,
             skip_serializing_if = "::std::option::Option::is_none"
         )]
-        pub publish_date: ::std::option::Option<
-            ::chrono::DateTime<::chrono::offset::Utc>,
-        >,
+        pub publish_date: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         ///The replay gain data of the song.
         #[serde(
             rename = "replayGain",
@@ -14511,7 +14070,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum PodcastStatus {
         #[serde(rename = "new")]
@@ -14546,9 +14105,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for PodcastStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "new" => Ok(Self::New),
                 "downloading" => Ok(Self::Downloading),
@@ -14562,9 +14119,7 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for PodcastStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -14774,7 +14329,8 @@ pub mod types {
         pub stream_url: ::std::string::String,
     }
     impl ::std::convert::From<&PostCreateInternetRadioStationBody>
-    for PostCreateInternetRadioStationBody {
+        for PostCreateInternetRadioStationBody
+    {
         fn from(value: &PostCreateInternetRadioStationBody) -> Self {
             value.clone()
         }
@@ -14864,8 +14420,7 @@ pub mod types {
         ///The URL of the Podcast to add.
         pub url: ::std::string::String,
     }
-    impl ::std::convert::From<&PostCreatePodcastChannelBody>
-    for PostCreatePodcastChannelBody {
+    impl ::std::convert::From<&PostCreatePodcastChannelBody> for PostCreatePodcastChannelBody {
         fn from(value: &PostCreatePodcastChannelBody) -> Self {
             value.clone()
         }
@@ -15131,7 +14686,8 @@ pub mod types {
         pub id: ::std::string::String,
     }
     impl ::std::convert::From<&PostDeleteInternetRadioStationBody>
-    for PostDeleteInternetRadioStationBody {
+        for PostDeleteInternetRadioStationBody
+    {
         fn from(value: &PostDeleteInternetRadioStationBody) -> Self {
             value.clone()
         }
@@ -15189,8 +14745,7 @@ pub mod types {
         ///The ID of the Podcast channel to delete.
         pub id: ::std::string::String,
     }
-    impl ::std::convert::From<&PostDeletePodcastChannelBody>
-    for PostDeletePodcastChannelBody {
+    impl ::std::convert::From<&PostDeletePodcastChannelBody> for PostDeletePodcastChannelBody {
         fn from(value: &PostDeletePodcastChannelBody) -> Self {
             value.clone()
         }
@@ -15219,8 +14774,7 @@ pub mod types {
         ///The ID of the Podcast episode to delete.
         pub id: ::std::string::String,
     }
-    impl ::std::convert::From<&PostDeletePodcastEpisodeBody>
-    for PostDeletePodcastEpisodeBody {
+    impl ::std::convert::From<&PostDeletePodcastEpisodeBody> for PostDeletePodcastEpisodeBody {
         fn from(value: &PostDeletePodcastEpisodeBody) -> Self {
             value.clone()
         }
@@ -15336,8 +14890,7 @@ pub mod types {
         ///The ID of the Podcast episode to download.
         pub id: ::std::string::String,
     }
-    impl ::std::convert::From<&PostDownloadPodcastEpisodeBody>
-    for PostDownloadPodcastEpisodeBody {
+    impl ::std::convert::From<&PostDownloadPodcastEpisodeBody> for PostDownloadPodcastEpisodeBody {
         fn from(value: &PostDownloadPodcastEpisodeBody) -> Self {
             value.clone()
         }
@@ -15856,7 +15409,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum PostGetCaptionsBodyFormat {
         #[serde(rename = "srt")]
@@ -15879,9 +15432,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for PostGetCaptionsBodyFormat {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "srt" => Ok(Self::Srt),
                 "vtt" => Ok(Self::Vtt),
@@ -15891,9 +15442,7 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for PostGetCaptionsBodyFormat {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -16875,7 +16424,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum PostJukeboxControlBodyVariant0Action {
         #[serde(rename = "get")]
@@ -16910,9 +16459,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for PostJukeboxControlBodyVariant0Action {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "get" => Ok(Self::Get),
                 "status" => Ok(Self::Status),
@@ -16926,14 +16473,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for PostJukeboxControlBodyVariant0Action {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for PostJukeboxControlBodyVariant0Action {
+    impl ::std::convert::TryFrom<&::std::string::String> for PostJukeboxControlBodyVariant0Action {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -16941,8 +16485,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for PostJukeboxControlBodyVariant0Action {
+    impl ::std::convert::TryFrom<::std::string::String> for PostJukeboxControlBodyVariant0Action {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -16973,7 +16516,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum PostJukeboxControlBodyVariant1Action {
         #[serde(rename = "remove")]
@@ -16993,9 +16536,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for PostJukeboxControlBodyVariant1Action {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "remove" => Ok(Self::Remove),
                 _ => Err("invalid value".into()),
@@ -17004,14 +16545,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for PostJukeboxControlBodyVariant1Action {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for PostJukeboxControlBodyVariant1Action {
+    impl ::std::convert::TryFrom<&::std::string::String> for PostJukeboxControlBodyVariant1Action {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -17019,8 +16557,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for PostJukeboxControlBodyVariant1Action {
+    impl ::std::convert::TryFrom<::std::string::String> for PostJukeboxControlBodyVariant1Action {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -17051,7 +16588,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum PostJukeboxControlBodyVariant2Action {
         #[serde(rename = "skip")]
@@ -17071,9 +16608,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for PostJukeboxControlBodyVariant2Action {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "skip" => Ok(Self::Skip),
                 _ => Err("invalid value".into()),
@@ -17082,14 +16617,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for PostJukeboxControlBodyVariant2Action {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for PostJukeboxControlBodyVariant2Action {
+    impl ::std::convert::TryFrom<&::std::string::String> for PostJukeboxControlBodyVariant2Action {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -17097,8 +16629,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for PostJukeboxControlBodyVariant2Action {
+    impl ::std::convert::TryFrom<::std::string::String> for PostJukeboxControlBodyVariant2Action {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -17129,7 +16660,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum PostJukeboxControlBodyVariant3Action {
         #[serde(rename = "add")]
@@ -17149,9 +16680,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for PostJukeboxControlBodyVariant3Action {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "add" => Ok(Self::Add),
                 _ => Err("invalid value".into()),
@@ -17160,14 +16689,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for PostJukeboxControlBodyVariant3Action {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for PostJukeboxControlBodyVariant3Action {
+    impl ::std::convert::TryFrom<&::std::string::String> for PostJukeboxControlBodyVariant3Action {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -17175,8 +16701,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for PostJukeboxControlBodyVariant3Action {
+    impl ::std::convert::TryFrom<::std::string::String> for PostJukeboxControlBodyVariant3Action {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -17207,7 +16732,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum PostJukeboxControlBodyVariant4Action {
         #[serde(rename = "set")]
@@ -17227,9 +16752,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for PostJukeboxControlBodyVariant4Action {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "set" => Ok(Self::Set),
                 _ => Err("invalid value".into()),
@@ -17238,14 +16761,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for PostJukeboxControlBodyVariant4Action {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for PostJukeboxControlBodyVariant4Action {
+    impl ::std::convert::TryFrom<&::std::string::String> for PostJukeboxControlBodyVariant4Action {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -17253,8 +16773,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for PostJukeboxControlBodyVariant4Action {
+    impl ::std::convert::TryFrom<::std::string::String> for PostJukeboxControlBodyVariant4Action {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -17285,7 +16804,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum PostJukeboxControlBodyVariant5Action {
         #[serde(rename = "setGain")]
@@ -17305,9 +16824,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for PostJukeboxControlBodyVariant5Action {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "setGain" => Ok(Self::SetGain),
                 _ => Err("invalid value".into()),
@@ -17316,14 +16833,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for PostJukeboxControlBodyVariant5Action {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for PostJukeboxControlBodyVariant5Action {
+    impl ::std::convert::TryFrom<&::std::string::String> for PostJukeboxControlBodyVariant5Action {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -17331,8 +16845,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for PostJukeboxControlBodyVariant5Action {
+    impl ::std::convert::TryFrom<::std::string::String> for PostJukeboxControlBodyVariant5Action {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -17432,8 +16945,7 @@ pub mod types {
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub position: ::std::option::Option<u64>,
     }
-    impl ::std::convert::From<&PostSavePlayQueueByIndexBody>
-    for PostSavePlayQueueByIndexBody {
+    impl ::std::convert::From<&PostSavePlayQueueByIndexBody> for PostSavePlayQueueByIndexBody {
         fn from(value: &PostSavePlayQueueByIndexBody) -> Self {
             value.clone()
         }
@@ -17994,11 +17506,9 @@ pub mod types {
     }
     impl ::std::str::FromStr for PostStreamBodySize {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
-            static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
-            { ::regress::Regex::new("^[0-9]+x[0-9]+$").unwrap() });
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+            static PATTERN: ::std::sync::LazyLock<::regress::Regex> =
+                ::std::sync::LazyLock::new(|| ::regress::Regex::new("^[0-9]+x[0-9]+$").unwrap());
             if PATTERN.find(value).is_none() {
                 return Err("doesn't match pattern \"^[0-9]+x[0-9]+$\"".into());
             }
@@ -18007,9 +17517,7 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for PostStreamBodySize {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -18147,7 +17655,8 @@ pub mod types {
         pub stream_url: ::std::string::String,
     }
     impl ::std::convert::From<&PostUpdateInternetRadioStationBody>
-    for PostUpdateInternetRadioStationBody {
+        for PostUpdateInternetRadioStationBody
+    {
         fn from(value: &PostUpdateInternetRadioStationBody) -> Self {
             value.clone()
         }
@@ -18498,22 +18007,19 @@ pub mod types {
             value.0
         }
     }
-    impl ::std::convert::From<&PostUpdateUserBodyMaxBitRate>
-    for PostUpdateUserBodyMaxBitRate {
+    impl ::std::convert::From<&PostUpdateUserBodyMaxBitRate> for PostUpdateUserBodyMaxBitRate {
         fn from(value: &PostUpdateUserBodyMaxBitRate) -> Self {
             value.clone()
         }
     }
     impl ::std::convert::TryFrom<i64> for PostUpdateUserBodyMaxBitRate {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: i64,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: i64) -> ::std::result::Result<Self, self::error::ConversionError> {
             if ![
-                0_i64, 32_i64, 40_i64, 48_i64, 56_i64, 64_i64, 80_i64, 96_i64, 112_i64,
-                128_i64, 160_i64, 192_i64, 224_i64, 256_i64, 320_i64,
+                0_i64, 32_i64, 40_i64, 48_i64, 56_i64, 64_i64, 80_i64, 96_i64, 112_i64, 128_i64,
+                160_i64, 192_i64, 224_i64, 256_i64, 320_i64,
             ]
-                .contains(&value)
+            .contains(&value)
             {
                 Err("invalid value".into())
             } else {
@@ -18527,7 +18033,7 @@ pub mod types {
             D: ::serde::Deserializer<'de>,
         {
             Self::try_from(<i64>::deserialize(deserializer)?)
-                .map_err(|e| { <D::Error as ::serde::de::Error>::custom(e.to_string()) })
+                .map_err(|e| <D::Error as ::serde::de::Error>::custom(e.to_string()))
         }
     }
     ///A record label for an album.
@@ -18762,14 +18268,12 @@ pub mod types {
             value.clone()
         }
     }
-    impl ::std::convert::From<Search2SuccessResponse>
-    for Search2ResponseSubsonicResponse {
+    impl ::std::convert::From<Search2SuccessResponse> for Search2ResponseSubsonicResponse {
         fn from(value: Search2SuccessResponse) -> Self {
             Self::Search2SuccessResponse(value)
         }
     }
-    impl ::std::convert::From<SubsonicFailureResponse>
-    for Search2ResponseSubsonicResponse {
+    impl ::std::convert::From<SubsonicFailureResponse> for Search2ResponseSubsonicResponse {
         fn from(value: SubsonicFailureResponse) -> Self {
             Self::SubsonicFailureResponse(value)
         }
@@ -18850,7 +18354,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum Search2SuccessResponseStatus {
         #[serde(rename = "ok")]
@@ -18870,9 +18374,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for Search2SuccessResponseStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ok" => Ok(Self::Ok),
                 _ => Err("invalid value".into()),
@@ -18881,14 +18383,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for Search2SuccessResponseStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for Search2SuccessResponseStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for Search2SuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -18896,8 +18395,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for Search2SuccessResponseStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for Search2SuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -18977,14 +18475,12 @@ pub mod types {
             value.clone()
         }
     }
-    impl ::std::convert::From<Search3SuccessResponse>
-    for Search3ResponseSubsonicResponse {
+    impl ::std::convert::From<Search3SuccessResponse> for Search3ResponseSubsonicResponse {
         fn from(value: Search3SuccessResponse) -> Self {
             Self::Search3SuccessResponse(value)
         }
     }
-    impl ::std::convert::From<SubsonicFailureResponse>
-    for Search3ResponseSubsonicResponse {
+    impl ::std::convert::From<SubsonicFailureResponse> for Search3ResponseSubsonicResponse {
         fn from(value: SubsonicFailureResponse) -> Self {
             Self::SubsonicFailureResponse(value)
         }
@@ -19065,7 +18561,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum Search3SuccessResponseStatus {
         #[serde(rename = "ok")]
@@ -19085,9 +18581,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for Search3SuccessResponseStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ok" => Ok(Self::Ok),
                 _ => Err("invalid value".into()),
@@ -19096,14 +18590,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for Search3SuccessResponseStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for Search3SuccessResponseStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for Search3SuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -19111,8 +18602,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for Search3SuccessResponseStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for Search3SuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -19197,8 +18687,7 @@ pub mod types {
             Self::SearchSuccessResponse(value)
         }
     }
-    impl ::std::convert::From<SubsonicFailureResponse>
-    for SearchResponseSubsonicResponse {
+    impl ::std::convert::From<SubsonicFailureResponse> for SearchResponseSubsonicResponse {
         fn from(value: SubsonicFailureResponse) -> Self {
             Self::SubsonicFailureResponse(value)
         }
@@ -19216,19 +18705,16 @@ pub mod types {
     /// </details>
     #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     #[serde(transparent)]
-    pub struct SearchResult(
-        pub ::serde_json::Map<::std::string::String, ::serde_json::Value>,
-    );
+    pub struct SearchResult(pub ::serde_json::Map<::std::string::String, ::serde_json::Value>);
     impl ::std::ops::Deref for SearchResult {
         type Target = ::serde_json::Map<::std::string::String, ::serde_json::Value>;
-        fn deref(
-            &self,
-        ) -> &::serde_json::Map<::std::string::String, ::serde_json::Value> {
+        fn deref(&self) -> &::serde_json::Map<::std::string::String, ::serde_json::Value> {
             &self.0
         }
     }
     impl ::std::convert::From<SearchResult>
-    for ::serde_json::Map<::std::string::String, ::serde_json::Value> {
+        for ::serde_json::Map<::std::string::String, ::serde_json::Value>
+    {
         fn from(value: SearchResult) -> Self {
             value.0
         }
@@ -19238,12 +18724,10 @@ pub mod types {
             value.clone()
         }
     }
-    impl ::std::convert::From<
-        ::serde_json::Map<::std::string::String, ::serde_json::Value>,
-    > for SearchResult {
-        fn from(
-            value: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
-        ) -> Self {
+    impl ::std::convert::From<::serde_json::Map<::std::string::String, ::serde_json::Value>>
+        for SearchResult
+    {
+        fn from(value: ::serde_json::Map<::std::string::String, ::serde_json::Value>) -> Self {
             Self(value)
         }
     }
@@ -19443,7 +18927,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum SearchSuccessResponseStatus {
         #[serde(rename = "ok")]
@@ -19463,9 +18947,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for SearchSuccessResponseStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ok" => Ok(Self::Ok),
                 _ => Err("invalid value".into()),
@@ -19474,14 +18956,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for SearchSuccessResponseStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for SearchSuccessResponseStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for SearchSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -19580,9 +19059,7 @@ pub mod types {
             default,
             skip_serializing_if = "::std::option::Option::is_none"
         )]
-        pub last_visited: ::std::option::Option<
-            ::chrono::DateTime<::chrono::offset::Utc>,
-        >,
+        pub last_visited: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         ///The share url
         pub url: ::std::string::String,
         ///The username
@@ -19629,7 +19106,9 @@ pub mod types {
     }
     impl ::std::default::Default for Shares {
         fn default() -> Self {
-            Self { share: Default::default() }
+            Self {
+                share: Default::default(),
+            }
         }
     }
     ///SimilarSongs list.
@@ -19665,7 +19144,9 @@ pub mod types {
     }
     impl ::std::default::Default for SimilarSongs {
         fn default() -> Self {
-            Self { song: Default::default() }
+            Self {
+                song: Default::default(),
+            }
         }
     }
     ///SimilarSongs2 list.
@@ -19701,7 +19182,9 @@ pub mod types {
     }
     impl ::std::default::Default for SimilarSongs2 {
         fn default() -> Self {
-            Self { song: Default::default() }
+            Self {
+                song: Default::default(),
+            }
         }
     }
     ///Songs list.
@@ -19737,7 +19220,9 @@ pub mod types {
     }
     impl ::std::default::Default for Songs {
         fn default() -> Self {
-            Self { song: Default::default() }
+            Self {
+                song: Default::default(),
+            }
         }
     }
     ///starred.
@@ -19932,14 +19417,12 @@ pub mod types {
             value.clone()
         }
     }
-    impl ::std::convert::From<StartScanSuccessResponse>
-    for StartScanResponseSubsonicResponse {
+    impl ::std::convert::From<StartScanSuccessResponse> for StartScanResponseSubsonicResponse {
         fn from(value: StartScanSuccessResponse) -> Self {
             Self::StartScanSuccessResponse(value)
         }
     }
-    impl ::std::convert::From<SubsonicFailureResponse>
-    for StartScanResponseSubsonicResponse {
+    impl ::std::convert::From<SubsonicFailureResponse> for StartScanResponseSubsonicResponse {
         fn from(value: SubsonicFailureResponse) -> Self {
             Self::SubsonicFailureResponse(value)
         }
@@ -20020,7 +19503,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum StartScanSuccessResponseStatus {
         #[serde(rename = "ok")]
@@ -20040,9 +19523,7 @@ pub mod types {
     }
     impl ::std::str::FromStr for StartScanSuccessResponseStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ok" => Ok(Self::Ok),
                 _ => Err("invalid value".into()),
@@ -20051,14 +19532,11 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for StartScanSuccessResponseStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for StartScanSuccessResponseStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for StartScanSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -20066,8 +19544,7 @@ pub mod types {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for StartScanSuccessResponseStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for StartScanSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -20107,11 +19584,9 @@ pub mod types {
     }
     impl ::std::str::FromStr for StreamSize {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
-            static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
-            { ::regress::Regex::new("^[0-9]+x[0-9]+$").unwrap() });
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+            static PATTERN: ::std::sync::LazyLock<::regress::Regex> =
+                ::std::sync::LazyLock::new(|| ::regress::Regex::new("^[0-9]+x[0-9]+$").unwrap());
             if PATTERN.find(value).is_none() {
                 return Err("doesn't match pattern \"^[0-9]+x[0-9]+$\"".into());
             }
@@ -20120,9 +19595,7 @@ pub mod types {
     }
     impl ::std::convert::TryFrom<&str> for StreamSize {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -20217,7 +19690,7 @@ pub mod types {
         pub display_title: ::std::option::Option<::std::string::String>,
         /**The lyrics language (ideally ISO 639). If the language is unknown (e.g. lrc file), the server must return `und` (ISO standard) or `xxx` (common value for taggers). Ideally, the server will return lang as an ISO 639 (2/3) code. However, tagged files and external lyrics can come with any value as a potential language code, so clients should take care when displaying lang.
 
-Furthermore, there is special behavior for the value xxx. While not an ISO code, it is commonly used by taggers and other parsing software. Clients should treat xxx as not having a specified language (equivalent to the und code).*/
+        Furthermore, there is special behavior for the value xxx. While not an ISO code, it is commonly used by taggers and other parsing software. Clients should treat xxx as not having a specified language (equivalent to the und code).*/
         pub lang: ::std::string::String,
         ///The actual lyrics. Ordered by start time (synced) or appearance order (unsynced)
         pub line: ::std::vec::Vec<Line>,
@@ -20338,18 +19811,18 @@ Furthermore, there is special behavior for the value xxx. While not an ISO code,
     #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct SubsonicError {
         /**The error code.
-* 0: A generic error.
-* 10: Required parameter is missing.
-* 20: Incompatible Subsonic REST protocol version. Client must upgrade.
-* 30: Incompatible Subsonic REST protocol version. Server must upgrade.
-* 40: Wrong username or password.
-* 41: Token authentication not supported for LDAP users.
-* 42: Provided authentication mechanism not supported.
-* 43: Multiple conflicting authentication mechanisms provided.
-* 44: Invalid API key.
-* 50: User is not authorized for the given operation.
-* 60: The trial period for the Subsonic server is over. Please upgrade to Subsonic Premium. Visit subsonic.org for details.
-* 70: The requested data was not found.*/
+        * 0: A generic error.
+        * 10: Required parameter is missing.
+        * 20: Incompatible Subsonic REST protocol version. Client must upgrade.
+        * 30: Incompatible Subsonic REST protocol version. Server must upgrade.
+        * 40: Wrong username or password.
+        * 41: Token authentication not supported for LDAP users.
+        * 42: Provided authentication mechanism not supported.
+        * 43: Multiple conflicting authentication mechanisms provided.
+        * 44: Invalid API key.
+        * 50: User is not authorized for the given operation.
+        * 60: The trial period for the Subsonic server is over. Please upgrade to Subsonic Premium. Visit subsonic.org for details.
+        * 70: The requested data was not found.*/
         pub code: SubsonicErrorCode,
         ///A URL (documentation, configuration, etc) which may provide additional context for the error)
         #[serde(
@@ -20368,18 +19841,18 @@ Furthermore, there is special behavior for the value xxx. While not an ISO code,
         }
     }
     /**The error code.
-* 0: A generic error.
-* 10: Required parameter is missing.
-* 20: Incompatible Subsonic REST protocol version. Client must upgrade.
-* 30: Incompatible Subsonic REST protocol version. Server must upgrade.
-* 40: Wrong username or password.
-* 41: Token authentication not supported for LDAP users.
-* 42: Provided authentication mechanism not supported.
-* 43: Multiple conflicting authentication mechanisms provided.
-* 44: Invalid API key.
-* 50: User is not authorized for the given operation.
-* 60: The trial period for the Subsonic server is over. Please upgrade to Subsonic Premium. Visit subsonic.org for details.
-* 70: The requested data was not found.*/
+    * 0: A generic error.
+    * 10: Required parameter is missing.
+    * 20: Incompatible Subsonic REST protocol version. Client must upgrade.
+    * 30: Incompatible Subsonic REST protocol version. Server must upgrade.
+    * 40: Wrong username or password.
+    * 41: Token authentication not supported for LDAP users.
+    * 42: Provided authentication mechanism not supported.
+    * 43: Multiple conflicting authentication mechanisms provided.
+    * 44: Invalid API key.
+    * 50: User is not authorized for the given operation.
+    * 60: The trial period for the Subsonic server is over. Please upgrade to Subsonic Premium. Visit subsonic.org for details.
+    * 70: The requested data was not found.*/
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -20425,14 +19898,12 @@ Furthermore, there is special behavior for the value xxx. While not an ISO code,
     }
     impl ::std::convert::TryFrom<i64> for SubsonicErrorCode {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: i64,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: i64) -> ::std::result::Result<Self, self::error::ConversionError> {
             if ![
-                0_i64, 10_i64, 20_i64, 30_i64, 40_i64, 41_i64, 42_i64, 43_i64, 44_i64,
-                50_i64, 60_i64, 70_i64,
+                0_i64, 10_i64, 20_i64, 30_i64, 40_i64, 41_i64, 42_i64, 43_i64, 44_i64, 50_i64,
+                60_i64, 70_i64,
             ]
-                .contains(&value)
+            .contains(&value)
             {
                 Err("invalid value".into())
             } else {
@@ -20446,7 +19917,7 @@ Furthermore, there is special behavior for the value xxx. While not an ISO code,
             D: ::serde::Deserializer<'de>,
         {
             Self::try_from(<i64>::deserialize(deserializer)?)
-                .map_err(|e| { <D::Error as ::serde::de::Error>::custom(e.to_string()) })
+                .map_err(|e| <D::Error as ::serde::de::Error>::custom(e.to_string()))
         }
     }
     ///`SubsonicFailureResponse`
@@ -20532,7 +20003,7 @@ Furthermore, there is special behavior for the value xxx. While not an ISO code,
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum SubsonicFailureResponseStatus {
         #[serde(rename = "failed")]
@@ -20552,9 +20023,7 @@ Furthermore, there is special behavior for the value xxx. While not an ISO code,
     }
     impl ::std::str::FromStr for SubsonicFailureResponseStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "failed" => Ok(Self::Failed),
                 _ => Err("invalid value".into()),
@@ -20563,14 +20032,11 @@ Furthermore, there is special behavior for the value xxx. While not an ISO code,
     }
     impl ::std::convert::TryFrom<&str> for SubsonicFailureResponseStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for SubsonicFailureResponseStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for SubsonicFailureResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -20578,8 +20044,7 @@ Furthermore, there is special behavior for the value xxx. While not an ISO code,
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for SubsonicFailureResponseStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for SubsonicFailureResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -20659,14 +20124,12 @@ Furthermore, there is special behavior for the value xxx. While not an ISO code,
             value.clone()
         }
     }
-    impl ::std::convert::From<SubsonicSuccessResponse>
-    for SubsonicResponseSubsonicResponse {
+    impl ::std::convert::From<SubsonicSuccessResponse> for SubsonicResponseSubsonicResponse {
         fn from(value: SubsonicSuccessResponse) -> Self {
             Self::SuccessResponse(value)
         }
     }
-    impl ::std::convert::From<SubsonicFailureResponse>
-    for SubsonicResponseSubsonicResponse {
+    impl ::std::convert::From<SubsonicFailureResponse> for SubsonicResponseSubsonicResponse {
         fn from(value: SubsonicFailureResponse) -> Self {
             Self::FailureResponse(value)
         }
@@ -20749,7 +20212,7 @@ Furthermore, there is special behavior for the value xxx. While not an ISO code,
         Hash,
         Ord,
         PartialEq,
-        PartialOrd
+        PartialOrd,
     )]
     pub enum SubsonicSuccessResponseStatus {
         #[serde(rename = "ok")]
@@ -20769,9 +20232,7 @@ Furthermore, there is special behavior for the value xxx. While not an ISO code,
     }
     impl ::std::str::FromStr for SubsonicSuccessResponseStatus {
         type Err = self::error::ConversionError;
-        fn from_str(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ok" => Ok(Self::Ok),
                 _ => Err("invalid value".into()),
@@ -20780,14 +20241,11 @@ Furthermore, there is special behavior for the value xxx. While not an ISO code,
     }
     impl ::std::convert::TryFrom<&str> for SubsonicSuccessResponseStatus {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: &str,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<&::std::string::String>
-    for SubsonicSuccessResponseStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for SubsonicSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -20795,8 +20253,7 @@ Furthermore, there is special behavior for the value xxx. While not an ISO code,
             value.parse()
         }
     }
-    impl ::std::convert::TryFrom<::std::string::String>
-    for SubsonicSuccessResponseStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for SubsonicSuccessResponseStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -20867,7 +20324,9 @@ Furthermore, there is special behavior for the value xxx. While not an ISO code,
     }
     impl ::std::default::Default for TopSongs {
         fn default() -> Self {
-            Self { song: Default::default() }
+            Self {
+                song: Default::default(),
+            }
         }
     }
     ///`UpdateUserMaxBitRate`
@@ -20918,14 +20377,12 @@ Furthermore, there is special behavior for the value xxx. While not an ISO code,
     }
     impl ::std::convert::TryFrom<i64> for UpdateUserMaxBitRate {
         type Error = self::error::ConversionError;
-        fn try_from(
-            value: i64,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(value: i64) -> ::std::result::Result<Self, self::error::ConversionError> {
             if ![
-                0_i64, 32_i64, 40_i64, 48_i64, 56_i64, 64_i64, 80_i64, 96_i64, 112_i64,
-                128_i64, 160_i64, 192_i64, 224_i64, 256_i64, 320_i64,
+                0_i64, 32_i64, 40_i64, 48_i64, 56_i64, 64_i64, 80_i64, 96_i64, 112_i64, 128_i64,
+                160_i64, 192_i64, 224_i64, 256_i64, 320_i64,
             ]
-                .contains(&value)
+            .contains(&value)
             {
                 Err("invalid value".into())
             } else {
@@ -20939,7 +20396,7 @@ Furthermore, there is special behavior for the value xxx. While not an ISO code,
             D: ::serde::Deserializer<'de>,
         {
             Self::try_from(<i64>::deserialize(deserializer)?)
-                .map_err(|e| { <D::Error as ::serde::de::Error>::custom(e.to_string()) })
+                .map_err(|e| <D::Error as ::serde::de::Error>::custom(e.to_string()))
         }
     }
     ///user.
@@ -21053,9 +20510,7 @@ Furthermore, there is special behavior for the value xxx. While not an ISO code,
             default,
             skip_serializing_if = "::std::option::Option::is_none"
         )]
-        pub avatar_last_changed: ::std::option::Option<
-            ::chrono::DateTime<::chrono::offset::Utc>,
-        >,
+        pub avatar_last_changed: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         ///Whether the user can create comments
         #[serde(rename = "commentRole")]
         pub comment_role: bool,
@@ -21142,7 +20597,9 @@ Furthermore, there is special behavior for the value xxx. While not an ISO code,
     }
     impl ::std::default::Default for Users {
         fn default() -> Self {
-            Self { user: Default::default() }
+            Self {
+                user: Default::default(),
+            }
         }
     }
     ///videoInfo. TODO
@@ -21158,19 +20615,16 @@ Furthermore, there is special behavior for the value xxx. While not an ISO code,
     /// </details>
     #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     #[serde(transparent)]
-    pub struct VideoInfo(
-        pub ::serde_json::Map<::std::string::String, ::serde_json::Value>,
-    );
+    pub struct VideoInfo(pub ::serde_json::Map<::std::string::String, ::serde_json::Value>);
     impl ::std::ops::Deref for VideoInfo {
         type Target = ::serde_json::Map<::std::string::String, ::serde_json::Value>;
-        fn deref(
-            &self,
-        ) -> &::serde_json::Map<::std::string::String, ::serde_json::Value> {
+        fn deref(&self) -> &::serde_json::Map<::std::string::String, ::serde_json::Value> {
             &self.0
         }
     }
     impl ::std::convert::From<VideoInfo>
-    for ::serde_json::Map<::std::string::String, ::serde_json::Value> {
+        for ::serde_json::Map<::std::string::String, ::serde_json::Value>
+    {
         fn from(value: VideoInfo) -> Self {
             value.0
         }
@@ -21180,12 +20634,10 @@ Furthermore, there is special behavior for the value xxx. While not an ISO code,
             value.clone()
         }
     }
-    impl ::std::convert::From<
-        ::serde_json::Map<::std::string::String, ::serde_json::Value>,
-    > for VideoInfo {
-        fn from(
-            value: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
-        ) -> Self {
+    impl ::std::convert::From<::serde_json::Map<::std::string::String, ::serde_json::Value>>
+        for VideoInfo
+    {
+        fn from(value: ::serde_json::Map<::std::string::String, ::serde_json::Value>) -> Self {
             Self(value)
         }
     }
@@ -21205,14 +20657,13 @@ Furthermore, there is special behavior for the value xxx. While not an ISO code,
     pub struct Videos(pub ::serde_json::Map<::std::string::String, ::serde_json::Value>);
     impl ::std::ops::Deref for Videos {
         type Target = ::serde_json::Map<::std::string::String, ::serde_json::Value>;
-        fn deref(
-            &self,
-        ) -> &::serde_json::Map<::std::string::String, ::serde_json::Value> {
+        fn deref(&self) -> &::serde_json::Map<::std::string::String, ::serde_json::Value> {
             &self.0
         }
     }
     impl ::std::convert::From<Videos>
-    for ::serde_json::Map<::std::string::String, ::serde_json::Value> {
+        for ::serde_json::Map<::std::string::String, ::serde_json::Value>
+    {
         fn from(value: Videos) -> Self {
             value.0
         }
@@ -21222,12 +20673,10 @@ Furthermore, there is special behavior for the value xxx. While not an ISO code,
             value.clone()
         }
     }
-    impl ::std::convert::From<
-        ::serde_json::Map<::std::string::String, ::serde_json::Value>,
-    > for Videos {
-        fn from(
-            value: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
-        ) -> Self {
+    impl ::std::convert::From<::serde_json::Map<::std::string::String, ::serde_json::Value>>
+        for Videos
+    {
+        fn from(value: ::serde_json::Map<::std::string::String, ::serde_json::Value>) -> Self {
             Self(value)
         }
     }
@@ -21246,9 +20695,7 @@ Furthermore, there is special behavior for the value xxx. While not an ISO code,
         pub(super) fn default_nzu64<T, const V: u64>() -> T
         where
             T: ::std::convert::TryFrom<::std::num::NonZeroU64>,
-            <T as ::std::convert::TryFrom<
-                ::std::num::NonZeroU64,
-            >>::Error: ::std::fmt::Debug,
+            <T as ::std::convert::TryFrom<::std::num::NonZeroU64>>::Error: ::std::fmt::Debug,
         {
             T::try_from(::std::num::NonZeroU64::try_from(V).unwrap()).unwrap()
         }
@@ -21274,7 +20721,9 @@ impl Client {
         #[cfg(not(target_arch = "wasm32"))]
         let client = {
             let dur = ::std::time::Duration::from_secs(15u64);
-            reqwest::ClientBuilder::new().connect_timeout(dur).timeout(dur)
+            reqwest::ClientBuilder::new()
+                .connect_timeout(dur)
+                .timeout(dur)
         };
         #[cfg(target_arch = "wasm32")]
         let client = reqwest::ClientBuilder::new();
@@ -21312,24 +20761,23 @@ impl ClientHooks<()> for &Client {}
 impl Client {
     /**Adds a message to the chat log
 
-Adds a message to the chat log.
+    Adds a message to the chat log.
 
-Sends a `GET` request to `/rest/addChatMessage`
+    Sends a `GET` request to `/rest/addChatMessage`
 
-Arguments:
-- `message`: The chat message.
-*/
+    Arguments:
+    - `message`: The chat message.
+    */
     pub async fn get_add_chat_message<'a>(
         &'a self,
         message: &'a str,
     ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let url = format!("{}/rest/addChatMessage", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -21355,24 +20803,23 @@ Arguments:
     }
     /**Adds a message to the chat log
 
-Adds a message to the chat log.
+    Adds a message to the chat log.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/addChatMessage`
+    Sends a `POST` request to `/rest/addChatMessage`
 
-*/
+    */
     pub async fn post_add_chat_message<'a>(
         &'a self,
         body: &'a types::PostAddChatMessageBody,
     ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let url = format!("{}/rest/addChatMessage", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -21399,14 +20846,14 @@ Sends a `POST` request to `/rest/addChatMessage`
     }
     /**Changes the password of an existing user on the server
 
-Changes the password of an existing user on the server, using the following parameters. You can only change your own password unless you have admin privileges.
+    Changes the password of an existing user on the server, using the following parameters. You can only change your own password unless you have admin privileges.
 
-Sends a `GET` request to `/rest/changePassword`
+    Sends a `GET` request to `/rest/changePassword`
 
-Arguments:
-- `password`: The new password of the new user, either in clear text of hex-encoded (see above).
-- `username`: The name of the user which should change its password.
-*/
+    Arguments:
+    - `password`: The new password of the new user, either in clear text of hex-encoded (see above).
+    - `username`: The name of the user which should change its password.
+    */
     pub async fn change_password<'a>(
         &'a self,
         password: &'a str,
@@ -21414,11 +20861,10 @@ Arguments:
     ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let url = format!("{}/rest/changePassword", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -21445,24 +20891,23 @@ Arguments:
     }
     /**Changes the password of an existing user on the server
 
-Changes the password of an existing user on the server, using the following parameters. You can only change your own password unless you have admin privileges.
+    Changes the password of an existing user on the server, using the following parameters. You can only change your own password unless you have admin privileges.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/changePassword`
+    Sends a `POST` request to `/rest/changePassword`
 
-*/
+    */
     pub async fn post_change_password<'a>(
         &'a self,
         body: &'a types::PostChangePasswordBody,
     ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let url = format!("{}/rest/changePassword", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -21489,15 +20934,15 @@ Sends a `POST` request to `/rest/changePassword`
     }
     /**Creates or updates a bookmark
 
-Creates or updates a bookmark (a position within a media file). Bookmarks are personal and not visible to other users.
+    Creates or updates a bookmark (a position within a media file). Bookmarks are personal and not visible to other users.
 
-Sends a `GET` request to `/rest/createBookmark`
+    Sends a `GET` request to `/rest/createBookmark`
 
-Arguments:
-- `comment`: A user-defined comment.
-- `id`: ID of the media file to bookmark. If a bookmark already exists for this file it will be overwritten.
-- `position`: The position (in milliseconds) within the media file.
-*/
+    Arguments:
+    - `comment`: A user-defined comment.
+    - `id`: ID of the media file to bookmark. If a bookmark already exists for this file it will be overwritten.
+    - `position`: The position (in milliseconds) within the media file.
+    */
     pub async fn create_bookmark<'a>(
         &'a self,
         comment: Option<&'a str>,
@@ -21506,11 +20951,10 @@ Arguments:
     ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let url = format!("{}/rest/createBookmark", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -21538,24 +20982,23 @@ Arguments:
     }
     /**Creates or updates a bookmark
 
-Creates or updates a bookmark (a position within a media file). Bookmarks are personal and not visible to other users.
+    Creates or updates a bookmark (a position within a media file). Bookmarks are personal and not visible to other users.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/createBookmark`
+    Sends a `POST` request to `/rest/createBookmark`
 
-*/
+    */
     pub async fn post_create_bookmark<'a>(
         &'a self,
         body: &'a types::PostCreateBookmarkBody,
     ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let url = format!("{}/rest/createBookmark", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -21582,15 +21025,15 @@ Sends a `POST` request to `/rest/createBookmark`
     }
     /**Adds a new internet radio station
 
-Adds a new internet radio station. Only users with admin privileges are allowed to call this method.
+    Adds a new internet radio station. Only users with admin privileges are allowed to call this method.
 
-Sends a `GET` request to `/rest/createInternetRadioStation`
+    Sends a `GET` request to `/rest/createInternetRadioStation`
 
-Arguments:
-- `homepage_url`: The home page URL for the station.
-- `name`: The station name.
-- `stream_url`: The stream URL for the station.
-*/
+    Arguments:
+    - `homepage_url`: The home page URL for the station.
+    - `name`: The station name.
+    - `stream_url`: The stream URL for the station.
+    */
     pub async fn create_internet_radio_station<'a>(
         &'a self,
         homepage_url: Option<&'a str>,
@@ -21599,11 +21042,10 @@ Arguments:
     ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let url = format!("{}/rest/createInternetRadioStation", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -21612,9 +21054,15 @@ Arguments:
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
-            .query(&progenitor_client::QueryParam::new("homepageUrl", &homepage_url))
+            .query(&progenitor_client::QueryParam::new(
+                "homepageUrl",
+                &homepage_url,
+            ))
             .query(&progenitor_client::QueryParam::new("name", &name))
-            .query(&progenitor_client::QueryParam::new("streamUrl", &stream_url))
+            .query(&progenitor_client::QueryParam::new(
+                "streamUrl",
+                &stream_url,
+            ))
             .headers(header_map)
             .build()?;
         let info = OperationInfo {
@@ -21631,24 +21079,23 @@ Arguments:
     }
     /**Adds a new internet radio station
 
-Adds a new internet radio station. Only users with admin privileges are allowed to call this method.
+    Adds a new internet radio station. Only users with admin privileges are allowed to call this method.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/createInternetRadioStation`
+    Sends a `POST` request to `/rest/createInternetRadioStation`
 
-*/
+    */
     pub async fn post_create_internet_radio_station<'a>(
         &'a self,
         body: &'a types::PostCreateInternetRadioStationBody,
     ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let url = format!("{}/rest/createInternetRadioStation", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -21675,15 +21122,15 @@ Sends a `POST` request to `/rest/createInternetRadioStation`
     }
     /**Creates (or updates) a playlist
 
-Creates (or updates) a playlist.
+    Creates (or updates) a playlist.
 
-Sends a `GET` request to `/rest/createPlaylist`
+    Sends a `GET` request to `/rest/createPlaylist`
 
-Arguments:
-- `name`: The human-readable name of the playlist. Required if creating a new playlist.
-- `playlist_id`: The playlist ID. Required if updating an existing playlist.
-- `song_id`: ID of a song in the playlist. Use one `songId` parameter for each song in the playlist.
-*/
+    Arguments:
+    - `name`: The human-readable name of the playlist. Required if creating a new playlist.
+    - `playlist_id`: The playlist ID. Required if updating an existing playlist.
+    - `song_id`: ID of a song in the playlist. Use one `songId` parameter for each song in the playlist.
+    */
     pub async fn create_playlist<'a>(
         &'a self,
         name: Option<&'a str>,
@@ -21692,11 +21139,10 @@ Arguments:
     ) -> Result<ResponseValue<types::CreatePlaylistResponse>, Error<()>> {
         let url = format!("{}/rest/createPlaylist", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -21706,7 +21152,10 @@ Arguments:
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("name", &name))
-            .query(&progenitor_client::QueryParam::new("playlistId", &playlist_id))
+            .query(&progenitor_client::QueryParam::new(
+                "playlistId",
+                &playlist_id,
+            ))
             .query(&progenitor_client::QueryParam::new("songId", &song_id))
             .headers(header_map)
             .build()?;
@@ -21724,24 +21173,23 @@ Arguments:
     }
     /**Creates (or updates) a playlist
 
-Creates (or updates) a playlist.
+    Creates (or updates) a playlist.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/createPlaylist`
+    Sends a `POST` request to `/rest/createPlaylist`
 
-*/
+    */
     pub async fn post_create_playlist<'a>(
         &'a self,
         body: &'a types::PostCreatePlaylistBody,
     ) -> Result<ResponseValue<types::CreatePlaylistResponse>, Error<()>> {
         let url = format!("{}/rest/createPlaylist", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -21768,24 +21216,23 @@ Sends a `POST` request to `/rest/createPlaylist`
     }
     /**Adds a new Podcast channel
 
-Adds a new Podcast channel. Note: The user must be authorized for Podcast administration (see Settings > Users > User is allowed to administrate Podcasts).
+    Adds a new Podcast channel. Note: The user must be authorized for Podcast administration (see Settings > Users > User is allowed to administrate Podcasts).
 
-Sends a `GET` request to `/rest/createPodcastChannel`
+    Sends a `GET` request to `/rest/createPodcastChannel`
 
-Arguments:
-- `url`: The URL of the Podcast to add.
-*/
+    Arguments:
+    - `url`: The URL of the Podcast to add.
+    */
     pub async fn create_podcast_channel<'a>(
         &'a self,
         url: &'a str,
     ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let _url = format!("{}/rest/createPodcastChannel", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -21811,24 +21258,23 @@ Arguments:
     }
     /**Adds a new Podcast channel
 
-Adds a new Podcast channel. Note: The user must be authorized for Podcast administration (see Settings > Users > User is allowed to administrate Podcasts).
+    Adds a new Podcast channel. Note: The user must be authorized for Podcast administration (see Settings > Users > User is allowed to administrate Podcasts).
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/createPodcastChannel`
+    Sends a `POST` request to `/rest/createPodcastChannel`
 
-*/
+    */
     pub async fn post_create_podcast_channel<'a>(
         &'a self,
         body: &'a types::PostCreatePodcastChannelBody,
     ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let url = format!("{}/rest/createPodcastChannel", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -21855,15 +21301,15 @@ Sends a `POST` request to `/rest/createPodcastChannel`
     }
     /**Creates a public URL that can be used by anyone to stream music or video from the server
 
-Creates a public URL that can be used by anyone to stream music or video from the server. The URL is short and suitable for posting on Facebook, Twitter etc. Note: The user must be authorized to share (see Settings > Users > User is allowed to share files with anyone). Since 1.6.0.
+    Creates a public URL that can be used by anyone to stream music or video from the server. The URL is short and suitable for posting on Facebook, Twitter etc. Note: The user must be authorized to share (see Settings > Users > User is allowed to share files with anyone). Since 1.6.0.
 
-Sends a `GET` request to `/rest/createShare`
+    Sends a `GET` request to `/rest/createShare`
 
-Arguments:
-- `description`: A user-defined description that will be displayed to people visiting the shared media.
-- `expires`: The time at which the share expires. Given as milliseconds since 1970.
-- `id`: ID of a song, album or video to share. Use one id parameter for each entry to share.
-*/
+    Arguments:
+    - `description`: A user-defined description that will be displayed to people visiting the shared media.
+    - `expires`: The time at which the share expires. Given as milliseconds since 1970.
+    - `id`: ID of a song, album or video to share. Use one id parameter for each entry to share.
+    */
     pub async fn create_share<'a>(
         &'a self,
         description: Option<&'a str>,
@@ -21872,11 +21318,10 @@ Arguments:
     ) -> Result<ResponseValue<types::CreateSharesResponse>, Error<()>> {
         let url = format!("{}/rest/createShare", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -21885,7 +21330,10 @@ Arguments:
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
-            .query(&progenitor_client::QueryParam::new("description", &description))
+            .query(&progenitor_client::QueryParam::new(
+                "description",
+                &description,
+            ))
             .query(&progenitor_client::QueryParam::new("expires", &expires))
             .query(&progenitor_client::QueryParam::new("id", &id))
             .headers(header_map)
@@ -21904,24 +21352,23 @@ Arguments:
     }
     /**Creates a public URL that can be used by anyone to stream music or video from the server
 
-Creates a public URL that can be used by anyone to stream music or video from the server. The URL is short and suitable for posting on Facebook, Twitter etc. Note: The user must be authorized to share (see Settings > Users > User is allowed to share files with anyone). Since 1.6.0.
+    Creates a public URL that can be used by anyone to stream music or video from the server. The URL is short and suitable for posting on Facebook, Twitter etc. Note: The user must be authorized to share (see Settings > Users > User is allowed to share files with anyone). Since 1.6.0.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`).
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`).
 
-Sends a `POST` request to `/rest/createShare`
+    Sends a `POST` request to `/rest/createShare`
 
-*/
+    */
     pub async fn post_create_share<'a>(
         &'a self,
         body: &'a types::PostCreateShareBody,
     ) -> Result<ResponseValue<types::CreateSharesResponse>, Error<()>> {
         let url = format!("{}/rest/createShare", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -21948,29 +21395,29 @@ Sends a `POST` request to `/rest/createShare`
     }
     /**Creates a new user on the server
 
-Creates a new user on the server.
+    Creates a new user on the server.
 
-Sends a `GET` request to `/rest/createUser`
+    Sends a `GET` request to `/rest/createUser`
 
-Arguments:
-- `admin_role`: Whether the user is administrator.
-- `comment_role`: Whether the user is allowed to create and edit comments and ratings.
-- `cover_art_role`: Whether the user is allowed to change cover art and tags.
-- `download_role`: Whether the user is allowed to download files.
-- `email`: The email address of the new user.
-- `jukebox_role`: Whether the user is allowed to play files in jukebox mode.
-- `ldap_authenticated`: Whether the user is authenticated in LDAP.
-- `music_folder_id`: (Since 1.12.0) IDs of the music folders the user is allowed access to. Include the parameter once for each folder. Default all folders.
-- `password`: The password of the new user, either in clear text of hex-encoded (see above).
-- `playlist_role`: Whether the user is allowed to create and delete playlists. Since 1.8.0, changing this role has no effect.
-- `podcast_role`: Whether the user is allowed to administrate Podcasts.
-- `settings_role`: Whether the user is allowed to change personal settings and password.
-- `share_role`: (Since 1.8.0) Whether the user is allowed to share files with anyone.
-- `stream_role`: Whether the user is allowed to play files.
-- `upload_role`: Whether the user is allowed to upload files.
-- `username`: The name of the new user.
-- `video_conversion_role`: (Since 1.15.0) Whether the user is allowed to start video conversions.
-*/
+    Arguments:
+    - `admin_role`: Whether the user is administrator.
+    - `comment_role`: Whether the user is allowed to create and edit comments and ratings.
+    - `cover_art_role`: Whether the user is allowed to change cover art and tags.
+    - `download_role`: Whether the user is allowed to download files.
+    - `email`: The email address of the new user.
+    - `jukebox_role`: Whether the user is allowed to play files in jukebox mode.
+    - `ldap_authenticated`: Whether the user is authenticated in LDAP.
+    - `music_folder_id`: (Since 1.12.0) IDs of the music folders the user is allowed access to. Include the parameter once for each folder. Default all folders.
+    - `password`: The password of the new user, either in clear text of hex-encoded (see above).
+    - `playlist_role`: Whether the user is allowed to create and delete playlists. Since 1.8.0, changing this role has no effect.
+    - `podcast_role`: Whether the user is allowed to administrate Podcasts.
+    - `settings_role`: Whether the user is allowed to change personal settings and password.
+    - `share_role`: (Since 1.8.0) Whether the user is allowed to share files with anyone.
+    - `stream_role`: Whether the user is allowed to play files.
+    - `upload_role`: Whether the user is allowed to upload files.
+    - `username`: The name of the new user.
+    - `video_conversion_role`: (Since 1.15.0) Whether the user is allowed to start video conversions.
+    */
     pub async fn create_user<'a>(
         &'a self,
         admin_role: Option<bool>,
@@ -21993,11 +21440,10 @@ Arguments:
     ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let url = format!("{}/rest/createUser", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22006,35 +21452,65 @@ Arguments:
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
-            .query(&progenitor_client::QueryParam::new("adminRole", &admin_role))
-            .query(&progenitor_client::QueryParam::new("commentRole", &comment_role))
-            .query(&progenitor_client::QueryParam::new("coverArtRole", &cover_art_role))
-            .query(&progenitor_client::QueryParam::new("downloadRole", &download_role))
+            .query(&progenitor_client::QueryParam::new(
+                "adminRole",
+                &admin_role,
+            ))
+            .query(&progenitor_client::QueryParam::new(
+                "commentRole",
+                &comment_role,
+            ))
+            .query(&progenitor_client::QueryParam::new(
+                "coverArtRole",
+                &cover_art_role,
+            ))
+            .query(&progenitor_client::QueryParam::new(
+                "downloadRole",
+                &download_role,
+            ))
             .query(&progenitor_client::QueryParam::new("email", &email))
-            .query(&progenitor_client::QueryParam::new("jukeboxRole", &jukebox_role))
-            .query(
-                &progenitor_client::QueryParam::new(
-                    "ldapAuthenticated",
-                    &ldap_authenticated,
-                ),
-            )
-            .query(
-                &progenitor_client::QueryParam::new("musicFolderId", &music_folder_id),
-            )
+            .query(&progenitor_client::QueryParam::new(
+                "jukeboxRole",
+                &jukebox_role,
+            ))
+            .query(&progenitor_client::QueryParam::new(
+                "ldapAuthenticated",
+                &ldap_authenticated,
+            ))
+            .query(&progenitor_client::QueryParam::new(
+                "musicFolderId",
+                &music_folder_id,
+            ))
             .query(&progenitor_client::QueryParam::new("password", &password))
-            .query(&progenitor_client::QueryParam::new("playlistRole", &playlist_role))
-            .query(&progenitor_client::QueryParam::new("podcastRole", &podcast_role))
-            .query(&progenitor_client::QueryParam::new("settingsRole", &settings_role))
-            .query(&progenitor_client::QueryParam::new("shareRole", &share_role))
-            .query(&progenitor_client::QueryParam::new("streamRole", &stream_role))
-            .query(&progenitor_client::QueryParam::new("uploadRole", &upload_role))
+            .query(&progenitor_client::QueryParam::new(
+                "playlistRole",
+                &playlist_role,
+            ))
+            .query(&progenitor_client::QueryParam::new(
+                "podcastRole",
+                &podcast_role,
+            ))
+            .query(&progenitor_client::QueryParam::new(
+                "settingsRole",
+                &settings_role,
+            ))
+            .query(&progenitor_client::QueryParam::new(
+                "shareRole",
+                &share_role,
+            ))
+            .query(&progenitor_client::QueryParam::new(
+                "streamRole",
+                &stream_role,
+            ))
+            .query(&progenitor_client::QueryParam::new(
+                "uploadRole",
+                &upload_role,
+            ))
             .query(&progenitor_client::QueryParam::new("username", &username))
-            .query(
-                &progenitor_client::QueryParam::new(
-                    "videoConversionRole",
-                    &video_conversion_role,
-                ),
-            )
+            .query(&progenitor_client::QueryParam::new(
+                "videoConversionRole",
+                &video_conversion_role,
+            ))
             .headers(header_map)
             .build()?;
         let info = OperationInfo {
@@ -22051,24 +21527,23 @@ Arguments:
     }
     /**Creates a new user on the server
 
-Creates a new user on the server.
+    Creates a new user on the server.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/createUser`
+    Sends a `POST` request to `/rest/createUser`
 
-*/
+    */
     pub async fn post_create_user<'a>(
         &'a self,
         body: &'a types::PostCreateUserBody,
     ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let url = format!("{}/rest/createUser", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22095,24 +21570,23 @@ Sends a `POST` request to `/rest/createUser`
     }
     /**Deletes a bookmark
 
-Deletes a bookmark (a position within a media file). Bookmarks are personal and not visible to other users.
+    Deletes a bookmark (a position within a media file). Bookmarks are personal and not visible to other users.
 
-Sends a `GET` request to `/rest/deleteBookmark`
+    Sends a `GET` request to `/rest/deleteBookmark`
 
-Arguments:
-- `id`: ID of the media file for which to delete the bookmark. Other users’ bookmarks are not affected.
-*/
+    Arguments:
+    - `id`: ID of the media file for which to delete the bookmark. Other users’ bookmarks are not affected.
+    */
     pub async fn delete_bookmark<'a>(
         &'a self,
         id: &'a str,
     ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let url = format!("{}/rest/deleteBookmark", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22138,24 +21612,23 @@ Arguments:
     }
     /**Deletes a bookmark
 
-Deletes a bookmark (a position within a media file). Bookmarks are personal and not visible to other users.
+    Deletes a bookmark (a position within a media file). Bookmarks are personal and not visible to other users.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/deleteBookmark`
+    Sends a `POST` request to `/rest/deleteBookmark`
 
-*/
+    */
     pub async fn post_delete_bookmark<'a>(
         &'a self,
         body: &'a types::PostDeleteBookmarkBody,
     ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let url = format!("{}/rest/deleteBookmark", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22182,24 +21655,23 @@ Sends a `POST` request to `/rest/deleteBookmark`
     }
     /**Deletes an existing internet radio station
 
-Deletes an existing internet radio station. Only users with admin privileges are allowed to call this method.
+    Deletes an existing internet radio station. Only users with admin privileges are allowed to call this method.
 
-Sends a `GET` request to `/rest/deleteInternetRadioStation`
+    Sends a `GET` request to `/rest/deleteInternetRadioStation`
 
-Arguments:
-- `id`: The ID for the station.
-*/
+    Arguments:
+    - `id`: The ID for the station.
+    */
     pub async fn delete_internet_radio_station<'a>(
         &'a self,
         id: &'a str,
     ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let url = format!("{}/rest/deleteInternetRadioStation", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22225,24 +21697,23 @@ Arguments:
     }
     /**Deletes an existing internet radio station
 
-Deletes an existing internet radio station. Only users with admin privileges are allowed to call this method.
+    Deletes an existing internet radio station. Only users with admin privileges are allowed to call this method.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/deleteInternetRadioStation`
+    Sends a `POST` request to `/rest/deleteInternetRadioStation`
 
-*/
+    */
     pub async fn post_delete_internet_radio_station<'a>(
         &'a self,
         body: &'a types::PostDeleteInternetRadioStationBody,
     ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let url = format!("{}/rest/deleteInternetRadioStation", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22269,24 +21740,23 @@ Sends a `POST` request to `/rest/deleteInternetRadioStation`
     }
     /**Deletes a saved playlist
 
-Deletes a saved playlist.
+    Deletes a saved playlist.
 
-Sends a `GET` request to `/rest/deletePlaylist`
+    Sends a `GET` request to `/rest/deletePlaylist`
 
-Arguments:
-- `id`: ID of the playlist to delete, as obtained by `getPlaylists`.
-*/
+    Arguments:
+    - `id`: ID of the playlist to delete, as obtained by `getPlaylists`.
+    */
     pub async fn delete_playlist<'a>(
         &'a self,
         id: &'a str,
     ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let url = format!("{}/rest/deletePlaylist", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22312,24 +21782,23 @@ Arguments:
     }
     /**Deletes a saved playlist
 
-Deletes a saved playlist.
+    Deletes a saved playlist.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/deletePlaylist`
+    Sends a `POST` request to `/rest/deletePlaylist`
 
-*/
+    */
     pub async fn post_delete_playlist<'a>(
         &'a self,
         body: &'a types::PostDeletePlaylistBody,
     ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let url = format!("{}/rest/deletePlaylist", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22356,24 +21825,23 @@ Sends a `POST` request to `/rest/deletePlaylist`
     }
     /**Deletes a Podcast channel
 
-Deletes a Podcast channel. Note: The user must be authorized for Podcast administration (see Settings > Users > User is allowed to administrate Podcasts).
+    Deletes a Podcast channel. Note: The user must be authorized for Podcast administration (see Settings > Users > User is allowed to administrate Podcasts).
 
-Sends a `GET` request to `/rest/deletePodcastChannel`
+    Sends a `GET` request to `/rest/deletePodcastChannel`
 
-Arguments:
-- `id`: The ID of the Podcast channel to delete.
-*/
+    Arguments:
+    - `id`: The ID of the Podcast channel to delete.
+    */
     pub async fn delete_podcast_channel<'a>(
         &'a self,
         id: &'a str,
     ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let url = format!("{}/rest/deletePodcastChannel", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22399,24 +21867,23 @@ Arguments:
     }
     /**Deletes a Podcast channel
 
-Deletes a Podcast channel. Note: The user must be authorized for Podcast administration (see Settings > Users > User is allowed to administrate Podcasts).
+    Deletes a Podcast channel. Note: The user must be authorized for Podcast administration (see Settings > Users > User is allowed to administrate Podcasts).
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/deletePodcastChannel`
+    Sends a `POST` request to `/rest/deletePodcastChannel`
 
-*/
+    */
     pub async fn post_delete_podcast_channel<'a>(
         &'a self,
         body: &'a types::PostDeletePodcastChannelBody,
     ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let url = format!("{}/rest/deletePodcastChannel", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22443,24 +21910,23 @@ Sends a `POST` request to `/rest/deletePodcastChannel`
     }
     /**Deletes a Podcast episode
 
-Deletes a Podcast episode. Note: The user must be authorized for Podcast administration (see Settings > Users > User is allowed to administrate Podcasts).
+    Deletes a Podcast episode. Note: The user must be authorized for Podcast administration (see Settings > Users > User is allowed to administrate Podcasts).
 
-Sends a `GET` request to `/rest/deletePodcastEpisode`
+    Sends a `GET` request to `/rest/deletePodcastEpisode`
 
-Arguments:
-- `id`: The ID of the Podcast episode to delete.
-*/
+    Arguments:
+    - `id`: The ID of the Podcast episode to delete.
+    */
     pub async fn delete_podcast_episode<'a>(
         &'a self,
         id: &'a str,
     ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let url = format!("{}/rest/deletePodcastEpisode", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22486,24 +21952,23 @@ Arguments:
     }
     /**Deletes a Podcast episode
 
-Deletes a Podcast episode. Note: The user must be authorized for Podcast administration (see Settings > Users > User is allowed to administrate Podcasts).
+    Deletes a Podcast episode. Note: The user must be authorized for Podcast administration (see Settings > Users > User is allowed to administrate Podcasts).
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/deletePodcastEpisode`
+    Sends a `POST` request to `/rest/deletePodcastEpisode`
 
-*/
+    */
     pub async fn post_delete_podcast_episode<'a>(
         &'a self,
         body: &'a types::PostDeletePodcastEpisodeBody,
     ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let url = format!("{}/rest/deletePodcastEpisode", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22530,24 +21995,23 @@ Sends a `POST` request to `/rest/deletePodcastEpisode`
     }
     /**Deletes an existing share
 
-Deletes an existing share
+    Deletes an existing share
 
-Sends a `GET` request to `/rest/deleteShare`
+    Sends a `GET` request to `/rest/deleteShare`
 
-Arguments:
-- `id`: ID of the share to delete.
-*/
+    Arguments:
+    - `id`: ID of the share to delete.
+    */
     pub async fn delete_share<'a>(
         &'a self,
         id: &'a str,
     ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let url = format!("{}/rest/deleteShare", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22573,24 +22037,23 @@ Arguments:
     }
     /**Deletes an existing share
 
-Deletes an existing share.
+    Deletes an existing share.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/deleteShare`
+    Sends a `POST` request to `/rest/deleteShare`
 
-*/
+    */
     pub async fn post_delete_share<'a>(
         &'a self,
         body: &'a types::PostDeleteShareBody,
     ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let url = format!("{}/rest/deleteShare", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22617,24 +22080,23 @@ Sends a `POST` request to `/rest/deleteShare`
     }
     /**Deletes an existing user on the server
 
-Deletes an existing user on the server.
+    Deletes an existing user on the server.
 
-Sends a `GET` request to `/rest/deleteUser`
+    Sends a `GET` request to `/rest/deleteUser`
 
-Arguments:
-- `username`: The name of the user to delete.
-*/
+    Arguments:
+    - `username`: The name of the user to delete.
+    */
     pub async fn delete_user<'a>(
         &'a self,
         username: &'a str,
     ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let url = format!("{}/rest/deleteUser", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22660,24 +22122,23 @@ Arguments:
     }
     /**Deletes an existing user on the server
 
-Deletes an existing user on the server.
+    Deletes an existing user on the server.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/deleteUser`
+    Sends a `POST` request to `/rest/deleteUser`
 
-*/
+    */
     pub async fn post_delete_user<'a>(
         &'a self,
         body: &'a types::PostDeleteUserBody,
     ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let url = format!("{}/rest/deleteUser", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22704,24 +22165,23 @@ Sends a `POST` request to `/rest/deleteUser`
     }
     /**Downloads a given media file
 
-Downloads a given media file. Similar to stream, but this method returns the original media data without transcoding or downsampling.
+    Downloads a given media file. Similar to stream, but this method returns the original media data without transcoding or downsampling.
 
-Sends a `GET` request to `/rest/download`
+    Sends a `GET` request to `/rest/download`
 
-Arguments:
-- `id`: A string which uniquely identifies the file to stream. Obtained by calls to getMusicDirectory.
-*/
+    Arguments:
+    - `id`: A string which uniquely identifies the file to stream. Obtained by calls to getMusicDirectory.
+    */
     pub async fn download<'a>(
         &'a self,
         id: &'a str,
     ) -> Result<ResponseValue<ByteStream>, Error<()>> {
         let url = format!("{}/rest/download", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22743,24 +22203,23 @@ Arguments:
     }
     /**Downloads a given media file
 
-Downloads a given media file. Similar to stream, but this method returns the original media data without transcoding or downsampling.
+    Downloads a given media file. Similar to stream, but this method returns the original media data without transcoding or downsampling.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/download`
+    Sends a `POST` request to `/rest/download`
 
-*/
+    */
     pub async fn post_download<'a>(
         &'a self,
         body: &'a types::PostDownloadBody,
     ) -> Result<ResponseValue<ByteStream>, Error<()>> {
         let url = format!("{}/rest/download", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22783,24 +22242,23 @@ Sends a `POST` request to `/rest/download`
     }
     /**Request the server to start downloading a given Podcast episode
 
-Request the server to start downloading a given Podcast episode. Note: The user must be authorized for Podcast administration (see Settings > Users > User is allowed to administrate Podcasts).
+    Request the server to start downloading a given Podcast episode. Note: The user must be authorized for Podcast administration (see Settings > Users > User is allowed to administrate Podcasts).
 
-Sends a `GET` request to `/rest/downloadPodcastEpisode`
+    Sends a `GET` request to `/rest/downloadPodcastEpisode`
 
-Arguments:
-- `id`: The ID of the Podcast episode to download
-*/
+    Arguments:
+    - `id`: The ID of the Podcast episode to download
+    */
     pub async fn download_podcast_episode<'a>(
         &'a self,
         id: &'a str,
     ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let url = format!("{}/rest/downloadPodcastEpisode", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22826,24 +22284,23 @@ Arguments:
     }
     /**Request the server to start downloading a given Podcast episode
 
-Request the server to start downloading a given Podcast episode. Note: The user must be authorized for Podcast administration (see Settings > Users > User is allowed to administrate Podcasts).
+    Request the server to start downloading a given Podcast episode. Note: The user must be authorized for Podcast administration (see Settings > Users > User is allowed to administrate Podcasts).
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/downloadPodcastEpisode`
+    Sends a `POST` request to `/rest/downloadPodcastEpisode`
 
-*/
+    */
     pub async fn post_download_podcast_episode<'a>(
         &'a self,
         body: &'a types::PostDownloadPodcastEpisodeBody,
     ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let url = format!("{}/rest/downloadPodcastEpisode", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22870,24 +22327,23 @@ Sends a `POST` request to `/rest/downloadPodcastEpisode`
     }
     /**Returns details for an album
 
-Returns details for an album, including a list of songs. This method organizes music according to ID3 tags.
+    Returns details for an album, including a list of songs. This method organizes music according to ID3 tags.
 
-Sends a `GET` request to `/rest/getAlbum`
+    Sends a `GET` request to `/rest/getAlbum`
 
-Arguments:
-- `id`: The album ID.
-*/
+    Arguments:
+    - `id`: The album ID.
+    */
     pub async fn get_album<'a>(
         &'a self,
         id: &'a str,
     ) -> Result<ResponseValue<types::GetAlbumResponse>, Error<()>> {
         let url = format!("{}/rest/getAlbum", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22913,24 +22369,23 @@ Arguments:
     }
     /**Returns details for an album
 
-Returns details for an album, including a list of songs. This method organizes music according to ID3 tags.
+    Returns details for an album, including a list of songs. This method organizes music according to ID3 tags.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/getAlbum`
+    Sends a `POST` request to `/rest/getAlbum`
 
-*/
+    */
     pub async fn post_get_album<'a>(
         &'a self,
         body: &'a types::PostGetAlbumBody,
     ) -> Result<ResponseValue<types::GetAlbumResponse>, Error<()>> {
         let url = format!("{}/rest/getAlbum", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22957,24 +22412,23 @@ Sends a `POST` request to `/rest/getAlbum`
     }
     /**Returns album info
 
-Returns album notes, image URLs etc, using data from last.fm.
+    Returns album notes, image URLs etc, using data from last.fm.
 
-Sends a `GET` request to `/rest/getAlbumInfo`
+    Sends a `GET` request to `/rest/getAlbumInfo`
 
-Arguments:
-- `id`: The album ID or song ID.
-*/
+    Arguments:
+    - `id`: The album ID or song ID.
+    */
     pub async fn get_album_info<'a>(
         &'a self,
         id: &'a str,
     ) -> Result<ResponseValue<types::GetAlbumInfoResponse>, Error<()>> {
         let url = format!("{}/rest/getAlbumInfo", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23000,24 +22454,23 @@ Arguments:
     }
     /**Returns album info
 
-Returns album notes, image URLs etc, using data from last.fm.
+    Returns album notes, image URLs etc, using data from last.fm.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/getAlbumInfo`
+    Sends a `POST` request to `/rest/getAlbumInfo`
 
-*/
+    */
     pub async fn post_get_album_info<'a>(
         &'a self,
         body: &'a types::PostGetAlbumInfoBody,
     ) -> Result<ResponseValue<types::GetAlbumInfoResponse>, Error<()>> {
         let url = format!("{}/rest/getAlbumInfo", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23044,24 +22497,23 @@ Sends a `POST` request to `/rest/getAlbumInfo`
     }
     /**Returns album info (v2)
 
-Similar to getAlbumInfo, but organizes music according to ID3 tags.
+    Similar to getAlbumInfo, but organizes music according to ID3 tags.
 
-Sends a `GET` request to `/rest/getAlbumInfo2`
+    Sends a `GET` request to `/rest/getAlbumInfo2`
 
-Arguments:
-- `id`: The album ID or song ID.
-*/
+    Arguments:
+    - `id`: The album ID or song ID.
+    */
     pub async fn get_album_info2<'a>(
         &'a self,
         id: &'a str,
     ) -> Result<ResponseValue<types::GetAlbumInfoResponse>, Error<()>> {
         let url = format!("{}/rest/getAlbumInfo2", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23087,24 +22539,23 @@ Arguments:
     }
     /**Returns album info (v2)
 
-Similar to getAlbumInfo, but organizes music according to ID3 tags.
+    Similar to getAlbumInfo, but organizes music according to ID3 tags.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/getAlbumInfo2`
+    Sends a `POST` request to `/rest/getAlbumInfo2`
 
-*/
+    */
     pub async fn post_get_album_info2<'a>(
         &'a self,
         body: &'a types::PostGetAlbumInfo2Body,
     ) -> Result<ResponseValue<types::GetAlbumInfoResponse>, Error<()>> {
         let url = format!("{}/rest/getAlbumInfo2", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23131,19 +22582,19 @@ Sends a `POST` request to `/rest/getAlbumInfo2`
     }
     /**Returns a list of random, newest, highest rated etc. albums
 
-Returns a list of random, newest, highest rated etc. albums. Similar to the album lists on the home page of the Subsonic web interface.
+    Returns a list of random, newest, highest rated etc. albums. Similar to the album lists on the home page of the Subsonic web interface.
 
-Sends a `GET` request to `/rest/getAlbumList`
+    Sends a `GET` request to `/rest/getAlbumList`
 
-Arguments:
-- `from_year`: Required if `type=='byYear'`. The first year in the range. If `fromYear` > `toYear` a reverse chronological list is returned.
-- `genre`: Required if `type=='byGenre'`. The name of the genre, e.g., “Rock”.
-- `music_folder_id`: (Since 1.11.0) Only return albums in the music folder with the given ID. See `getMusicFolders`.
-- `offset`: The list offset. Useful if you for example want to page through the list of newest albums.
-- `size`: The number of albums to return. Max 500.
-- `to_year`: Required if `type=='byYear'`. The last year in the range.
-- `type_`
-*/
+    Arguments:
+    - `from_year`: Required if `type=='byYear'`. The first year in the range. If `fromYear` > `toYear` a reverse chronological list is returned.
+    - `genre`: Required if `type=='byGenre'`. The name of the genre, e.g., “Rock”.
+    - `music_folder_id`: (Since 1.11.0) Only return albums in the music folder with the given ID. See `getMusicFolders`.
+    - `offset`: The list offset. Useful if you for example want to page through the list of newest albums.
+    - `size`: The number of albums to return. Max 500.
+    - `to_year`: Required if `type=='byYear'`. The last year in the range.
+    - `type_`
+    */
     pub async fn get_album_list<'a>(
         &'a self,
         from_year: Option<i64>,
@@ -23156,11 +22607,10 @@ Arguments:
     ) -> Result<ResponseValue<types::GetAlbumListResponse>, Error<()>> {
         let url = format!("{}/rest/getAlbumList", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23171,9 +22621,10 @@ Arguments:
             )
             .query(&progenitor_client::QueryParam::new("fromYear", &from_year))
             .query(&progenitor_client::QueryParam::new("genre", &genre))
-            .query(
-                &progenitor_client::QueryParam::new("musicFolderId", &music_folder_id),
-            )
+            .query(&progenitor_client::QueryParam::new(
+                "musicFolderId",
+                &music_folder_id,
+            ))
             .query(&progenitor_client::QueryParam::new("offset", &offset))
             .query(&progenitor_client::QueryParam::new("size", &size))
             .query(&progenitor_client::QueryParam::new("toYear", &to_year))
@@ -23194,24 +22645,23 @@ Arguments:
     }
     /**Returns a list of random, newest, highest rated etc. albums
 
-Returns a list of random, newest, highest rated etc. albums. Similar to the album lists on the home page of the Subsonic web interface.
+    Returns a list of random, newest, highest rated etc. albums. Similar to the album lists on the home page of the Subsonic web interface.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/getAlbumList`
+    Sends a `POST` request to `/rest/getAlbumList`
 
-*/
+    */
     pub async fn post_get_album_list<'a>(
         &'a self,
         body: &'a types::PostGetAlbumListBody,
     ) -> Result<ResponseValue<types::GetAlbumListResponse>, Error<()>> {
         let url = format!("{}/rest/getAlbumList", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23238,19 +22688,19 @@ Sends a `POST` request to `/rest/getAlbumList`
     }
     /**Returns a list of random, newest, highest rated etc. albums (v2)
 
-Similar to `getAlbumList`, but organizes music according to ID3 tags.
+    Similar to `getAlbumList`, but organizes music according to ID3 tags.
 
-Sends a `GET` request to `/rest/getAlbumList2`
+    Sends a `GET` request to `/rest/getAlbumList2`
 
-Arguments:
-- `from_year`: Required if `type=='byYear'`. The first year in the range. If `fromYear` > `toYear` a reverse chronological list is returned.
-- `genre`: Required if `type=='byGenre'`. The name of the genre, e.g., “Rock”.
-- `music_folder_id`: (Since 1.11.0) Only return albums in the music folder with the given ID. See `getMusicFolders`.
-- `offset`: The list offset. Useful if you for example want to page through the list of newest albums.
-- `size`: The number of albums to return. Max 500.
-- `to_year`: Required if `type=='byYear'`. The last year in the range.
-- `type_`
-*/
+    Arguments:
+    - `from_year`: Required if `type=='byYear'`. The first year in the range. If `fromYear` > `toYear` a reverse chronological list is returned.
+    - `genre`: Required if `type=='byGenre'`. The name of the genre, e.g., “Rock”.
+    - `music_folder_id`: (Since 1.11.0) Only return albums in the music folder with the given ID. See `getMusicFolders`.
+    - `offset`: The list offset. Useful if you for example want to page through the list of newest albums.
+    - `size`: The number of albums to return. Max 500.
+    - `to_year`: Required if `type=='byYear'`. The last year in the range.
+    - `type_`
+    */
     pub async fn get_album_list2<'a>(
         &'a self,
         from_year: Option<i64>,
@@ -23263,11 +22713,10 @@ Arguments:
     ) -> Result<ResponseValue<types::GetAlbumList2Response>, Error<()>> {
         let url = format!("{}/rest/getAlbumList2", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23278,9 +22727,10 @@ Arguments:
             )
             .query(&progenitor_client::QueryParam::new("fromYear", &from_year))
             .query(&progenitor_client::QueryParam::new("genre", &genre))
-            .query(
-                &progenitor_client::QueryParam::new("musicFolderId", &music_folder_id),
-            )
+            .query(&progenitor_client::QueryParam::new(
+                "musicFolderId",
+                &music_folder_id,
+            ))
             .query(&progenitor_client::QueryParam::new("offset", &offset))
             .query(&progenitor_client::QueryParam::new("size", &size))
             .query(&progenitor_client::QueryParam::new("toYear", &to_year))
@@ -23301,24 +22751,23 @@ Arguments:
     }
     /**Returns a list of random, newest, highest rated etc. albums (v2)
 
-Similar to `getAlbumList`, but organizes music according to ID3 tags.
+    Similar to `getAlbumList`, but organizes music according to ID3 tags.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/getAlbumList2`
+    Sends a `POST` request to `/rest/getAlbumList2`
 
-*/
+    */
     pub async fn post_get_album_list2<'a>(
         &'a self,
         body: &'a types::PostGetAlbumList2Body,
     ) -> Result<ResponseValue<types::GetAlbumList2Response>, Error<()>> {
         let url = format!("{}/rest/getAlbumList2", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23345,24 +22794,23 @@ Sends a `POST` request to `/rest/getAlbumList2`
     }
     /**Returns details for an artist
 
-Returns details for an artist, including a list of albums. This method organizes music according to ID3 tags.
+    Returns details for an artist, including a list of albums. This method organizes music according to ID3 tags.
 
-Sends a `GET` request to `/rest/getArtist`
+    Sends a `GET` request to `/rest/getArtist`
 
-Arguments:
-- `id`: The artist ID.
-*/
+    Arguments:
+    - `id`: The artist ID.
+    */
     pub async fn get_artist<'a>(
         &'a self,
         id: &'a str,
     ) -> Result<ResponseValue<types::GetArtistResponse>, Error<()>> {
         let url = format!("{}/rest/getArtist", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23388,24 +22836,23 @@ Arguments:
     }
     /**Returns details for an artist
 
-Returns details for an artist, including a list of albums. This method organizes music according to ID3 tags.
+    Returns details for an artist, including a list of albums. This method organizes music according to ID3 tags.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/getArtist`
+    Sends a `POST` request to `/rest/getArtist`
 
-*/
+    */
     pub async fn post_get_artist<'a>(
         &'a self,
         body: &'a types::PostGetArtistBody,
     ) -> Result<ResponseValue<types::GetArtistResponse>, Error<()>> {
         let url = format!("{}/rest/getArtist", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23432,15 +22879,15 @@ Sends a `POST` request to `/rest/getArtist`
     }
     /**Returns artist info
 
-Returns artist info with biography, image URLs and similar artists, using data from last.fm.
+    Returns artist info with biography, image URLs and similar artists, using data from last.fm.
 
-Sends a `GET` request to `/rest/getArtistInfo`
+    Sends a `GET` request to `/rest/getArtistInfo`
 
-Arguments:
-- `count`: Max number of similar artists to return.
-- `id`: The artist, album or song ID.
-- `include_not_present`: Whether to return artists that are not present in the media library.
-*/
+    Arguments:
+    - `count`: Max number of similar artists to return.
+    - `id`: The artist, album or song ID.
+    - `include_not_present`: Whether to return artists that are not present in the media library.
+    */
     pub async fn get_artist_info<'a>(
         &'a self,
         count: Option<u64>,
@@ -23449,11 +22896,10 @@ Arguments:
     ) -> Result<ResponseValue<types::GetArtistInfoResponse>, Error<()>> {
         let url = format!("{}/rest/getArtistInfo", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23464,12 +22910,10 @@ Arguments:
             )
             .query(&progenitor_client::QueryParam::new("count", &count))
             .query(&progenitor_client::QueryParam::new("id", &id))
-            .query(
-                &progenitor_client::QueryParam::new(
-                    "includeNotPresent",
-                    &include_not_present,
-                ),
-            )
+            .query(&progenitor_client::QueryParam::new(
+                "includeNotPresent",
+                &include_not_present,
+            ))
             .headers(header_map)
             .build()?;
         let info = OperationInfo {
@@ -23486,24 +22930,23 @@ Arguments:
     }
     /**Returns artist info
 
-Returns artist info with biography, image URLs and similar artists, using data from last.fm.
+    Returns artist info with biography, image URLs and similar artists, using data from last.fm.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/getArtistInfo`
+    Sends a `POST` request to `/rest/getArtistInfo`
 
-*/
+    */
     pub async fn post_get_artist_info<'a>(
         &'a self,
         body: &'a types::PostGetArtistInfoBody,
     ) -> Result<ResponseValue<types::GetArtistInfoResponse>, Error<()>> {
         let url = format!("{}/rest/getArtistInfo", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23530,15 +22973,15 @@ Sends a `POST` request to `/rest/getArtistInfo`
     }
     /**Returns artist info (v2)
 
-Similar to `getArtistInfo`, but organizes music according to ID3 tags.
+    Similar to `getArtistInfo`, but organizes music according to ID3 tags.
 
-Sends a `GET` request to `/rest/getArtistInfo2`
+    Sends a `GET` request to `/rest/getArtistInfo2`
 
-Arguments:
-- `count`: Max number of similar artists to return.
-- `id`: The artist, album or song ID.
-- `include_not_present`: Whether to return artists that are not present in the media library.
-*/
+    Arguments:
+    - `count`: Max number of similar artists to return.
+    - `id`: The artist, album or song ID.
+    - `include_not_present`: Whether to return artists that are not present in the media library.
+    */
     pub async fn get_artist_info2<'a>(
         &'a self,
         count: Option<u64>,
@@ -23547,11 +22990,10 @@ Arguments:
     ) -> Result<ResponseValue<types::GetArtistInfo2Response>, Error<()>> {
         let url = format!("{}/rest/getArtistInfo2", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23562,12 +23004,10 @@ Arguments:
             )
             .query(&progenitor_client::QueryParam::new("count", &count))
             .query(&progenitor_client::QueryParam::new("id", &id))
-            .query(
-                &progenitor_client::QueryParam::new(
-                    "includeNotPresent",
-                    &include_not_present,
-                ),
-            )
+            .query(&progenitor_client::QueryParam::new(
+                "includeNotPresent",
+                &include_not_present,
+            ))
             .headers(header_map)
             .build()?;
         let info = OperationInfo {
@@ -23584,24 +23024,23 @@ Arguments:
     }
     /**Returns artist info (v2)
 
-Similar to `getArtistInfo`, but organizes music according to ID3 tags.
+    Similar to `getArtistInfo`, but organizes music according to ID3 tags.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/getArtistInfo2`
+    Sends a `POST` request to `/rest/getArtistInfo2`
 
-*/
+    */
     pub async fn post_get_artist_info2<'a>(
         &'a self,
         body: &'a types::PostGetArtistInfo2Body,
     ) -> Result<ResponseValue<types::GetArtistInfo2Response>, Error<()>> {
         let url = format!("{}/rest/getArtistInfo2", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23628,24 +23067,23 @@ Sends a `POST` request to `/rest/getArtistInfo2`
     }
     /**Returns all artists
 
-Similar to `getIndexes`, but organizes music according to ID3 tags.
+    Similar to `getIndexes`, but organizes music according to ID3 tags.
 
-Sends a `GET` request to `/rest/getArtists`
+    Sends a `GET` request to `/rest/getArtists`
 
-Arguments:
-- `music_folder_id`: If specified, only return artists in the music folder with the given ID. See `getMusicFolders`.
-*/
+    Arguments:
+    - `music_folder_id`: If specified, only return artists in the music folder with the given ID. See `getMusicFolders`.
+    */
     pub async fn get_artists<'a>(
         &'a self,
         music_folder_id: Option<&'a str>,
     ) -> Result<ResponseValue<types::GetArtistsResponse>, Error<()>> {
         let url = format!("{}/rest/getArtists", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23654,9 +23092,10 @@ Arguments:
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
-            .query(
-                &progenitor_client::QueryParam::new("musicFolderId", &music_folder_id),
-            )
+            .query(&progenitor_client::QueryParam::new(
+                "musicFolderId",
+                &music_folder_id,
+            ))
             .headers(header_map)
             .build()?;
         let info = OperationInfo {
@@ -23673,24 +23112,23 @@ Arguments:
     }
     /**Returns all artists
 
-Similar to `getIndexes`, but organizes music according to ID3 tags.
+    Similar to `getIndexes`, but organizes music according to ID3 tags.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/getArtists`
+    Sends a `POST` request to `/rest/getArtists`
 
-*/
+    */
     pub async fn post_get_artists<'a>(
         &'a self,
         body: &'a types::PostGetArtistsBody,
     ) -> Result<ResponseValue<types::GetArtistsResponse>, Error<()>> {
         let url = format!("{}/rest/getArtists", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23717,22 +23155,21 @@ Sends a `POST` request to `/rest/getArtists`
     }
     /**Returns the avatar (personal image) for a user
 
-Returns the avatar (personal image) for a user.
+    Returns the avatar (personal image) for a user.
 
-Sends a `GET` request to `/rest/getAvatar`
+    Sends a `GET` request to `/rest/getAvatar`
 
-*/
+    */
     pub async fn get_avatar<'a>(
         &'a self,
         username: &'a str,
     ) -> Result<ResponseValue<ByteStream>, Error<()>> {
         let url = format!("{}/rest/getAvatar", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23754,24 +23191,23 @@ Sends a `GET` request to `/rest/getAvatar`
     }
     /**Returns the avatar (personal image) for a user
 
-Returns the avatar (personal image) for a user.
+    Returns the avatar (personal image) for a user.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/getAvatar`
+    Sends a `POST` request to `/rest/getAvatar`
 
-*/
+    */
     pub async fn post_get_avatar<'a>(
         &'a self,
         body: &'a types::PostGetAvatarBody,
     ) -> Result<ResponseValue<ByteStream>, Error<()>> {
         let url = format!("{}/rest/getAvatar", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23794,21 +23230,20 @@ Sends a `POST` request to `/rest/getAvatar`
     }
     /**Returns all bookmarks for this user
 
-Returns all bookmarks for this user. A bookmark is a position within a certain media file.
+    Returns all bookmarks for this user. A bookmark is a position within a certain media file.
 
-Sends a `GET` request to `/rest/getBookmarks`
+    Sends a `GET` request to `/rest/getBookmarks`
 
-*/
+    */
     pub async fn get_bookmarks<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::GetBookmarksResponse>, Error<()>> {
         let url = format!("{}/rest/getBookmarks", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23833,24 +23268,23 @@ Sends a `GET` request to `/rest/getBookmarks`
     }
     /**Returns all bookmarks for this user
 
-Returns all bookmarks for this user. A bookmark is a position within a certain media file.
+    Returns all bookmarks for this user. A bookmark is a position within a certain media file.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/getBookmarks`
+    Sends a `POST` request to `/rest/getBookmarks`
 
-*/
+    */
     pub async fn post_get_bookmarks<'a>(
         &'a self,
         body: &'a ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     ) -> Result<ResponseValue<types::GetBookmarksResponse>, Error<()>> {
         let url = format!("{}/rest/getBookmarks", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23877,14 +23311,14 @@ Sends a `POST` request to `/rest/getBookmarks`
     }
     /**Returns captions (subtitles) for a video
 
-Returns captions (subtitles) for a video. Use `getVideoInfo` to get a list of available captions.
+    Returns captions (subtitles) for a video. Use `getVideoInfo` to get a list of available captions.
 
-Sends a `GET` request to `/rest/getCaptions`
+    Sends a `GET` request to `/rest/getCaptions`
 
-Arguments:
-- `format`: Preferred captions format (“srt” or “vtt”).
-- `id`: The ID of the video.
-*/
+    Arguments:
+    - `format`: Preferred captions format (“srt” or “vtt”).
+    - `id`: The ID of the video.
+    */
     pub async fn get_captions<'a>(
         &'a self,
         format: Option<types::GetCaptionsFormat>,
@@ -23892,11 +23326,10 @@ Arguments:
     ) -> Result<ResponseValue<ByteStream>, Error<()>> {
         let url = format!("{}/rest/getCaptions", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23919,24 +23352,23 @@ Arguments:
     }
     /**Returns captions (subtitles) for a video
 
-Returns captions (subtitles) for a video. Use `getVideoInfo` to get a list of available captions.
+    Returns captions (subtitles) for a video. Use `getVideoInfo` to get a list of available captions.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/getCaptions`
+    Sends a `POST` request to `/rest/getCaptions`
 
-*/
+    */
     pub async fn post_get_captions<'a>(
         &'a self,
         body: &'a types::PostGetCaptionsBody,
     ) -> Result<ResponseValue<ByteStream>, Error<()>> {
         let url = format!("{}/rest/getCaptions", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23959,21 +23391,20 @@ Sends a `POST` request to `/rest/getCaptions`
     }
     /**Returns the current visible (non-expired) chat messages
 
-Returns the current visible (non-expired) chat messages.
+    Returns the current visible (non-expired) chat messages.
 
-Sends a `GET` request to `/rest/getChatMessages`
+    Sends a `GET` request to `/rest/getChatMessages`
 
-*/
+    */
     pub async fn get_chat_messages<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::GetChatMessagesResponse>, Error<()>> {
         let url = format!("{}/rest/getChatMessages", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23998,24 +23429,23 @@ Sends a `GET` request to `/rest/getChatMessages`
     }
     /**Returns the current visible (non-expired) chat messages
 
-Returns the current visible (non-expired) chat messages.
+    Returns the current visible (non-expired) chat messages.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/getChatMessages`
+    Sends a `POST` request to `/rest/getChatMessages`
 
-*/
+    */
     pub async fn post_get_chat_messages<'a>(
         &'a self,
         body: &'a ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     ) -> Result<ResponseValue<types::GetChatMessagesResponse>, Error<()>> {
         let url = format!("{}/rest/getChatMessages", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -24042,14 +23472,14 @@ Sends a `POST` request to `/rest/getChatMessages`
     }
     /**Returns a cover art image
 
-Returns a cover art image.
+    Returns a cover art image.
 
-Sends a `GET` request to `/rest/getCoverArt`
+    Sends a `GET` request to `/rest/getCoverArt`
 
-Arguments:
-- `id`: The coverArt ID. Returned by most entities likes `Child` or `AlbumID3`
-- `size`: If specified, scale image to this size.
-*/
+    Arguments:
+    - `id`: The coverArt ID. Returned by most entities likes `Child` or `AlbumID3`
+    - `size`: If specified, scale image to this size.
+    */
     pub async fn get_cover_art<'a>(
         &'a self,
         id: &'a str,
@@ -24057,11 +23487,10 @@ Arguments:
     ) -> Result<ResponseValue<ByteStream>, Error<()>> {
         let url = format!("{}/rest/getCoverArt", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -24084,24 +23513,23 @@ Arguments:
     }
     /**Returns a cover art image
 
-Returns a cover art image.
+    Returns a cover art image.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/getCoverArt`
+    Sends a `POST` request to `/rest/getCoverArt`
 
-*/
+    */
     pub async fn post_get_cover_art<'a>(
         &'a self,
         body: &'a types::PostGetCoverArtBody,
     ) -> Result<ResponseValue<ByteStream>, Error<()>> {
         let url = format!("{}/rest/getCoverArt", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -24124,21 +23552,20 @@ Sends a `POST` request to `/rest/getCoverArt`
     }
     /**Returns all genres
 
-Returns all genres.
+    Returns all genres.
 
-Sends a `GET` request to `/rest/getGenres`
+    Sends a `GET` request to `/rest/getGenres`
 
-*/
+    */
     pub async fn get_genres<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::GetGenresResponse>, Error<()>> {
         let url = format!("{}/rest/getGenres", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -24163,24 +23590,23 @@ Sends a `GET` request to `/rest/getGenres`
     }
     /**Returns all genres
 
-Returns all genres.
+    Returns all genres.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/getGenres`
+    Sends a `POST` request to `/rest/getGenres`
 
-*/
+    */
     pub async fn post_get_genres<'a>(
         &'a self,
         body: &'a ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     ) -> Result<ResponseValue<types::GetGenresResponse>, Error<()>> {
         let url = format!("{}/rest/getGenres", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -24207,14 +23633,14 @@ Sends a `POST` request to `/rest/getGenres`
     }
     /**Returns an indexed structure of all artists
 
-Returns an indexed structure of all artists.
+    Returns an indexed structure of all artists.
 
-Sends a `GET` request to `/rest/getIndexes`
+    Sends a `GET` request to `/rest/getIndexes`
 
-Arguments:
-- `if_modified_since`: If specified, only return a result if the artist collection has changed since the given time (in milliseconds since 1 Jan 1970).
-- `music_folder_id`: If specified, only return artists in the music folder with the given ID. See `getMusicFolders`.
-*/
+    Arguments:
+    - `if_modified_since`: If specified, only return a result if the artist collection has changed since the given time (in milliseconds since 1 Jan 1970).
+    - `music_folder_id`: If specified, only return artists in the music folder with the given ID. See `getMusicFolders`.
+    */
     pub async fn get_indexes<'a>(
         &'a self,
         if_modified_since: Option<i64>,
@@ -24222,11 +23648,10 @@ Arguments:
     ) -> Result<ResponseValue<types::GetIndexesResponse>, Error<()>> {
         let url = format!("{}/rest/getIndexes", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -24235,15 +23660,14 @@ Arguments:
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
-            .query(
-                &progenitor_client::QueryParam::new(
-                    "ifModifiedSince",
-                    &if_modified_since,
-                ),
-            )
-            .query(
-                &progenitor_client::QueryParam::new("musicFolderId", &music_folder_id),
-            )
+            .query(&progenitor_client::QueryParam::new(
+                "ifModifiedSince",
+                &if_modified_since,
+            ))
+            .query(&progenitor_client::QueryParam::new(
+                "musicFolderId",
+                &music_folder_id,
+            ))
             .headers(header_map)
             .build()?;
         let info = OperationInfo {
@@ -24260,24 +23684,23 @@ Arguments:
     }
     /**Returns an indexed structure of all artists
 
-Returns an indexed structure of all artists.
+    Returns an indexed structure of all artists.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/getIndexes`
+    Sends a `POST` request to `/rest/getIndexes`
 
-*/
+    */
     pub async fn post_get_indexes<'a>(
         &'a self,
         body: &'a types::PostGetIndexesBody,
     ) -> Result<ResponseValue<types::GetIndexesResponse>, Error<()>> {
         let url = format!("{}/rest/getIndexes", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -24304,21 +23727,20 @@ Sends a `POST` request to `/rest/getIndexes`
     }
     /**Returns all internet radio stations
 
-Returns all internet radio stations. Takes no extra parameters.
+    Returns all internet radio stations. Takes no extra parameters.
 
-Sends a `GET` request to `/rest/getInternetRadioStations`
+    Sends a `GET` request to `/rest/getInternetRadioStations`
 
-*/
+    */
     pub async fn get_internet_radio_stations<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::GetInternetRadioStationsResponse>, Error<()>> {
         let url = format!("{}/rest/getInternetRadioStations", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -24343,24 +23765,23 @@ Sends a `GET` request to `/rest/getInternetRadioStations`
     }
     /**Returns all internet radio stations
 
-Returns all internet radio stations. Takes no extra parameters.
+    Returns all internet radio stations. Takes no extra parameters.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/getInternetRadioStations`
+    Sends a `POST` request to `/rest/getInternetRadioStations`
 
-*/
+    */
     pub async fn post_get_internet_radio_stations<'a>(
         &'a self,
         body: &'a ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     ) -> Result<ResponseValue<types::GetInternetRadioStationsResponse>, Error<()>> {
         let url = format!("{}/rest/getInternetRadioStations", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -24387,21 +23808,20 @@ Sends a `POST` request to `/rest/getInternetRadioStations`
     }
     /**Get details about the software license
 
-Get details about the software license.
+    Get details about the software license.
 
-Sends a `GET` request to `/rest/getLicense`
+    Sends a `GET` request to `/rest/getLicense`
 
-*/
+    */
     pub async fn get_license<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::GetLicenseResponse>, Error<()>> {
         let url = format!("{}/rest/getLicense", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -24426,24 +23846,23 @@ Sends a `GET` request to `/rest/getLicense`
     }
     /**Get details about the software license
 
-Get details about the software license.
+    Get details about the software license.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/getLicense`
+    Sends a `POST` request to `/rest/getLicense`
 
-*/
+    */
     pub async fn post_get_license<'a>(
         &'a self,
         body: &'a ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     ) -> Result<ResponseValue<types::GetLicenseResponse>, Error<()>> {
         let url = format!("{}/rest/getLicense", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -24470,14 +23889,14 @@ Sends a `POST` request to `/rest/getLicense`
     }
     /**Searches for and returns lyrics for a given song
 
-Searches for and returns lyrics for a given song.
+    Searches for and returns lyrics for a given song.
 
-Sends a `GET` request to `/rest/getLyrics`
+    Sends a `GET` request to `/rest/getLyrics`
 
-Arguments:
-- `artist`: The artist name.
-- `title`: The song title.
-*/
+    Arguments:
+    - `artist`: The artist name.
+    - `title`: The song title.
+    */
     pub async fn get_lyrics<'a>(
         &'a self,
         artist: Option<&'a str>,
@@ -24485,11 +23904,10 @@ Arguments:
     ) -> Result<ResponseValue<types::GetLyricsResponse>, Error<()>> {
         let url = format!("{}/rest/getLyrics", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -24516,24 +23934,23 @@ Arguments:
     }
     /**Searches for and returns lyrics for a given song
 
-Searches for and returns lyrics for a given song.
+    Searches for and returns lyrics for a given song.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/getLyrics`
+    Sends a `POST` request to `/rest/getLyrics`
 
-*/
+    */
     pub async fn post_get_lyrics<'a>(
         &'a self,
         body: &'a types::PostGetLyricsBody,
     ) -> Result<ResponseValue<types::GetLyricsResponse>, Error<()>> {
         let url = format!("{}/rest/getLyrics", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -24560,24 +23977,23 @@ Sends a `POST` request to `/rest/getLyrics`
     }
     /**Add support for synchronized lyrics, multiple languages, and retrieval by song ID.
 
-OpenSubsonic extension name `songLyrics` (As returned by `getOpenSubsonicExtensions`). Retrieves all structured lyrics from the server for a given song. The lyrics can come from embedded tags (SYLT/USLT), LRC file/text file, or any other external source.
+    OpenSubsonic extension name `songLyrics` (As returned by `getOpenSubsonicExtensions`). Retrieves all structured lyrics from the server for a given song. The lyrics can come from embedded tags (SYLT/USLT), LRC file/text file, or any other external source.
 
-Sends a `GET` request to `/rest/getLyricsBySongId`
+    Sends a `GET` request to `/rest/getLyricsBySongId`
 
-Arguments:
-- `id`: The track ID.
-*/
+    Arguments:
+    - `id`: The track ID.
+    */
     pub async fn get_lyrics_by_song_id<'a>(
         &'a self,
         id: &'a str,
     ) -> Result<ResponseValue<types::GetLyricsBySongIdResponse>, Error<()>> {
         let url = format!("{}/rest/getLyricsBySongId", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -24604,22 +24020,21 @@ Arguments:
     }
     /**Add support for synchronized lyrics, multiple languages, and retrieval by song ID
 
-OpenSubsonic extension name `songLyrics` (As returned by `getOpenSubsonicExtensions`). Retrieves all structured lyrics from the server for a given song. The lyrics can come from embedded tags (SYLT/USLT), LRC file/text file, or any other external source.
+    OpenSubsonic extension name `songLyrics` (As returned by `getOpenSubsonicExtensions`). Retrieves all structured lyrics from the server for a given song. The lyrics can come from embedded tags (SYLT/USLT), LRC file/text file, or any other external source.
 
-Sends a `POST` request to `/rest/getLyricsBySongId`
+    Sends a `POST` request to `/rest/getLyricsBySongId`
 
-*/
+    */
     pub async fn post_get_lyrics_by_song_id<'a>(
         &'a self,
         body: &'a types::PostGetLyricsBySongIdBody,
     ) -> Result<ResponseValue<types::GetLyricsBySongIdResponse>, Error<()>> {
         let url = format!("{}/rest/getLyricsBySongId", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -24647,24 +24062,23 @@ Sends a `POST` request to `/rest/getLyricsBySongId`
     }
     /**Returns a listing of all files in a music directory
 
-Returns a listing of all files in a music directory. Typically used to get list of albums for an artist, or list of songs for an album.
+    Returns a listing of all files in a music directory. Typically used to get list of albums for an artist, or list of songs for an album.
 
-Sends a `GET` request to `/rest/getMusicDirectory`
+    Sends a `GET` request to `/rest/getMusicDirectory`
 
-Arguments:
-- `id`: A string which uniquely identifies the music folder. Obtained by calls to `getIndexes` or `getMusicDirectory`.
-*/
+    Arguments:
+    - `id`: A string which uniquely identifies the music folder. Obtained by calls to `getIndexes` or `getMusicDirectory`.
+    */
     pub async fn get_music_directory<'a>(
         &'a self,
         id: &'a str,
     ) -> Result<ResponseValue<types::GetMusicDirectoryResponse>, Error<()>> {
         let url = format!("{}/rest/getMusicDirectory", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -24690,24 +24104,23 @@ Arguments:
     }
     /**Returns a listing of all files in a music directory
 
-Returns a listing of all files in a music directory. Typically used to get list of albums for an artist, or list of songs for an album.
+    Returns a listing of all files in a music directory. Typically used to get list of albums for an artist, or list of songs for an album.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/getMusicDirectory`
+    Sends a `POST` request to `/rest/getMusicDirectory`
 
-*/
+    */
     pub async fn post_get_music_directory<'a>(
         &'a self,
         body: &'a types::PostGetMusicDirectoryBody,
     ) -> Result<ResponseValue<types::GetMusicDirectoryResponse>, Error<()>> {
         let url = format!("{}/rest/getMusicDirectory", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -24734,21 +24147,20 @@ Sends a `POST` request to `/rest/getMusicDirectory`
     }
     /**Returns all configured top-level music folders
 
-Returns all configured top-level music folders. Takes no extra parameters.
+    Returns all configured top-level music folders. Takes no extra parameters.
 
-Sends a `GET` request to `/rest/getMusicFolders`
+    Sends a `GET` request to `/rest/getMusicFolders`
 
-*/
+    */
     pub async fn get_music_folders<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::GetMusicFoldersResponse>, Error<()>> {
         let url = format!("{}/rest/getMusicFolders", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -24773,24 +24185,23 @@ Sends a `GET` request to `/rest/getMusicFolders`
     }
     /**Returns all configured top-level music folders
 
-Returns all configured top-level music folders. Takes no extra parameters.
+    Returns all configured top-level music folders. Takes no extra parameters.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/getMusicFolders`
+    Sends a `POST` request to `/rest/getMusicFolders`
 
-*/
+    */
     pub async fn post_get_music_folders<'a>(
         &'a self,
         body: &'a ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     ) -> Result<ResponseValue<types::GetMusicFoldersResponse>, Error<()>> {
         let url = format!("{}/rest/getMusicFolders", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -24817,24 +24228,23 @@ Sends a `POST` request to `/rest/getMusicFolders`
     }
     /**Returns the most recently published Podcast episodes
 
-Returns the most recently published Podcast episodes.
+    Returns the most recently published Podcast episodes.
 
-Sends a `GET` request to `/rest/getNewestPodcasts`
+    Sends a `GET` request to `/rest/getNewestPodcasts`
 
-Arguments:
-- `count`: The maximum number of episodes to return.
-*/
+    Arguments:
+    - `count`: The maximum number of episodes to return.
+    */
     pub async fn get_newest_podcasts<'a>(
         &'a self,
         count: Option<i64>,
     ) -> Result<ResponseValue<types::GetNewestPodcastsResponse>, Error<()>> {
         let url = format!("{}/rest/getNewestPodcasts", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -24860,24 +24270,23 @@ Arguments:
     }
     /**Returns the most recently published Podcast episodes
 
-Returns the most recently published Podcast episodes.
+    Returns the most recently published Podcast episodes.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/getNewestPodcasts`
+    Sends a `POST` request to `/rest/getNewestPodcasts`
 
-*/
+    */
     pub async fn post_get_newest_podcasts<'a>(
         &'a self,
         body: &'a types::PostGetNewestPodcastsBody,
     ) -> Result<ResponseValue<types::GetNewestPodcastsResponse>, Error<()>> {
         let url = format!("{}/rest/getNewestPodcasts", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -24904,21 +24313,20 @@ Sends a `POST` request to `/rest/getNewestPodcasts`
     }
     /**Returns what is currently being played by all users
 
-Returns what is currently being played by all users. Takes no extra parameters.
+    Returns what is currently being played by all users. Takes no extra parameters.
 
-Sends a `GET` request to `/rest/getNowPlaying`
+    Sends a `GET` request to `/rest/getNowPlaying`
 
-*/
+    */
     pub async fn get_now_playing<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::GetNowPlayingResponse>, Error<()>> {
         let url = format!("{}/rest/getNowPlaying", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -24943,24 +24351,23 @@ Sends a `GET` request to `/rest/getNowPlaying`
     }
     /**Returns what is currently being played by all users
 
-Returns what is currently being played by all users. Takes no extra parameters.
+    Returns what is currently being played by all users. Takes no extra parameters.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/getNowPlaying`
+    Sends a `POST` request to `/rest/getNowPlaying`
 
-*/
+    */
     pub async fn post_get_now_playing<'a>(
         &'a self,
         body: &'a ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     ) -> Result<ResponseValue<types::GetNowPlayingResponse>, Error<()>> {
         let url = format!("{}/rest/getNowPlaying", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -24987,21 +24394,20 @@ Sends a `POST` request to `/rest/getNowPlaying`
     }
     /**List the OpenSubsonic extensions supported by this server
 
-List the OpenSubsonic extensions supported by this server.
+    List the OpenSubsonic extensions supported by this server.
 
-Sends a `GET` request to `/rest/getOpenSubsonicExtensions`
+    Sends a `GET` request to `/rest/getOpenSubsonicExtensions`
 
-*/
+    */
     pub async fn get_open_subsonic_extensions<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::GetOpenSubsonicExtensionsResponse>, Error<()>> {
         let url = format!("{}/rest/getOpenSubsonicExtensions", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -25026,24 +24432,23 @@ Sends a `GET` request to `/rest/getOpenSubsonicExtensions`
     }
     /**List the OpenSubsonic extensions supported by this server
 
-List the OpenSubsonic extensions supported by this server.
+    List the OpenSubsonic extensions supported by this server.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/getOpenSubsonicExtensions`
+    Sends a `POST` request to `/rest/getOpenSubsonicExtensions`
 
-*/
+    */
     pub async fn post_get_open_subsonic_extensions<'a>(
         &'a self,
         body: &'a ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     ) -> Result<ResponseValue<types::GetOpenSubsonicExtensionsResponse>, Error<()>> {
         let url = format!("{}/rest/getOpenSubsonicExtensions", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -25070,24 +24475,23 @@ Sends a `POST` request to `/rest/getOpenSubsonicExtensions`
     }
     /**Returns a listing of files in a saved playlist
 
-Returns a listing of files in a saved playlist.
+    Returns a listing of files in a saved playlist.
 
-Sends a `GET` request to `/rest/getPlaylist`
+    Sends a `GET` request to `/rest/getPlaylist`
 
-Arguments:
-- `id`: ID of the playlist to return, as obtained by `getPlaylists`.
-*/
+    Arguments:
+    - `id`: ID of the playlist to return, as obtained by `getPlaylists`.
+    */
     pub async fn get_playlist<'a>(
         &'a self,
         id: &'a str,
     ) -> Result<ResponseValue<types::GetPlaylistResponse>, Error<()>> {
         let url = format!("{}/rest/getPlaylist", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -25113,24 +24517,23 @@ Arguments:
     }
     /**Returns a listing of files in a saved playlist
 
-Returns a listing of files in a saved playlist.
+    Returns a listing of files in a saved playlist.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/getPlaylist`
+    Sends a `POST` request to `/rest/getPlaylist`
 
-*/
+    */
     pub async fn post_get_playlist<'a>(
         &'a self,
         body: &'a types::PostGetPlaylistBody,
     ) -> Result<ResponseValue<types::GetPlaylistResponse>, Error<()>> {
         let url = format!("{}/rest/getPlaylist", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -25157,24 +24560,23 @@ Sends a `POST` request to `/rest/getPlaylist`
     }
     /**Returns all playlists a user is allowed to play
 
-Returns all playlists a user is allowed to play.
+    Returns all playlists a user is allowed to play.
 
-Sends a `GET` request to `/rest/getPlaylists`
+    Sends a `GET` request to `/rest/getPlaylists`
 
-Arguments:
-- `username`: (Since 1.8.0) If specified, return playlists for this user rather than for the authenticated user. The authenticated user must have admin role if this parameter is used.
-*/
+    Arguments:
+    - `username`: (Since 1.8.0) If specified, return playlists for this user rather than for the authenticated user. The authenticated user must have admin role if this parameter is used.
+    */
     pub async fn get_playlists<'a>(
         &'a self,
         username: Option<&'a str>,
     ) -> Result<ResponseValue<types::GetPlaylistsResponse>, Error<()>> {
         let url = format!("{}/rest/getPlaylists", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -25200,24 +24602,23 @@ Arguments:
     }
     /**Returns all playlists a user is allowed to play
 
-Returns all playlists a user is allowed to play.
+    Returns all playlists a user is allowed to play.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/getPlaylists`
+    Sends a `POST` request to `/rest/getPlaylists`
 
-*/
+    */
     pub async fn post_get_playlists<'a>(
         &'a self,
         body: &'a types::PostGetPlaylistsBody,
     ) -> Result<ResponseValue<types::GetPlaylistsResponse>, Error<()>> {
         let url = format!("{}/rest/getPlaylists", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -25244,21 +24645,20 @@ Sends a `POST` request to `/rest/getPlaylists`
     }
     /**Returns the state of the play queue for this user
 
-Returns the state of the play queue for this user (as set by savePlayQueue). This includes the tracks in the play queue, the currently playing track, and the position within this track. Typically used to allow a user to move between different clients/apps while retaining the same play queue (for instance when listening to an audio book).
+    Returns the state of the play queue for this user (as set by savePlayQueue). This includes the tracks in the play queue, the currently playing track, and the position within this track. Typically used to allow a user to move between different clients/apps while retaining the same play queue (for instance when listening to an audio book).
 
-Sends a `GET` request to `/rest/getPlayQueue`
+    Sends a `GET` request to `/rest/getPlayQueue`
 
-*/
+    */
     pub async fn get_play_queue<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::GetPlayQueueResponse>, Error<()>> {
         let url = format!("{}/rest/getPlayQueue", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -25283,24 +24683,23 @@ Sends a `GET` request to `/rest/getPlayQueue`
     }
     /**Returns the state of the play queue for this user
 
-Returns the state of the play queue for this user (as set by savePlayQueue). This includes the tracks in the play queue, the currently playing track, and the position within this track. Typically used to allow a user to move between different clients/apps while retaining the same play queue (for instance when listening to an audio book).
+    Returns the state of the play queue for this user (as set by savePlayQueue). This includes the tracks in the play queue, the currently playing track, and the position within this track. Typically used to allow a user to move between different clients/apps while retaining the same play queue (for instance when listening to an audio book).
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/getPlayQueue`
+    Sends a `POST` request to `/rest/getPlayQueue`
 
-*/
+    */
     pub async fn post_get_play_queue<'a>(
         &'a self,
         body: &'a ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     ) -> Result<ResponseValue<types::GetPlayQueueResponse>, Error<()>> {
         let url = format!("{}/rest/getPlayQueue", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -25327,21 +24726,20 @@ Sends a `POST` request to `/rest/getPlayQueue`
     }
     /**Returns the state of the play queue for this user, using queue index
 
-Returns the state of the play queue for this user (as set by savePlayQueue). This includes the tracks in the play queue, the currently playing track, and the position within this track. Typically used to allow a user to move between different clients/apps while retaining the same play queue (for instance when listening to an audio book).
+    Returns the state of the play queue for this user (as set by savePlayQueue). This includes the tracks in the play queue, the currently playing track, and the position within this track. Typically used to allow a user to move between different clients/apps while retaining the same play queue (for instance when listening to an audio book).
 
-Sends a `GET` request to `/rest/getPlayQueueByIndex`
+    Sends a `GET` request to `/rest/getPlayQueueByIndex`
 
-*/
+    */
     pub async fn get_play_queue_by_index<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::GetPlayQueueByIndexResponse>, Error<()>> {
         let url = format!("{}/rest/getPlayQueueByIndex", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -25366,24 +24764,23 @@ Sends a `GET` request to `/rest/getPlayQueueByIndex`
     }
     /**Returns the state of the play queue for this user
 
-Returns the state of the play queue for this user (as set by savePlayQueue). This includes the tracks in the play queue, the currently playing track, and the position within this track. Typically used to allow a user to move between different clients/apps while retaining the same play queue (for instance when listening to an audio book).
+    Returns the state of the play queue for this user (as set by savePlayQueue). This includes the tracks in the play queue, the currently playing track, and the position within this track. Typically used to allow a user to move between different clients/apps while retaining the same play queue (for instance when listening to an audio book).
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/getPlayQueueByIndex`
+    Sends a `POST` request to `/rest/getPlayQueueByIndex`
 
-*/
+    */
     pub async fn post_get_play_queue_by_index<'a>(
         &'a self,
         body: &'a ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     ) -> Result<ResponseValue<types::GetPlayQueueByIndexResponse>, Error<()>> {
         let url = format!("{}/rest/getPlayQueueByIndex", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -25410,24 +24807,23 @@ Sends a `POST` request to `/rest/getPlayQueueByIndex`
     }
     /**Returns details for a podcast episode
 
-OpenSubsonic extension name getPodcastEpisode (As returned by `getOpenSubsonicExtensions`). Returns details for a podcast episode.
+    OpenSubsonic extension name getPodcastEpisode (As returned by `getOpenSubsonicExtensions`). Returns details for a podcast episode.
 
-Sends a `GET` request to `/rest/getPodcastEpisode`
+    Sends a `GET` request to `/rest/getPodcastEpisode`
 
-Arguments:
-- `id`: The podcast episode ID.
-*/
+    Arguments:
+    - `id`: The podcast episode ID.
+    */
     pub async fn get_podcast_episode<'a>(
         &'a self,
         id: &'a str,
     ) -> Result<ResponseValue<types::GetPodcastEpisodeResponse>, Error<()>> {
         let url = format!("{}/rest/getPodcastEpisode", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -25454,24 +24850,23 @@ Arguments:
     }
     /**Returns details for a podcast episode
 
-OpenSubsonic extension name `getPodcastEpisode` (As returned by `getOpenSubsonicExtensions`). Returns details for a podcast episode.
+    OpenSubsonic extension name `getPodcastEpisode` (As returned by `getOpenSubsonicExtensions`). Returns details for a podcast episode.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/getPodcastEpisode`
+    Sends a `POST` request to `/rest/getPodcastEpisode`
 
-*/
+    */
     pub async fn post_get_podcast_episode<'a>(
         &'a self,
         body: &'a types::PostGetPodcastEpisodeBody,
     ) -> Result<ResponseValue<types::GetPodcastEpisodeResponse>, Error<()>> {
         let url = format!("{}/rest/getPodcastEpisode", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -25499,14 +24894,14 @@ Sends a `POST` request to `/rest/getPodcastEpisode`
     }
     /**Returns all Podcast channels the server subscribes to, and (optionally) their episodes
 
-Returns all Podcast channels the server subscribes to, and (optionally) their episodes. This method can also be used to return details for only one channel - refer to the id parameter. A typical use case for this method would be to first retrieve all channels without episodes, and then retrieve all episodes for the single channel the user selects.
+    Returns all Podcast channels the server subscribes to, and (optionally) their episodes. This method can also be used to return details for only one channel - refer to the id parameter. A typical use case for this method would be to first retrieve all channels without episodes, and then retrieve all episodes for the single channel the user selects.
 
-Sends a `GET` request to `/rest/getPodcasts`
+    Sends a `GET` request to `/rest/getPodcasts`
 
-Arguments:
-- `id`: (Since 1.9.0) If specified, only return the Podcast channel with this ID.
-- `include_episodes`: (Since 1.9.0) Whether to include Podcast episodes in the returned result.
-*/
+    Arguments:
+    - `id`: (Since 1.9.0) If specified, only return the Podcast channel with this ID.
+    - `include_episodes`: (Since 1.9.0) Whether to include Podcast episodes in the returned result.
+    */
     pub async fn get_podcasts<'a>(
         &'a self,
         id: Option<&'a str>,
@@ -25514,11 +24909,10 @@ Arguments:
     ) -> Result<ResponseValue<types::GetPodcastsResponse>, Error<()>> {
         let url = format!("{}/rest/getPodcasts", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -25528,9 +24922,10 @@ Arguments:
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("id", &id))
-            .query(
-                &progenitor_client::QueryParam::new("includeEpisodes", &include_episodes),
-            )
+            .query(&progenitor_client::QueryParam::new(
+                "includeEpisodes",
+                &include_episodes,
+            ))
             .headers(header_map)
             .build()?;
         let info = OperationInfo {
@@ -25547,24 +24942,23 @@ Arguments:
     }
     /**Returns all Podcast channels the server subscribes to, and (optionally) their episodes
 
-Returns all Podcast channels the server subscribes to, and (optionally) their episodes. This method can also be used to return details for only one channel - refer to the id parameter. A typical use case for this method would be to first retrieve all channels without episodes, and then retrieve all episodes for the single channel the user selects.
+    Returns all Podcast channels the server subscribes to, and (optionally) their episodes. This method can also be used to return details for only one channel - refer to the id parameter. A typical use case for this method would be to first retrieve all channels without episodes, and then retrieve all episodes for the single channel the user selects.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/getPodcasts`
+    Sends a `POST` request to `/rest/getPodcasts`
 
-*/
+    */
     pub async fn post_get_podcasts<'a>(
         &'a self,
         body: &'a types::PostGetPodcastsBody,
     ) -> Result<ResponseValue<types::GetPodcastsResponse>, Error<()>> {
         let url = format!("{}/rest/getPodcasts", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -25591,17 +24985,17 @@ Sends a `POST` request to `/rest/getPodcasts`
     }
     /**Returns random songs matching the given criteria
 
-Returns random songs matching the given criteria.
+    Returns random songs matching the given criteria.
 
-Sends a `GET` request to `/rest/getRandomSongs`
+    Sends a `GET` request to `/rest/getRandomSongs`
 
-Arguments:
-- `from_year`: (Since 1.9.0) Only return songs from this year or later.
-- `genre`: Only returns songs belonging to this genre.
-- `music_folder_id`: Only return songs in the music folder with the given ID. See `getMusicFolders`.
-- `size`: The maximum number of songs to return. Max 500.
-- `to_year`: Only return songs published before or in this year.
-*/
+    Arguments:
+    - `from_year`: (Since 1.9.0) Only return songs from this year or later.
+    - `genre`: Only returns songs belonging to this genre.
+    - `music_folder_id`: Only return songs in the music folder with the given ID. See `getMusicFolders`.
+    - `size`: The maximum number of songs to return. Max 500.
+    - `to_year`: Only return songs published before or in this year.
+    */
     pub async fn get_random_songs<'a>(
         &'a self,
         from_year: Option<i64>,
@@ -25612,11 +25006,10 @@ Arguments:
     ) -> Result<ResponseValue<types::GetRandomSongsResponse>, Error<()>> {
         let url = format!("{}/rest/getRandomSongs", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -25627,9 +25020,10 @@ Arguments:
             )
             .query(&progenitor_client::QueryParam::new("fromYear", &from_year))
             .query(&progenitor_client::QueryParam::new("genre", &genre))
-            .query(
-                &progenitor_client::QueryParam::new("musicFolderId", &music_folder_id),
-            )
+            .query(&progenitor_client::QueryParam::new(
+                "musicFolderId",
+                &music_folder_id,
+            ))
             .query(&progenitor_client::QueryParam::new("size", &size))
             .query(&progenitor_client::QueryParam::new("toYear", &to_year))
             .headers(header_map)
@@ -25648,24 +25042,23 @@ Arguments:
     }
     /**Returns random songs matching the given criteria
 
-Returns random songs matching the given criteria.
+    Returns random songs matching the given criteria.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/getRandomSongs`
+    Sends a `POST` request to `/rest/getRandomSongs`
 
-*/
+    */
     pub async fn post_get_random_songs<'a>(
         &'a self,
         body: &'a types::PostGetRandomSongsBody,
     ) -> Result<ResponseValue<types::GetRandomSongsResponse>, Error<()>> {
         let url = format!("{}/rest/getRandomSongs", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -25692,21 +25085,20 @@ Sends a `POST` request to `/rest/getRandomSongs`
     }
     /**Returns the current status for media library scanning
 
-Returns the current status for media library scanning. Takes no extra parameters.
+    Returns the current status for media library scanning. Takes no extra parameters.
 
-Sends a `GET` request to `/rest/getScanStatus`
+    Sends a `GET` request to `/rest/getScanStatus`
 
-*/
+    */
     pub async fn get_scan_status<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::GetScanStatusResponse>, Error<()>> {
         let url = format!("{}/rest/getScanStatus", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -25731,24 +25123,23 @@ Sends a `GET` request to `/rest/getScanStatus`
     }
     /**Returns the current status for media library scanning
 
-Returns the current status for media library scanning. Takes no extra parameters.
+    Returns the current status for media library scanning. Takes no extra parameters.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/getScanStatus`
+    Sends a `POST` request to `/rest/getScanStatus`
 
-*/
+    */
     pub async fn post_get_scan_status<'a>(
         &'a self,
         body: &'a ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     ) -> Result<ResponseValue<types::GetScanStatusResponse>, Error<()>> {
         let url = format!("{}/rest/getScanStatus", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -25775,21 +25166,20 @@ Sends a `POST` request to `/rest/getScanStatus`
     }
     /**Returns information about shared media this user is allowed to manage
 
-Returns information about shared media this user is allowed to manage. Takes no extra parameters.
+    Returns information about shared media this user is allowed to manage. Takes no extra parameters.
 
-Sends a `GET` request to `/rest/getShares`
+    Sends a `GET` request to `/rest/getShares`
 
-*/
+    */
     pub async fn get_shares<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::GetSharesResponse>, Error<()>> {
         let url = format!("{}/rest/getShares", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -25814,24 +25204,23 @@ Sends a `GET` request to `/rest/getShares`
     }
     /**Returns information about shared media this user is allowed to manage
 
-Returns information about shared media this user is allowed to manage. Takes no extra parameters.
+    Returns information about shared media this user is allowed to manage. Takes no extra parameters.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/getShares`
+    Sends a `POST` request to `/rest/getShares`
 
-*/
+    */
     pub async fn post_get_shares<'a>(
         &'a self,
         body: &'a ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     ) -> Result<ResponseValue<types::GetSharesResponse>, Error<()>> {
         let url = format!("{}/rest/getShares", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -25858,14 +25247,14 @@ Sends a `POST` request to `/rest/getShares`
     }
     /**Returns a random collection of songs from the given artist and similar artists
 
-Returns a random collection of songs from the given artist and similar artists, using data from last.fm. Typically used for artist radio features.
+    Returns a random collection of songs from the given artist and similar artists, using data from last.fm. Typically used for artist radio features.
 
-Sends a `GET` request to `/rest/getSimilarSongs`
+    Sends a `GET` request to `/rest/getSimilarSongs`
 
-Arguments:
-- `count`: Max number of songs to return.
-- `id`: The artist, album or song ID.
-*/
+    Arguments:
+    - `count`: Max number of songs to return.
+    - `id`: The artist, album or song ID.
+    */
     pub async fn get_similar_songs<'a>(
         &'a self,
         count: Option<u64>,
@@ -25873,11 +25262,10 @@ Arguments:
     ) -> Result<ResponseValue<types::GetSimilarSongsResponse>, Error<()>> {
         let url = format!("{}/rest/getSimilarSongs", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -25904,24 +25292,23 @@ Arguments:
     }
     /**Returns a random collection of songs from the given artist and similar artists
 
-Returns a random collection of songs from the given artist and similar artists, using data from last.fm. Typically used for artist radio features.
+    Returns a random collection of songs from the given artist and similar artists, using data from last.fm. Typically used for artist radio features.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/getSimilarSongs`
+    Sends a `POST` request to `/rest/getSimilarSongs`
 
-*/
+    */
     pub async fn post_get_similar_songs<'a>(
         &'a self,
         body: &'a types::PostGetSimilarSongsBody,
     ) -> Result<ResponseValue<types::GetSimilarSongsResponse>, Error<()>> {
         let url = format!("{}/rest/getSimilarSongs", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -25948,14 +25335,14 @@ Sends a `POST` request to `/rest/getSimilarSongs`
     }
     /**Returns a random collection of songs from the given artist and similar artists (v2)
 
-Similar to `getSimilarSongs`, but organizes music according to ID3 tags.
+    Similar to `getSimilarSongs`, but organizes music according to ID3 tags.
 
-Sends a `GET` request to `/rest/getSimilarSongs2`
+    Sends a `GET` request to `/rest/getSimilarSongs2`
 
-Arguments:
-- `count`: Max number of songs to return.
-- `id`: The artist, album or song ID.
-*/
+    Arguments:
+    - `count`: Max number of songs to return.
+    - `id`: The artist, album or song ID.
+    */
     pub async fn get_similar_songs2<'a>(
         &'a self,
         count: Option<u64>,
@@ -25963,11 +25350,10 @@ Arguments:
     ) -> Result<ResponseValue<types::GetSimilarSongs2Response>, Error<()>> {
         let url = format!("{}/rest/getSimilarSongs2", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -25994,24 +25380,23 @@ Arguments:
     }
     /**Returns a random collection of songs from the given artist and similar artists (v2)
 
-Similar to `getSimilarSongs`, but organizes music according to ID3 tags.
+    Similar to `getSimilarSongs`, but organizes music according to ID3 tags.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/getSimilarSongs2`
+    Sends a `POST` request to `/rest/getSimilarSongs2`
 
-*/
+    */
     pub async fn post_get_similar_songs2<'a>(
         &'a self,
         body: &'a types::PostGetSimilarSongs2Body,
     ) -> Result<ResponseValue<types::GetSimilarSongs2Response>, Error<()>> {
         let url = format!("{}/rest/getSimilarSongs2", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -26038,24 +25423,23 @@ Sends a `POST` request to `/rest/getSimilarSongs2`
     }
     /**Returns details for a song
 
-Returns details for a song.
+    Returns details for a song.
 
-Sends a `GET` request to `/rest/getSong`
+    Sends a `GET` request to `/rest/getSong`
 
-Arguments:
-- `id`: The song ID.
-*/
+    Arguments:
+    - `id`: The song ID.
+    */
     pub async fn get_song<'a>(
         &'a self,
         id: &'a str,
     ) -> Result<ResponseValue<types::GetSongResponse>, Error<()>> {
         let url = format!("{}/rest/getSong", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -26081,24 +25465,23 @@ Arguments:
     }
     /**Returns details for a song
 
-Returns details for a song.
+    Returns details for a song.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/getSong`
+    Sends a `POST` request to `/rest/getSong`
 
-*/
+    */
     pub async fn post_get_song<'a>(
         &'a self,
         body: &'a types::PostGetSongBody,
     ) -> Result<ResponseValue<types::GetSongResponse>, Error<()>> {
         let url = format!("{}/rest/getSong", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -26125,16 +25508,16 @@ Sends a `POST` request to `/rest/getSong`
     }
     /**Returns songs in a given genre
 
-Returns songs in a given genre.
+    Returns songs in a given genre.
 
-Sends a `GET` request to `/rest/getSongsByGenre`
+    Sends a `GET` request to `/rest/getSongsByGenre`
 
-Arguments:
-- `count`: The maximum number of songs to return. Max 500.
-- `genre`: The genre, as returned by `getGenres`.
-- `music_folder_id`: (Since 1.12.0) Only return albums in the music folder with the given ID. See `getMusicFolders`.
-- `offset`: The offset. Useful if you want to page through the songs in a genre.
-*/
+    Arguments:
+    - `count`: The maximum number of songs to return. Max 500.
+    - `genre`: The genre, as returned by `getGenres`.
+    - `music_folder_id`: (Since 1.12.0) Only return albums in the music folder with the given ID. See `getMusicFolders`.
+    - `offset`: The offset. Useful if you want to page through the songs in a genre.
+    */
     pub async fn get_songs_by_genre<'a>(
         &'a self,
         count: Option<i64>,
@@ -26144,11 +25527,10 @@ Arguments:
     ) -> Result<ResponseValue<types::GetSongsByGenreResponse>, Error<()>> {
         let url = format!("{}/rest/getSongsByGenre", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -26159,9 +25541,10 @@ Arguments:
             )
             .query(&progenitor_client::QueryParam::new("count", &count))
             .query(&progenitor_client::QueryParam::new("genre", &genre))
-            .query(
-                &progenitor_client::QueryParam::new("musicFolderId", &music_folder_id),
-            )
+            .query(&progenitor_client::QueryParam::new(
+                "musicFolderId",
+                &music_folder_id,
+            ))
             .query(&progenitor_client::QueryParam::new("offset", &offset))
             .headers(header_map)
             .build()?;
@@ -26179,24 +25562,23 @@ Arguments:
     }
     /**Returns songs in a given genre
 
-Returns songs in a given genre.
+    Returns songs in a given genre.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/getSongsByGenre`
+    Sends a `POST` request to `/rest/getSongsByGenre`
 
-*/
+    */
     pub async fn post_get_songs_by_genre<'a>(
         &'a self,
         body: &'a types::PostGetSongsByGenreBody,
     ) -> Result<ResponseValue<types::GetSongsByGenreResponse>, Error<()>> {
         let url = format!("{}/rest/getSongsByGenre", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -26223,24 +25605,23 @@ Sends a `POST` request to `/rest/getSongsByGenre`
     }
     /**Returns starred songs, albums and artists
 
-Returns starred songs, albums and artists.
+    Returns starred songs, albums and artists.
 
-Sends a `GET` request to `/rest/getStarred`
+    Sends a `GET` request to `/rest/getStarred`
 
-Arguments:
-- `music_folder_id`: (Since 1.12.0) Only return albums in the music folder with the given ID. See `getMusicFolders`.
-*/
+    Arguments:
+    - `music_folder_id`: (Since 1.12.0) Only return albums in the music folder with the given ID. See `getMusicFolders`.
+    */
     pub async fn get_starred<'a>(
         &'a self,
         music_folder_id: Option<&'a str>,
     ) -> Result<ResponseValue<types::GetStarredResponse>, Error<()>> {
         let url = format!("{}/rest/getStarred", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -26249,9 +25630,10 @@ Arguments:
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
-            .query(
-                &progenitor_client::QueryParam::new("musicFolderId", &music_folder_id),
-            )
+            .query(&progenitor_client::QueryParam::new(
+                "musicFolderId",
+                &music_folder_id,
+            ))
             .headers(header_map)
             .build()?;
         let info = OperationInfo {
@@ -26268,24 +25650,23 @@ Arguments:
     }
     /**Returns starred songs, albums and artists
 
-Returns starred songs, albums and artists.
+    Returns starred songs, albums and artists.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/getStarred`
+    Sends a `POST` request to `/rest/getStarred`
 
-*/
+    */
     pub async fn post_get_starred<'a>(
         &'a self,
         body: &'a ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     ) -> Result<ResponseValue<types::GetStarredResponse>, Error<()>> {
         let url = format!("{}/rest/getStarred", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -26312,24 +25693,23 @@ Sends a `POST` request to `/rest/getStarred`
     }
     /**Returns starred songs, albums and artists
 
-Similar to `getStarred`, but organizes music according to ID3 tags.
+    Similar to `getStarred`, but organizes music according to ID3 tags.
 
-Sends a `GET` request to `/rest/getStarred2`
+    Sends a `GET` request to `/rest/getStarred2`
 
-Arguments:
-- `music_folder_id`: (Since 1.12.0) Only return albums in the music folder with the given ID. See `getMusicFolders`.
-*/
+    Arguments:
+    - `music_folder_id`: (Since 1.12.0) Only return albums in the music folder with the given ID. See `getMusicFolders`.
+    */
     pub async fn get_starred2<'a>(
         &'a self,
         music_folder_id: Option<&'a str>,
     ) -> Result<ResponseValue<types::GetStarred2Response>, Error<()>> {
         let url = format!("{}/rest/getStarred2", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -26338,9 +25718,10 @@ Arguments:
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
-            .query(
-                &progenitor_client::QueryParam::new("musicFolderId", &music_folder_id),
-            )
+            .query(&progenitor_client::QueryParam::new(
+                "musicFolderId",
+                &music_folder_id,
+            ))
             .headers(header_map)
             .build()?;
         let info = OperationInfo {
@@ -26357,24 +25738,23 @@ Arguments:
     }
     /**Returns starred songs, albums and artists
 
-Similar to `getStarred`, but organizes music according to ID3 tags.
+    Similar to `getStarred`, but organizes music according to ID3 tags.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/getStarred2`
+    Sends a `POST` request to `/rest/getStarred2`
 
-*/
+    */
     pub async fn post_get_starred2<'a>(
         &'a self,
         body: &'a ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     ) -> Result<ResponseValue<types::GetStarred2Response>, Error<()>> {
         let url = format!("{}/rest/getStarred2", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -26401,14 +25781,14 @@ Sends a `POST` request to `/rest/getStarred2`
     }
     /**Returns top songs for the given artist
 
-Returns top songs for the given artist, using data from last.fm.
+    Returns top songs for the given artist, using data from last.fm.
 
-Sends a `GET` request to `/rest/getTopSongs`
+    Sends a `GET` request to `/rest/getTopSongs`
 
-Arguments:
-- `count`: The maximum number of songs to return.
-- `id`: The artist name.
-*/
+    Arguments:
+    - `count`: The maximum number of songs to return.
+    - `id`: The artist name.
+    */
     pub async fn get_top_songs<'a>(
         &'a self,
         count: Option<u64>,
@@ -26416,11 +25796,10 @@ Arguments:
     ) -> Result<ResponseValue<types::GetTopSongsResponse>, Error<()>> {
         let url = format!("{}/rest/getTopSongs", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -26447,24 +25826,23 @@ Arguments:
     }
     /**Returns top songs for the given artist
 
-Returns top songs for the given artist, using data from last.fm.
+    Returns top songs for the given artist, using data from last.fm.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/getTopSongs`
+    Sends a `POST` request to `/rest/getTopSongs`
 
-*/
+    */
     pub async fn post_get_top_songs<'a>(
         &'a self,
         body: &'a types::PostGetTopSongsBody,
     ) -> Result<ResponseValue<types::GetTopSongsResponse>, Error<()>> {
         let url = format!("{}/rest/getTopSongs", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -26491,24 +25869,23 @@ Sends a `POST` request to `/rest/getTopSongs`
     }
     /**Get details about a given user, including which authorization roles and folder access it has
 
-Get details about a given user, including which authorization roles and folder access it has. Can be used to enable/disable certain features in the client, such as jukebox control.
+    Get details about a given user, including which authorization roles and folder access it has. Can be used to enable/disable certain features in the client, such as jukebox control.
 
-Sends a `GET` request to `/rest/getUser`
+    Sends a `GET` request to `/rest/getUser`
 
-Arguments:
-- `username`: The name of the user to retrieve. You can only retrieve your own user unless you have admin privileges.
-*/
+    Arguments:
+    - `username`: The name of the user to retrieve. You can only retrieve your own user unless you have admin privileges.
+    */
     pub async fn get_user<'a>(
         &'a self,
         username: &'a str,
     ) -> Result<ResponseValue<types::GetUserResponse>, Error<()>> {
         let url = format!("{}/rest/getUser", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -26534,24 +25911,23 @@ Arguments:
     }
     /**Get details about a given user, including which authorization roles and folder access it has
 
-Get details about a given user, including which authorization roles and folder access it has. Can be used to enable/disable certain features in the client, such as jukebox control.
+    Get details about a given user, including which authorization roles and folder access it has. Can be used to enable/disable certain features in the client, such as jukebox control.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/getUser`
+    Sends a `POST` request to `/rest/getUser`
 
-*/
+    */
     pub async fn post_get_user<'a>(
         &'a self,
         body: &'a types::PostGetUserBody,
     ) -> Result<ResponseValue<types::GetUserResponse>, Error<()>> {
         let url = format!("{}/rest/getUser", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -26578,21 +25954,20 @@ Sends a `POST` request to `/rest/getUser`
     }
     /**Get details about all users, including which authorization roles and folder access they have
 
-Get details about all users, including which authorization roles and folder access they have. Only users with admin privileges are allowed to call this method.
+    Get details about all users, including which authorization roles and folder access they have. Only users with admin privileges are allowed to call this method.
 
-Sends a `GET` request to `/rest/getUsers`
+    Sends a `GET` request to `/rest/getUsers`
 
-*/
+    */
     pub async fn get_users<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::GetUsersResponse>, Error<()>> {
         let url = format!("{}/rest/getUsers", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -26617,24 +25992,23 @@ Sends a `GET` request to `/rest/getUsers`
     }
     /**Get details about all users, including which authorization roles and folder access they have
 
-Get details about all users, including which authorization roles and folder access they have. Only users with admin privileges are allowed to call this method.
+    Get details about all users, including which authorization roles and folder access they have. Only users with admin privileges are allowed to call this method.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/getUsers`
+    Sends a `POST` request to `/rest/getUsers`
 
-*/
+    */
     pub async fn post_get_users<'a>(
         &'a self,
         body: &'a ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     ) -> Result<ResponseValue<types::GetUsersResponse>, Error<()>> {
         let url = format!("{}/rest/getUsers", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -26661,24 +26035,23 @@ Sends a `POST` request to `/rest/getUsers`
     }
     /**Returns details for a video
 
-Returns details for a video, including information about available audio tracks, subtitles (captions) and conversions.
+    Returns details for a video, including information about available audio tracks, subtitles (captions) and conversions.
 
-Sends a `GET` request to `/rest/getVideoInfo`
+    Sends a `GET` request to `/rest/getVideoInfo`
 
-Arguments:
-- `id`: The video ID.
-*/
+    Arguments:
+    - `id`: The video ID.
+    */
     pub async fn get_video_info<'a>(
         &'a self,
         id: &'a str,
     ) -> Result<ResponseValue<types::GetVideoInfoResponse>, Error<()>> {
         let url = format!("{}/rest/getVideoInfo", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -26704,24 +26077,23 @@ Arguments:
     }
     /**Returns details for a video
 
-Returns details for a video, including information about available audio tracks, subtitles (captions) and conversions.
+    Returns details for a video, including information about available audio tracks, subtitles (captions) and conversions.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/getVideoInfo`
+    Sends a `POST` request to `/rest/getVideoInfo`
 
-*/
+    */
     pub async fn post_get_video_info<'a>(
         &'a self,
         body: &'a types::PostGetVideoInfoBody,
     ) -> Result<ResponseValue<types::GetVideoInfoResponse>, Error<()>> {
         let url = format!("{}/rest/getVideoInfo", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -26748,21 +26120,20 @@ Sends a `POST` request to `/rest/getVideoInfo`
     }
     /**Returns all video files
 
-Returns all video files.
+    Returns all video files.
 
-Sends a `GET` request to `/rest/getVideos`
+    Sends a `GET` request to `/rest/getVideos`
 
-*/
+    */
     pub async fn get_videos<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::GetVideosResponse>, Error<()>> {
         let url = format!("{}/rest/getVideos", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -26787,24 +26158,23 @@ Sends a `GET` request to `/rest/getVideos`
     }
     /**Returns all video files
 
-Returns all video files.
+    Returns all video files.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/getVideos`
+    Sends a `POST` request to `/rest/getVideos`
 
-*/
+    */
     pub async fn post_get_videos<'a>(
         &'a self,
         body: &'a ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     ) -> Result<ResponseValue<types::GetVideosResponse>, Error<()>> {
         let url = format!("{}/rest/getVideos", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -26831,15 +26201,15 @@ Sends a `POST` request to `/rest/getVideos`
     }
     /**Downloads a given media file (HLS)
 
-Creates an HLS (HTTP Live Streaming) playlist used for streaming video or audio. HLS is a streaming protocol implemented by Apple and works by breaking the overall stream into a sequence of small HTTP-based file downloads. It’s supported by iOS and newer versions of Android. This method also supports adaptive bitrate streaming, see the bitRate parameter.
+    Creates an HLS (HTTP Live Streaming) playlist used for streaming video or audio. HLS is a streaming protocol implemented by Apple and works by breaking the overall stream into a sequence of small HTTP-based file downloads. It’s supported by iOS and newer versions of Android. This method also supports adaptive bitrate streaming, see the bitRate parameter.
 
-Sends a `GET` request to `/rest/hls.m3u8`
+    Sends a `GET` request to `/rest/hls.m3u8`
 
-Arguments:
-- `audio_track`: The ID of the audio track to use. See `getVideoInfo` for how to get the list of available audio tracks for a video.
-- `bit_rate`: If specified, the server will attempt to limit the bitrate to this value, in kilobits per second. If this parameter is specified more than once, the server will create a variant playlist, suitable for adaptive bitrate streaming. The playlist will support streaming at all the specified bitrates. The server will automatically choose video dimensions that are suitable for the given bitrates. Since 1.9.0 you may explicitly request a certain width (480) and height (360) like so: bitRate=1000@480x360
-- `id`: A string which uniquely identifies the media file to stream.
-*/
+    Arguments:
+    - `audio_track`: The ID of the audio track to use. See `getVideoInfo` for how to get the list of available audio tracks for a video.
+    - `bit_rate`: If specified, the server will attempt to limit the bitrate to this value, in kilobits per second. If this parameter is specified more than once, the server will create a variant playlist, suitable for adaptive bitrate streaming. The playlist will support streaming at all the specified bitrates. The server will automatically choose video dimensions that are suitable for the given bitrates. Since 1.9.0 you may explicitly request a certain width (480) and height (360) like so: bitRate=1000@480x360
+    - `id`: A string which uniquely identifies the media file to stream.
+    */
     pub async fn hls_m3u8<'a>(
         &'a self,
         audio_track: Option<&'a str>,
@@ -26848,16 +26218,18 @@ Arguments:
     ) -> Result<ResponseValue<ByteStream>, Error<()>> {
         let url = format!("{}/rest/hls.m3u8", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
             .get(url)
-            .query(&progenitor_client::QueryParam::new("audioTrack", &audio_track))
+            .query(&progenitor_client::QueryParam::new(
+                "audioTrack",
+                &audio_track,
+            ))
             .query(&progenitor_client::QueryParam::new("bitRate", &bit_rate))
             .query(&progenitor_client::QueryParam::new("id", &id))
             .headers(header_map)
@@ -26876,24 +26248,23 @@ Arguments:
     }
     /**Downloads a given media file (HLS)
 
-Creates an HLS (HTTP Live Streaming) playlist used for streaming video or audio. HLS is a streaming protocol implemented by Apple and works by breaking the overall stream into a sequence of small HTTP-based file downloads. It’s supported by iOS and newer versions of Android. This method also supports adaptive bitrate streaming, see the bitRate parameter.
+    Creates an HLS (HTTP Live Streaming) playlist used for streaming video or audio. HLS is a streaming protocol implemented by Apple and works by breaking the overall stream into a sequence of small HTTP-based file downloads. It’s supported by iOS and newer versions of Android. This method also supports adaptive bitrate streaming, see the bitRate parameter.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/hls.m3u8`
+    Sends a `POST` request to `/rest/hls.m3u8`
 
-*/
+    */
     pub async fn post_hls_m3u8<'a>(
         &'a self,
         body: &'a types::PostHlsM3u8Body,
     ) -> Result<ResponseValue<ByteStream>, Error<()>> {
         let url = format!("{}/rest/hls.m3u8", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -26916,17 +26287,17 @@ Sends a `POST` request to `/rest/hls.m3u8`
     }
     /**Controls the jukebox, i.e., playback directly on the server’s audio hardware
 
-Controls the jukebox, i.e., playback directly on the server’s audio hardware. Note: The user must be authorized to control the jukebox (see Settings > Users > User is allowed to play files in jukebox mode).
+    Controls the jukebox, i.e., playback directly on the server’s audio hardware. Note: The user must be authorized to control the jukebox (see Settings > Users > User is allowed to play files in jukebox mode).
 
-Sends a `GET` request to `/rest/jukeboxControl`
+    Sends a `GET` request to `/rest/jukeboxControl`
 
-Arguments:
-- `action`: The operation to perform. Must be one of: get, status (since 1.7.0), set (since 1.7.0), start, stop, skip, add, clear, remove, shuffle, setGain
-- `gain`: Used by `setGain` to control the playback volume. A float value between 0.0 and 1.0.
-- `id`: Used by `add` and `set`. ID of song to add to the jukebox playlist. Use multiple id parameters to add many songs in the same request. (set is similar to a clear followed by a add, but will not change the currently playing track.)
-- `index`: Used by `skip` and `remove`. Zero-based index of the song to skip to or remove.
-- `offset`: (Since 1.7.0) Used by `skip`. Start playing this many seconds into the track.
-*/
+    Arguments:
+    - `action`: The operation to perform. Must be one of: get, status (since 1.7.0), set (since 1.7.0), start, stop, skip, add, clear, remove, shuffle, setGain
+    - `gain`: Used by `setGain` to control the playback volume. A float value between 0.0 and 1.0.
+    - `id`: Used by `add` and `set`. ID of song to add to the jukebox playlist. Use multiple id parameters to add many songs in the same request. (set is similar to a clear followed by a add, but will not change the currently playing track.)
+    - `index`: Used by `skip` and `remove`. Zero-based index of the song to skip to or remove.
+    - `offset`: (Since 1.7.0) Used by `skip`. Start playing this many seconds into the track.
+    */
     pub async fn jukebox_control<'a>(
         &'a self,
         action: types::JukeboxAction,
@@ -26937,11 +26308,10 @@ Arguments:
     ) -> Result<ResponseValue<types::JukeboxControlResponse>, Error<()>> {
         let url = format!("{}/rest/jukeboxControl", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -26971,24 +26341,23 @@ Arguments:
     }
     /**Controls the jukebox, i.e., playback directly on the server’s audio hardware
 
-Controls the jukebox, i.e., playback directly on the server’s audio hardware. Note: The user must be authorized to control the jukebox (see Settings > Users > User is allowed to play files in jukebox mode).
+    Controls the jukebox, i.e., playback directly on the server’s audio hardware. Note: The user must be authorized to control the jukebox (see Settings > Users > User is allowed to play files in jukebox mode).
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/jukeboxControl`
+    Sends a `POST` request to `/rest/jukeboxControl`
 
-*/
+    */
     pub async fn post_jukebox_control<'a>(
         &'a self,
         body: &'a types::PostJukeboxControlBody,
     ) -> Result<ResponseValue<types::JukeboxControlResponse>, Error<()>> {
         let url = format!("{}/rest/jukeboxControl", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -27015,21 +26384,18 @@ Sends a `POST` request to `/rest/jukeboxControl`
     }
     /**Used to test connectivity with the server
 
-Test connectivity with the server.
+    Test connectivity with the server.
 
-Sends a `GET` request to `/rest/ping`
+    Sends a `GET` request to `/rest/ping`
 
-*/
-    pub async fn ping<'a>(
-        &'a self,
-    ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
+    */
+    pub async fn ping<'a>(&'a self) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let url = format!("{}/rest/ping", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -27054,24 +26420,23 @@ Sends a `GET` request to `/rest/ping`
     }
     /**Used to test connectivity with the server
 
-Test connectivity with the server.
+    Test connectivity with the server.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/ping`
+    Sends a `POST` request to `/rest/ping`
 
-*/
+    */
     pub async fn post_ping<'a>(
         &'a self,
         body: &'a ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let url = format!("{}/rest/ping", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -27098,21 +26463,20 @@ Sends a `POST` request to `/rest/ping`
     }
     /**Requests the server to check for new Podcast episodes
 
-Requests the server to check for new Podcast episodes. Note: The user must be authorized for Podcast administration (see Settings > Users > User is allowed to administrate Podcasts).
+    Requests the server to check for new Podcast episodes. Note: The user must be authorized for Podcast administration (see Settings > Users > User is allowed to administrate Podcasts).
 
-Sends a `GET` request to `/rest/refreshPodcasts`
+    Sends a `GET` request to `/rest/refreshPodcasts`
 
-*/
+    */
     pub async fn refresh_podcasts<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let url = format!("{}/rest/refreshPodcasts", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -27137,24 +26501,23 @@ Sends a `GET` request to `/rest/refreshPodcasts`
     }
     /**Requests the server to check for new Podcast episodes
 
-Requests the server to check for new Podcast episodes. Note: The user must be authorized for Podcast administration (see Settings > Users > User is allowed to administrate Podcasts).
+    Requests the server to check for new Podcast episodes. Note: The user must be authorized for Podcast administration (see Settings > Users > User is allowed to administrate Podcasts).
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/refreshPodcasts`
+    Sends a `POST` request to `/rest/refreshPodcasts`
 
-*/
+    */
     pub async fn post_refresh_podcasts<'a>(
         &'a self,
         body: &'a ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let url = format!("{}/rest/refreshPodcasts", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -27181,15 +26544,15 @@ Sends a `POST` request to `/rest/refreshPodcasts`
     }
     /**Saves the state of the play queue for this user
 
-Saves the state of the play queue for this user. This includes the tracks in the play queue, the currently playing track, and the position within this track. Typically used to allow a user to move between different clients/apps while retaining the same play queue (for instance when listening to an audio book). `id` is optional. Send a call without any parameters to clear the currently saved queue.
+    Saves the state of the play queue for this user. This includes the tracks in the play queue, the currently playing track, and the position within this track. Typically used to allow a user to move between different clients/apps while retaining the same play queue (for instance when listening to an audio book). `id` is optional. Send a call without any parameters to clear the currently saved queue.
 
-Sends a `GET` request to `/rest/savePlayQueue`
+    Sends a `GET` request to `/rest/savePlayQueue`
 
-Arguments:
-- `current`: The ID of the current playing song.  This is required if one or more IDs is provided.
-- `id`: ID of a song in the play queue. Use one id parameter for each song in the play queue. Specify no IDs to clear
-- `position`: The position in milliseconds within the currently playing song.
-*/
+    Arguments:
+    - `current`: The ID of the current playing song.  This is required if one or more IDs is provided.
+    - `id`: ID of a song in the play queue. Use one id parameter for each song in the play queue. Specify no IDs to clear
+    - `position`: The position in milliseconds within the currently playing song.
+    */
     pub async fn save_play_queue<'a>(
         &'a self,
         current: Option<&'a str>,
@@ -27198,11 +26561,10 @@ Arguments:
     ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let url = format!("{}/rest/savePlayQueue", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -27230,24 +26592,23 @@ Arguments:
     }
     /**Saves the state of the play queue for this user
 
-Saves the state of the play queue for this user. This includes the tracks in the play queue, the currently playing track, and the position within this track. Typically used to allow a user to move between different clients/apps while retaining the same play queue (for instance when listening to an audio book). `id` is optional. Send a call without any parameters to clear the currently saved queue.
+    Saves the state of the play queue for this user. This includes the tracks in the play queue, the currently playing track, and the position within this track. Typically used to allow a user to move between different clients/apps while retaining the same play queue (for instance when listening to an audio book). `id` is optional. Send a call without any parameters to clear the currently saved queue.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/savePlayQueue`
+    Sends a `POST` request to `/rest/savePlayQueue`
 
-*/
+    */
     pub async fn post_save_play_queue<'a>(
         &'a self,
         body: &'a types::PostSavePlayQueueBody,
     ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let url = format!("{}/rest/savePlayQueue", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -27274,15 +26635,15 @@ Sends a `POST` request to `/rest/savePlayQueue`
     }
     /**Saves the state of the play queue for this user, using queue index
 
-Saves the state of the play queue for this user. This includes the tracks in the play queue, the currently playing track, and the position within this track. Typically used to allow a user to move between different clients/apps while retaining the same play queue (for instance when listening to an audio book). `id` is optional. Send a call without any parameters to clear the currently saved queue.
+    Saves the state of the play queue for this user. This includes the tracks in the play queue, the currently playing track, and the position within this track. Typically used to allow a user to move between different clients/apps while retaining the same play queue (for instance when listening to an audio book). `id` is optional. Send a call without any parameters to clear the currently saved queue.
 
-Sends a `GET` request to `/rest/savePlayQueueByIndex`
+    Sends a `GET` request to `/rest/savePlayQueueByIndex`
 
-Arguments:
-- `current_index`: The index of the current playing song. This is required if one or more IDs is provided.
-- `id`: ID of a song in the play queue. Use one id parameter for each song in the play queue. Specify no IDs to clear
-- `position`: The position in milliseconds within the currently playing song.
-*/
+    Arguments:
+    - `current_index`: The index of the current playing song. This is required if one or more IDs is provided.
+    - `id`: ID of a song in the play queue. Use one id parameter for each song in the play queue. Specify no IDs to clear
+    - `position`: The position in milliseconds within the currently playing song.
+    */
     pub async fn save_play_queue_by_index<'a>(
         &'a self,
         current_index: Option<u64>,
@@ -27291,11 +26652,10 @@ Arguments:
     ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let url = format!("{}/rest/savePlayQueueByIndex", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -27304,7 +26664,10 @@ Arguments:
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
-            .query(&progenitor_client::QueryParam::new("currentIndex", &current_index))
+            .query(&progenitor_client::QueryParam::new(
+                "currentIndex",
+                &current_index,
+            ))
             .query(&progenitor_client::QueryParam::new("id", &id))
             .query(&progenitor_client::QueryParam::new("position", &position))
             .headers(header_map)
@@ -27323,24 +26686,23 @@ Arguments:
     }
     /**Saves the state of the play queue for this user
 
-Saves the state of the play queue for this user. This includes the tracks in the play queue, the currently playing track, and the position within this track. Typically used to allow a user to move between different clients/apps while retaining the same play queue (for instance when listening to an audio book). `id` is optional. Send a call without any parameters to clear the currently saved queue.
+    Saves the state of the play queue for this user. This includes the tracks in the play queue, the currently playing track, and the position within this track. Typically used to allow a user to move between different clients/apps while retaining the same play queue (for instance when listening to an audio book). `id` is optional. Send a call without any parameters to clear the currently saved queue.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/savePlayQueueByIndex`
+    Sends a `POST` request to `/rest/savePlayQueueByIndex`
 
-*/
+    */
     pub async fn post_save_play_queue_by_index<'a>(
         &'a self,
         body: &'a types::PostSavePlayQueueByIndexBody,
     ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let url = format!("{}/rest/savePlayQueueByIndex", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -27367,21 +26729,21 @@ Sends a `POST` request to `/rest/savePlayQueueByIndex`
     }
     /**Registers the local playback of one or more media files
 
-Registers the local playback of one or more media files. Typically used when playing media that is cached on the client. This operation includes the following:
+    Registers the local playback of one or more media files. Typically used when playing media that is cached on the client. This operation includes the following:
 
-* “Scrobbles” the media files on last.fm if the user has configured his/her last.fm credentials on the server.
-* Updates the play count and last played timestamp for the media files. (Since 1.11.0)
-* Makes the media files appear in the “Now playing” page in the web app, and appear in the list of songs returned by getNowPlaying (Since 1.11.0)
+    * “Scrobbles” the media files on last.fm if the user has configured his/her last.fm credentials on the server.
+    * Updates the play count and last played timestamp for the media files. (Since 1.11.0)
+    * Makes the media files appear in the “Now playing” page in the web app, and appear in the list of songs returned by getNowPlaying (Since 1.11.0)
 
-Since 1.8.0 you may specify multiple id (and optionally time) parameters to scrobble multiple files.
+    Since 1.8.0 you may specify multiple id (and optionally time) parameters to scrobble multiple files.
 
-Sends a `GET` request to `/rest/scrobble`
+    Sends a `GET` request to `/rest/scrobble`
 
-Arguments:
-- `id`: A string which uniquely identifies the file to scrobble.
-- `submission`: Whether this is a “submission” or a “now playing” notification.
-- `time`: (Since 1.8.0) The time (in milliseconds since 1 Jan 1970) at which the song was listened to.
-*/
+    Arguments:
+    - `id`: A string which uniquely identifies the file to scrobble.
+    - `submission`: Whether this is a “submission” or a “now playing” notification.
+    - `time`: (Since 1.8.0) The time (in milliseconds since 1 Jan 1970) at which the song was listened to.
+    */
     pub async fn scrobble<'a>(
         &'a self,
         id: &'a str,
@@ -27390,11 +26752,10 @@ Arguments:
     ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let url = format!("{}/rest/scrobble", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -27404,7 +26765,10 @@ Arguments:
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("id", &id))
-            .query(&progenitor_client::QueryParam::new("submission", &submission))
+            .query(&progenitor_client::QueryParam::new(
+                "submission",
+                &submission,
+            ))
             .query(&progenitor_client::QueryParam::new("time", &time))
             .headers(header_map)
             .build()?;
@@ -27422,30 +26786,29 @@ Arguments:
     }
     /**Registers the local playback of one or more media files
 
-Registers the local playback of one or more media files. Typically used when playing media that is cached on the client. This operation includes the following:
+    Registers the local playback of one or more media files. Typically used when playing media that is cached on the client. This operation includes the following:
 
-* “Scrobbles” the media files on last.fm if the user has configured his/her last.fm credentials on the server.
-* Updates the play count and last played timestamp for the media files. (Since 1.11.0)
-* Makes the media files appear in the “Now playing” page in the web app, and appear in the list of songs returned by getNowPlaying (Since 1.11.0)
+    * “Scrobbles” the media files on last.fm if the user has configured his/her last.fm credentials on the server.
+    * Updates the play count and last played timestamp for the media files. (Since 1.11.0)
+    * Makes the media files appear in the “Now playing” page in the web app, and appear in the list of songs returned by getNowPlaying (Since 1.11.0)
 
-Since 1.8.0 you may specify multiple id (and optionally time) parameters to scrobble multiple files.
+    Since 1.8.0 you may specify multiple id (and optionally time) parameters to scrobble multiple files.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/scrobble`
+    Sends a `POST` request to `/rest/scrobble`
 
-*/
+    */
     pub async fn post_scrobble<'a>(
         &'a self,
         body: &'a types::PostScrobbleBody,
     ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let url = format!("{}/rest/scrobble", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -27472,21 +26835,21 @@ Sends a `POST` request to `/rest/scrobble`
     }
     /**Returns a listing of files matching the given search criteria. Supports paging through the result
 
-Deprecated since 1.4.0, use search2 instead.
+    Deprecated since 1.4.0, use search2 instead.
 
-Returns a listing of files matching the given search criteria. Supports paging through the result.
+    Returns a listing of files matching the given search criteria. Supports paging through the result.
 
-Sends a `GET` request to `/rest/search`
+    Sends a `GET` request to `/rest/search`
 
-Arguments:
-- `album`: Album to search for.
-- `any`: Searches all fields.
-- `artist`: Artist to search for.
-- `count`: Maximum number of results to return.
-- `newer_than`: Only return matches that are newer than this. Given as milliseconds since 1970.
-- `offset`: Search result offset. Used for paging.
-- `title`: Song title to search for.
-*/
+    Arguments:
+    - `album`: Album to search for.
+    - `any`: Searches all fields.
+    - `artist`: Artist to search for.
+    - `count`: Maximum number of results to return.
+    - `newer_than`: Only return matches that are newer than this. Given as milliseconds since 1970.
+    - `offset`: Search result offset. Used for paging.
+    - `title`: Song title to search for.
+    */
     pub async fn search<'a>(
         &'a self,
         album: Option<&'a str>,
@@ -27499,11 +26862,10 @@ Arguments:
     ) -> Result<ResponseValue<types::SearchResponse>, Error<()>> {
         let url = format!("{}/rest/search", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -27516,7 +26878,10 @@ Arguments:
             .query(&progenitor_client::QueryParam::new("any", &any))
             .query(&progenitor_client::QueryParam::new("artist", &artist))
             .query(&progenitor_client::QueryParam::new("count", &count))
-            .query(&progenitor_client::QueryParam::new("newerThan", &newer_than))
+            .query(&progenitor_client::QueryParam::new(
+                "newerThan",
+                &newer_than,
+            ))
             .query(&progenitor_client::QueryParam::new("offset", &offset))
             .query(&progenitor_client::QueryParam::new("title", &title))
             .headers(header_map)
@@ -27535,26 +26900,25 @@ Arguments:
     }
     /**Returns a listing of files matching the given search criteria. Supports paging through the result
 
-Deprecated since 1.4.0, use search2 instead.
+    Deprecated since 1.4.0, use search2 instead.
 
-Returns a listing of files matching the given search criteria. Supports paging through the result.
+    Returns a listing of files matching the given search criteria. Supports paging through the result.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/search`
+    Sends a `POST` request to `/rest/search`
 
-*/
+    */
     pub async fn post_search<'a>(
         &'a self,
         body: &'a types::PostSearchBody,
     ) -> Result<ResponseValue<types::SearchResponse>, Error<()>> {
         let url = format!("{}/rest/search", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -27581,20 +26945,20 @@ Sends a `POST` request to `/rest/search`
     }
     /**Returns a listing of files matching the given search criteria. Supports paging through the result. (v2)
 
-Returns albums, artists and songs matching the given search criteria. Supports paging through the result.
+    Returns albums, artists and songs matching the given search criteria. Supports paging through the result.
 
-Sends a `GET` request to `/rest/search2`
+    Sends a `GET` request to `/rest/search2`
 
-Arguments:
-- `album_count`: Maximum number of albums to return.
-- `album_offset`: Search result offset for albums. Used for paging.
-- `artist_count`: Maximum number of artists to return.
-- `artist_offset`: Search result offset for artists. Used for paging.
-- `music_folder_id`: (Since 1.12.0) Only return albums in the music folder with the given ID. See `getMusicFolders`.
-- `query`: Search query.
-- `song_count`: Maximum number of songs to return.
-- `song_offset`: Search result offset for songs. Used for paging.
-*/
+    Arguments:
+    - `album_count`: Maximum number of albums to return.
+    - `album_offset`: Search result offset for albums. Used for paging.
+    - `artist_count`: Maximum number of artists to return.
+    - `artist_offset`: Search result offset for artists. Used for paging.
+    - `music_folder_id`: (Since 1.12.0) Only return albums in the music folder with the given ID. See `getMusicFolders`.
+    - `query`: Search query.
+    - `song_count`: Maximum number of songs to return.
+    - `song_offset`: Search result offset for songs. Used for paging.
+    */
     pub async fn search2<'a>(
         &'a self,
         album_count: Option<u64>,
@@ -27608,11 +26972,10 @@ Arguments:
     ) -> Result<ResponseValue<types::Search2Response>, Error<()>> {
         let url = format!("{}/rest/search2", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -27621,16 +26984,35 @@ Arguments:
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
-            .query(&progenitor_client::QueryParam::new("albumCount", &album_count))
-            .query(&progenitor_client::QueryParam::new("albumOffset", &album_offset))
-            .query(&progenitor_client::QueryParam::new("artistCount", &artist_count))
-            .query(&progenitor_client::QueryParam::new("artistOffset", &artist_offset))
-            .query(
-                &progenitor_client::QueryParam::new("musicFolderId", &music_folder_id),
-            )
+            .query(&progenitor_client::QueryParam::new(
+                "albumCount",
+                &album_count,
+            ))
+            .query(&progenitor_client::QueryParam::new(
+                "albumOffset",
+                &album_offset,
+            ))
+            .query(&progenitor_client::QueryParam::new(
+                "artistCount",
+                &artist_count,
+            ))
+            .query(&progenitor_client::QueryParam::new(
+                "artistOffset",
+                &artist_offset,
+            ))
+            .query(&progenitor_client::QueryParam::new(
+                "musicFolderId",
+                &music_folder_id,
+            ))
             .query(&progenitor_client::QueryParam::new("query", &query))
-            .query(&progenitor_client::QueryParam::new("songCount", &song_count))
-            .query(&progenitor_client::QueryParam::new("songOffset", &song_offset))
+            .query(&progenitor_client::QueryParam::new(
+                "songCount",
+                &song_count,
+            ))
+            .query(&progenitor_client::QueryParam::new(
+                "songOffset",
+                &song_offset,
+            ))
             .headers(header_map)
             .build()?;
         let info = OperationInfo {
@@ -27647,24 +27029,23 @@ Arguments:
     }
     /**Returns a listing of files matching the given search criteria. Supports paging through the result. (v2)
 
-Returns albums, artists and songs matching the given search criteria. Supports paging through the result.
+    Returns albums, artists and songs matching the given search criteria. Supports paging through the result.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/search2`
+    Sends a `POST` request to `/rest/search2`
 
-*/
+    */
     pub async fn post_search2<'a>(
         &'a self,
         body: &'a types::PostSearch2Body,
     ) -> Result<ResponseValue<types::Search2Response>, Error<()>> {
         let url = format!("{}/rest/search2", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -27691,22 +27072,22 @@ Sends a `POST` request to `/rest/search2`
     }
     /**Returns albums, artists and songs matching the given search criteria. Supports paging through the result. (v3)
 
-Returns albums, artists and songs matching the given search criteria. Supports paging through the result.
+    Returns albums, artists and songs matching the given search criteria. Supports paging through the result.
 
-Music is organized according to ID3 tags.
+    Music is organized according to ID3 tags.
 
-Sends a `GET` request to `/rest/search3`
+    Sends a `GET` request to `/rest/search3`
 
-Arguments:
-- `album_count`: Maximum number of albums to return.
-- `album_offset`: Search result offset for albums. Used for paging.
-- `artist_count`: Maximum number of artists to return.
-- `artist_offset`: Search result offset for artists. Used for paging.
-- `music_folder_id`: (Since 1.12.0) Only return albums in the music folder with the given ID. See `getMusicFolders`.
-- `query`: Search query. Servers must support an empty query and return all the data to allow clients to properly access all the media information for offline sync.
-- `song_count`: Maximum number of songs to return.
-- `song_offset`: Search result offset for songs. Used for paging.
-*/
+    Arguments:
+    - `album_count`: Maximum number of albums to return.
+    - `album_offset`: Search result offset for albums. Used for paging.
+    - `artist_count`: Maximum number of artists to return.
+    - `artist_offset`: Search result offset for artists. Used for paging.
+    - `music_folder_id`: (Since 1.12.0) Only return albums in the music folder with the given ID. See `getMusicFolders`.
+    - `query`: Search query. Servers must support an empty query and return all the data to allow clients to properly access all the media information for offline sync.
+    - `song_count`: Maximum number of songs to return.
+    - `song_offset`: Search result offset for songs. Used for paging.
+    */
     pub async fn search3<'a>(
         &'a self,
         album_count: Option<u64>,
@@ -27720,11 +27101,10 @@ Arguments:
     ) -> Result<ResponseValue<types::Search3Response>, Error<()>> {
         let url = format!("{}/rest/search3", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -27733,16 +27113,35 @@ Arguments:
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
-            .query(&progenitor_client::QueryParam::new("albumCount", &album_count))
-            .query(&progenitor_client::QueryParam::new("albumOffset", &album_offset))
-            .query(&progenitor_client::QueryParam::new("artistCount", &artist_count))
-            .query(&progenitor_client::QueryParam::new("artistOffset", &artist_offset))
-            .query(
-                &progenitor_client::QueryParam::new("musicFolderId", &music_folder_id),
-            )
+            .query(&progenitor_client::QueryParam::new(
+                "albumCount",
+                &album_count,
+            ))
+            .query(&progenitor_client::QueryParam::new(
+                "albumOffset",
+                &album_offset,
+            ))
+            .query(&progenitor_client::QueryParam::new(
+                "artistCount",
+                &artist_count,
+            ))
+            .query(&progenitor_client::QueryParam::new(
+                "artistOffset",
+                &artist_offset,
+            ))
+            .query(&progenitor_client::QueryParam::new(
+                "musicFolderId",
+                &music_folder_id,
+            ))
             .query(&progenitor_client::QueryParam::new("query", &query))
-            .query(&progenitor_client::QueryParam::new("songCount", &song_count))
-            .query(&progenitor_client::QueryParam::new("songOffset", &song_offset))
+            .query(&progenitor_client::QueryParam::new(
+                "songCount",
+                &song_count,
+            ))
+            .query(&progenitor_client::QueryParam::new(
+                "songOffset",
+                &song_offset,
+            ))
             .headers(header_map)
             .build()?;
         let info = OperationInfo {
@@ -27759,26 +27158,25 @@ Arguments:
     }
     /**Returns albums, artists and songs matching the given search criteria. Supports paging through the result. (v3)
 
-Returns albums, artists and songs matching the given search criteria. Supports paging through the result.
+    Returns albums, artists and songs matching the given search criteria. Supports paging through the result.
 
-Music is organized according to ID3 tags.
+    Music is organized according to ID3 tags.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/search3`
+    Sends a `POST` request to `/rest/search3`
 
-*/
+    */
     pub async fn post_search3<'a>(
         &'a self,
         body: &'a types::PostSearch3Body,
     ) -> Result<ResponseValue<types::Search3Response>, Error<()>> {
         let url = format!("{}/rest/search3", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -27805,14 +27203,14 @@ Sends a `POST` request to `/rest/search3`
     }
     /**Sets the rating for a music file
 
-Sets the rating for a music file.
+    Sets the rating for a music file.
 
-Sends a `GET` request to `/rest/setRating`
+    Sends a `GET` request to `/rest/setRating`
 
-Arguments:
-- `id`: A string which uniquely identifies the file (song) or folder (album/artist) to rate.
-- `rating`: The rating between 1 and 5 (inclusive), or 0 to remove the rating.
-*/
+    Arguments:
+    - `id`: A string which uniquely identifies the file (song) or folder (album/artist) to rate.
+    - `rating`: The rating between 1 and 5 (inclusive), or 0 to remove the rating.
+    */
     pub async fn set_rating<'a>(
         &'a self,
         id: &'a str,
@@ -27820,11 +27218,10 @@ Arguments:
     ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let url = format!("{}/rest/setRating", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -27851,24 +27248,23 @@ Arguments:
     }
     /**Sets the rating for a music file
 
-Sets the rating for a music file.
+    Sets the rating for a music file.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/setRating`
+    Sends a `POST` request to `/rest/setRating`
 
-*/
+    */
     pub async fn post_set_rating<'a>(
         &'a self,
         body: &'a types::PostSetRatingBody,
     ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let url = format!("{}/rest/setRating", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -27895,15 +27291,15 @@ Sends a `POST` request to `/rest/setRating`
     }
     /**Attaches a star to a song, album or artist
 
-Attaches a star to a song, album or artist.
+    Attaches a star to a song, album or artist.
 
-Sends a `GET` request to `/rest/star`
+    Sends a `GET` request to `/rest/star`
 
-Arguments:
-- `album_id`: The ID of an album to star. Use this rather than `id` if the client accesses the media collection according to ID3 tags rather than file structure. Multiple parameters allowed.
-- `artist_id`: The ID of an artist to star. Use this rather than `id` if the client accesses the media collection according to ID3 tags rather than file structure. Multiple parameters allowed.
-- `id`: The ID of the file (song) or folder (album/artist) to star. Multiple parameters allowed.
-*/
+    Arguments:
+    - `album_id`: The ID of an album to star. Use this rather than `id` if the client accesses the media collection according to ID3 tags rather than file structure. Multiple parameters allowed.
+    - `artist_id`: The ID of an artist to star. Use this rather than `id` if the client accesses the media collection according to ID3 tags rather than file structure. Multiple parameters allowed.
+    - `id`: The ID of the file (song) or folder (album/artist) to star. Multiple parameters allowed.
+    */
     pub async fn star<'a>(
         &'a self,
         album_id: Option<&'a ::std::vec::Vec<::std::string::String>>,
@@ -27912,11 +27308,10 @@ Arguments:
     ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let url = format!("{}/rest/star", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -27944,24 +27339,23 @@ Arguments:
     }
     /**Attaches a star to a song, album or artist
 
-Attaches a star to a song, album or artist.
+    Attaches a star to a song, album or artist.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/star`
+    Sends a `POST` request to `/rest/star`
 
-*/
+    */
     pub async fn post_star<'a>(
         &'a self,
         body: &'a types::PostStarBody,
     ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let url = format!("{}/rest/star", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -27988,21 +27382,20 @@ Sends a `POST` request to `/rest/star`
     }
     /**Initiates a rescan of the media libraries
 
-Initiates a rescan of the media libraries. Takes no extra parameters.
+    Initiates a rescan of the media libraries. Takes no extra parameters.
 
-Sends a `GET` request to `/rest/startScan`
+    Sends a `GET` request to `/rest/startScan`
 
-*/
+    */
     pub async fn start_scan<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::StartScanResponse>, Error<()>> {
         let url = format!("{}/rest/startScan", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -28027,24 +27420,23 @@ Sends a `GET` request to `/rest/startScan`
     }
     /**Initiates a rescan of the media libraries
 
-Initiates a rescan of the media libraries. Takes no extra parameters.
+    Initiates a rescan of the media libraries. Takes no extra parameters.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/startScan`
+    Sends a `POST` request to `/rest/startScan`
 
-*/
+    */
     pub async fn post_start_scan<'a>(
         &'a self,
         body: &'a ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     ) -> Result<ResponseValue<types::StartScanResponse>, Error<()>> {
         let url = format!("{}/rest/startScan", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -28071,23 +27463,23 @@ Sends a `POST` request to `/rest/startScan`
     }
     /**Streams a given media file
 
-Streams a given media file.
+    Streams a given media file.
 
-OpenSubsonic servers must not count access to this endpoint as a play and increase playcount. Clients can use the Scrobble endpoint to indicate that a media is played ensuring proper data in all cases.
+    OpenSubsonic servers must not count access to this endpoint as a play and increase playcount. Clients can use the Scrobble endpoint to indicate that a media is played ensuring proper data in all cases.
 
-If the server support the Transcode Offet extension, then it must accept the timeOffset parameter for music too.
+    If the server support the Transcode Offet extension, then it must accept the timeOffset parameter for music too.
 
-Sends a `GET` request to `/rest/stream`
+    Sends a `GET` request to `/rest/stream`
 
-Arguments:
-- `converted`: (Since 1.14.0) Only applicable to video streaming. Servers can optimize videos for streaming by converting them to MP4. If a conversion exists for the video in question, then setting this parameter to “true” will cause the converted video to be returned instead of the original.
-- `estimate_content_length`: (Since 1.8.0). If set to “true”, the Content-Length HTTP header will be set to an estimated value for transcoded or downsampled media.
-- `format`: (Since 1.6.0) Specifies the preferred target format (e.g., “mp3” or “flv”) in case there are multiple applicable transcodings. Starting with 1.9.0 you can use the special value “raw” to disable transcoding.
-- `id`: A string which uniquely identifies the file to stream. Obtained by calls to getMusicDirectory.
-- `max_bit_rate`: (Since 1.2.0) If specified, the server will attempt to limit the bitrate to this value, in kilobits per second. If set to zero, no limit is imposed.
-- `size`: (Since 1.6.0) Only applicable to video streaming. Requested video size specified as WxH, for instance “640x480”.
-- `time_offset`: By default only applicable to video streaming. If specified, start streaming at the given offset (in seconds) into the media. The `Transcode Offset` extension enables the parameter to music too.
-*/
+    Arguments:
+    - `converted`: (Since 1.14.0) Only applicable to video streaming. Servers can optimize videos for streaming by converting them to MP4. If a conversion exists for the video in question, then setting this parameter to “true” will cause the converted video to be returned instead of the original.
+    - `estimate_content_length`: (Since 1.8.0). If set to “true”, the Content-Length HTTP header will be set to an estimated value for transcoded or downsampled media.
+    - `format`: (Since 1.6.0) Specifies the preferred target format (e.g., “mp3” or “flv”) in case there are multiple applicable transcodings. Starting with 1.9.0 you can use the special value “raw” to disable transcoding.
+    - `id`: A string which uniquely identifies the file to stream. Obtained by calls to getMusicDirectory.
+    - `max_bit_rate`: (Since 1.2.0) If specified, the server will attempt to limit the bitrate to this value, in kilobits per second. If set to zero, no limit is imposed.
+    - `size`: (Since 1.6.0) Only applicable to video streaming. Requested video size specified as WxH, for instance “640x480”.
+    - `time_offset`: By default only applicable to video streaming. If specified, start streaming at the given offset (in seconds) into the media. The `Transcode Offset` extension enables the parameter to music too.
+    */
     pub async fn stream<'a>(
         &'a self,
         converted: Option<bool>,
@@ -28100,27 +27492,30 @@ Arguments:
     ) -> Result<ResponseValue<ByteStream>, Error<()>> {
         let url = format!("{}/rest/stream", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
             .get(url)
             .query(&progenitor_client::QueryParam::new("converted", &converted))
-            .query(
-                &progenitor_client::QueryParam::new(
-                    "estimateContentLength",
-                    &estimate_content_length,
-                ),
-            )
+            .query(&progenitor_client::QueryParam::new(
+                "estimateContentLength",
+                &estimate_content_length,
+            ))
             .query(&progenitor_client::QueryParam::new("format", &format))
             .query(&progenitor_client::QueryParam::new("id", &id))
-            .query(&progenitor_client::QueryParam::new("maxBitRate", &max_bit_rate))
+            .query(&progenitor_client::QueryParam::new(
+                "maxBitRate",
+                &max_bit_rate,
+            ))
             .query(&progenitor_client::QueryParam::new("size", &size))
-            .query(&progenitor_client::QueryParam::new("timeOffset", &time_offset))
+            .query(&progenitor_client::QueryParam::new(
+                "timeOffset",
+                &time_offset,
+            ))
             .headers(header_map)
             .build()?;
         let info = OperationInfo {
@@ -28137,28 +27532,27 @@ Arguments:
     }
     /**Streams a given media file
 
-Streams a given media file.
+    Streams a given media file.
 
-OpenSubsonic servers must not count access to this endpoint as a play and increase playcount. Clients can use the Scrobble endpoint to indicate that a media is played ensuring proper data in all cases.
+    OpenSubsonic servers must not count access to this endpoint as a play and increase playcount. Clients can use the Scrobble endpoint to indicate that a media is played ensuring proper data in all cases.
 
-If the server supports the Transcode Offset extension, then it must accept the timeOffset parameter for music too.
+    If the server supports the Transcode Offset extension, then it must accept the timeOffset parameter for music too.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/stream`
+    Sends a `POST` request to `/rest/stream`
 
-*/
+    */
     pub async fn post_stream<'a>(
         &'a self,
         body: &'a types::PostStreamBody,
     ) -> Result<ResponseValue<ByteStream>, Error<()>> {
         let url = format!("{}/rest/stream", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -28181,21 +27575,20 @@ Sends a `POST` request to `/rest/stream`
     }
     /**Returns information about an API key
 
-OpenSubsonic extension name `apiKeyAuthentication` (As returned by `getOpenSubsonicExtensions`). Returns data about an API key.
+    OpenSubsonic extension name `apiKeyAuthentication` (As returned by `getOpenSubsonicExtensions`). Returns data about an API key.
 
-Sends a `GET` request to `/rest/tokenInfo`
+    Sends a `GET` request to `/rest/tokenInfo`
 
-*/
+    */
     pub async fn token_info<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::GetTokenInfoResponse>, Error<()>> {
         let url = format!("{}/rest/tokenInfo", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -28221,22 +27614,21 @@ Sends a `GET` request to `/rest/tokenInfo`
     }
     /**Returns information about an API key
 
-OpenSubsonic extension name `apiKeyAuthentication` (As returned by `getOpenSubsonicExtensions`). Returns data about an API key.
+    OpenSubsonic extension name `apiKeyAuthentication` (As returned by `getOpenSubsonicExtensions`). Returns data about an API key.
 
-Sends a `POST` request to `/rest/tokenInfo`
+    Sends a `POST` request to `/rest/tokenInfo`
 
-*/
+    */
     pub async fn post_token_info<'a>(
         &'a self,
         body: &'a ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     ) -> Result<ResponseValue<types::GetTokenInfoResponse>, Error<()>> {
         let url = format!("{}/rest/tokenInfo", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -28264,15 +27656,15 @@ Sends a `POST` request to `/rest/tokenInfo`
     }
     /**Removes a star to a song, album or artist
 
-Removes a star to a song, album or artist.
+    Removes a star to a song, album or artist.
 
-Sends a `GET` request to `/rest/unstar`
+    Sends a `GET` request to `/rest/unstar`
 
-Arguments:
-- `album_id`: The ID of an album to star. Use this rather than `id` if the client accesses the media collection according to ID3 tags rather than file structure. Multiple parameters allowed.
-- `artist_id`: The ID of an artist to star. Use this rather than `id` if the client accesses the media collection according to ID3 tags rather than file structure. Multiple parameters allowed.
-- `id`: The ID of the file (song) or folder (album/artist) to star. Multiple parameters allowed.
-*/
+    Arguments:
+    - `album_id`: The ID of an album to star. Use this rather than `id` if the client accesses the media collection according to ID3 tags rather than file structure. Multiple parameters allowed.
+    - `artist_id`: The ID of an artist to star. Use this rather than `id` if the client accesses the media collection according to ID3 tags rather than file structure. Multiple parameters allowed.
+    - `id`: The ID of the file (song) or folder (album/artist) to star. Multiple parameters allowed.
+    */
     pub async fn unstar<'a>(
         &'a self,
         album_id: Option<&'a ::std::vec::Vec<::std::string::String>>,
@@ -28281,11 +27673,10 @@ Arguments:
     ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let url = format!("{}/rest/unstar", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -28313,24 +27704,23 @@ Arguments:
     }
     /**Removes a star to a song, album or artist
 
-Removes a star to a song, album or artist.
+    Removes a star to a song, album or artist.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/unstar`
+    Sends a `POST` request to `/rest/unstar`
 
-*/
+    */
     pub async fn post_unstar<'a>(
         &'a self,
         body: &'a types::PostUnstarBody,
     ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let url = format!("{}/rest/unstar", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -28357,16 +27747,16 @@ Sends a `POST` request to `/rest/unstar`
     }
     /**Updates an existing internet radio station
 
-Updates an existing internet radio station. Only users with admin privileges are allowed to call this method.
+    Updates an existing internet radio station. Only users with admin privileges are allowed to call this method.
 
-Sends a `GET` request to `/rest/updateInternetRadioStation`
+    Sends a `GET` request to `/rest/updateInternetRadioStation`
 
-Arguments:
-- `homepage_url`: The home page URL for the station.
-- `id`: The ID of the station.
-- `name`: The user-defined name for the station.
-- `stream_url`: The stream URL for the station.
-*/
+    Arguments:
+    - `homepage_url`: The home page URL for the station.
+    - `id`: The ID of the station.
+    - `name`: The user-defined name for the station.
+    - `stream_url`: The stream URL for the station.
+    */
     pub async fn update_internet_radio_station<'a>(
         &'a self,
         homepage_url: Option<&'a str>,
@@ -28376,11 +27766,10 @@ Arguments:
     ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let url = format!("{}/rest/updateInternetRadioStation", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -28389,10 +27778,16 @@ Arguments:
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
-            .query(&progenitor_client::QueryParam::new("homepageUrl", &homepage_url))
+            .query(&progenitor_client::QueryParam::new(
+                "homepageUrl",
+                &homepage_url,
+            ))
             .query(&progenitor_client::QueryParam::new("id", &id))
             .query(&progenitor_client::QueryParam::new("name", &name))
-            .query(&progenitor_client::QueryParam::new("streamUrl", &stream_url))
+            .query(&progenitor_client::QueryParam::new(
+                "streamUrl",
+                &stream_url,
+            ))
             .headers(header_map)
             .build()?;
         let info = OperationInfo {
@@ -28409,24 +27804,23 @@ Arguments:
     }
     /**Updates an existing internet radio station
 
-Updates an existing internet radio station. Only users with admin privileges are allowed to call this method.
+    Updates an existing internet radio station. Only users with admin privileges are allowed to call this method.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/updateInternetRadioStation`
+    Sends a `POST` request to `/rest/updateInternetRadioStation`
 
-*/
+    */
     pub async fn post_update_internet_radio_station<'a>(
         &'a self,
         body: &'a types::PostUpdateInternetRadioStationBody,
     ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let url = format!("{}/rest/updateInternetRadioStation", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -28453,18 +27847,18 @@ Sends a `POST` request to `/rest/updateInternetRadioStation`
     }
     /**Updates a playlist. Only the owner of a playlist is allowed to update it
 
-Updates a playlist. Only the owner of a playlist is allowed to update it.
+    Updates a playlist. Only the owner of a playlist is allowed to update it.
 
-Sends a `GET` request to `/rest/updatePlaylist`
+    Sends a `GET` request to `/rest/updatePlaylist`
 
-Arguments:
-- `comment`: The playlist comment.
-- `name`: The human-readable name of the playlist.
-- `playlist_id`: The playlist ID.
-- `public`: `true` if the playlist should be visible to all users, `false` otherwise.
-- `song_id_to_add`: Add this song with this ID to the playlist. Multiple parameters allowed.
-- `song_index_to_remove`: Remove the song at this position in the playlist. Multiple parameters allowed.
-*/
+    Arguments:
+    - `comment`: The playlist comment.
+    - `name`: The human-readable name of the playlist.
+    - `playlist_id`: The playlist ID.
+    - `public`: `true` if the playlist should be visible to all users, `false` otherwise.
+    - `song_id_to_add`: Add this song with this ID to the playlist. Multiple parameters allowed.
+    - `song_index_to_remove`: Remove the song at this position in the playlist. Multiple parameters allowed.
+    */
     pub async fn update_playlist<'a>(
         &'a self,
         comment: Option<&'a str>,
@@ -28476,11 +27870,10 @@ Arguments:
     ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let url = format!("{}/rest/updatePlaylist", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -28491,15 +27884,19 @@ Arguments:
             )
             .query(&progenitor_client::QueryParam::new("comment", &comment))
             .query(&progenitor_client::QueryParam::new("name", &name))
-            .query(&progenitor_client::QueryParam::new("playlistId", &playlist_id))
+            .query(&progenitor_client::QueryParam::new(
+                "playlistId",
+                &playlist_id,
+            ))
             .query(&progenitor_client::QueryParam::new("public", &public))
-            .query(&progenitor_client::QueryParam::new("songIdToAdd", &song_id_to_add))
-            .query(
-                &progenitor_client::QueryParam::new(
-                    "songIndexToRemove",
-                    &song_index_to_remove,
-                ),
-            )
+            .query(&progenitor_client::QueryParam::new(
+                "songIdToAdd",
+                &song_id_to_add,
+            ))
+            .query(&progenitor_client::QueryParam::new(
+                "songIndexToRemove",
+                &song_index_to_remove,
+            ))
             .headers(header_map)
             .build()?;
         let info = OperationInfo {
@@ -28516,24 +27913,23 @@ Arguments:
     }
     /**Updates a playlist. Only the owner of a playlist is allowed to update it
 
-Updates a playlist. Only the owner of a playlist is allowed to update it.
+    Updates a playlist. Only the owner of a playlist is allowed to update it.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/updatePlaylist`
+    Sends a `POST` request to `/rest/updatePlaylist`
 
-*/
+    */
     pub async fn post_update_playlist<'a>(
         &'a self,
         body: &'a types::PostUpdatePlaylistBody,
     ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let url = format!("{}/rest/updatePlaylist", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -28560,15 +27956,15 @@ Sends a `POST` request to `/rest/updatePlaylist`
     }
     /**Updates the description and/or expiration date for an existing share
 
-Updates the description and/or expiration date for an existing share.
+    Updates the description and/or expiration date for an existing share.
 
-Sends a `GET` request to `/rest/updateShare`
+    Sends a `GET` request to `/rest/updateShare`
 
-Arguments:
-- `description`: A user-defined description that will be displayed to people visiting the shared media.
-- `expires`: The time at which the share expires. Given as milliseconds since 1970, or zero to remove the expiration.
-- `id`: ID of the share to update.
-*/
+    Arguments:
+    - `description`: A user-defined description that will be displayed to people visiting the shared media.
+    - `expires`: The time at which the share expires. Given as milliseconds since 1970, or zero to remove the expiration.
+    - `id`: ID of the share to update.
+    */
     pub async fn update_share<'a>(
         &'a self,
         description: Option<&'a str>,
@@ -28577,11 +27973,10 @@ Arguments:
     ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let url = format!("{}/rest/updateShare", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -28590,7 +27985,10 @@ Arguments:
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
-            .query(&progenitor_client::QueryParam::new("description", &description))
+            .query(&progenitor_client::QueryParam::new(
+                "description",
+                &description,
+            ))
             .query(&progenitor_client::QueryParam::new("expires", &expires))
             .query(&progenitor_client::QueryParam::new("id", &id))
             .headers(header_map)
@@ -28609,24 +28007,23 @@ Arguments:
     }
     /**Updates the description and/or expiration date for an existing share
 
-Updates the description and/or expiration date for an existing share.
+    Updates the description and/or expiration date for an existing share.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/updateShare`
+    Sends a `POST` request to `/rest/updateShare`
 
-*/
+    */
     pub async fn post_update_share<'a>(
         &'a self,
         body: &'a types::PostUpdateShareBody,
     ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let url = format!("{}/rest/updateShare", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -28653,29 +28050,29 @@ Sends a `POST` request to `/rest/updateShare`
     }
     /**Modifies an existing user on the server
 
-Modifies an existing user on the server.
+    Modifies an existing user on the server.
 
-Sends a `GET` request to `/rest/updateUser`
+    Sends a `GET` request to `/rest/updateUser`
 
-Arguments:
-- `admin_role`: Whether the user is administrator.
-- `comment_role`: Whether the user is allowed to create and edit comments and ratings.
-- `cover_art_role`: Whether the user is allowed to change cover art and tags.
-- `download_role`: Whether the user is allowed to download files.
-- `email`: The email address of the user.
-- `jukebox_role`: Whether the user is allowed to play files in jukebox mode.
-- `ldap_authenticated`: Whether the user is authenicated in LDAP.
-- `max_bit_rate`: (Since 1.13.0) The maximum bit rate (in Kbps) for the user. Audio streams of higher bit rates are automatically downsampled to this bit rate. Legal values: 0 (no limit), 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320.
-- `music_folder_id`: (Since 1.12.0) IDs of the music folders the user is allowed access to. Include the parameter once for each folder.
-- `password`: The password of the user, either in clear text of hex-encoded (see above).
-- `podcast_role`: Whether the user is allowed to administrate Podcasts.
-- `settings_role`: Whether the user is allowed to change personal settings and password.
-- `share_role`: Whether the user is allowed to share files with anyone.
-- `stream_role`: Whether the user is allowed to play files.
-- `upload_role`: Whether the user is allowed to upload files.
-- `username`: The name of the user.
-- `video_conversion_role`: (Since 1.15.0) Whether the user is allowed to start video conversions.
-*/
+    Arguments:
+    - `admin_role`: Whether the user is administrator.
+    - `comment_role`: Whether the user is allowed to create and edit comments and ratings.
+    - `cover_art_role`: Whether the user is allowed to change cover art and tags.
+    - `download_role`: Whether the user is allowed to download files.
+    - `email`: The email address of the user.
+    - `jukebox_role`: Whether the user is allowed to play files in jukebox mode.
+    - `ldap_authenticated`: Whether the user is authenicated in LDAP.
+    - `max_bit_rate`: (Since 1.13.0) The maximum bit rate (in Kbps) for the user. Audio streams of higher bit rates are automatically downsampled to this bit rate. Legal values: 0 (no limit), 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320.
+    - `music_folder_id`: (Since 1.12.0) IDs of the music folders the user is allowed access to. Include the parameter once for each folder.
+    - `password`: The password of the user, either in clear text of hex-encoded (see above).
+    - `podcast_role`: Whether the user is allowed to administrate Podcasts.
+    - `settings_role`: Whether the user is allowed to change personal settings and password.
+    - `share_role`: Whether the user is allowed to share files with anyone.
+    - `stream_role`: Whether the user is allowed to play files.
+    - `upload_role`: Whether the user is allowed to upload files.
+    - `username`: The name of the user.
+    - `video_conversion_role`: (Since 1.15.0) Whether the user is allowed to start video conversions.
+    */
     pub async fn update_user<'a>(
         &'a self,
         admin_role: Option<bool>,
@@ -28698,11 +28095,10 @@ Arguments:
     ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let url = format!("{}/rest/updateUser", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -28711,35 +28107,65 @@ Arguments:
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
-            .query(&progenitor_client::QueryParam::new("adminRole", &admin_role))
-            .query(&progenitor_client::QueryParam::new("commentRole", &comment_role))
-            .query(&progenitor_client::QueryParam::new("coverArtRole", &cover_art_role))
-            .query(&progenitor_client::QueryParam::new("downloadRole", &download_role))
+            .query(&progenitor_client::QueryParam::new(
+                "adminRole",
+                &admin_role,
+            ))
+            .query(&progenitor_client::QueryParam::new(
+                "commentRole",
+                &comment_role,
+            ))
+            .query(&progenitor_client::QueryParam::new(
+                "coverArtRole",
+                &cover_art_role,
+            ))
+            .query(&progenitor_client::QueryParam::new(
+                "downloadRole",
+                &download_role,
+            ))
             .query(&progenitor_client::QueryParam::new("email", &email))
-            .query(&progenitor_client::QueryParam::new("jukeboxRole", &jukebox_role))
-            .query(
-                &progenitor_client::QueryParam::new(
-                    "ldapAuthenticated",
-                    &ldap_authenticated,
-                ),
-            )
-            .query(&progenitor_client::QueryParam::new("maxBitRate", &max_bit_rate))
-            .query(
-                &progenitor_client::QueryParam::new("musicFolderId", &music_folder_id),
-            )
+            .query(&progenitor_client::QueryParam::new(
+                "jukeboxRole",
+                &jukebox_role,
+            ))
+            .query(&progenitor_client::QueryParam::new(
+                "ldapAuthenticated",
+                &ldap_authenticated,
+            ))
+            .query(&progenitor_client::QueryParam::new(
+                "maxBitRate",
+                &max_bit_rate,
+            ))
+            .query(&progenitor_client::QueryParam::new(
+                "musicFolderId",
+                &music_folder_id,
+            ))
             .query(&progenitor_client::QueryParam::new("password", &password))
-            .query(&progenitor_client::QueryParam::new("podcastRole", &podcast_role))
-            .query(&progenitor_client::QueryParam::new("settingsRole", &settings_role))
-            .query(&progenitor_client::QueryParam::new("shareRole", &share_role))
-            .query(&progenitor_client::QueryParam::new("streamRole", &stream_role))
-            .query(&progenitor_client::QueryParam::new("uploadRole", &upload_role))
+            .query(&progenitor_client::QueryParam::new(
+                "podcastRole",
+                &podcast_role,
+            ))
+            .query(&progenitor_client::QueryParam::new(
+                "settingsRole",
+                &settings_role,
+            ))
+            .query(&progenitor_client::QueryParam::new(
+                "shareRole",
+                &share_role,
+            ))
+            .query(&progenitor_client::QueryParam::new(
+                "streamRole",
+                &stream_role,
+            ))
+            .query(&progenitor_client::QueryParam::new(
+                "uploadRole",
+                &upload_role,
+            ))
             .query(&progenitor_client::QueryParam::new("username", &username))
-            .query(
-                &progenitor_client::QueryParam::new(
-                    "videoConversionRole",
-                    &video_conversion_role,
-                ),
-            )
+            .query(&progenitor_client::QueryParam::new(
+                "videoConversionRole",
+                &video_conversion_role,
+            ))
             .headers(header_map)
             .build()?;
         let info = OperationInfo {
@@ -28756,24 +28182,23 @@ Arguments:
     }
     /**Modifies an existing user on the server
 
-Modifies an existing user on the server.
+    Modifies an existing user on the server.
 
-Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
+    Requires OpenSubsonic extension name `formPost` (As returned by `getOpenSubsonicExtensions`)
 
-Sends a `POST` request to `/rest/updateUser`
+    Sends a `POST` request to `/rest/updateUser`
 
-*/
+    */
     pub async fn post_update_user<'a>(
         &'a self,
         body: &'a types::PostUpdateUserBody,
     ) -> Result<ResponseValue<types::SubsonicResponse>, Error<()>> {
         let url = format!("{}/rest/updateUser", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map
-            .append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-            );
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
