@@ -13,21 +13,24 @@ use stream_download::{
     source::DecodeError,
     storage::{adaptive::AdaptiveStorageProvider, temp::TempStorageProvider},
 };
-use tokio::sync::broadcast::Sender;
 use tracing::info;
 
-use crate::{PlayerCommand, model::Song, player::stream_url};
+use crate::{
+    PlayerCommand,
+    model::Song,
+    player::{AudioBackendStateUpdate, stream_url},
+};
 
 pub struct AudioBackend {
     sink: Sink,
     pub command_rx: flume::Receiver<PlayerCommand>,
+    pub state_tx: flume::Sender<AudioBackendStateUpdate>,
     username: String,
     password: String,
     base_url: String,
     queue: RefCell<Vec<Song>>,
     current: Arc<AtomicUsize>,
     next_queued: Arc<AtomicBool>,
-    pub tx: Sender<u64>,
     _output_stream: OutputStream,
 }
 
@@ -37,7 +40,7 @@ impl AudioBackend {
         username: impl ToString,
         password: impl ToString,
         command_rx: flume::Receiver<PlayerCommand>,
-        tx: Sender<u64>,
+        state_tx: flume::Sender<AudioBackendStateUpdate>,
     ) -> Result<Self, MusicPlayerError> {
         let _output_stream = OutputStreamBuilder::open_default_stream()?;
         let sink = Sink::connect_new(_output_stream.mixer());
@@ -52,7 +55,7 @@ impl AudioBackend {
             current,
             command_rx,
             _output_stream,
-            tx,
+            state_tx,
             next_queued,
             queue: RefCell::new(vec![]),
         })

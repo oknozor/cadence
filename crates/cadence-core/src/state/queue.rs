@@ -5,6 +5,7 @@ use std::{collections::HashMap, time::Duration};
 
 pub static CONTROLLER: GlobalStore<Controller> = Global::new(Controller::default);
 
+#[derive(Debug)]
 pub enum HostNotificationCommand {
     Play,
     Pause,
@@ -17,6 +18,7 @@ pub enum HostNotificationCommand {
 pub struct Controller {
     pub is_playing: bool,
     pub shuffle: bool,
+    pub position: Duration,
     sender: Option<Sender<PlayerCommand>>,
     current_idx: Option<usize>,
     queue_store: Store<HashMap<usize, Song>>,
@@ -25,6 +27,7 @@ pub struct Controller {
 impl Default for Controller {
     fn default() -> Self {
         Self {
+            position: Duration::ZERO,
             current_idx: Default::default(),
             is_playing: Default::default(),
             shuffle: Default::default(),
@@ -46,7 +49,12 @@ impl<Lens> Store<Controller, Lens> {
             .and_then(|idx: usize| self.queue_store().read().get(idx).map(|store| store()))
     }
 
+    fn position_f64(&self) -> Option<f64> {
+        Some(self.position().read().as_secs_f64())
+    }
+
     fn seek(&mut self, pos: Duration) {
+        self.position().set(pos);
         self.send(PlayerCommand::Seek(pos));
     }
 
@@ -92,6 +100,11 @@ impl<Lens> Store<Controller, Lens> {
             .map(|current| current.id == song_id)
             .unwrap_or_default()
     }
+
+    fn finish(&mut self) {
+        self.toggle_play();
+        self.seek(Duration::ZERO);
+    }
 }
 
 #[store(name = ControllerStorePrivate)]
@@ -101,6 +114,7 @@ impl<Lens> Store<Controller, Lens> {
     }
 
     fn send(&self, command: PlayerCommand) {
+        tracing::trace!("Sending player command: {:?}", command);
         if let Err(err) = self.sender_unchecked().send(command) {
             tracing::error!("failed to send message to audio backend: {}", err);
         }

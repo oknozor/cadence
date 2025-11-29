@@ -1,18 +1,18 @@
 use crate::{
-    hooks::{use_command_receiver, use_command_sender},
-    player::AudioBackend,
-    state::{CONTROLLER, ControllerExt},
+    player::{AudioBackend, AudioBackendStateUpdate},
+    state::{CONTROLLER, ControllerExt, ControllerStoreExt, HostNotificationCommand},
 };
 use dioxus::prelude::*;
 
 use crate::{
-    hooks::{use_playback_position_sender, use_saved_credentials},
+    hooks::use_saved_credentials,
     services::subsonic_client::{SUBSONIC_CLIENT, SubsonicClient},
     state::LoginState,
 };
 
-pub fn use_on_login_effect() {
+pub fn initialize_audio_backend() {
     let saved_credentials = use_saved_credentials();
+    use_audio_backend_state_update();
 
     use_effect(move || {
         if let Some(credentials) = saved_credentials.read().cloned() {
@@ -34,12 +34,12 @@ pub fn use_on_login_effect() {
                             &credentials.server_url,
                             &credentials.username,
                             &credentials.password,
-                            use_command_receiver(),
-                            use_playback_position_sender(),
+                            use_context(),
+                            use_context(),
                         )
                         .expect("Player start failed");
 
-                        CONTROLLER.resolve().attach_sender(use_command_sender());
+                        CONTROLLER.resolve().attach_sender(use_context());
                         if let Err(err) = player.run().await {
                             error!("Audio backend error: {}", err);
                         }
@@ -53,5 +53,52 @@ pub fn use_on_login_effect() {
                 }
             });
         }
+    });
+}
+
+pub fn use_notification_control() {
+    use_effect(move || {
+        let rx: flume::Receiver<HostNotificationCommand> = use_context();
+        spawn(async move {
+            loop {
+                match rx.recv_async().await {
+                    Ok(command) => {
+                        tracing::info!("Received host notification command: {command:?}");
+                        match command {
+                            HostNotificationCommand::Play | HostNotificationCommand::Pause => {
+                                CONTROLLER.resolve().toggle_play()
+                            }
+                            HostNotificationCommand::Next => CONTROLLER.resolve().next(),
+                            HostNotificationCommand::Previous => CONTROLLER.resolve().previous(),
+                            HostNotificationCommand::Seek(duration) => {
+                                CONTROLLER.resolve().seek(duration)
+                            }
+                        }
+                    }
+                    Err(err) => error!("failed to handle notification command: {err}"),
+                }
+            }
+        });
+    });
+}
+
+fn use_audio_backend_state_update() {
+    use_effect(move || {
+        let rx: flume::Receiver<AudioBackendStateUpdate> = use_context();
+
+        spawn(async move {
+            loop {
+                match rx.recv_async().await {
+                    Ok(AudioBackendStateUpdate::Position(pos)) => {
+                        CONTROLLER.resolve().position().set(pos);
+                    }
+                    Ok(AudioBackendStateUpdate::Finished) => {
+                        tracing::info!("Audio backend finished");
+                        CONTROLLER.resolve().finish();
+                    }
+                    Err(err) => error!("failed to handle playback position update: {err}"),
+                }
+            }
+        });
     });
 }

@@ -1,24 +1,16 @@
 use dioxus::prelude::*;
-use dioxus_primitives::progress::{self, ProgressIndicatorProps, ProgressProps};
+use dioxus_primitives::progress::{Progress, ProgressIndicator};
 
 #[component]
-pub fn Progress(props: ProgressProps) -> Element {
+pub fn PlayerProgress(value: ReadSignal<Option<f64>>, max: f64) -> Element {
     rsx! {
         div { class: "progress-container",
-            progress::Progress {
+            Progress {
                 class: "progress",
-                value: props.value,
-                max: props.max,
-                attributes: props.attributes,
-                {props.children}
+                value ,
+                 max,
+                ProgressIndicator { class: "progress-indicator" }
             }
         }
-    }
-}
-
-#[component]
-pub fn ProgressIndicator(props: ProgressIndicatorProps) -> Element {
-    rsx! {
-        progress::ProgressIndicator { class: "progress-indicator", attributes: props.attributes, {props.children} }
     }
 }

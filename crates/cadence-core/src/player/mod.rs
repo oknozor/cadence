@@ -9,7 +9,7 @@ use tracing::info;
 
 use crate::model::Song;
 
-#[derive(Debug, Clone)]
+#[derive(Debug)]
 pub enum PlayerCommand {
     Play,
     Queue(Song),
@@ -21,6 +21,12 @@ pub enum PlayerCommand {
     Seek(Duration),
 }
 
+#[derive(Debug)]
+pub enum AudioBackendStateUpdate {
+    Finished,
+    Position(Duration),
+}
+
 impl AudioBackend {
     pub async fn run(&mut self) -> Result<(), MusicPlayerError> {
         info!("Audio backend starting...");
@@ -28,9 +34,9 @@ impl AudioBackend {
 
         loop {
             tokio::select! {
-                _ =  dioxus_sdk::time::sleep(Duration::from_secs(1)) => {
+                _ =  dioxus_sdk::time::sleep(Duration::from_millis(200)) => {
                     if let Ok(pos) = self.get_pos().await {
-                        self.tx.send(pos).unwrap();
+                        self.state_tx.send_async(AudioBackendStateUpdate::Position(Duration::from_secs(pos))).await.unwrap();
                     }
                 },
                 Ok(command) = rx.recv_async() => {

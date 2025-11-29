@@ -1,15 +1,13 @@
-use crate::icons::play::PlayIcon;
+use std::time::Duration;
+
 use crate::items::ItemInfo;
-use crate::progress::Progress;
-use crate::progress::ProgressIndicator;
 use crate::thumbnails::Thumbnail;
-use cadence_core::hooks::use_playback_position;
+use crate::{icons::play::PlayIcon, progress::PlayerProgress};
 use cadence_core::state::{CONTROLLER, ControllerExt, ControllerStoreExt};
 use dioxus::prelude::*;
 
 #[component]
 pub fn Player() -> Element {
-    let playback_position = use_playback_position();
     let mut controller = CONTROLLER.resolve();
 
     rsx! {
@@ -38,10 +36,9 @@ pub fn Player() -> Element {
                         }
                     }
                 }
-                Progress {
-                    value: playback_position,
+                PlayerProgress {
+                    value: controller.position_f64(),
                     max: track.duration.unwrap_or_default() as f64,
-                    ProgressIndicator {}
                 }
             } else {
                 div {

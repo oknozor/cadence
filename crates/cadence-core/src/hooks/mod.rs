@@ -1,13 +1,8 @@
-use crate::{
-    player::PlayerCommand,
-    state::{CONTROLLER, ControllerExt, HostNotificationCommand},
-};
 use dioxus::{CapturedError, prelude::*};
 use dioxus_sdk::storage::{get_from_storage, use_storage};
-use tokio::sync::broadcast;
 
 use crate::{
-    hooks::effects::use_on_login_effect,
+    hooks::effects::initialize_audio_backend,
     model::{Album, SearchResult},
     services::subsonic_client::{AlbumListType, SUBSONIC_CLIENT, SubsonicClient},
     state::{LoginState, SubSonicLogin},
@@ -17,49 +12,6 @@ mod context;
 pub use context::init_global_context;
 
 pub mod effects;
-
-pub fn use_playback_position() -> Signal<Option<f64>> {
-    let position_tx: broadcast::Sender<u64> = use_playback_position_sender();
-    let mut position = use_signal(|| None::<f64>);
-
-    use_effect(move || {
-        let mut tx = position_tx.subscribe();
-        spawn(async move {
-            while let Ok(new_progress) = tx.recv().await {
-                position.set(Some(new_progress as f64));
-            }
-        });
-    });
-
-    position
-}
-
-pub fn use_notification_control() {
-    use_effect(move || {
-        let rx: flume::Receiver<HostNotificationCommand> = use_context();
-        spawn(async move {
-            loop {
-                match rx.recv_async().await {
-                    Ok(command) => match command {
-                        HostNotificationCommand::Play | HostNotificationCommand::Pause => {
-                            CONTROLLER.resolve().toggle_play()
-                        }
-                        HostNotificationCommand::Next => CONTROLLER.resolve().next(),
-                        HostNotificationCommand::Previous => CONTROLLER.resolve().previous(),
-                        HostNotificationCommand::Seek(duration) => {
-                            CONTROLLER.resolve().seek(duration)
-                        }
-                    },
-                    Err(err) => error!("failed to handle notification command: {err}"),
-                }
-            }
-        });
-    });
-}
-
-pub fn use_playback_position_sender() -> broadcast::Sender<u64> {
-    consume_context()
-}
 
 pub fn use_search_results() -> Action<(String,), Vec<SearchResult>> {
     use_action(move |input: String| async move {
@@ -76,15 +28,7 @@ pub fn use_search_results() -> Action<(String,), Vec<SearchResult>> {
 }
 
 pub fn use_login_state() -> LoginState {
-    use_on_login_effect();
-    consume_context()
-}
-
-pub fn use_command_sender() -> flume::Sender<PlayerCommand> {
-    consume_context()
-}
-
-pub fn use_command_receiver() -> flume::Receiver<PlayerCommand> {
+    initialize_audio_backend();
     consume_context()
 }
 
