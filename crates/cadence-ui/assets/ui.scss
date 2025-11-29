@@ -1,6 +1,5 @@
 @use '../src/icons/icons.scss';
 @use '../src/items/items.scss';
-@use '../src/navbar/navbar.scss';
 @use '../src/thumbnails/thumbnails.scss';
 @use '../src/track/track.scss';
 @use '../src/progress/progress.scss';
@@ -9,6 +8,15 @@
 @use '../src/album/album.scss';
 @use '../src/search/search.scss';
 @use '../src/button/button.scss';
+@use '../src/navigation/topbar/topbar.scss';
+@use '../src/navigation/navbar/navbar.scss';
+
+@use '../src/views/album/album-view.scss';
+@use '../src/views/search/search-view.scss';
+@use '../src/views/home/home-view.scss';
+@use '../src/views/library/library-view.scss';
+@use '../src/views/view.scss';
+
 @use 'theme.scss';
 @import 'mixins.scss';
 

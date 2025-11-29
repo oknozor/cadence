@@ -1,6 +1,6 @@
-use crate::{Route, navigation::topbar::TopBar};
+use crate::album::AlbumList;
+use crate::{navigation::topbar::TopBar, views::Route};
 use cadence_core::hooks::{use_recently_played, use_recently_released};
-use cadence_ui::album::AlbumList;
 use dioxus::prelude::*;
 
 #[component]

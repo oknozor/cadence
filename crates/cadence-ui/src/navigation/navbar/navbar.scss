@@ -1,4 +1,5 @@
-@import '../../../../cadence-ui/assets/theme.scss';
+@use '../../../assets/theme.scss';
+@import '../../../assets/mixins.scss';
 
 #navbar {
     padding-bottom: 10px;
@@ -22,5 +23,31 @@
         color: $secondary-color;
         display: flex;
         flex-direction: row;
+    }
+}
+
+
+.navbar-item {
+    @include column;
+    align-items: center;
+
+    > .navbar-item-icon.active {
+        animation: shrinkPulse 1s infinite;
+    }
+
+    > .navbar-item-label {
+        @include text-primary;
+    }
+}
+
+@keyframes shrinkPulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(0.7);
+    }
+    100% {
+        transform: scale(1);
     }
 }

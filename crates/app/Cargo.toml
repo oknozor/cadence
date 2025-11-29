@@ -8,7 +8,7 @@ build = "../../build.rs"
 cadence-core.workspace = true
 cadence-ui.workspace = true
 cadence-storage-android= { workspace = true, optional = true}
-dioxus = { workspace = true, features = ["router"] }
+dioxus = { workspace = true }
 dioxus-sdk = { workspace = true }
 jni = { workspace = true }
 

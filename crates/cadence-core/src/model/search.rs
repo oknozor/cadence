@@ -1,4 +1,6 @@
-#[derive(Debug, Clone, PartialEq, Eq)]
+use crate::model::Song;
+
+#[derive(Debug, Clone, PartialEq)]
 pub enum SearchResult {
     Artist {
         id: String,
@@ -11,10 +13,5 @@ pub enum SearchResult {
         cover: Option<String>,
         artist: Option<String>,
     },
-    Song {
-        id: String,
-        name: String,
-        cover: Option<String>,
-        artist: Option<String>,
-    },
+    Song(Song),
 }

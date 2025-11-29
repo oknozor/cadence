@@ -1,0 +1,9 @@
+@import '../../assets/mixins.scss';
+@import '../../assets/theme.scss';
+
+.view {
+    @include column;
+    height: 100%;
+    margin: 0 15px;
+    flex-grow: 1;
+}

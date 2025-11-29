@@ -1,4 +1,4 @@
-use cadence_ui::{
+use crate::{
     button::{Button, ExpandableButton},
     icons::{close::CloseIcon, gear::GearIcon},
 };

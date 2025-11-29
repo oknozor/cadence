@@ -1,5 +1,3 @@
-use std::time::Duration;
-
 use crate::items::ItemInfo;
 use crate::thumbnails::Thumbnail;
 use crate::{icons::play::PlayIcon, progress::PlayerProgress};

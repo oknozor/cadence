@@ -1,8 +1,8 @@
-use cadence_core::hooks::use_album;
-use cadence_ui::{
+use crate::{
     album::{AlbumActionBar, AlbumCover, AlbumTitle},
     track::TrackList,
 };
+use cadence_core::hooks::use_album;
 use dioxus::prelude::*;
 
 #[component]

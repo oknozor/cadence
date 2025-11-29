@@ -13,6 +13,7 @@ pub struct ItemInfoProps {
     #[props(default = ReadSignal::new(Signal::new(false)))]
     pub paused: ReadSignal<bool>,
 }
+
 #[component]
 pub fn ItemInfo(props: ItemInfoProps) -> Element {
     rsx! {

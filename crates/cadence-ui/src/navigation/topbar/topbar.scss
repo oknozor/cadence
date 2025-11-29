@@ -1,3 +1,6 @@
+@use '../../../assets/theme.scss';
+@import '../../../assets/mixins.scss';
+
 .topbar {
     display: flex;
     flex-direction: row;

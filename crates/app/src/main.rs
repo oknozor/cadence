@@ -6,26 +6,8 @@ use cadence_core::{hooks::use_saved_credentials, state::SubSonicLogin};
 use cadence_ui::UI_CSS;
 use cadence_ui::login::Login;
 use cadence_ui::player::Player;
+use cadence_ui::views::Route;
 use dioxus::prelude::*;
-use navigation::navbar::Navbar;
-use views::{AlbumView, Home, LibraryView, SearchView};
-
-mod navigation;
-mod views;
-
-#[derive(Debug, Clone, Routable, PartialEq)]
-#[rustfmt::skip]
-enum Route {
-    #[layout(WebNavbar)]
-    #[route("/")]
-    Home { },
-    #[route("/search")]
-    SearchView { },
-    #[route("/library")]
-    LibraryView { },
-    #[route("/album/:id")]
-    AlbumView { id: String },
-}
 
 const FAVICON: Asset = asset!("/assets/favicon.ico");
 const MAIN_CSS: Asset = asset!("/assets/styles/main.scss");
@@ -82,13 +64,5 @@ fn App() -> Element {
                 div { class: "error", "{err}" }
             }
         }
-    }
-}
-
-#[component]
-fn WebNavbar() -> Element {
-    rsx! {
-        Outlet::<Route> {}
-        Navbar {}
     }
 }

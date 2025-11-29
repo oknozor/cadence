@@ -1,5 +1,5 @@
+use crate::search::{SearchInput, SearchResults, SearchResultsEmpty};
 use cadence_core::hooks::use_search_results;
-use cadence_ui::search::{SearchInput, SearchResults, SearchResultsEmpty};
 use dioxus::prelude::*;
 
 #[component]

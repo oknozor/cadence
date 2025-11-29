@@ -8,7 +8,7 @@ use opensubsonic_cli::{
     },
 };
 
-use crate::model::{Album, SearchResult};
+use crate::model::{Album, SearchResult, Song};
 
 pub static SUBSONIC_CLIENT: GlobalSignal<Option<SubsonicClient>> = GlobalSignal::new(|| None);
 
@@ -176,12 +176,18 @@ impl SubsonicClient {
                                 thumbnail: artist.artist_image_url.map(ensure_https),
                             })
                             .chain(response.search_result3.song.into_iter().map(|song| {
-                                SearchResult::Song {
+                                SearchResult::Song(Song {
                                     id: song.id,
-                                    name: song.title,
-                                    cover: song.cover_art.as_deref().map(cover_url),
-                                    artist: song.display_artist.or(song.artist),
-                                }
+                                    title: song.title,
+                                    cover_art: song.cover_art.as_deref().map(cover_url),
+                                    artist: song
+                                        .display_artist
+                                        .or(song.artist)
+                                        .unwrap_or("Unkown artist".to_string()),
+                                    album: song.album.unwrap_or("Unkown album".to_string()),
+                                    track_number: song.disc_number,
+                                    duration: song.duration,
+                                })
                             })),
                     )
                     .collect();
