@@ -1,4 +1,4 @@
-use crate::navigation::navbar::Navbar;
+use crate::{navigation::navbar::Navbar, queue::Queue};
 use album::AlbumView;
 use dioxus::prelude::*;
 use home::Home;

@@ -1,4 +1,110 @@
-/* BASIC SPOTIFY-LIKE QUEUE DESIGN */
+//* BASIC SPOTIFY-LIKE QUEUE DESIGN */
+.music-queue {
+  position: absolute;
+  bottom: -150px;
+  left: 0;
+  right: 0;
+  z-index: 99;
+  background: #181818;
+  color: #fff;
+  transition: height 0.25s, box-shadow 0.25s;
+  height: 80px;              /* start collapsed height */
+  border-top-left-radius: 18px;
+  border-top-right-radius: 18px;
+  box-shadow: 0 -2px 24px rgba(0,0,0,0.3);
+  max-width: 540px;          /* center nicely on large screens */
+  margin: 0 auto;
+  will-change: height;
+  display: flex;
+  flex-direction: column;
+}
+
+/* EXPANDED STATE */
+.music-queue.expanded {
+  height: 75vh;              /* almost full screen, but leaves space for status bar etc */
+  min-height: 340px;         /* for short screens */
+}
+
+/* HEADER (Drag handle zone) */
+.queue-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 0 6px 0;
+  cursor: grab;
+  user-select: none;
+}
+
+/* Drag Handle */
+.drag-handle {
+  width: 36px;
+  height: 5px;
+  background: #3a3a3a;
+  border-radius: 3px;
+  margin-bottom: 8px;
+}
+
+/* Title */
+.queue-title {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  margin-bottom: 2px;
+}
+
+/* TRACK LIST */
+.queue-list {
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* TRACK ITEM */
+.queue-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 18px 10px 16px;
+  border-bottom: 1px solid #232323;
+}
+
+.album-art {
+  width: 44px;
+  height: 44px;
+  border-radius: 6px;
+  margin-right: 12px;
+  object-fit: cover;
+  background: #222;
+  flex-shrink: 0;
+}
+
+.track-info {
+  flex: 1;
+  overflow: hidden;
+}
+
+.track-title {
+  font-weight: 500;
+  font-size: 15px;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.track-artist {
+  font-size: 13px;
+  color: #aaa;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.queue-menu {
+  font-size: 20px;
+  color: #aaa;
+  margin-left: 8px;
+  cursor: pointer;
+}
+
 .music-queue {
   position: fixed;
   left: 0;

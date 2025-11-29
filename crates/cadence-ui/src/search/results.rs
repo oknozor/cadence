@@ -26,9 +26,7 @@ pub fn SearchResults(search_results: ReadSignal<Vec<SearchResult>>) -> Element {
                         artist,
                     }
                 } else if let SearchResult::Song(song) = result {
-                    SongItemInfo {
-                        song,
-                    }
+                    SongItemInfo { song }
                 }
             }
         }
@@ -167,7 +165,12 @@ pub fn SongItemInfo(song: Song) -> Element {
     });
 
     let content = rsx! {
-        ItemInfo { primary: title, secondary: "Song · {artist}", is_active, is_paused }
+        ItemInfo {
+            primary: title,
+            secondary: "Song · {artist}",
+            is_active,
+            is_paused,
+        }
     };
 
     let action = Some(rsx! {

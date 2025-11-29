@@ -1,33 +1,32 @@
-/*
-* <!-- QUEUE COMPONENT -->
-<div class="music-queue closed" id="musicQueue">
-  <div class="queue-header" id="queueHeader">
-    <div class="drag-handle"></div>
-    <div class="queue-title">Queue</div>
-    <!-- Optional: close/minimize button
-    <button class="close-btn">&times;</button>
-    -->
-  </div>
-  <div class="queue-list">
-    <!-- Repeat this for each track in the queue -->
-    <div class="queue-item">
-      <img src="album1.jpg" alt="" class="album-art">
-      <div class="track-info">
-        <div class="track-title">Song Title</div>
-        <div class="track-artist">Artist Name</div>
-      </div>
-      <!-- Optional: menu or remove icon
-      <span class="queue-menu">⋮</span>
-      -->
-    </div>
-    <div class="queue-item">
-      <img src="album2.jpg" alt="" class="album-art">
-      <div class="track-info">
-        <div class="track-title">Next Song</div>
-        <div class="track-artist">Another Artist</div>
-      </div>
-    </div>
-    <!-- ...etc... -->
-  </div>
-</div>
-*/
+use cadence_core::state::{CONTROLLER, ControllerStoreExt};
+use dioxus::prelude::*;
+
+use crate::items::ItemInfo;
+
+#[component]
+pub fn Queue() -> Element {
+    let controller = CONTROLLER.resolve();
+    let queue = controller.queue_store();
+    let is_paused = !*controller.is_playing().read();
+    let mut expanded = use_signal(|| true);
+
+    rsx! {
+        div { class: if expanded() { "music-queue expanded" } else { "music-queue" },
+            div { class: "queue-header",
+                div { class: "drag-handle",
+                    ondrag: move |_| expanded.set(!expanded()) }
+                div { class: "queue-title", "Queue" }
+            }
+            div { class: "queue-list",
+                for (_ , song) in queue.read().iter() {
+                    ItemInfo {
+                        primary: song.read().1.title.clone(),
+                        secondary: song.read().1.artist.clone(),
+                        is_active: song.read().0,
+                        is_paused,
+                    }
+                }
+            }
+        }
+    }
+}

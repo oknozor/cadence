@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-dioxus = { workspace = true, default-features = true }
+dioxus = { workspace = true }
 dioxus-sdk.workspace = true
 tokio = { version = "1", features = ["rt", "macros", "time", "rt-multi-thread"] }
 opensubsonic-cli = { workspace = true }

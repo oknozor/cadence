@@ -9,8 +9,8 @@ pub fn Player() -> Element {
     let mut controller = CONTROLLER.resolve();
 
     let content = if let Some(track) = controller.current() {
-        let primary = track.read().title.clone();
-        let secondary = track.read().artist.clone();
+        let primary = track.read().1.title.clone();
+        let secondary = track.read().1.artist.clone();
 
         rsx! {
             div {
@@ -18,12 +18,9 @@ pub fn Player() -> Element {
                 flex_direction: "row",
                 align_items: "center",
                 padding_left: "10px",
-                div {
-                    class: "track-container",
-                    flex: "column",
-                    flex_grow: 1,
-                    if let Some(cover) = track.read().cover_art.as_ref() {
-                        Thumbnail { src: cover, name: track().title, size: 32 }
+                div { class: "track-container", flex: "column", flex_grow: 1,
+                    if let Some(cover) = track.read().1.cover_art.as_ref() {
+                        Thumbnail { src: cover, name: track().1.title, size: 32 }
                     }
                     ItemInfo { primary, secondary }
                 }
@@ -38,7 +35,7 @@ pub fn Player() -> Element {
             }
             PlayerProgress {
                 value: controller.position_f64(),
-                max: track.read().duration.unwrap_or_default() as f64,
+                max: track.read().1.duration.unwrap_or_default() as f64,
             }
         }
     } else {
@@ -49,8 +46,6 @@ pub fn Player() -> Element {
     };
 
     rsx! {
-        div { class: "player-container",
-            {content}
-        }
+        div { class: "player-container", {content} }
     }
 }
