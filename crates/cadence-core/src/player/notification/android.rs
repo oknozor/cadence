@@ -8,24 +8,22 @@ use jni::sys::jint;
 use jni::sys::jobject;
 use log::info;
 
+use flume::Sender;
 use once_cell::sync::Lazy;
 use once_cell::sync::OnceCell;
 use std::sync::Mutex;
 use std::time::Duration;
-use tokio::runtime::Runtime;
-use tokio::sync::broadcast::Sender;
 
-use crate::PlayerCommand;
+use crate::state::HostNotificationCommand;
 
-static RT: OnceCell<Runtime> = OnceCell::new();
-pub static MEDIA_MSG_TX: OnceCell<Sender<PlayerCommand>> = OnceCell::new();
+pub static MEDIA_MSG_TX: OnceCell<Sender<HostNotificationCommand>> = OnceCell::new();
 pub static NOTIFICATION: Lazy<Mutex<Option<GlobalRef>>> = Lazy::new(|| Mutex::new(None));
 
-pub fn init(sender: Sender<PlayerCommand>) {
+pub fn init(sender: Sender<HostNotificationCommand>) {
     MEDIA_MSG_TX.get_or_init(|| sender);
 }
 
-pub fn send_media_message(msg: PlayerCommand) {
+pub fn send_media_message(msg: HostNotificationCommand) {
     let tx = MEDIA_MSG_TX
         .get()
         .expect("Notification backend sender should be initialized")
@@ -50,7 +48,6 @@ pub extern "C" fn Java_dev_dioxus_main_KeepAliveService_startRustBackground(
     _class: jni::objects::JClass,
 ) {
     tracing::info!("Starting Rust background");
-    RT.set(Runtime::new().unwrap()).unwrap();
 }
 
 /// Updates media notification through foreground service connected function
@@ -132,7 +129,7 @@ pub extern "system" fn Java_dev_dioxus_main_MediaCallbackKt_nativeOnPlay(
     _class: JClass,
 ) {
     log::info!("Rust received Play");
-    send_media_message(PlayerCommand::Play)
+    send_media_message(HostNotificationCommand::Play)
 }
 
 #[unsafe(no_mangle)]
@@ -141,7 +138,7 @@ pub extern "system" fn Java_dev_dioxus_main_MediaCallbackKt_nativeOnPause(
     _class: JClass,
 ) {
     log::info!("Rust received Pause");
-    send_media_message(PlayerCommand::Pause)
+    send_media_message(HostNotificationCommand::Pause)
 }
 
 #[unsafe(no_mangle)]
@@ -150,7 +147,7 @@ pub extern "system" fn Java_dev_dioxus_main_MediaCallbackKt_nativeOnNext(
     _class: JClass,
 ) {
     log::info!("Rust received Next");
-    send_media_message(PlayerCommand::Pause)
+    send_media_message(HostNotificationCommand::Pause)
 }
 
 #[unsafe(no_mangle)]
@@ -159,7 +156,7 @@ pub extern "system" fn Java_dev_dioxus_main_MediaCallbackKt_nativeOnPrevious(
     _class: JClass,
 ) {
     log::info!("Rust received Previous");
-    send_media_message(PlayerCommand::Previous)
+    send_media_message(HostNotificationCommand::Previous)
 }
 
 #[unsafe(no_mangle)]
@@ -171,7 +168,7 @@ pub extern "system" fn Java_dev_dioxus_main_MediaCallbackKt_nativeOnSeekTo(
     log::info!("Rust received Seek To {:?}", pos);
     let pos: i64 = pos.into();
     let pos = Duration::from_millis(pos as u64);
-    send_media_message(PlayerCommand::Seek(pos));
+    send_media_message(HostNotificationCommand::Seek(pos));
 }
 
 #[unsafe(no_mangle)]

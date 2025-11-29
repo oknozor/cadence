@@ -1,4 +1,7 @@
-use crate::player::PlayerCommand;
+use crate::{
+    player::PlayerCommand,
+    state::{CONTROLLER, ControllerExt, HostNotificationCommand},
+};
 use dioxus::{CapturedError, prelude::*};
 use dioxus_sdk::storage::{get_from_storage, use_storage};
 use tokio::sync::broadcast;
@@ -29,6 +32,29 @@ pub fn use_playback_position() -> Signal<Option<f64>> {
     });
 
     position
+}
+
+pub fn use_notification_control() {
+    use_effect(move || {
+        let rx: flume::Receiver<HostNotificationCommand> = use_context();
+        spawn(async move {
+            loop {
+                match rx.recv_async().await {
+                    Ok(command) => match command {
+                        HostNotificationCommand::Play | HostNotificationCommand::Pause => {
+                            CONTROLLER.resolve().toggle_play()
+                        }
+                        HostNotificationCommand::Next => CONTROLLER.resolve().next(),
+                        HostNotificationCommand::Previous => CONTROLLER.resolve().previous(),
+                        HostNotificationCommand::Seek(duration) => {
+                            CONTROLLER.resolve().seek(duration)
+                        }
+                    },
+                    Err(err) => error!("failed to handle notification command: {err}"),
+                }
+            }
+        });
+    });
 }
 
 pub fn use_playback_position_sender() -> broadcast::Sender<u64> {
@@ -79,6 +105,20 @@ pub fn use_saved_credentials() -> Signal<Option<SubSonicLogin>> {
     );
 
     use_storage::<LocalStorage, _>("subsonic_credentials".to_string(), || saved)
+}
+
+pub fn use_album(id: String) -> Resource<Album> {
+    use_resource(move || {
+        let id = id.clone();
+        async move {
+            SUBSONIC_CLIENT()
+                .clone()
+                .unwrap()
+                .get_album(&id)
+                .await
+                .unwrap()
+        }
+    })
 }
 
 pub fn use_recently_released() -> Resource<Result<Vec<Album>, CapturedError>> {

@@ -7,6 +7,7 @@ use dioxus::prelude::*;
 
 #[component]
 pub fn AlbumActionBar(songs: Vec<Song>) -> Element {
+    let mut controller = CONTROLLER.resolve();
     rsx! {
         div { class: "album-action-bar",
             div { class: "album-action-bar-start",
@@ -25,18 +26,18 @@ pub fn AlbumActionBar(songs: Vec<Song>) -> Element {
 
             div { class: "album-action-bar-end",
                 button {
-                    ShuffleIcon { size: 36, filled: CONTROLLER.resolve().shuffle() }
+                    ShuffleIcon { size: 36, filled: controller.shuffle() }
                 }
 
                 button {
                     onclick: move |_| {
-                        if *CONTROLLER.resolve().is_playing().read() {
-                            CONTROLLER.resolve().toggle_play();
+                        if *controller.is_playing().read() {
+                            controller.toggle_play();
                         } else {
-                            CONTROLLER.resolve().queue_all(songs.clone());
+                            controller.queue_all(songs.clone());
                         }
                     },
-                    PlayIcon { size: 48, is_playing: CONTROLLER.resolve().is_playing() }
+                    PlayIcon { size: 48, is_playing: controller.is_playing() }
                 }
             }
         }

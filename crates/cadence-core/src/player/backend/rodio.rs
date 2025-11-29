@@ -166,10 +166,9 @@ impl AudioBackend {
         Ok(())
     }
 
+    // TODO: proper autoqueue implementation
     async fn auto_queue(&self) -> Result<(), MusicPlayerError> {
-        info!("Attempt to autoqueue");
         if self.next_queued.load(Ordering::Relaxed) {
-            info!("dismissed");
             return Ok(());
         }
 

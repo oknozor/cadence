@@ -4,13 +4,12 @@ mod android;
 #[cfg(not(target_os = "android"))]
 mod mpris;
 
-use crate::PlayerCommand;
-use tokio::sync::broadcast::Sender;
-
+use crate::state::HostNotificationCommand;
+use flume::Sender;
 pub struct NotificationControl;
 
 impl NotificationControl {
-    pub fn init(sender: Sender<PlayerCommand>) {
+    pub fn init(sender: Sender<HostNotificationCommand>) {
         #[cfg(target_os = "android")]
         android::init(sender);
 
@@ -18,7 +17,7 @@ impl NotificationControl {
         mpris::init(sender);
     }
 
-    pub async fn send(command: PlayerCommand) {
+    pub async fn send(command: HostNotificationCommand) {
         #[cfg(target_os = "android")]
         android::send_media_message(command);
 

@@ -25,7 +25,7 @@ impl AudioBackend {
     pub async fn run(&mut self) -> Result<(), MusicPlayerError> {
         info!("Audio backend starting...");
         let rx = self.command_rx.clone();
-        tracing::error!("receiver has disconnected: {:?}", rx.is_disconnected());
+
         loop {
             tokio::select! {
                 _ =  dioxus_sdk::time::sleep(Duration::from_secs(1)) => {

@@ -1,4 +1,3 @@
-use dioxus::prelude::info;
 use dioxus::signals::GlobalSignal;
 use opensubsonic_cli::types::Search3ResponseSubsonicResponse;
 use opensubsonic_cli::{

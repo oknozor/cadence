@@ -14,7 +14,6 @@ pub fn TrackRow(song: Song) -> Element {
         div {
             class: "track-row",
             onclick: move |_| {
-                debug!("TrackRow clicked {:?}", song);
                 controller.queue_now(song.clone());
             },
             ItemInfo {

@@ -1,9 +1,17 @@
 use crate::{PlayerCommand, model::Song};
 use dioxus::prelude::*;
 use flume::Sender;
-use std::collections::HashMap;
+use std::{collections::HashMap, time::Duration};
 
 pub static CONTROLLER: GlobalStore<Controller> = Global::new(Controller::default);
+
+pub enum HostNotificationCommand {
+    Play,
+    Pause,
+    Next,
+    Previous,
+    Seek(Duration),
+}
 
 #[derive(Store)]
 pub struct Controller {
@@ -38,26 +46,34 @@ impl<Lens> Store<Controller, Lens> {
             .and_then(|idx: usize| self.queue_store().read().get(idx).map(|store| store()))
     }
 
+    fn seek(&mut self, pos: Duration) {
+        self.send(PlayerCommand::Seek(pos));
+    }
+
+    fn next(&mut self) {
+        self.increment_current();
+        self.send(PlayerCommand::Next);
+    }
+
+    fn previous(&mut self) {
+        self.decrement_current();
+        self.send(PlayerCommand::Previous);
+    }
+
     fn toggle_play(&mut self) {
         self.is_playing().toggle();
         if *self.is_playing().read() {
-            self.sender_unchecked()
-                .send(PlayerCommand::Play)
-                .expect("failed to send message to audio backend");
+            self.send(PlayerCommand::Play);
         } else {
-            self.sender_unchecked()
-                .send(PlayerCommand::Pause)
-                .expect("failed to send message to audio backend");
+            self.send(PlayerCommand::Pause);
         }
     }
 
     fn queue_now(&mut self, song: Song) {
+        self.is_playing().set(true);
         self.queue(song.clone());
         self.increment_current();
-        info!("{:?}", self.sender_unchecked().receiver_count());
-        if let Err(err) = self.sender_unchecked().send(PlayerCommand::QueueNow(song)) {
-            tracing::error!("failed to send message to audio backend: {}", err);
-        }
+        self.send(PlayerCommand::QueueNow(song));
     }
 
     fn queue(&mut self, song: Song) {
@@ -72,11 +88,9 @@ impl<Lens> Store<Controller, Lens> {
     }
 
     fn is_active(&self, song_id: &str) -> bool {
-        self.queue_store()
-            .read()
-            .iter()
-            .find(|(_, song)| song().id == song_id)
-            .is_some()
+        self.current()
+            .map(|current| current.id == song_id)
+            .unwrap_or_default()
     }
 }
 
@@ -84,6 +98,12 @@ impl<Lens> Store<Controller, Lens> {
 impl<Lens> Store<Controller, Lens> {
     fn sender_unchecked(&self) -> Sender<PlayerCommand> {
         self.sender().unwrap().cloned()
+    }
+
+    fn send(&self, command: PlayerCommand) {
+        if let Err(err) = self.sender_unchecked().send(command) {
+            tracing::error!("failed to send message to audio backend: {}", err);
+        }
     }
 
     fn increment_current(&mut self) {

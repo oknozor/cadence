@@ -1,5 +1,7 @@
 use cadence_core::hooks::init_global_context;
 use cadence_core::hooks::use_login_state;
+use cadence_core::hooks::use_notification_control;
+use cadence_core::player::NotificationControl;
 use cadence_core::{hooks::use_saved_credentials, state::SubSonicLogin};
 use cadence_ui::UI_CSS;
 use cadence_ui::login::Login;
@@ -41,6 +43,8 @@ fn App() -> Element {
     let dir = cadence_storage_android::internal_storage_dir();
 
     init_global_context();
+    NotificationControl::init(consume_context());
+    use_notification_control();
 
     let mut saved_credentials = use_saved_credentials();
     let login_state = use_login_state();
@@ -87,21 +91,4 @@ fn WebNavbar() -> Element {
         Outlet::<Route> {}
         Navbar {}
     }
-}
-
-#[allow(non_snake_case)]
-#[unsafe(no_mangle)]
-pub extern "C" fn Java_dev_dioxus_main_MainActivity_notifyOnNewIntent(
-    mut env: jni::JNIEnv,
-    _class: jni::objects::JClass,
-    data: jni::objects::JString,
-) {
-    let string: String = match env.get_string(&data) {
-        Ok(s) => s.into(),
-        Err(e) => {
-            eprintln!("Failed to convert Java string: {:?}", e);
-            return;
-        }
-    };
-    error!("New intent received: {}", string);
 }

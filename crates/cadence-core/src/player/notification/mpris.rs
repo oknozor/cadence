@@ -1,12 +1,12 @@
-use tokio::sync::broadcast::Sender;
+use flume::Sender;
 
-use crate::PlayerCommand;
+use crate::state::HostNotificationCommand;
 
-pub fn init(_sender: Sender<PlayerCommand>) {
+pub fn init(_sender: Sender<HostNotificationCommand>) {
     todo!("Init not implemented for mpris")
 }
 
-pub async fn send_media_message(_command: PlayerCommand) {
+pub async fn send_media_message(_command: HostNotificationCommand) {
     todo!("Notification control not implemented for mpris")
 }
 

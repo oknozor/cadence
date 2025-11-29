@@ -1,4 +1,4 @@
-use cadence_core::services::subsonic_client::SUBSONIC_CLIENT;
+use cadence_core::hooks::use_album;
 use cadence_ui::{
     album::{AlbumActionBar, AlbumCover, AlbumTitle},
     track::TrackList,
@@ -7,36 +7,19 @@ use dioxus::prelude::*;
 
 #[component]
 pub fn AlbumView(id: String) -> Element {
-    let album = use_resource(move || {
-        let id = id.clone();
-        async move {
-            SUBSONIC_CLIENT()
-                .clone()
-                .unwrap()
-                .get_album(&id)
-                .await
-                .unwrap()
-        }
-    });
-
-    let cover = album
-        .read()
-        .as_ref()
-        .and_then(|album| album.cover_art.clone())
-        .unwrap_or_default();
+    let album = use_album(id);
 
     rsx! {
         div { class: "album-view",
             match album() {
                 Some(album) => rsx! {
-                    AlbumCover { src: cover }
+                    AlbumCover { src: album.cover_art.clone().unwrap_or_default() }
                     div { class: "album-info view",
                         AlbumTitle {
                             name: album.name.clone(),
                             artist: album.artist.clone(),
                             year: album.year.clone(),
                         }
-                        // TODO: songs should probably be behind a singal ?
                         AlbumActionBar { songs: album.songs.clone() }
                         TrackList { album }
                     }
