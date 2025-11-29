@@ -8,6 +8,7 @@ use search::SearchView;
 mod album;
 mod home;
 mod library;
+mod now_playing;
 mod search;
 
 #[derive(Debug, Clone, Routable, PartialEq)]

@@ -6,6 +6,7 @@ pub mod login;
 pub mod navigation;
 pub mod player;
 pub mod progress;
+pub mod queue;
 pub mod search;
 pub mod thumbnails;
 pub mod track;

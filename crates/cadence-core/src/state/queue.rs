@@ -1,7 +1,10 @@
 use crate::{PlayerCommand, model::Song};
-use dioxus::prelude::*;
+use dioxus::{
+    prelude::{Store, *},
+    stores::hashmap::GetWrite,
+};
 use flume::Sender;
-use std::{collections::HashMap, time::Duration};
+use std::{cell::Ref, collections::HashMap, option::Option, time::Duration};
 
 pub static CONTROLLER: GlobalStore<Controller> = Global::new(Controller::default);
 
@@ -20,7 +23,8 @@ pub struct Controller {
     pub shuffle: bool,
     pub position: Duration,
     sender: Option<Sender<PlayerCommand>>,
-    current_idx: Option<usize>,
+    current_idx: usize,
+    current_song_id: Option<String>,
     queue_store: Store<HashMap<usize, Song>>,
 }
 
@@ -28,11 +32,12 @@ impl Default for Controller {
     fn default() -> Self {
         Self {
             position: Duration::ZERO,
-            current_idx: Default::default(),
+            current_idx: 0,
             is_playing: Default::default(),
             shuffle: Default::default(),
             queue_store: Store::new(HashMap::default()),
             sender: None,
+            current_song_id: None,
         }
     }
 }
@@ -43,10 +48,9 @@ impl<Lens> Store<Controller, Lens> {
         *self.sender().write() = Some(sender);
     }
 
-    fn current(&self) -> Option<Song> {
-        self.current_idx()
-            .read()
-            .and_then(|idx: usize| self.queue_store().read().get(idx).map(|store| store()))
+    fn current(&self) -> Option<Store<Song, GetWrite<usize, WriteSignal<HashMap<usize, Song>>>>> {
+        let idx = *self.current_idx().read();
+        self.queue_store().read().get(idx)
     }
 
     fn position_f64(&self) -> Option<f64> {
@@ -60,12 +64,16 @@ impl<Lens> Store<Controller, Lens> {
 
     fn next(&mut self) {
         self.increment_current();
-        self.send(PlayerCommand::Next);
+        if let Some(id) = self.current_song_id()() {
+            self.send(PlayerCommand::QueueNow(id));
+        }
     }
 
     fn previous(&mut self) {
         self.decrement_current();
-        self.send(PlayerCommand::Previous);
+        if let Some(id) = self.current_song_id()() {
+            self.send(PlayerCommand::QueueNow(id));
+        }
     }
 
     fn toggle_play(&mut self) {
@@ -77,33 +85,40 @@ impl<Lens> Store<Controller, Lens> {
         }
     }
 
-    fn queue_now(&mut self, song: Song) {
+    fn play_now(&mut self, song: Song) {
+        tracing::info!("Playing now song: {}", song.title);
+        let id = song.id.clone();
         self.is_playing().set(true);
-        self.queue(song.clone());
+        self.current_song_id().set(Some(id.clone()));
         self.increment_current();
-        self.send(PlayerCommand::QueueNow(song));
+        self.queue(song);
+        self.send(PlayerCommand::QueueNow(id));
     }
 
     fn queue(&mut self, song: Song) {
+        tracing::info!("Queueing song: {}", song.title);
         let len = self.queue_store().read().len();
         self.queue_store().write().insert(len, song);
     }
 
     fn queue_all(&mut self, songs: Vec<Song>) {
-        songs.into_iter().for_each(|song| {
-            self.queue(song);
-        });
+        self.clear_queue();
+        for (i, song) in songs.into_iter().enumerate() {
+            if i == 0 {
+                self.play_now(song);
+            } else {
+                self.queue(song);
+            }
+        }
     }
 
-    fn is_active(&self, song_id: &str) -> bool {
-        self.current()
-            .map(|current| current.id == song_id)
-            .unwrap_or_default()
-    }
-
-    fn finish(&mut self) {
-        self.toggle_play();
-        self.seek(Duration::ZERO);
+    fn on_playback_ended(&mut self) {
+        if self.remains() > 0 {
+            self.next();
+        } else {
+            self.toggle_play();
+            self.position().set(Duration::ZERO);
+        }
     }
 }
 
@@ -120,23 +135,36 @@ impl<Lens> Store<Controller, Lens> {
         }
     }
 
+    fn clear_queue(&mut self) {
+        self.queue_store().write().clear();
+        self.current_idx().set(0);
+        self.current_song_id().set(None);
+    }
+
     fn increment_current(&mut self) {
-        match self.current_idx().transpose() {
-            Some(mut idx) => {
-                *idx.write() += 1;
-            }
-            None => self.current_idx().set(Some(0)),
+        let mut idx = self.current_idx();
+        *idx.write() += 1;
+        let idx = *idx.read();
+        let song = self.queue_store().read().get(idx);
+        if let Some(song) = song {
+            self.current_song_id().set(Some(song.read().id.clone()));
         }
     }
 
     fn decrement_current(&mut self) {
-        match self.current_idx().transpose() {
-            Some(mut idx) => {
-                if *idx.read() > 0 {
-                    *idx.write() -= 1;
-                }
-            }
-            None => self.current_idx().set(None),
+        let mut idx = self.current_idx();
+        if *idx.read() > 0 {
+            *idx.write() -= 1;
         }
+        let idx = *idx.read();
+        let song = self.queue_store().read().get(idx);
+        if let Some(song) = song {
+            self.current_song_id().set(Some(song.read().id.clone()));
+        }
+    }
+
+    fn remains(&self) -> usize {
+        let current = *self.current_idx().read();
+        self.queue_store().read().len() - current
     }
 }

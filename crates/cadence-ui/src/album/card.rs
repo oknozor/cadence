@@ -25,8 +25,8 @@ pub fn AlbumCard(album: Album, on_album_select: EventHandler<String>) -> Element
             ItemInfo {
                 primary: album.name,
                 secondary: album.artist,
-                active: false,
-                paused: false,
+                is_active: false,
+                is_paused: false,
             }
         }
     }

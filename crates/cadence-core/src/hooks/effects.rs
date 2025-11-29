@@ -88,13 +88,15 @@ fn use_audio_backend_state_update() {
 
         spawn(async move {
             loop {
+                let mut controller = CONTROLLER.resolve();
+
                 match rx.recv_async().await {
                     Ok(AudioBackendStateUpdate::Position(pos)) => {
-                        CONTROLLER.resolve().position().set(pos);
+                        controller.position().set(pos);
                     }
                     Ok(AudioBackendStateUpdate::Finished) => {
                         tracing::info!("Audio backend finished");
-                        CONTROLLER.resolve().finish();
+                        controller.on_playback_ended();
                     }
                     Err(err) => error!("failed to handle playback position update: {err}"),
                 }

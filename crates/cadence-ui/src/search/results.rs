@@ -26,7 +26,9 @@ pub fn SearchResults(search_results: ReadSignal<Vec<SearchResult>>) -> Element {
                         artist,
                     }
                 } else if let SearchResult::Song(song) = result {
-                    SongItemInfo { song }
+                    SongItemInfo {
+                        song,
+                    }
                 }
             }
         }
@@ -144,11 +146,14 @@ pub fn AlbumItemInfo(
 #[component]
 pub fn SongItemInfo(song: Song) -> Element {
     let mut controller = CONTROLLER.resolve();
-    let active = controller.is_active(&song.id);
-    let paused = !*controller.is_playing().read();
+    let id = song.id.clone();
+    let is_active = use_memo(move || {
+        let current = controller.current_song_id()();
+        current == Some(id.clone())
+    });
+    let is_paused = !*controller.is_playing().read();
 
     let Song {
-        id,
         title,
         artist,
         cover_art,
@@ -162,12 +167,7 @@ pub fn SongItemInfo(song: Song) -> Element {
     });
 
     let content = rsx! {
-        ItemInfo {
-            primary: title,
-            secondary: "Song · {artist}",
-            active,
-            paused,
-        }
+        ItemInfo { primary: title, secondary: "Song · {artist}", is_active, is_paused }
     };
 
     let action = Some(rsx! {
@@ -175,7 +175,7 @@ pub fn SongItemInfo(song: Song) -> Element {
         PlusIcon { size: 18, filled: false }
     });
 
-    let callback = move || controller.queue_now(song.clone());
+    let callback = move || controller.play_now(song.clone());
 
     rsx! {
         SearchResultRow {

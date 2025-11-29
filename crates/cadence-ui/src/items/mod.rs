@@ -8,10 +8,10 @@ pub struct ItemInfoProps {
     pub secondary: ReadSignal<String>,
 
     #[props(default = ReadSignal::new(Signal::new(false)))]
-    pub active: ReadSignal<bool>,
+    pub is_active: ReadSignal<bool>,
 
     #[props(default = ReadSignal::new(Signal::new(false)))]
-    pub paused: ReadSignal<bool>,
+    pub is_paused: ReadSignal<bool>,
 }
 
 #[component]
@@ -19,8 +19,8 @@ pub fn ItemInfo(props: ItemInfoProps) -> Element {
     rsx! {
         div { class: "item-info",
             div { class: "item-line",
-                if *props.active.read() {
-                    AnimatedBars { size: 12, paused: props.paused }
+                if *props.is_active.read() {
+                    AnimatedBars { size: 12, paused: props.is_paused }
                 }
                 span { class: "item-primary", "{props.primary}" }
             }

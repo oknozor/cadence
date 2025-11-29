@@ -7,18 +7,14 @@ pub use notification::NotificationControl;
 use std::time::Duration;
 use tracing::info;
 
-use crate::model::Song;
-
 #[derive(Debug)]
 pub enum PlayerCommand {
     Play,
-    Queue(Song),
-    QueueNow(Song),
-    QueueAll(Vec<Song>),
     Pause,
     Next,
-    Previous,
     Seek(Duration),
+    Queue(String),
+    QueueNow(String),
 }
 
 #[derive(Debug)]
@@ -40,17 +36,16 @@ impl AudioBackend {
                     }
                 },
                 Ok(command) = rx.recv_async() => {
+                    tracing::info!("Received command: {:?}", command);
                     match command {
-                        PlayerCommand::Play => self.play()?,
-                        PlayerCommand::Queue(song) => self.queue(song).await?,
-                        PlayerCommand::QueueAll(tracks) => self.queue_all_now(tracks).await?,
-                        PlayerCommand::QueueNow(song) => {
-                            self.queue_now(song).await?;
+                        PlayerCommand::Queue(id) => self.queue(&id).await?,
+                        PlayerCommand::QueueNow(id) => {
+                            self.queue_now(&id).await?;
                         }
+                        PlayerCommand::Play => self.play()?,
                         PlayerCommand::Pause => self.pause()?,
-                        PlayerCommand::Seek(duration) => self.seek(duration)?,
                         PlayerCommand::Next => self.next()?,
-                        PlayerCommand::Previous => self.previous().await?,
+                        PlayerCommand::Seek(duration) => self.seek(duration)?,
                     }
                 }
             }
