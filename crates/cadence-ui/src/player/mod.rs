@@ -1,4 +1,5 @@
 use crate::progress::PlayerProgress;
+use crate::queue::Queue;
 use crate::thumbnails::Thumbnail;
 use crate::{icons::play::PlayIcon, items::ItemInfo};
 use cadence_core::state::{CONTROLLER, ControllerExt, ControllerStoreExt};
@@ -7,17 +8,22 @@ use dioxus::prelude::*;
 #[component]
 pub fn Player() -> Element {
     let mut controller = CONTROLLER.resolve();
-    let navigator = navigator();
+    let mut expand = use_signal(|| false);
 
     let content = if let Some(track) = controller.current() {
         let primary = track.read().1.title.clone();
         let secondary = track.read().1.artist.clone();
 
         rsx! {
-            div { class: "player",
-                div { class: "track-container", onclick: move |_| {
-                    controller.play();
-                }}
+            div { class: if expand() { "dead-zone" } else { "dead-zone expanded" } }
+            div {
+                class: "player",
+                onclick: move |_| {
+                    let value = !*expand.read();
+                    expand.set(value);
+                    tracing::debug!("Player clicked");
+                },
+                div { class: "track-container",
                     if let Some(cover) = track.read().1.cover_art.as_ref() {
                         Thumbnail { src: cover, name: track().1.title, size: 32 }
                     }
@@ -36,6 +42,7 @@ pub fn Player() -> Element {
                 value: controller.position_f64(),
                 max: track.read().1.duration.unwrap_or_default() as f64,
             }
+            Queue { expand }
         }
     } else {
         rsx! {
@@ -45,6 +52,6 @@ pub fn Player() -> Element {
     };
 
     rsx! {
-        div { class: "player-container", {content} }
+        div { class: if expand() { "player-container expanded" } else { "player-container" }, {content} }
     }
 }

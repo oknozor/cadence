@@ -4,7 +4,7 @@ use dioxus::prelude::*;
 use crate::{album::AlbumCover, items::ItemInfo};
 
 #[component]
-pub fn Queue() -> Element {
+pub fn Queue(expand: ReadSignal<bool>) -> Element {
     let controller = CONTROLLER.resolve();
     let queue = controller.queue_store();
     let current = controller.current();
@@ -19,12 +19,12 @@ pub fn Queue() -> Element {
     let is_paused = !*controller.is_playing().read();
 
     rsx! {
-            div { class: "now-playing-view",
-                div { class: "now-playing",
+        div { class: "queue-container",
+            div {
                 if let Some(src) = cover_art.read().clone() {
-                    AlbumCover { src  }
+                    AlbumCover { src }
                 }
-                div { class: "queue-list",
+                div {
                     for (_ , song) in queue.read().iter() {
                         ItemInfo {
                             primary: song.read().1.title.clone(),

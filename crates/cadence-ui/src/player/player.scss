@@ -4,16 +4,32 @@
 .player-container {
     @include column;
     width: 94%;
-    margin: 3px;
     background-color: $primary-color-6;
     border-radius: 4px;
+    align-self: center;
+    transition: all 0.3s ease-in-out;
+    margin-left: 10px ;
+    margin-right: 10px ;
+    &.expanded {
+       height: 100%;
+       margin-left: 0;
+       margin-right: 0;
+    }
+
+    .dead-zone {
+        pointer-events: none;
+        z-index: -1000;
+        height: 100%;
+        width: 100%;
+        &.expanded {
+            height: 0;
+        }
+    }
 
     .player {
         @include row;
         align-items: center;
         justify-content: center;
-        padding-left: 8px ;
-        padding-right: 15px ;
 
         .track-container {
             padding: 5px;
@@ -33,6 +49,7 @@
 
     }
     .progress-container {
+        @include column;
         justify-self: center;
         margin-left: 8px;
         margin-right: 8px;

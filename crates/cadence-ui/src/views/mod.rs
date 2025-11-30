@@ -3,13 +3,11 @@ use album::AlbumView;
 use dioxus::prelude::*;
 use home::Home;
 use library::LibraryView;
-use now_playing::NowPlayingView;
 use search::SearchView;
 
 mod album;
 mod home;
 mod library;
-mod now_playing;
 mod search;
 
 #[derive(Debug, Clone, Routable, PartialEq)]
@@ -18,8 +16,6 @@ pub enum Route {
     #[layout(WebNavbar)]
     #[route("/")]
     Home { },
-    #[route("/now-playing")]
-    NowPlayingView { },
     #[route("/search")]
     SearchView { },
     #[route("/library")]
