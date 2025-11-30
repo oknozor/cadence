@@ -5,7 +5,7 @@ mod rodio;
 mod wasm;
 
 #[cfg(target_arch = "wasm32")]
-pub use wasm::{CadencePlayer, MusicPlayerError};
+pub use wasm::{AudioBackend, MusicPlayerError};
 
 #[cfg(not(target_arch = "wasm32"))]
 pub use rodio::{AudioBackend, MusicPlayerError};

@@ -3,52 +3,38 @@
 
 .player-container {
     @include column;
-    width: 100%;
-    position: fixed;
-    bottom: 71px;
-    background-color: #1a1d24;
-}
+    width: 94%;
+    margin: 3px;
+    background-color: $primary-color-6;
+    border-radius: 4px;
 
-.track-container {
-    padding: 3px;
-    @include row;
-    gap: $gap;
-}
+    .player {
+        @include row;
+        align-items: center;
+        justify-content: center;
+        padding-left: 8px ;
+        padding-right: 15px ;
 
-.track-info {
-    @include column;
-    color: $secondary-color;
-}
+        .track-container {
+            padding: 5px;
+            @include row;
+            gap: $gap;
+        }
+        .player-controls {
+            @include row;
+            align-items: center;
+            justify-content: center;
+            button {
+                @include row;
+                align-items: center;
+                justify-content: center;
+            }
+        }
 
-.track-info h3 {
-    margin: 0;
-}
-
-.track-info p {
-    margin: 0;
-    font-size: 10px;
-}
-
-.progress-container {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-}
-
-.player-controls {
-    background-color: #1a1d24;
-}
-
-.player-controls button {
-    background-color: #1a1d24;
-}
-.player-controls button svg {
-    background-color: #1a1d24;
-}
-
-.player-controls button:hover {
-}
-
-.no-track {
-    color: #6b7280;
+    }
+    .progress-container {
+        justify-self: center;
+        margin-left: 8px;
+        margin-right: 8px;
+    }
 }

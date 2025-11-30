@@ -1,7 +1,7 @@
 use dioxus::prelude::*;
 
 #[component]
-pub fn ShuffleIcon(size: u32, filled: ReadSignal<bool>) -> Element {
+pub fn ShuffleIcon(size: u8, filled: ReadSignal<bool>) -> Element {
     rsx! {
         if filled() {
             svg {

@@ -1,5 +1,5 @@
 use crate::{
-    button::{Button, ExpandableButton},
+    button::{ExpandableButton, MenuButton},
     icons::{close::CloseIcon, gear::GearIcon},
 };
 use dioxus::prelude::*;
@@ -28,7 +28,7 @@ pub fn TopBar() -> Element {
                 GearIcon { filled: false }
             }
             div { class: "topbar-menu",
-                Button {
+                MenuButton {
                     visibility: if music_active() { "hidden" } else { "visible" },
                     display: if music_active() { "none" } else { "flex" },
                     active: all_active,
@@ -57,7 +57,7 @@ pub fn TopBar() -> Element {
                     text: "Music",
                     text_expanded: "Followed",
                 }
-                Button {
+                MenuButton {
                     visibility: if music_active() { "hidden" } else { "visible" },
                     display: if music_active() { "none" } else { "flex" },
                     active: podcasts_active,
@@ -66,7 +66,7 @@ pub fn TopBar() -> Element {
                     },
                     "Podcasts"
                 }
-                Button {
+                MenuButton {
                     visibility: if music_active() { "hidden" } else { "visible" },
                     display: if music_active() { "none" } else { "flex" },
                     active: radio_active,

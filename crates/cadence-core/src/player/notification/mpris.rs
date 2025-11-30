@@ -3,11 +3,11 @@ use flume::Sender;
 use crate::state::HostNotificationCommand;
 
 pub fn init(_sender: Sender<HostNotificationCommand>) {
-    todo!("Init not implemented for mpris")
+    tracing::debug!("Init not implemented for mpris")
 }
 
 pub async fn send_media_message(_command: HostNotificationCommand) {
-    todo!("Notification control not implemented for mpris")
+    tracing::debug!("Notification control not implemented for mpris")
 }
 
 pub fn update_media_notification(
@@ -18,5 +18,5 @@ pub fn update_media_notification(
     _playing: bool,
     _artwork_bytes: Option<Vec<u8>>,
 ) {
-    todo!("Notification control not implemented for mpris")
+    tracing::debug!("Notification control not implemented for mpris")
 }

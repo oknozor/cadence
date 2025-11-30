@@ -1,4 +1,5 @@
 use crate::icons::{home::HomeIcon, library::LibraryIcon, plus::PlusIcon, search::SearchIcon};
+use crate::player::Player;
 use crate::views::Route;
 use dioxus::prelude::*;
 use std::time::Duration;
@@ -21,41 +22,44 @@ pub fn Navbar() -> Element {
     let nav = navigator();
 
     rsx! {
-        div { id: "navbar",
-            NavbarItem {
-                label: "Home".to_string(),
-                active: home_active,
-                onclick: move || {
-                    nav.replace(Route::Home {});
-                    set_active(&mut home_active);
-                },
-                HomeIcon { filled: home_active }
-            }
-            NavbarItem {
-                label: "Search".to_string(),
-                active: search_active,
-                onclick: move || {
-                    nav.replace(Route::SearchView {});
-                    set_active(&mut search_active);
-                },
-                SearchIcon { size: 32, filled: search_active }
-            }
-            NavbarItem {
-                label: "Library".to_string(),
-                active: library_active,
-                onclick: move || {
-                    nav.replace(Route::LibraryView {});
-                    set_active(&mut library_active);
-                },
-                LibraryIcon { filled: library_active }
-            }
-            NavbarItem {
-                label: "Create".to_string(),
-                active: plus_active,
-                onclick: move || {
-                    set_active(&mut plus_active);
-                },
-                PlusIcon { size: 32, filled: plus_active }
+        div { class: "navbar-container",
+            Player {}
+            div { id: "navbar",
+                NavbarItem {
+                    label: "Home".to_string(),
+                    active: home_active,
+                    onclick: move || {
+                        nav.replace(Route::Home {});
+                        set_active(&mut home_active);
+                    },
+                    HomeIcon { filled: home_active }
+                }
+                NavbarItem {
+                    label: "Search".to_string(),
+                    active: search_active,
+                    onclick: move || {
+                        nav.replace(Route::SearchView {});
+                        set_active(&mut search_active);
+                    },
+                    SearchIcon { size: 32, filled: search_active }
+                }
+                NavbarItem {
+                    label: "Library".to_string(),
+                    active: library_active,
+                    onclick: move || {
+                        nav.replace(Route::LibraryView {});
+                        set_active(&mut library_active);
+                    },
+                    LibraryIcon { filled: library_active }
+                }
+                NavbarItem {
+                    label: "Create".to_string(),
+                    active: plus_active,
+                    onclick: move || {
+                        set_active(&mut plus_active);
+                    },
+                    PlusIcon { size: 32, filled: plus_active }
+                }
             }
         }
     }

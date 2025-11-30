@@ -21,7 +21,7 @@ pub struct ButtonProps {
 }
 
 #[component]
-pub fn Button(mut props: ButtonProps) -> Element {
+pub fn MenuButton(mut props: ButtonProps) -> Element {
     let active = *props.active.read();
     rsx! {
         button {
@@ -45,7 +45,7 @@ pub fn ExpandableButton(mut props: ExpandableButtonProps) -> Element {
 
     rsx! {
         div { class: if active && inner_active { "expandable-wrapper expanded active" } else if active { "expandable-wrapper expanded" } else { "expandable-wrapper" },
-            Button {
+            MenuButton {
                 active: props.active.clone(),
                 onclick: move |evt| {
                     if let Some(onclick) = props.onclick {
@@ -59,7 +59,7 @@ pub fn ExpandableButton(mut props: ExpandableButtonProps) -> Element {
                 "{props.text}"
             }
             div { class: if active && inner_active { "expanded-content expanded active" } else if active { "expanded-content expanded" } else { "expanded-content" },
-                Button {
+                MenuButton {
                     id: "inner",
                     active: props.inner_active,
                     onclick: move |_| {},

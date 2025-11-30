@@ -5,7 +5,6 @@ use cadence_core::player::NotificationControl;
 use cadence_core::{hooks::use_saved_credentials, state::SubSonicLogin};
 use cadence_ui::UI_CSS;
 use cadence_ui::login::Login;
-use cadence_ui::player::Player;
 use cadence_ui::views::Route;
 use dioxus::prelude::*;
 
@@ -57,7 +56,6 @@ fn App() -> Element {
         }
         if *login_state.logged_in().read() {
             Router::<Route> {}
-            Player {}
         } else {
             Login { on_login: handle_login }
             if let Some(err) = login_state.errored().read().as_ref() {

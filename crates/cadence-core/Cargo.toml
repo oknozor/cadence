@@ -6,7 +6,6 @@ edition = "2024"
 [dependencies]
 dioxus = { workspace = true }
 dioxus-sdk.workspace = true
-tokio = { version = "1", features = ["rt", "macros", "time", "rt-multi-thread"] }
 opensubsonic-cli = { workspace = true }
 cadence-storage-android = { workspace = true, optional = true }
 serde = { workspace = true }
@@ -23,11 +22,13 @@ once_cell.workspace = true
 log.workspace = true
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
+tokio = { version = "1", features = ["rt", "macros", "time"] }
 howler-wasm.workspace = true
 web-time = "1"
 wasmtimer = "0.4.3"
 
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+tokio = { version = "1", features = ["rt", "macros", "time", "rt-multi-thread"] }
 rodio = { version =  "0.21.1", features = ["wasm-bindgen"] }
 stream-download = { version = "0.22.8", features = ["reqwest-rustls"] }
 

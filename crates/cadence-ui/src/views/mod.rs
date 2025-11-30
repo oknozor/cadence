@@ -1,8 +1,9 @@
-use crate::{navigation::navbar::Navbar, queue::Queue};
+use crate::navigation::navbar::Navbar;
 use album::AlbumView;
 use dioxus::prelude::*;
 use home::Home;
 use library::LibraryView;
+use now_playing::NowPlayingView;
 use search::SearchView;
 
 mod album;
@@ -17,6 +18,8 @@ pub enum Route {
     #[layout(WebNavbar)]
     #[route("/")]
     Home { },
+    #[route("/now-playing")]
+    NowPlayingView { },
     #[route("/search")]
     SearchView { },
     #[route("/library")]

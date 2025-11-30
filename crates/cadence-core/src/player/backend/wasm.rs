@@ -1,49 +1,47 @@
-use crate::{PlayerCommand, stream_url};
+use crate::PlayerCommand;
+use crate::player::{AudioBackendStateUpdate, stream_url};
 use howler_wasm::JsHowl;
-use log::debug;
 use std::cell::RefCell;
 use std::collections::VecDeque;
-use std::sync::Arc;
-use tokio::sync::{Mutex, broadcast};
 use web_time::Duration;
 
-pub struct CadencePlayer {
-    pub(super) rx: Arc<Mutex<broadcast::Receiver<PlayerCommand>>>,
-    pub(super) tx: broadcast::Sender<u64>,
+pub struct AudioBackend {
+    pub command_rx: flume::Receiver<PlayerCommand>,
+    pub state_tx: flume::Sender<AudioBackendStateUpdate>,
     username: String,
     password: String,
     base_url: String,
     queue: RefCell<VecDeque<JsHowl>>,
 }
 
-impl CadencePlayer {
+impl AudioBackend {
     pub fn build(
         base_url: impl ToString,
         username: impl ToString,
         password: impl ToString,
-        rx: Arc<Mutex<broadcast::Receiver<PlayerCommand>>>,
-        tx: broadcast::Sender<u64>,
+        command_rx: flume::Receiver<PlayerCommand>,
+        state_tx: flume::Sender<AudioBackendStateUpdate>,
     ) -> Result<Self, MusicPlayerError> {
         howler_wasm::init();
 
-        Ok(CadencePlayer {
+        Ok(AudioBackend {
             username: username.to_string(),
             password: password.to_string(),
             base_url: base_url.to_string(),
             queue: RefCell::new(VecDeque::new()),
-            tx,
-            rx,
+            command_rx,
+            state_tx,
         })
     }
 
-    pub(super) fn play(&self) -> Result<(), MusicPlayerError> {
+    pub fn play(&self) -> Result<(), MusicPlayerError> {
         if let Some(howl) = self.queue.borrow_mut().back() {
             howl.play();
         }
         Ok(())
     }
 
-    pub(super) async fn queue(&self, id: &str) -> Result<(), MusicPlayerError> {
+    pub async fn queue_now(&self, id: &str) -> Result<(), MusicPlayerError> {
         let username = &self.username;
         let password = &self.password;
         let base_url = &self.base_url;
@@ -51,7 +49,7 @@ impl CadencePlayer {
 
         let howl = JsHowl::new(url);
         if self.is_empty() {
-            debug!("queue is empty, playing now");
+            tracing::debug!("queue is empty, playing now");
             howl.play();
         }
 
@@ -59,7 +57,23 @@ impl CadencePlayer {
         Ok(())
     }
 
-    pub(super) fn pause(&self) -> Result<(), MusicPlayerError> {
+    pub async fn queue(&self, id: &str) -> Result<(), MusicPlayerError> {
+        let username = &self.username;
+        let password = &self.password;
+        let base_url = &self.base_url;
+        let url = stream_url(base_url, username, password, id);
+
+        let howl = JsHowl::new(url);
+        if self.is_empty() {
+            tracing::debug!("queue is empty, playing now");
+            howl.play();
+        }
+
+        self.queue.borrow_mut().push_back(howl);
+        Ok(())
+    }
+
+    pub fn pause(&self) -> Result<(), MusicPlayerError> {
         let queue = self.queue.borrow_mut();
         let current = queue.back();
 
@@ -70,8 +84,8 @@ impl CadencePlayer {
         Ok(())
     }
 
-    pub(super) fn seek(&self, duration: Duration) -> Result<(), MusicPlayerError> {
-        let mut queue = self.queue.borrow_mut();
+    pub fn seek(&self, duration: Duration) -> Result<(), MusicPlayerError> {
+        let queue = self.queue.borrow_mut();
         let current = queue.back();
 
         if let Some(howl) = current.as_ref() {
@@ -84,7 +98,7 @@ impl CadencePlayer {
         self.queue.borrow().is_empty()
     }
 
-    pub(super) fn next(&self) -> Result<(), MusicPlayerError> {
+    pub fn next(&self) -> Result<(), MusicPlayerError> {
         if self.is_empty() {
             return Ok(());
         }
@@ -103,9 +117,14 @@ impl CadencePlayer {
         Ok(())
     }
 
-    pub(super) fn get_pos(&self) -> Option<u64> {
+    pub async fn get_pos(&self) -> Result<u64, MusicPlayerError> {
         let queue = self.queue.borrow_mut();
-        queue.back().map(|howl| howl.position())
+        queue
+            .back()
+            .map(|howl| howl.position())
+            .ok_or(MusicPlayerError::Custom(
+                "Failed to get player position".to_string(),
+            ))
     }
 }
 

@@ -1,45 +1,52 @@
 @use '../../../assets/theme.scss';
 @import '../../../assets/mixins.scss';
 
-#navbar {
-    opacity: 0.9;
-    padding-bottom: 10px;
-    padding-top: 10px;
-    color: $secondary-color;
-    background-color: $primary-color;
-    display: flex;
-    flex-direction: row;
-    gap: 20px;
+.navbar-container {
+    @include column;
+    align-items: center;
     justify-content: center;
-    width: 100%;
-    height: 50px;
     position: fixed;
+    width: 100%;
     bottom: 0;
     left: 0;
     z-index: 1000;
 
-    .icon {
-        fill: $secondary-color;
-        background-color: $primary-color;
+    #navbar {
+        @include row;
+        opacity: 0.9;
+        padding-bottom: 10px;
+        padding-top: 10px;
         color: $secondary-color;
-        display: flex;
-        flex-direction: row;
+        background-color: $primary-color;
+        gap: 20px;
+        justify-content: center;
+        height: 50px;
+        width: 100%;
+
+        .icon {
+            fill: $secondary-color;
+            background-color: $primary-color;
+            color: $secondary-color;
+            @include row;
+        }
+
+        .navbar-item {
+            @include column;
+            align-items: center;
+
+            > .navbar-item-icon.active {
+                animation: shrinkPulse 1s infinite;
+            }
+
+            > .navbar-item-label {
+                @include text-primary;
+            }
+        }
     }
 }
 
 
-.navbar-item {
-    @include column;
-    align-items: center;
 
-    > .navbar-item-icon.active {
-        animation: shrinkPulse 1s infinite;
-    }
-
-    > .navbar-item-label {
-        @include text-primary;
-    }
-}
 
 @keyframes shrinkPulse {
     0% {
