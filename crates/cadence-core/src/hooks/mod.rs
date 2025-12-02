@@ -23,7 +23,7 @@ pub fn use_search_results() -> Action<(String,), Vec<SearchResult>> {
         client
             .search(&input)
             .await
-            .map_err(|err| CapturedError::from_display(err))
+            .map_err(CapturedError::from_display)
     })
 }
 

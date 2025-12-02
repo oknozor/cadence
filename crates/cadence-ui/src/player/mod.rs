@@ -6,22 +6,20 @@ use cadence_core::state::{CONTROLLER, ControllerExt, ControllerStoreExt};
 use dioxus::prelude::*;
 
 #[component]
-pub fn Player() -> Element {
+pub fn Player(expand: WriteSignal<bool>) -> Element {
     let mut controller = CONTROLLER.resolve();
-    let mut expand = use_signal(|| false);
 
     let content = if let Some(track) = controller.current() {
         let primary = track.read().1.title.clone();
         let secondary = track.read().1.artist.clone();
 
         rsx! {
-            div { class: if expand() { "dead-zone" } else { "dead-zone expanded" } }
             div {
                 class: "player",
                 onclick: move |_| {
                     let value = !*expand.read();
                     expand.set(value);
-                    tracing::debug!("Player clicked");
+                    debug!("Player clicked");
                 },
                 div { class: "track-container",
                     if let Some(cover) = track.read().1.cover_art.as_ref() {

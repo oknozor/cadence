@@ -12,3 +12,4 @@ dioxus-sdk = { workspace = true }
 redb.workspace = true
 jni.workspace = true
 once_cell.workspace = true
+dirs.workspace = true

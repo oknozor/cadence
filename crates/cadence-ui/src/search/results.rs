@@ -113,11 +113,11 @@ pub fn AlbumItemInfo(
     let content = artist
         .map(|artist| {
             rsx! {
-                ItemInfo { primary: name.clone(), secondary: "Album · {artist}" }
+                ItemInfo { primary: name, secondary: "Album · {artist}" }
             }
         })
         .unwrap_or(rsx! {
-            ItemInfo { primary: name.clone(), secondary: "Album" }
+            ItemInfo { primary: name, secondary: "Album" }
         });
 
     let action = Some(rsx! {

@@ -7,9 +7,7 @@ fn main() {
     watch_dir("./res".into());
 
     #[cfg(debug_assertions)]
-    let dest = PathBuf::from(format!(
-        "../../target/dx/app/debug/android/app/app/src/main/kotlin/dev/dioxus/main"
-    ));
+    let dest = PathBuf::from("../../target/dx/app/debug/android/app/app/src/main/kotlin/dev/dioxus/main".to_string());
 
     #[cfg(not(debug_assertions))]
     let dest = PathBuf::from(format!(

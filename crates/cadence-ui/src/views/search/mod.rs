@@ -4,7 +4,7 @@ use dioxus::prelude::*;
 
 #[component]
 pub fn SearchView() -> Element {
-    let mut input = use_signal(|| String::new());
+    let mut input = use_signal(String::new);
     let mut search_results = use_search_results();
 
     let oninput = move |value: String| {

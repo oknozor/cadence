@@ -46,7 +46,7 @@ pub fn ExpandableButton(mut props: ExpandableButtonProps) -> Element {
     rsx! {
         div { class: if active && inner_active { "expandable-wrapper expanded active" } else if active { "expandable-wrapper expanded" } else { "expandable-wrapper" },
             MenuButton {
-                active: props.active.clone(),
+                active: props.active,
                 onclick: move |evt| {
                     if let Some(onclick) = props.onclick {
                         *props.active.write() = !active;

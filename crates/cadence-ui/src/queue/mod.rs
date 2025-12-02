@@ -19,7 +19,7 @@ pub fn Queue(expand: ReadSignal<bool>) -> Element {
     let is_paused = !*controller.is_playing().read();
 
     rsx! {
-        div { class: "queue-container",
+        div { class: if expand() { "queue-container expanded" } else { "queue-container" },
             div {
                 if let Some(src) = cover_art.read().clone() {
                     AlbumCover { src }

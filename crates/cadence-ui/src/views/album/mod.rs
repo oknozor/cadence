@@ -18,7 +18,7 @@ pub fn AlbumView(id: String) -> Element {
                         AlbumTitle {
                             name: album.name.clone(),
                             artist: album.artist.clone(),
-                            year: album.year.clone(),
+                            year: album.year,
                         }
                         AlbumActionBar { songs: album.songs.clone() }
                         TrackList { album }

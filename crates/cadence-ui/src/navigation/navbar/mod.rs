@@ -10,6 +10,7 @@ pub fn Navbar() -> Element {
     let mut plus_active = use_signal(|| false);
     let mut home_active = use_signal(|| false);
     let mut library_active = use_signal(|| false);
+    let mut expand = use_signal(|| false);
 
     let mut set_active = move |active_signal: &mut Signal<bool>| {
         search_active.set(false);
@@ -22,8 +23,8 @@ pub fn Navbar() -> Element {
     let nav = navigator();
 
     rsx! {
-        div { class: "navbar-container",
-            Player {}
+        div { class: if expand() { "navbar-container expanded" } else { "navbar-container" },
+            Player { expand }
             div { id: "navbar",
                 NavbarItem {
                     label: "Home".to_string(),

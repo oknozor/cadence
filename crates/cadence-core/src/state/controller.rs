@@ -8,6 +8,8 @@ use std::{collections::HashMap, option::Option, time::Duration};
 
 pub static CONTROLLER: GlobalStore<Controller> = Global::new(Controller::default);
 
+type SongStore = Store<(bool, Song), GetWrite<usize, WriteSignal<HashMap<usize, (bool, Song)>>>>;
+
 #[derive(Debug)]
 pub enum HostNotificationCommand {
     Play,
@@ -50,7 +52,7 @@ impl<Lens> Store<Controller, Lens> {
 
     fn current(
         &self,
-    ) -> Option<Store<(bool, Song), GetWrite<usize, WriteSignal<HashMap<usize, (bool, Song)>>>>>
+    ) -> Option<SongStore>
     {
         let idx = *self.current_idx().read();
         self.queue_store().read().get(idx)

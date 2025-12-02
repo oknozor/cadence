@@ -85,7 +85,7 @@ impl AudioBackend {
         let username = &self.username;
         let password = &self.password;
         let base_url = &self.base_url;
-        let url = stream_url(&base_url, username, password, &track_id);
+        let url = stream_url(base_url, username, password, track_id);
 
         let reader = match StreamDownload::new_http(
             url.parse()?,

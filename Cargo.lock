@@ -363,6 +363,7 @@ version = "0.1.0"
 dependencies = [
  "dioxus",
  "dioxus-sdk",
+ "dirs",
  "jni",
  "once_cell",
  "redb",

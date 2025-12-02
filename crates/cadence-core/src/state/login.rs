@@ -8,11 +8,11 @@ pub struct LoginState {
 
 impl LoginState {
     pub fn logged_in(&self) -> Signal<bool> {
-        self.logged_in.clone()
+        self.logged_in
     }
 
     pub fn errored(&self) -> Signal<Option<String>> {
-        self.error.clone()
+        self.error
     }
 
     pub fn set(&mut self, logged_in: bool) {

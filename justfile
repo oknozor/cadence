@@ -11,7 +11,7 @@ mobile:
     dx --verbose serve --hot-patch --package app --platform android
 
 web:
-    dx --verbose serve --port 8080 --hot-patch --package app --platform web
+    dx --verbose serve --port 3000 --hot-patch --package app --platform web
 
 desktop:
     dx serve --hot-patch  --package app --platform desktop

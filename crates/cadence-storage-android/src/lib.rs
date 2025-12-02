@@ -5,7 +5,6 @@ use redb::{ReadableTable, TableDefinition};
 use serde::Serialize;
 use serde::de::DeserializeOwned;
 use std::fmt::Debug;
-use std::path::PathBuf;
 use std::sync::Arc;
 use thiserror::Error;
 
@@ -47,13 +46,21 @@ impl StorageBacking for LocalStorage {
 }
 
 fn init_database() -> Result<LocalStorage, StorageError> {
-    let path = internal_storage_dir();
-    let path = path.join("cadence-db");
-    let path = path.as_path();
+    #[cfg(target_os = "android")]
+    let path = {
+        let path = internal_storage_dir();
+        path.join("cadence-db")
+    };
+
+    #[cfg(not(target_os = "android"))]
+    let path = {
+        let path = dirs::data_dir().expect("Failed to get data directory");
+        path.join("cadence-db")
+    };
 
     debug!("Opening database {:?}", path);
 
-    let database = match redb::Database::open(path) {
+    let database = match redb::Database::open(&path) {
         Ok(db) => db,
         Err(_err) => redb::Database::create(path).expect("failed to create database"),
     };
@@ -93,6 +100,7 @@ impl LocalStorage {
         let table = read_txn
             .open_table(definition)
             .expect("failed to open database");
+
         table
             .get(key)
             .ok()
@@ -102,9 +110,11 @@ impl LocalStorage {
     }
 }
 
-pub fn internal_storage_dir() -> PathBuf {
+#[cfg(target_os = "android")]
+pub fn internal_storage_dir() -> std::path::PathBuf {
     use jni::JNIEnv;
     use jni::objects::{JObject, JString};
+    use std::path::PathBuf;
 
     let (tx, rx) = std::sync::mpsc::channel();
 
@@ -120,7 +130,6 @@ pub fn internal_storage_dir() -> PathBuf {
         Ok(PathBuf::from(files_dir))
     }
 
-    #[cfg(target_os = "android")]
     dioxus::mobile::wry::prelude::dispatch(move |env, activity, _webview| {
         tx.send(run(env, activity).unwrap()).unwrap()
     });
