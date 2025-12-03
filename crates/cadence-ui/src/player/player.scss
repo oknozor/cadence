@@ -7,40 +7,22 @@
   background-color: $primary-color-6;
   border-radius: 4px;
   align-self: center;
-  margin-left: 10px;
-  margin-right: 10px;
-
-  &:not(.expanded) {
-    animation: collapse-height 0.5s ease-in-out forwards;
-  }
-
-  &.expanded {
-    animation: expand-height 0.5s ease-in-out forwards;
-    height: 100%;
-    width: 100%;
-    margin-left: 0;
-    margin-right: 0;
-  }
 
   .player {
     @include row;
-    align-items: center;
-    justify-content: center;
-
-    &.expanded {
-      height: 100vh;
-    }
+    justify-content: space-between;
+    padding: 8px;
 
     .track-container {
-      padding: 5px;
       @include row;
       gap: $gap;
     }
 
     .player-controls {
       @include row;
+      gap: theme.$gap;
       align-items: center;
-      justify-content: center;
+      justify-content: space-between;
 
       button {
         @include row;
@@ -48,7 +30,6 @@
         justify-content: center;
       }
     }
-
   }
 
   .progress-container {
@@ -59,20 +40,35 @@
   }
 }
 
-@keyframes expand-height {
-  from {
-    height: 60px;
-  }
-  to {
-    height: 100%;
-  }
-}
+.player-fullscreen {
+  width: 100%;
+  height: 100%;
+  @include column;
+  justify-content: center;
 
-@keyframes collapse-height {
-  from {
-    height: 100%;
+  .player-controls {
+    @include row;
+    align-items: center;
+    justify-content: space-between;
+    gap: $gap;
+
+    .queue-controls {
+      @include row;
+      gap: $gap-big;
+      align-items: center;
+      justify-content: space-between;
+    }
   }
-  to {
-    height: 60px;
+
+  .control {
+    @include column;
+    justify-content: center;
+    align-items: center;
+
+    &.disabled {
+      .icon {
+        fill: theme.$secondary-color-5
+      }
+    }
   }
 }

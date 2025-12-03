@@ -34,6 +34,6 @@ pub fn SearchView() -> Element {
 
     rsx! {
         SearchInput { oninput }
-        div { class: "view", {content} }
+        {content}
     }
 }

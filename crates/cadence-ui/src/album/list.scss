@@ -1,23 +1,14 @@
 @import '../../assets/mixins.scss';
 @import '../../assets/theme.scss';
 
-.library-container {
-    @include column;
-    margin-left: 8px;
-    gap: 6px;
+.tracklist-container {
+  @include column;
+  gap: 6px;
 
-    h2 {
-        margin: 0;
-        @include text-primary;
-        font-size: 16px;
-        color: $secondary-color-1;
-    }
-}
-
-.albums-grid {
-    @include row;
-    overflow-x: auto;
-    overflow-y: hidden;
-    scroll-behavior: smooth;
-    gap: 6px;
+  h2 {
+    margin: 0;
+    @include text-primary;
+    font-size: 16px;
+    color: $secondary-color-1;
+  }
 }

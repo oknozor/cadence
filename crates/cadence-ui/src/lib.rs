@@ -6,6 +6,7 @@ pub mod login;
 pub mod navigation;
 pub mod player;
 pub mod progress;
+pub mod scroller;
 pub mod queue;
 pub mod search;
 pub mod thumbnails;

@@ -1,7 +1,36 @@
 use dioxus::prelude::*;
 
 #[component]
-pub fn PlayIcon(is_playing: ReadSignal<bool>, size: u8) -> Element {
+pub fn PlayIcon(is_playing: ReadSignal<bool>, size: Option<u8>) -> Element {
+    let size = size.unwrap_or(32);
+    rsx! {
+        if is_playing() {
+            svg {
+                class: "icon",
+                fill: "#000000",
+                height: "{size}",
+                view_box: "0 0 256 256",
+                width: "{size}",
+                xmlns: "http://www.w3.org/2000/svg",
+                path { d: "M216,48V208a16,16,0,0,1-16,16H160a16,16,0,0,1-16-16V48a16,16,0,0,1,16-16h40A16,16,0,0,1,216,48ZM96,32H56A16,16,0,0,0,40,48V208a16,16,0,0,0,16,16H96a16,16,0,0,0,16-16V48A16,16,0,0,0,96,32Z" }
+            }
+        } else {
+            svg {
+                class: "icon",
+                fill: "#000000",
+                height: "{size}",
+                view_box: "0 0 256 256",
+                width: "{size}",
+                xmlns: "http://www.w3.org/2000/svg",
+                path { d: "M240,128a15.74,15.74,0,0,1-7.6,13.51L88.32,229.65a16,16,0,0,1-16.2.3A15.86,15.86,0,0,1,64,216.13V39.87a15.86,15.86,0,0,1,8.12-13.82,16,16,0,0,1,16.2.3L232.4,114.49A15.74,15.74,0,0,1,240,128Z" }
+            }
+        }
+    }
+}
+
+#[component]
+pub fn PlayIconCircle(is_playing: ReadSignal<bool>, size: Option<u8>) -> Element {
+    let size = size.unwrap_or(32);
     rsx! {
         if is_playing() {
             svg {

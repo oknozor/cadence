@@ -2,40 +2,41 @@
 @import '../../assets/theme.scss';
 
 .search-results {
-    @include column;
-    gap: 15px;
-    margin-top: 15px;
-    margin-left: 15px;
+  @include column;
+  gap: 15px;
+  padding-top: 15px;
+  padding-left: 15px;
 
-    .search-item {
-        @include row;
-        justify-content: space-between;
-        .search-item-start {
-            @include row;
-            align-items: center;
-            gap: $gap-medium;
-        }
+  .search-item {
+    @include row;
+    justify-content: space-between;
 
-        .search-item-action {
-            @include row;
-            align-items: center;
-            gap: $gap;
-        }
+    .search-item-start {
+      @include row;
+      align-items: center;
+      gap: $gap-medium;
     }
+
+    .search-item-action {
+      @include row;
+      align-items: center;
+      gap: $gap;
+    }
+  }
 }
 
 .search-empty {
-    display: flex;
-    align-content: center;
-    justify-content: center;
-    text-align: center;
-    padding-top: 30%;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  text-align: center;
+  padding-top: 30%;
 
-    span:first-child {
-        @include text-primary;
-    }
+  span:first-child {
+    @include text-primary;
+  }
 
-    span:nth-child(2) {
-        @include text-secondary;
-    }
+  span:nth-child(2) {
+    @include text-secondary;
+  }
 }

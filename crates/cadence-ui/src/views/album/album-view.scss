@@ -2,8 +2,9 @@
 @import '../../../assets/theme.scss';
 
 .album-info {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: $gap-big;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: $gap-big;
+  max-height: 100%;
 }

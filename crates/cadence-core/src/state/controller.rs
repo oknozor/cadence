@@ -23,6 +23,7 @@ pub enum HostNotificationCommand {
 pub struct Controller {
     pub is_playing: bool,
     pub shuffle: bool,
+    pub random: bool,
     pub position: Duration,
     current_idx: usize,
     sender: Option<Sender<PlayerCommand>>,
@@ -40,6 +41,7 @@ impl Default for Controller {
             queue_store: Store::new(HashMap::default()),
             sender: None,
             current_song_id: None,
+            random: false,
         }
     }
 }

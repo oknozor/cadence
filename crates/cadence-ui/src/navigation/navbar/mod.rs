@@ -10,7 +10,7 @@ pub fn Navbar() -> Element {
     let mut plus_active = use_signal(|| false);
     let mut home_active = use_signal(|| false);
     let mut library_active = use_signal(|| false);
-    let mut expand = use_signal(|| false);
+    let expand = use_signal(|| false);
 
     let mut set_active = move |active_signal: &mut Signal<bool>| {
         search_active.set(false);
@@ -23,8 +23,8 @@ pub fn Navbar() -> Element {
     let nav = navigator();
 
     rsx! {
-        div { class: if expand() { "navbar-container expanded" } else { "navbar-container" },
-            Player { expand }
+        div { class: "navbar-container",
+            Player {}
             div { id: "navbar",
                 NavbarItem {
                     label: "Home".to_string(),
@@ -84,7 +84,6 @@ pub fn NavbarItem(
                     dioxus_sdk::time::sleep(Duration::from_millis(200)).await;
                     animate.set(false);
                 });
-
                 onclick.call(())
             },
             div { class: if animate() { "navbar-item-icon active" } else { "navbar-item-icon" },

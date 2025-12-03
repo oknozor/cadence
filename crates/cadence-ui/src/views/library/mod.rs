@@ -3,7 +3,6 @@ use dioxus::prelude::*;
 #[component]
 pub fn LibraryView() -> Element {
     rsx! {
-        span { "toto" }
-
+        div { class: "view", "toto" }
     }
 }

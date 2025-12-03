@@ -29,24 +29,22 @@ pub fn Home() -> Element {
     };
 
     rsx! {
-        div {
-            TopBar {}
-            div { class: "music-content",
-                AlbumList {
-                    title: "Recently Played",
-                    albums: recently_played,
-                    on_album_select: move |album_id| {
-                        nav.push(Route::AlbumView { id: album_id });
-                    },
-                }
+        TopBar {}
+        div { class: "music-content",
+            AlbumList {
+                title: "Recently Played",
+                albums: recently_played,
+                on_album_select: move |album_id| {
+                    nav.push(Route::AlbumView { id: album_id });
+                },
+            }
 
-                AlbumList {
-                    title: "Recently Released",
-                    albums: recently_released,
-                    on_album_select: move |album_id| {
-                        nav.push(Route::AlbumView { id: album_id });
-                    },
-                }
+            AlbumList {
+                title: "Recently Released",
+                albums: recently_released,
+                on_album_select: move |album_id| {
+                    nav.push(Route::AlbumView { id: album_id });
+                },
             }
         }
     }

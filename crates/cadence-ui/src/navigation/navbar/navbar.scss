@@ -2,92 +2,77 @@
 @import '../../../assets/mixins.scss';
 
 .navbar-container {
-    @include column;
-    position: fixed;
+  @include column;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  align-items: flex-end;
+  justify-content: flex-end;
+  width: 100%;
+
+  #navbar {
     bottom: 0;
     left: 0;
-    align-items: flex-end;
-    justify-content: flex-end;
     width: 100%;
+    z-index: 1000;
+    @include row;
+    opacity: 0.9;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    color: $secondary-color;
+    background-color: $primary-color;
+    gap: 20px;
+    justify-content: center;
+    height: 50px;
 
-    &:not(.expanded) {
-        animation: collapse-height 0.5s ease-in-out forwards;
+    .icon {
+      fill: $secondary-color;
+      background-color: $primary-color;
+      color: $secondary-color;
+      @include row;
     }
 
-    &.expanded {
-        animation: expand-height 0.5s ease-in-out forwards;
-        height: 100vh;
-        align-items: center;
-        justify-content: center;
+    .navbar-item {
+      @include column;
+      align-items: center;
 
-        > #navbar {
-            display: none;
-        }
+      > .navbar-item-icon.active {
+        animation: shrinkPulse 1s infinite;
+      }
+
+      > .navbar-item-label {
+        @include text-primary;
+      }
     }
-
-    #navbar {
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        z-index: 1000;
-        @include row;
-        opacity: 0.9;
-        padding-bottom: 10px;
-        padding-top: 10px;
-        color: $secondary-color;
-        background-color: $primary-color;
-        gap: 20px;
-        justify-content: center;
-        height: 50px;
-
-        .icon {
-            fill: $secondary-color;
-            background-color: $primary-color;
-            color: $secondary-color;
-            @include row;
-        }
-
-        .navbar-item {
-            @include column;
-            align-items: center;
-
-            > .navbar-item-icon.active {
-                animation: shrinkPulse 1s infinite;
-            }
-
-            > .navbar-item-label {
-                @include text-primary;
-            }
-        }
-    }
+  }
 }
 
 @keyframes shrinkPulse {
-    0% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(0.7);
-    }
-    100% {
-        transform: scale(1);
-    }
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.7);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 @keyframes expand-height {
-    from {
-        height: 60px;
-    }
-    to {
-        height: 100%;
-    }
+  from {
+    height: 60px;
+  }
+  to {
+    height: 100%;
+  }
 }
 
 @keyframes collapse-height {
-    from {
-        height: 100%;
-    }
-    to {
-        height: 60px;
-    }
+  from {
+    height: 100%;
+  }
+  to {
+    height: 60px;
+  }
 }

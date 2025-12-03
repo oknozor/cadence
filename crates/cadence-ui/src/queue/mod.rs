@@ -21,9 +21,6 @@ pub fn Queue(expand: ReadSignal<bool>) -> Element {
     rsx! {
         div { class: if expand() { "queue-container expanded" } else { "queue-container" },
             div {
-                if let Some(src) = cover_art.read().clone() {
-                    AlbumCover { src }
-                }
                 div {
                     for (_ , song) in queue.read().iter() {
                         ItemInfo {

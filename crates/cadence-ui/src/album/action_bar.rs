@@ -1,5 +1,5 @@
 use crate::icons::{
-    download::DownloadIcon, play::PlayIcon, plus::PlusIcon, share::ShareIcon, shuffle::ShuffleIcon,
+    download::DownloadIcon, play::PlayIconCircle, plus::PlusIcon, share::ShareIcon, shuffle::ShuffleIcon,
 };
 use cadence_core::state::{ControllerExt, ControllerStoreExt};
 use cadence_core::{model::Song, state::CONTROLLER};
@@ -37,7 +37,7 @@ pub fn AlbumActionBar(songs: Vec<Song>) -> Element {
                             controller.queue_all(songs.clone());
                         }
                     },
-                    PlayIcon { size: 48, is_playing: controller.is_playing() }
+                    PlayIconCircle { size: 48, is_playing: controller.is_playing() }
                 }
             }
         }

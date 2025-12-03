@@ -2,12 +2,11 @@
 @import '../../../assets/theme.scss';
 
 .search-empty {
-    display: flex;
-    height: 100%;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    flex: 1;
-    text-align: center;
-    padding-bottom: 30%;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  text-align: center;
 }

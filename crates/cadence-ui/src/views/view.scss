@@ -2,8 +2,8 @@
 @import '../../assets/theme.scss';
 
 .view {
-    @include column;
-    height: 100%;
-    margin: 0 15px;
-    flex-grow: 1;
+  @include column;
+  box-sizing: border-box;
+  height: 100%;
+  max-height: 100%;
 }

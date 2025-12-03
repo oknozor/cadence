@@ -2,6 +2,7 @@ use cadence_core::model::Album;
 use dioxus::prelude::*;
 
 use crate::album::card::AlbumCard;
+use crate::scroller::HorizontalScroller;
 
 #[component]
 pub fn AlbumList(
@@ -10,10 +11,10 @@ pub fn AlbumList(
     on_album_select: EventHandler<String>,
 ) -> Element {
     rsx! {
-        div { class: "library-container",
+        div { class: "tracklist-container",
             h2 { "{title}" }
 
-            div { class: "albums-grid",
+            HorizontalScroller { 
                 for album in albums {
                     AlbumCard { album, on_album_select }
                 }
