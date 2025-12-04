@@ -140,3 +140,6 @@ pub enum MusicPlayerError {
     #[error("Custom error: {0}")]
     Custom(String),
 }
+
+#[cfg(test)]
+mod test {}

@@ -85,7 +85,11 @@ pub fn ArtistItemInfo(
         ItemInfo { primary: "{name}", secondary: "Artist" }
     };
 
-    let callback = |_| ();
+    let callback = move |_| {
+        navigator().push(Route::ArtistView {
+            id: id.read().clone(),
+        });
+    };
 
     rsx! {
         SearchResultRow {
@@ -137,7 +141,6 @@ pub fn AlbumItemInfo(
             action,
             callback,
         }
-
     }
 }
 

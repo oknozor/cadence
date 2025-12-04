@@ -1,7 +1,6 @@
 use crate::album::AlbumCover;
 use crate::icons::list::ListIcon;
 use crate::icons::next::NextIcon;
-use crate::icons::play::PlayIcon;
 use crate::icons::plus::PlusIcon;
 use crate::icons::previous::PreviousIcon;
 use crate::icons::random::RandomIcon;
@@ -12,11 +11,7 @@ use crate::thumbnails::Thumbnail;
 use crate::views::Route;
 use crate::{icons::play::PlayIconCircle, items::ItemInfo};
 use cadence_core::state::{ControllerExt, ControllerStoreExt, CONTROLLER};
-use dioxus::html::a::width;
-use dioxus::html::completions::CompleteWithBraces::track;
 use dioxus::prelude::*;
-use dioxus_primitives::progress::Progress;
-use std::thread::current;
 
 #[component]
 pub fn Player() -> Element {
@@ -87,13 +82,14 @@ pub fn FullScreenPlayer() -> Element {
         current == 0
     });
 
-    let track_duration = current.map(|song| {
-        let duration = song.read().1.duration.unwrap_or_default();
-        let minutes = duration / 60;
-        let seconds = duration % 60;
-        format!("{:02}:{:02}", minutes, seconds)
-    }).unwrap_or("00:00".to_string());
-
+    let track_duration = current
+        .map(|song| {
+            let duration = song.read().1.duration.unwrap_or_default();
+            let minutes = duration / 60;
+            let seconds = duration % 60;
+            format!("{:02}:{:02}", minutes, seconds)
+        })
+        .unwrap_or("00:00".to_string());
 
     rsx! {
         div { class: "player-fullscreen",
@@ -141,7 +137,7 @@ pub fn FullScreenPlayer() -> Element {
                             onclick: move |_| {
                                 controller.toggle_play();
                             },
-                            PlayIconCircle { size: 48, is_playing: controller.is_playing() }
+                            PlayIconCircle { size: 48, is_playing }
                         }
 
                         button {

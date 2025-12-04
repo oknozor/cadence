@@ -4,7 +4,6 @@ use crate::{
     track::TrackList,
 };
 use cadence_core::hooks::use_album;
-use dioxus::html::sup::width;
 use dioxus::prelude::*;
 
 #[component]

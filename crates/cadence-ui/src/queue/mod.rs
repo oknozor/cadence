@@ -1,7 +1,7 @@
 use cadence_core::state::{CONTROLLER, ControllerExt, ControllerStoreExt};
 use dioxus::prelude::*;
 
-use crate::{album::AlbumCover, items::ItemInfo};
+use crate::items::ItemInfo;
 
 #[component]
 pub fn Queue(expand: ReadSignal<bool>) -> Element {

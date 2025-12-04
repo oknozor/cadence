@@ -1,4 +1,5 @@
 use crate::model::song::Song;
+use opensubsonic_cli::types::{AlbumId3, AlbumId3WithSongs};
 
 #[derive(Clone, PartialEq)]
 pub struct Album {
@@ -10,8 +11,8 @@ pub struct Album {
     pub songs: Vec<Song>,
 }
 
-impl From<opensubsonic_cli::types::AlbumId3WithSongs> for Album {
-    fn from(response: opensubsonic_cli::types::AlbumId3WithSongs) -> Self {
+impl From<AlbumId3WithSongs> for Album {
+    fn from(response: AlbumId3WithSongs) -> Self {
         let artist = response.artist.unwrap_or_default();
         let album = response.name;
         let cover_art = response.cover_art;
@@ -39,8 +40,8 @@ impl From<opensubsonic_cli::types::AlbumId3WithSongs> for Album {
     }
 }
 
-impl From<opensubsonic_cli::types::AlbumId3> for Album {
-    fn from(response: opensubsonic_cli::types::AlbumId3) -> Self {
+impl From<AlbumId3> for Album {
+    fn from(response: AlbumId3) -> Self {
         let artist = response.artist.unwrap_or_default();
         let album = response.name;
         let cover_art = response.cover_art;

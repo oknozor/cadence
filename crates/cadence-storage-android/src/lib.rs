@@ -71,7 +71,7 @@ fn init_database() -> Result<LocalStorage, StorageError> {
 }
 
 impl LocalStorage {
-    fn insert<'a, T>(&self, key: &str, value: T) -> Result<(), StorageError>
+    fn insert<T>(&self, key: &str, value: T) -> Result<(), StorageError>
     where
         T: Sized + Serialize,
     {
@@ -87,7 +87,7 @@ impl LocalStorage {
         Ok(())
     }
 
-    fn get<'a, T>(&self, key: &str) -> Option<T>
+    fn get<T>(&self, key: &str) -> Option<T>
     where
         T: DeserializeOwned,
     {

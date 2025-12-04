@@ -1,5 +1,6 @@
 use crate::icons::{
-    download::DownloadIcon, play::PlayIconCircle, plus::PlusIcon, share::ShareIcon, shuffle::ShuffleIcon,
+    download::DownloadIcon, play::PlayIconCircle, plus::PlusIcon, share::ShareIcon,
+    shuffle::ShuffleIcon,
 };
 use cadence_core::state::{ControllerExt, ControllerStoreExt};
 use cadence_core::{model::Song, state::CONTROLLER};

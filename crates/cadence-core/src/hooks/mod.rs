@@ -9,6 +9,7 @@ use crate::{
 };
 
 mod context;
+use crate::model::Artist;
 pub use context::init_global_context;
 
 pub mod effects;
@@ -59,6 +60,20 @@ pub fn use_album(id: String) -> Resource<Album> {
                 .clone()
                 .unwrap()
                 .get_album(&id)
+                .await
+                .unwrap()
+        }
+    })
+}
+
+pub fn use_artist(id: String) -> Resource<Artist> {
+    use_resource(move || {
+        let id = id.clone();
+        async move {
+            SUBSONIC_CLIENT()
+                .clone()
+                .unwrap()
+                .get_artist(&id)
                 .await
                 .unwrap()
         }

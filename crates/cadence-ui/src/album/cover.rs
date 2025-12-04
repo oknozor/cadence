@@ -1,5 +1,4 @@
 use dioxus::prelude::*;
-use dioxus_primitives::progress::Progress;
 
 #[derive(Props, Clone, PartialEq)]
 pub struct AlbumCoverProps {

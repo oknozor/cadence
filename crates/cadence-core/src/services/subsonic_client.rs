@@ -1,5 +1,7 @@
+use crate::model::{Album, Artist, SearchResult, Song};
 use dioxus::signals::GlobalSignal;
-use opensubsonic_cli::types::Search3ResponseSubsonicResponse;
+use opensubsonic_cli::types::GetArtistInfo2ResponseSubsonicResponse::GetArtistInfo2SuccessResponse;
+use opensubsonic_cli::types::{GetArtistResponseSubsonicResponse, Search3ResponseSubsonicResponse};
 use opensubsonic_cli::{
     Client,
     types::{
@@ -7,8 +9,6 @@ use opensubsonic_cli::{
         SubsonicFailureResponse,
     },
 };
-
-use crate::model::{Album, SearchResult, Song};
 
 pub static SUBSONIC_CLIENT: GlobalSignal<Option<SubsonicClient>> = GlobalSignal::new(|| None);
 
@@ -45,7 +45,7 @@ impl SubsonicClient {
     /// Create a new Subsonic client
     pub fn new(server_url: &str, username: &str, password: &str) -> Self {
         // TODO: we need to modify the openAPI spec to get rid of this, but  we'd rather
-        // talk to OpenSubSonic maintainer to share the work with them.
+        //   talk to OpenSubSonic maintainer to share the work with them.
         opensubsonic_cli::USERNAME.get_or_init(|| username.to_string());
         opensubsonic_cli::PASSWORD.get_or_init(|| password.to_string());
 
@@ -74,7 +74,7 @@ impl SubsonicClient {
             .map_err(ClientError::OpenSubSonic)
     }
 
-    /// Get album by ID
+    /// Get an album by ID
     pub async fn get_album(&self, id: &str) -> Result<Album, ClientError> {
         let response = self
             .client
@@ -101,6 +101,56 @@ impl SubsonicClient {
                 subsonic_failure_response,
             ) => Err(ClientError::Failure(subsonic_failure_response)),
         }
+    }
+
+    /// Get an artist by ID
+    pub async fn get_artist(&self, id: &str) -> Result<Artist, ClientError> {
+        let (artist, artist_info) = tokio::join!(
+            self.client.get_artist(id),
+            self.client.get_artist_info2(None, id, Some(false))
+        );
+
+        let artist = artist.map_err(ClientError::OpenSubSonic)?;
+        let artist = artist
+            .into_inner()
+            .subsonic_response
+            .ok_or_else(|| ClientError::Other("Empty response".to_string()))?;
+
+        let mut artist = match artist {
+            GetArtistResponseSubsonicResponse::GetArtistSuccessResponse(response) => {
+                let mut artist = response.artist;
+                for album in artist.album.iter_mut() {
+                    album.cover_art = album.cover_art.as_deref().map(cover_url)
+                }
+
+                let cover = artist.cover_art.as_deref().map(cover_url);
+                artist.cover_art = cover;
+
+                Artist::from(artist)
+            }
+            GetArtistResponseSubsonicResponse::SubsonicFailureResponse(
+                subsonic_failure_response,
+            ) => return Err(ClientError::Failure(subsonic_failure_response.clone())),
+        };
+
+        let artist_info = artist_info.map_err(ClientError::OpenSubSonic)?;
+        let artist_info = artist_info.into_inner().subsonic_response;
+
+        if let Some(GetArtistInfo2SuccessResponse(artist_info)) = artist_info {
+            artist.bio = artist_info.artist_info2.biography;
+            for artist in artist.similar.iter_mut() {
+                artist.cover_art = artist.cover_art.as_deref().map(cover_url);
+            }
+
+            artist.similar = artist_info
+                .artist_info2
+                .similar_artist
+                .into_iter()
+                .map(Artist::from)
+                .collect();
+        }
+
+        Ok(artist)
     }
 
     pub async fn list_album(&self, album_type: AlbumListType) -> Result<Vec<Album>, ClientError> {
@@ -204,8 +254,8 @@ impl SubsonicClient {
 fn ensure_https(url: String) -> String {
     if url.starts_with("https://") {
         url
-    } else if url.starts_with("http://") {
-        format!("https://{}", &url[7..])
+    } else if let Some(rest) = url.strip_prefix("http://") {
+        format!("https://{}", rest)
     } else {
         format!("https://{}", url)
     }
