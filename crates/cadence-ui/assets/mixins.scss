@@ -29,3 +29,37 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+@mixin size-100dvh {
+    height: 100dvh;
+    max-height: 100dvh;
+}
+
+@mixin size-100pct {
+    height: 100%;
+    max-height: 100%;
+}
+
+@mixin gutters-x($x: $page-gutter-x) {
+    padding-left: $x;
+    padding-right: $x;
+}
+
+@mixin overflow-x-auto-y-hidden {
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+@mixin overflow-x-hidden-y-auto {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+@mixin flex-fill {
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+@mixin max-h-100pct {
+    max-height: 100%;
+}

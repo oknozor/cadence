@@ -2,37 +2,43 @@
 @import '../../../assets/mixins.scss';
 
 .topbar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background: #0a0a0a;
+  max-width: 100%;
+  padding: 10px;
+  gap: 10px;
+  transition: all 0.2s ease;
+  height: 60px;
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  z-index: 100;
+  width: 100%;
+  position: sticky;
+  top: 0;
+
+  .topbar-menu {
     display: flex;
     flex-direction: row;
     align-items: center;
-    background: #0a0a0a;
-    max-width: 100%;
-    padding: 10px;
-    gap: 10px;
-    transition: all 0.2s ease;
-    height: 60px;
+    justify-content: center;
+    height: 100%;
+    gap: 8px;
+  }
 
-    .topbar-menu {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
-        height: 100%;
-        gap: 8px;
+  .settings-icons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-height: 30px;
+    padding: 5px;
+    background-color: dodgerblue;
+    border-radius: 50%;
+
+    svg {
+      width: 20px;
+      height: 20px;
     }
-
-    .settings-icons {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        max-height: 30px;
-        padding: 5px;
-        background-color: dodgerblue;
-        border-radius: 50%;
-
-        svg {
-                width: 20px;
-                height: 20px;
-            }
-    }
+  }
 }

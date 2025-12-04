@@ -14,7 +14,7 @@ pub fn AlbumList(
         div { class: "tracklist-container",
             h2 { "{title}" }
 
-            HorizontalScroller { 
+            HorizontalScroller {
                 for album in albums {
                     AlbumCard { album, on_album_select }
                 }

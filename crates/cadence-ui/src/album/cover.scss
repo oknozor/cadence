@@ -3,7 +3,7 @@
 
 .album-cover {
   @include column;
-  height: 30%;
+  margin: 10px;
   align-self: center;
   justify-content: center;
   align-items: center;

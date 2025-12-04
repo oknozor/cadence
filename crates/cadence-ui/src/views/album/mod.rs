@@ -14,8 +14,8 @@ pub fn AlbumView(id: String) -> Element {
     rsx! {
         match album() {
             Some(album) => rsx! {
-                AlbumCover { src: album.cover_art.clone().unwrap_or_default(), width: "200px" }
                 div { class: "album-info",
+                    AlbumCover { src: album.cover_art.clone().unwrap_or_default(), width: "200px" }
                     AlbumTitle {
                         name: album.name.clone(),
                         artist: album.artist.clone(),

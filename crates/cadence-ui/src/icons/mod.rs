@@ -16,4 +16,6 @@ pub mod share;
 pub mod shuffle;
 pub mod list;
 
+pub mod queue;
+
 

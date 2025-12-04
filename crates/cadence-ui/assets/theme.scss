@@ -1,3 +1,4 @@
+// Colors
 $primary-color: #000;
 $primary-color-1: #0e0e0e;
 $primary-color-2: #0a0a0a;
@@ -7,7 +8,6 @@ $primary-color-5: #262626;
 $primary-color-6: #232323;
 $primary-color-7: #3e3e3e;
 
-/* Secondary colors */
 $secondary-color: #fff;
 $secondary-color-1: #fafafa;
 $secondary-color-2: #e6e6e6;
@@ -27,7 +27,19 @@ $contrast-error-color: #dcdcdc;
 $primary-info-color: #262626;
 $secondary-info-color: #3e3e3e;
 
+// Spacings
 $gap-small: 2px;
 $gap: 4px;
 $gap-medium: 8px;
 $gap-big: 15px;
+
+$page-gutter-x: 12px;
+$topbar-height: 60px;
+$navbar-height: 70px;
+$navbar-padding-y: 20px;
+$navbar-reserved-space: $navbar-height + $navbar-padding-y;
+
+// Scrollbar inner fade
+$scroller-fade-size: 24px;
+$scroller-fade-blur: 24px;
+$scroller-fade-opacity: 0.7;

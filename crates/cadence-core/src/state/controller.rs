@@ -1,4 +1,4 @@
-use crate::{PlayerCommand, model::Song};
+use crate::{model::Song, PlayerCommand};
 use dioxus::{
     prelude::{Store, *},
     stores::hashmap::GetWrite,
@@ -62,6 +62,13 @@ impl<Lens> Store<Controller, Lens> {
 
     fn position_f64(&self) -> Option<f64> {
         Some(self.position().read().as_secs_f64())
+    }
+
+    fn position_display(&self) -> String {
+        let duration = *self.position().read();
+        let minutes = duration.as_secs() / 60;
+        let seconds = duration.as_secs() % 60;
+        format!("{:02}:{:02}", minutes, seconds)
     }
 
     fn seek(&mut self, pos: Duration) {

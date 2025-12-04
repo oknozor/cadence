@@ -2,6 +2,7 @@ use crate::album::AlbumCover;
 use crate::icons::list::ListIcon;
 use crate::icons::next::NextIcon;
 use crate::icons::play::PlayIcon;
+use crate::icons::plus::PlusIcon;
 use crate::icons::previous::PreviousIcon;
 use crate::icons::random::RandomIcon;
 use crate::icons::shuffle::ShuffleIcon;
@@ -12,7 +13,10 @@ use crate::views::Route;
 use crate::{icons::play::PlayIconCircle, items::ItemInfo};
 use cadence_core::state::{ControllerExt, ControllerStoreExt, CONTROLLER};
 use dioxus::html::a::width;
+use dioxus::html::completions::CompleteWithBraces::track;
 use dioxus::prelude::*;
+use dioxus_primitives::progress::Progress;
+use std::thread::current;
 
 #[component]
 pub fn Player() -> Element {
@@ -48,7 +52,7 @@ pub fn Player() -> Element {
             }
             PlayerProgress {
                 value: controller.position_f64(),
-                max: track.read().1.duration.unwrap_or_default() as f64,
+                max: track.read().1.duration.unwrap_or_default() as f64
             }
         }
     } else {
@@ -65,7 +69,7 @@ pub fn Player() -> Element {
 
 #[component]
 pub fn FullScreenPlayer() -> Element {
-    let controller = CONTROLLER.resolve();
+    let mut controller = CONTROLLER.resolve();
     let queue = controller.queue_store();
     let current = controller.current();
     let expand = use_signal(|| false);
@@ -77,46 +81,90 @@ pub fn FullScreenPlayer() -> Element {
         let last = controller.queue_store().read().len();
         current != last
     });
+
     let has_previous = use_memo(move || {
         let current = *controller.current_idx().read();
         current == 0
     });
 
+    let track_duration = current.map(|song| {
+        let duration = song.read().1.duration.unwrap_or_default();
+        let minutes = duration / 60;
+        let seconds = duration % 60;
+        format!("{:02}:{:02}", minutes, seconds)
+    }).unwrap_or("00:00".to_string());
+
+
     rsx! {
         div { class: "player-fullscreen",
-            if let Some(track) = current {
-                if let Some(src) = track.read().1.cover_art.clone() {
-                    AlbumCover { src, width: "200px" }
+            div { class: "controls-container",
+                if let Some(track) = current {
+                    if let Some(src) = track.read().1.cover_art.clone() {
+                        AlbumCover { src, width: "100%" }
+                    }
+                    div { class: "track-info",
+                        ItemInfo { primary: track.read().1.title.clone(), secondary: track.read().1.artist.clone() }
+                        PlusIcon { filled: false }
+                    }
+
+                    PlayerProgress {
+                        value: controller.position_f64(),
+                        max: track.read().1.duration.unwrap_or_default() as f64
+                    }
+
+                    div { class: "timing-progress",
+                        span { "{controller.position_display()}" }
+                        span { "{track_duration}" }
+                    }
                 }
-                ItemInfo {
-                    primary: track.read().1.title.clone(),
-                    secondary: track.read().1.artist.clone(),
+
+                div { class: "player-controls",
+                    button {
+                        class: if !is_shuffle { "control disabled" } else { "control" },
+                        onclick: move |_| {
+                            controller.shuffle().toggle();
+                        },
+                        ShuffleIcon { size: 24, filled: is_shuffle }
+                    }
+
+                    div { class: "queue-controls",
+                        button {
+                            class: if !has_previous() { "control disabled" } else { "control" },
+                            onclick: move |_| {
+                                controller.previous();
+                            },
+                            PreviousIcon { filled: has_previous() }
+                        }
+
+                        button {
+                            class: "control",
+                            onclick: move |_| {
+                                controller.toggle_play();
+                            },
+                            PlayIconCircle { size: 48, is_playing: controller.is_playing() }
+                        }
+
+                        button {
+                            class: if !has_next() { "control disabled" } else { "control" },
+                            onclick: move |_| {
+                                controller.next();
+                            },
+                            NextIcon { size: 24, filled: has_next() }
+                        }
+                    }
+
+                    button {
+                        class: if !is_random { "control disabled" } else { "control" },
+                        onclick: move |_| {
+                            controller.random().toggle();
+                        },
+                        RandomIcon { filled: is_random }
+                    }
                 }
             }
-            div { class: "player-controls",
-                button { class: if !is_shuffle { "control disabled" } else { "control" },
-                    ShuffleIcon { size: 24, filled: is_shuffle }
-                }
-
-                div { class: "queue-controls",
-                    button { class: if !has_previous() { "control disabled" } else { "control" },
-                        PreviousIcon { filled: has_previous() }
-                    }
-
-                    button { class: "control",
-                        PlayIconCircle { size: 48, is_playing: controller.is_playing() }
-                    }
-
-                    button { class: if !has_next() { "control disabled" } else { "control" },
-                        NextIcon { size: 24, filled: has_next() }
-                    }
-                }
-
-                button { class: if !is_random { "control disabled" } else { "control" },
-                    RandomIcon { filled: is_random }
-                }
+            div { class: "queue-container",
+                Queue { expand }
             }
-            Queue { expand }
         }
     }
 }

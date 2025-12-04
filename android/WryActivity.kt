@@ -32,6 +32,7 @@ import android.content.pm.PackageManager
 
 import androidx.core.app.ActivityCompat
 import android.Manifest
+import android.view.WindowInsets
 import android.view.WindowManager
 
 abstract class WryActivity : AppCompatActivity() {
@@ -45,8 +46,7 @@ abstract class WryActivity : AppCompatActivity() {
     }
 
     val version: String
-        @SuppressLint("WebViewApiAvailability", "ObsoleteSdkInt")
-        get() {
+        @SuppressLint("WebViewApiAvailability", "ObsoleteSdkInt") get() {
             // Check getCurrentWebViewPackage() directly if above Android 8
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 return WebView.getCurrentWebViewPackage()?.versionName ?: ""
@@ -58,16 +58,15 @@ abstract class WryActivity : AppCompatActivity() {
                 webViewPackage = "com.android.chrome"
             }
             try {
-                @Suppress("DEPRECATION")
-                val info = packageManager.getPackageInfo(webViewPackage, 0)
+                @Suppress("DEPRECATION") val info = packageManager.getPackageInfo(webViewPackage, 0)
                 return info.versionName.toString()
             } catch (ex: Exception) {
                 Logger.warn("Unable to get package info for '$webViewPackage'$ex")
             }
 
             try {
-                @Suppress("DEPRECATION")
-                val info = packageManager.getPackageInfo("com.android.webview", 0)
+                @Suppress("DEPRECATION") val info =
+                    packageManager.getPackageInfo("com.android.webview", 0)
                 return info.versionName.toString()
             } catch (ex: Exception) {
                 Logger.warn("Unable to get package info for 'com.android.webview'$ex")
@@ -81,16 +80,10 @@ abstract class WryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         requestPermissions()
 
-        if (Build.VERSION.SDK_INT >= 19 && Build.VERSION.SDK_INT < 21) {
-            setWindowFlag(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, true)
-        }
-        if (Build.VERSION.SDK_INT >= 19) {
-            window.decorView.systemUiVisibility =
-                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-        }
-        if (Build.VERSION.SDK_INT >= 21) {
+        if (Build.VERSION.SDK_INT < 30) {
             setWindowFlag(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false)
-            window.statusBarColor = Color.TRANSPARENT
+        } else {
+            window.statusBarColor = Color.rgb(10, 10, 10)
         }
 
         if (KeepAliveService.serviceInstance == null) {
@@ -192,8 +185,7 @@ abstract class WryActivity : AppCompatActivity() {
 
         if (permissionsToRequest.isNotEmpty()) {
             ActivityCompat.requestPermissions(
-                this,
-                permissionsToRequest.toTypedArray(), // Convert list to array
+                this, permissionsToRequest.toTypedArray(), // Convert list to array
                 1001 // Pass the request code
             )
         }

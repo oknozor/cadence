@@ -1,6 +1,7 @@
 use crate::icons::{home::HomeIcon, library::LibraryIcon, plus::PlusIcon, search::SearchIcon};
 use crate::player::Player;
 use crate::views::Route;
+use dioxus::html::completions::CompleteWithBraces::nav;
 use dioxus::prelude::*;
 use std::time::Duration;
 
@@ -86,9 +87,7 @@ pub fn NavbarItem(
                 });
                 onclick.call(())
             },
-            div { class: if animate() { "navbar-item-icon active" } else { "navbar-item-icon" },
-                {children}
-            }
+            div { class: if animate() { "navbar-item-icon active" } else { "navbar-item-icon" }, {children} }
             div { class: "navbar-item-label", "{label}" }
         }
     }

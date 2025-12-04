@@ -1,17 +1,17 @@
 @import '../../assets/mixins.scss';
 
 .album-action-bar {
-    @include row;
-    justify-content: space-between;
+  @include row;
+  justify-content: space-between;
 
   .album-action-bar-start {
-      @include row;
-      gap: $gap;
+    @include row;
+    gap: $gap-medium;
   }
 
   .album-action-bar-end {
-      @include row;
-      align-items: center;
-      gap: $gap;
+    @include row;
+    align-items: center;
+    gap: $gap-medium;
   }
 }

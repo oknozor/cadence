@@ -1,3 +1,4 @@
+use crate::scroller::VerticalScroller;
 use crate::search::{SearchInput, SearchResults, SearchResultsEmpty};
 use cadence_core::hooks::use_search_results;
 use dioxus::prelude::*;
@@ -22,7 +23,9 @@ pub fn SearchView() -> Element {
             SearchResultsEmpty {}
         },
         Some(Ok(search_results)) => rsx! {
-            SearchResults { search_results }
+            VerticalScroller {
+                SearchResults { search_results }
+            }
         },
         Some(Err(err)) => rsx! {
             div { class: "search-results", "Error: {err}" }

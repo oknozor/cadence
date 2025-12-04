@@ -41,22 +41,47 @@
 }
 
 .player-fullscreen {
-  width: 100%;
   height: 100%;
   @include column;
   justify-content: center;
 
-  .player-controls {
-    @include row;
-    align-items: center;
-    justify-content: space-between;
-    gap: $gap;
+  .controls-container {
+    width: 100%;
+    height: 100%;
+    @include column;
+    gap: $gap-big;
 
-    .queue-controls {
+    .track-info {
       @include row;
-      gap: $gap-big;
+      justify-content: space-between;
+      padding-bottom: 20px;
+    }
+
+    .progress-container {
+      width: 100%;
+      height: 5px;
+      @include column;
+      justify-self: center;
+    }
+
+    .timing-progress {
+      @include row;
+      justify-content: space-between;
+      padding-bottom: 20px;
+    }
+
+    .player-controls {
+      @include row;
       align-items: center;
       justify-content: space-between;
+      gap: $gap-big;
+
+      .queue-controls {
+        @include row;
+        gap: $gap-big;
+        align-items: center;
+        justify-content: space-between;
+      }
     }
   }
 
@@ -70,5 +95,9 @@
         fill: theme.$secondary-color-5
       }
     }
+  }
+
+  .queue-container {
+    height: 0;
   }
 }

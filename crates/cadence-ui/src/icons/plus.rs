@@ -1,7 +1,9 @@
 use dioxus::prelude::*;
 
 #[component]
-pub fn PlusIcon(size: u8, filled: ReadSignal<bool>) -> Element {
+pub fn PlusIcon(size: Option<u32>, filled: ReadSignal<bool>) -> Element {
+    let size = size.unwrap_or(32);
+
     rsx! {
         if filled() {
             svg {
