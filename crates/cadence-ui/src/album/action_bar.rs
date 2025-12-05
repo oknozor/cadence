@@ -1,3 +1,4 @@
+use crate::icons::dots::DotIcon;
 use crate::icons::{
     download::DownloadIcon, play::PlayIconCircle, plus::PlusIcon, share::ShareIcon,
     shuffle::ShuffleIcon,
@@ -7,8 +8,9 @@ use cadence_core::{model::Song, state::CONTROLLER};
 use dioxus::prelude::*;
 
 #[component]
-pub fn AlbumActionBar(songs: Vec<Song>) -> Element {
+pub fn AlbumActionBar(songs: Vec<Song>, modal_open: Signal<bool>) -> Element {
     let mut controller = CONTROLLER.resolve();
+
     rsx! {
         div { class: "album-action-bar",
             div { class: "album-action-bar-start",
@@ -22,6 +24,10 @@ pub fn AlbumActionBar(songs: Vec<Song>) -> Element {
 
                 button {
                     ShareIcon { size: 32 }
+                }
+
+                button { onclick: move |_| modal_open.toggle(),
+                    DotIcon { size: 32 }
                 }
             }
 

@@ -10,6 +10,13 @@ logcat:
 mobile:
     dx --verbose serve --hot-patch --package app --platform android
 
+build-android:
+    dx build --package app --platform android --features mobile --target aarch64-linux-android
+    echo "Apk built in target/dx/app/debug/android/app/app/build/outputs/apk/debug/app-debug.apk"
+
+bundle-android:
+    dx bundle --package app --platform android
+
 web:
     dx --verbose serve --port 3000 --hot-patch --package app --platform web
 

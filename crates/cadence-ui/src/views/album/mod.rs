@@ -1,3 +1,4 @@
+use crate::modal::AlbumMenuModal;
 use crate::scroller::VerticalScroller;
 use crate::{
     album::{AlbumActionBar, AlbumCover, AlbumTitle},
@@ -9,6 +10,7 @@ use dioxus::prelude::*;
 #[component]
 pub fn AlbumView(id: String) -> Element {
     let album = use_album(id);
+    let modal_open = use_signal(|| false);
 
     rsx! {
         match album() {
@@ -20,10 +22,11 @@ pub fn AlbumView(id: String) -> Element {
                         artist: album.artist.clone(),
                         year: album.year,
                     }
-                    AlbumActionBar { songs: album.songs.clone() }
+                    AlbumActionBar { songs: album.songs.clone(), modal_open }
                     VerticalScroller {
                         TrackList { album }
                     }
+                    AlbumMenuModal { open: modal_open }
                 }
             },
             None => rsx! {

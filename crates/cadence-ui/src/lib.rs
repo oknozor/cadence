@@ -12,6 +12,7 @@ pub mod search;
 pub mod thumbnails;
 pub mod track;
 pub mod views;
+pub mod modal;
 
 use dioxus::prelude::*;
 pub const UI_CSS: Asset = asset!("/assets/ui.scss");
