@@ -2,24 +2,23 @@
 @import '../../assets/theme.scss';
 
 .item-info {
-    @include column;
-    justify-content: space-around;
+  @include column;
+  justify-content: space-around;
+  align-content: end;
 
-    .item-line {
-        @include row;
-        gap: $gap;
-        flex-grow: 1;
+  .item-line {
+    @include row;
+    gap: $gap;
+    flex-grow: 1;
 
-        .item-primary {
-            @include ellipsis;
-            @include text-primary;
-            padding-top: 3px;
-            line-height: 0.8;
-        }
+    .item-primary {
+      @include ellipsis;
+      @include text-primary;
     }
-    .item-secondary {
-        @include ellipsis;
-        @include text-secondary;
-         padding-top: 3px;
-     }
+  }
+
+  .item-secondary {
+    @include ellipsis;
+    @include text-secondary;
+  }
 }

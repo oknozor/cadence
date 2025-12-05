@@ -1,4 +1,5 @@
 pub mod animated_bars;
+pub mod artist;
 pub mod back;
 pub mod close;
 pub mod dots;

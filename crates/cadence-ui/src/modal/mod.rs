@@ -4,7 +4,7 @@ use dioxus::prelude::*;
 const DRAG_CLOSE_THRESHOLD: f64 = 300.0;
 
 #[component]
-pub fn AlbumMenuModal(open: WriteSignal<bool>) -> Element {
+pub fn MenuModal(open: WriteSignal<bool>, children: Element) -> Element {
     let mut dragging = use_signal(|| false);
     let mut start_y = use_signal(|| 0.0);
     let mut delta = use_signal(|| 0.0);
@@ -66,15 +66,7 @@ pub fn AlbumMenuModal(open: WriteSignal<bool>) -> Element {
             },
 
             div { class: "grabber" }
-            div { class: "modal-header",
-                ItemInfo { primary: "Dummy", secondary: "Dummy" }
-            }
-            div { class: "modal-content",
-                span { "Dummy" }
-                span { "Dummy" }
-                span { "Dummy" }
-                span { "Dummy" }
-            }
+            div { class: "modal-content", {children} }
         }
     }
 }

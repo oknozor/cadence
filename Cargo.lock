@@ -340,6 +340,7 @@ dependencies = [
  "dioxus",
  "dioxus-sdk",
  "flume",
+ "futures",
  "howler-wasm",
  "jni",
  "log",

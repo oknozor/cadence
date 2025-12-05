@@ -8,3 +8,6 @@ mod cover;
 pub use cover::AlbumCover;
 mod title;
 pub use title::AlbumTitle;
+
+mod modal;
+pub use modal::AlbumMenuModal;

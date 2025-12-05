@@ -1,10 +1,15 @@
-use crate::modal::AlbumMenuModal;
+use crate::album::AlbumMenuModal;
+use crate::icons::download::DownloadIcon;
+use crate::icons::plus::PlusIcon;
+use crate::icons::share::ShareIcon;
+use crate::modal::MenuModal;
 use crate::scroller::VerticalScroller;
 use crate::{
     album::{AlbumActionBar, AlbumCover, AlbumTitle},
     track::TrackList,
 };
 use cadence_core::hooks::use_album;
+use dioxus::html::dialog::open;
 use dioxus::prelude::*;
 
 #[component]
@@ -24,9 +29,9 @@ pub fn AlbumView(id: String) -> Element {
                     }
                     AlbumActionBar { songs: album.songs.clone(), modal_open }
                     VerticalScroller {
-                        TrackList { album }
+                        TrackList { album: album.clone() }
                     }
-                    AlbumMenuModal { open: modal_open }
+                    AlbumMenuModal {open: modal_open, album }
                 }
             },
             None => rsx! {

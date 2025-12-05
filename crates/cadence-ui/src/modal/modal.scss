@@ -1,7 +1,6 @@
 @import '../../assets/mixins.scss';
 @import '../../assets/theme.scss';
 
-
 .bottom-modal {
   position: fixed;
   left: 0;
@@ -11,11 +10,11 @@
   color: #fff;
   border-radius: 18px 18px 0 0;
   box-shadow: 0 -2px 24px rgba(0, 0, 0, 0.3);
-  min-height: 70%;
   max-height: 60vh;
   overflow-y: auto;
-  z-index: 101;
+  z-index: 1001;
   pointer-events: none;
+  padding-bottom: $navbar-reserved-space;
 
   &.opened {
     bottom: 0;
@@ -32,6 +31,9 @@
   }
 
   .modal-content {
-    padding: 0 24px 24px 24px;
+    @include column;
+    padding: 8px;
+    gap: $gap-huge;
+    height: 100%;
   }
 }

@@ -16,6 +16,7 @@
     .track-container {
       @include row;
       gap: $gap;
+      align-items: center;
     }
 
     .player-controls {

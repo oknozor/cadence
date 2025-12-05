@@ -16,10 +16,12 @@ pub struct ItemInfoProps {
 
 #[component]
 pub fn ItemInfo(props: ItemInfoProps) -> Element {
+    let is_active = *props.is_active.read();
+
     rsx! {
         div { class: "item-info",
             div { class: "item-line",
-                if *props.is_active.read() {
+                if is_active {
                     AnimatedBars { size: 12, paused: props.is_paused }
                 }
                 span { class: "item-primary", "{props.primary}" }

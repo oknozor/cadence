@@ -14,6 +14,7 @@ url.workspace = true
 tracing.workspace = true
 once_cell.workspace = true
 flume.workspace = true
+futures = "0.3.31"
 
 [target.'cfg(target_os = "android")'.dependencies]
 jni.workspace = true
@@ -29,11 +30,11 @@ wasmtimer = "0.4.3"
 
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
 tokio = { version = "1", features = ["rt", "macros", "time", "rt-multi-thread"] }
-rodio = { version =  "0.21.1", features = ["wasm-bindgen"] }
+rodio = { version = "0.21.1", features = ["wasm-bindgen"] }
 stream-download = { version = "0.22.8", features = ["reqwest-rustls"] }
 
 [features]
 default = ["web"]
 web = ["dioxus/web"]
 desktop = ["dioxus/desktop"]
-mobile = ["dioxus/mobile", "cadence-storage-android" ]
+mobile = ["dioxus/mobile", "cadence-storage-android"]

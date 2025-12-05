@@ -6,6 +6,7 @@ pub struct Album {
     pub id: String,
     pub name: String,
     pub artist: String,
+    pub artist_id: String,
     pub year: Option<i64>,
     pub cover_art: Option<String>,
     pub songs: Vec<Song>,
@@ -16,11 +17,13 @@ impl From<AlbumId3WithSongs> for Album {
         let artist = response.artist.unwrap_or_default();
         let album = response.name;
         let cover_art = response.cover_art;
+        let artist_id = response.artist_id.unwrap_or_default();
 
         Album {
             id: response.id,
             name: album.clone(),
             artist: artist.clone(),
+            artist_id,
             year: response.year,
             cover_art: cover_art.clone(),
             songs: response
@@ -42,7 +45,9 @@ impl From<AlbumId3WithSongs> for Album {
 
 impl From<AlbumId3> for Album {
     fn from(response: AlbumId3) -> Self {
+        // FIXME: optionals should not default
         let artist = response.artist.unwrap_or_default();
+        let artist_id = response.artist_id.unwrap_or_default();
         let album = response.name;
         let cover_art = response.cover_art;
 
@@ -50,6 +55,7 @@ impl From<AlbumId3> for Album {
             id: response.id,
             name: album.clone(),
             artist: artist.clone(),
+            artist_id,
             year: response.year,
             cover_art: cover_art.clone(),
             songs: response
