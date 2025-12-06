@@ -9,19 +9,17 @@
 }
 
 .artist-header {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
+  @include column;
   gap: $gap-medium;
 }
 
 .artist-image {
-  height: 200px;
+  width: 200px;
+  margin: 20px;
   border-radius: 12px;
   background-color: $secondary-color-1;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-self: center;
 
   &.placeholder {
     font-size: 64px;
@@ -67,7 +65,12 @@
 }
 
 .wikidata-summary {
-  color: $secondary-color-3;
+  @include text-secondary(12px);
+  color: $secondary-color-4;
+
+  a {
+    color: #2196f3;
+  }
 }
 
 .scrobz-chart,

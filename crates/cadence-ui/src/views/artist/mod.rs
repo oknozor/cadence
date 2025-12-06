@@ -21,7 +21,7 @@ pub fn ArtistView(id: String) -> Element {
                             src: "{img}",
                             alt: "{artist.name}",
                             width: "200px",
-                            height: "200px",
+                            height: "200px"
                         }
                     } else {
                         div { class: "artist-image placeholder", "🎤" }
@@ -29,10 +29,6 @@ pub fn ArtistView(id: String) -> Element {
 
                     div { class: "artist-title",
                         h1 { class: "artist-name", "{artist.name}" }
-                        // Optional: small metadata line
-                        if let Some(years_active) = Some("—") {
-                            p { class: "artist-meta", "{years_active}" }
-                        }
                     }
 
                     div { class: "artist-actions",
@@ -41,13 +37,13 @@ pub fn ArtistView(id: String) -> Element {
                     }
                 }
 
-                VerticalScroller {
+                VerticalScroller { 
                     section { class: "artist-section",
                         h2 { "About" }
                         if let Some(bio) = artist.bio {
-                            p {
+                            div {
                                 class: "wikidata-summary",
-                                dangerous_inner_html: bio,
+                                dangerous_inner_html: bio
                             }
                         }
                     }
@@ -58,7 +54,7 @@ pub fn ArtistView(id: String) -> Element {
                             albums: artist.albums,
                             on_album_select: move |album_id| {
                                 nav.push(Route::AlbumView { id: album_id });
-                            },
+                            }
                         }
                     }
 
@@ -79,7 +75,6 @@ pub fn ArtistView(id: String) -> Element {
                     section { class: "artist-section",
                         h2 { "More like this" }
                         if artist.similar.is_empty() {
-
                         } else {
                             ul { class: "collabs",
                                 for similar in artist.similar.into_iter() {
