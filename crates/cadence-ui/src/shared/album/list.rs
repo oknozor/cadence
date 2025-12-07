@@ -8,7 +8,7 @@ use crate::shared::HorizontalScroller;
 pub fn AlbumList(
     title: String,
     albums: Vec<Album>,
-    on_album_select: EventHandler<String>,
+    on_card_clicked: EventHandler<String>,
 ) -> Element {
     rsx! {
         div { class: "tracklist-container",
@@ -16,7 +16,7 @@ pub fn AlbumList(
 
             HorizontalScroller {
                 for album in albums {
-                    AlbumCard { album, on_album_select }
+                    AlbumCard { album, on_card_clicked }
                 }
             }
         }

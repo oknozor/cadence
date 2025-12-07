@@ -1,83 +1,60 @@
-use crate::shared::AlbumList;
+use crate::shared::{AlbumList, ArtistGrid, RoundedThumbnail};
 use crate::{shared::VerticalScroller, views::Route};
 use cadence_core::hooks::use_artist;
 use dioxus::prelude::*;
 
+mod components;
+
 #[component]
 pub fn ArtistView(id: String) -> Element {
     let artist = use_artist(id);
-
-    // Elder Scrobz chart: render only if a Scrobz account is present
-    // TODO: Wire to a real setting/state; using a temporary flag for now
-    let has_scrobz_account = false;
     let nav = navigator();
+
+    let on_artist_card_clicked = move |artist_id| {
+        if let Some(a) = nav.push(Route::ArtistView { id: artist_id }) {
+            tracing::debug!("Clicked on artist card with ID: {:?}", a);
+        }
+    };
+
+    let on_album_card_clicked = move |album_id| {
+        nav.push(Route::AlbumView { id: album_id });
+    };
 
     if let Some(artist) = artist() {
         rsx! {
             div { class: "artist-info",
-                div { class: "artist-header",
-                    if let Some(img) = artist.cover_art.as_ref() {
-                        img {
-                            class: "artist-image",
-                            src: "{img}",
-                            alt: "{artist.name}",
-                            width: "200px",
-                            height: "200px"
-                        }
-                    } else {
-                        div { class: "artist-image placeholder", "🎤" }
-                    }
-
-                    div { class: "artist-title",
-                        h1 { class: "artist-name", "{artist.name}" }
-                    }
-                }
-
                 VerticalScroller {
-                    section { class: "artist-section",
-                        h2 { "About" }
-                        if let Some(bio) = artist.bio {
-                            div {
-                                class: "wikidata-summary",
-                                dangerous_inner_html: bio
+                    div { class: "artist-header",
+                        if let Some(src) = artist.cover_art {
+                            RoundedThumbnail {
+                                size: 128,
+                                src,
+                                name: artist.name.clone(),
                             }
                         }
+
+                        div { class: "artist-title",
+                            h1 { class: "artist-name", "{artist.name}" }
+                        }
+                    }
+
+                    if let Some(bio) = artist.bio {
+                        ArtistAbout { bio }
                     }
 
                     section { class: "artist-section",
                         AlbumList {
                             title: "Albums".to_string(),
                             albums: artist.albums,
-                            on_album_select: move |album_id| {
-                                nav.push(Route::AlbumView { id: album_id });
-                            }
+                            on_card_clicked: on_album_card_clicked,
                         }
                     }
 
-                    // Elder Scrobz chart (conditional)
-                    if has_scrobz_account {
-                        section { class: "artist-section",
-                            h2 { "Top Tracks (Scrobz)" }
-                            // TODO: Replace with a real chart/list; mocked for now
-                            ul { class: "scrobz-chart",
-                                li { "1. Mock Track 1" }
-                                li { "2. Mock Track 2" }
-                                li { "3. Mock Track 3" }
-                            }
-                        }
-                    }
-
-                    // Collabs
-                    section { class: "artist-section",
+                    if !artist.similar.is_empty() {
                         h2 { "More like this" }
-                        if artist.similar.is_empty() {
-                        } else {
-                            ul { class: "collabs",
-                                for similar in artist.similar.into_iter() {
-                                    // TODO
-                                    li { "{similar.name}" }
-                                }
-                            }
+                        ArtistGrid {
+                            artists: artist.similar,
+                            on_card_clicked: on_artist_card_clicked,
                         }
                     }
                 }
@@ -85,5 +62,15 @@ pub fn ArtistView(id: String) -> Element {
         }
     } else {
         rsx! { "Loading" }
+    }
+}
+
+#[component]
+pub fn ArtistAbout(bio: String) -> Element {
+    rsx! {
+        section { class: "artist-section",
+            h2 { "About" }
+            div { class: "wikidata-summary", dangerous_inner_html: bio }
+        }
     }
 }

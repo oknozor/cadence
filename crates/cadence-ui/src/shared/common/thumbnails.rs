@@ -3,12 +3,14 @@ use dioxus::prelude::*;
 #[component]
 pub fn RoundedThumbnail(size: u32, name: String, src: String) -> Element {
     rsx! {
-        img {
-            class: "thumbnail-rounded",
-            src: "{src}",
-            alt: "{name}",
-            width: "{size}px",
-            height: "{size}px",
+        div { class: "rounded-thumbnail-container",
+            img {
+                class: "rounded-thumbnail",
+                src: "{src}",
+                alt: "{name}",
+                width: "{size}px",
+                height: "{size}px",
+            }
         }
     }
 }

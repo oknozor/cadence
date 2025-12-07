@@ -1,6 +1,9 @@
 mod album;
 pub use album::*;
 
+mod artist;
+pub use artist::*;
+
 mod icons;
 pub use icons::*;
 

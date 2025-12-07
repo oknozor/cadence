@@ -6,7 +6,6 @@ use dioxus::prelude::*;
 #[component]
 pub fn Home() -> Element {
     let nav = navigator();
-
     let recently_released = use_recently_released();
     let recently_played = use_recently_played();
 
@@ -28,23 +27,23 @@ pub fn Home() -> Element {
         }
     };
 
+    let on_album_clicked = move |album_id| {
+        nav.push(Route::AlbumView { id: album_id });
+    };
+
     rsx! {
         TopBar {}
         div { class: "music-content",
             AlbumList {
                 title: "Recently Played",
                 albums: recently_played,
-                on_album_select: move |album_id| {
-                    nav.push(Route::AlbumView { id: album_id });
-                },
+                on_card_clicked: on_album_clicked,
             }
 
             AlbumList {
                 title: "Recently Released",
                 albums: recently_released,
-                on_album_select: move |album_id| {
-                    nav.push(Route::AlbumView { id: album_id });
-                },
+                on_card_clicked: on_album_clicked,
             }
         }
     }

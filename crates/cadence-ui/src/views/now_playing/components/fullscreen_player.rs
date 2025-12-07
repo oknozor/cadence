@@ -43,13 +43,16 @@ pub fn FullScreenPlayer() -> Element {
                         AlbumCover { src, width: "100%" }
                     }
                     div { class: "track-info",
-                        ItemInfo { primary: track.read().1.title.clone(), secondary: track.read().1.artist.clone() }
+                        ItemInfo {
+                            primary: track.read().1.title.clone(),
+                            secondary: track.read().1.artist.clone(),
+                        }
                         PlusIcon { filled: false }
                     }
 
                     PlayerProgress {
                         value: controller.position_f64(),
-                        max: track.read().1.duration.unwrap_or_default() as f64
+                        max: track.read().1.duration.unwrap_or_default() as f64,
                     }
 
                     div { class: "timing-progress",

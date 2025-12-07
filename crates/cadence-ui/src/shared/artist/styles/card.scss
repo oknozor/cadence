@@ -1,0 +1,13 @@
+@import "../../../../assets/mixins.scss";
+
+.artist-card {
+    @include column;
+    cursor: pointer;
+    align-items: center;
+    .artist-name {
+        text-align: center;
+        font-size: 18px;
+        font-weight: bold;
+        margin-top: 8px;
+    }
+}

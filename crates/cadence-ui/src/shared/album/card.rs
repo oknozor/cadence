@@ -3,12 +3,12 @@ use cadence_core::model::Album;
 use dioxus::prelude::*;
 
 #[component]
-pub fn AlbumCard(album: Album, on_album_select: EventHandler<String>) -> Element {
+pub fn AlbumCard(album: Album, on_card_clicked: EventHandler<String>) -> Element {
     rsx! {
         div {
             class: "album-card",
             key: "{album.id}",
-            onclick: move |_| on_album_select.call(album.id.clone()),
+            onclick: move |_| on_card_clicked.call(album.id.clone()),
 
             if let Some(cover) = album.cover_art.as_ref() {
                 img {

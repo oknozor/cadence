@@ -40,7 +40,7 @@ pub fn Player() -> Element {
             }
             PlayerProgress {
                 value: controller.position_f64(),
-                max: track.read().1.duration.unwrap_or_default() as f64
+                max: track.read().1.duration.unwrap_or_default() as f64,
             }
         }
     } else {

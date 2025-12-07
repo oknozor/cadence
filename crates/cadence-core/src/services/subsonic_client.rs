@@ -138,9 +138,6 @@ impl SubsonicClient {
 
         if let Some(GetArtistInfo2SuccessResponse(artist_info)) = artist_info {
             artist.bio = artist_info.artist_info2.biography;
-            for artist in artist.similar.iter_mut() {
-                artist.cover_art = artist.cover_art.as_deref().map(cover_url);
-            }
 
             artist.similar = artist_info
                 .artist_info2
@@ -148,6 +145,10 @@ impl SubsonicClient {
                 .into_iter()
                 .map(Artist::from)
                 .collect();
+
+            for artist in artist.similar.iter_mut() {
+                artist.cover_art = artist.cover_art.as_deref().map(cover_url);
+            }
         }
 
         Ok(artist)

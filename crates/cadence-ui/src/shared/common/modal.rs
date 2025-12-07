@@ -11,13 +11,7 @@ pub fn MenuModal(open: WriteSignal<bool>, children: Element) -> Element {
     rsx! {
         div {
             class: if open() { "bottom-modal opened" } else { "bottom-modal" },
-            transform: if dragging() {
-                "translateY({delta}px)"
-            } else if open() {
-                "translateY(0)"
-            } else {
-                "translateY(100%)"
-            },
+            transform: if dragging() { "translateY({delta}px)" } else if open() { "translateY(0)" } else { "translateY(100%)" },
             transition: "transform 0.3s cubic-bezier(.23,1.04,.41,.99)",
             ontouchstart: move |e| {
                 let touch_y = e.touches()[0].page_coordinates().y;

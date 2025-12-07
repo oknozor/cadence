@@ -6,35 +6,23 @@
     flex-direction: column;
     gap: $gap-big;
     @include max-h-100pct;
-}
 
-.artist-header {
-    @include column;
-    gap: $gap-medium;
-}
+    .artist-header {
+        @include row;
+        gap: $gap-big;
+        align-items: center;
 
-.artist-image {
-    width: 200px;
-    margin: 20px;
-    border-radius: 12px;
-    background-color: $secondary-color-1;
-    display: flex;
-    align-self: center;
+        .artist-title {
+            display: flex;
+            flex-direction: column;
+            gap: $gap-small;
 
-    &.placeholder {
-        font-size: 64px;
+            .artist-name {
+                font-size: 2rem;
+                font-weight: 700;
+            }
+        }
     }
-}
-
-.artist-title {
-    display: flex;
-    flex-direction: column;
-    gap: $gap-small;
-}
-
-.artist-name {
-    font-size: 2rem;
-    font-weight: 700;
 }
 
 .artist-meta {
@@ -72,16 +60,4 @@
     a {
         color: #2196f3;
     }
-}
-
-.scrobz-chart,
-.collabs {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    padding-left: 1rem;
-}
-
-.empty {
-    color: $secondary-color-2;
 }

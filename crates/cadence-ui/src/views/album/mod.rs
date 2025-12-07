@@ -26,7 +26,7 @@ pub fn AlbumView(id: String) -> Element {
                     VerticalScroller {
                         TrackList { album: album.clone() }
                     }
-                    AlbumMenuModal {open: modal_open, album }
+                    AlbumMenuModal { open: modal_open, album }
                 }
             },
             None => rsx! {

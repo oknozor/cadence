@@ -1,7 +1,12 @@
-.rounded-thumbnail {
-    object-fit: cover;
+.rounded-thumbnail-container {
     border-radius: 50%;
-    display: block;
+    display: inline-block;
+
+    .rounded-thumbnail {
+        object-fit: cover;
+        border-radius: 50%;
+        display: block;
+    }
 }
 
 .thumbnail {
