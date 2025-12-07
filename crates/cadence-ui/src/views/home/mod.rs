@@ -1,4 +1,4 @@
-use crate::album::AlbumList;
+use crate::shared::AlbumList;
 use crate::{navigation::topbar::TopBar, views::Route};
 use cadence_core::hooks::{use_recently_played, use_recently_released};
 use dioxus::prelude::*;

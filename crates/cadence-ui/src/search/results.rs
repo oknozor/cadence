@@ -5,9 +5,7 @@ use cadence_core::{
 use dioxus::prelude::*;
 
 use crate::{
-    icons::{dots::DotIcon, plus::PlusIcon},
-    items::ItemInfo,
-    thumbnails::{RoundedThumbnail, Thumbnail},
+    shared::{DotIcon, ItemInfo, PlusIcon, RoundedThumbnail, Thumbnail},
     views::Route,
 };
 

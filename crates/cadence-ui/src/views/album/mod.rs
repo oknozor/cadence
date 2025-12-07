@@ -1,16 +1,11 @@
-use crate::album::AlbumMenuModal;
-use crate::icons::download::DownloadIcon;
-use crate::icons::plus::PlusIcon;
-use crate::icons::share::ShareIcon;
-use crate::modal::MenuModal;
-use crate::scroller::VerticalScroller;
-use crate::{
-    album::{AlbumActionBar, AlbumCover, AlbumTitle},
-    track::TrackList,
-};
+use crate::shared::VerticalScroller;
+use crate::shared::{AlbumActionBar, AlbumCover};
+use crate::track::TrackList;
 use cadence_core::hooks::use_album;
-use dioxus::html::dialog::open;
+use components::{AlbumMenuModal, AlbumTitle};
 use dioxus::prelude::*;
+
+mod components;
 
 #[component]
 pub fn AlbumView(id: String) -> Element {

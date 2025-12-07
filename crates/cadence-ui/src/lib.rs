@@ -1,16 +1,10 @@
-pub mod album;
 pub mod button;
-pub mod icons;
-pub mod items;
 pub mod login;
-pub mod modal;
 pub mod navigation;
 pub mod player;
 pub mod progress;
-pub mod queue;
-pub mod scroller;
 pub mod search;
-pub mod thumbnails;
+pub mod shared;
 pub mod track;
 pub mod views;
 

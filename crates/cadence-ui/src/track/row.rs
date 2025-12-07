@@ -1,5 +1,4 @@
-use crate::icons::dots::DotIcon;
-use crate::items::ItemInfo;
+use crate::shared::{DotIcon, ItemInfo};
 use cadence_core::model::Song;
 use cadence_core::state::{CONTROLLER, ControllerExt, ControllerStoreExt};
 use dioxus::prelude::*;

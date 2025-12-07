@@ -1,78 +1,73 @@
-@use '../src/icons/icons.scss';
-@use '../src/items/items.scss';
-@use '../src/thumbnails/thumbnails.scss';
-@use '../src/track/track.scss';
-@use '../src/progress/progress.scss';
-@use '../src/scroller/scroller.scss';
-@use '../src/player/player.scss';
-@use '../src/login/login.scss';
-@use '../src/album/album.scss';
-@use '../src/search/search.scss';
-@use '../src/button/button.scss';
-@use '../src/queue/queue.scss';
-@use '../src/modal/modal.scss';
-@use '../src/navigation/topbar/topbar.scss';
-@use '../src/navigation/navbar/navbar.scss';
+// Warning: all import must use full path to our version of dioxus-cli can pick
+// scss files for hot-reload
+@use "../src/track/track.scss";
+@use "../src/progress/progress.scss";
+@use "../src/player/player.scss";
+@use "../src/login/login.scss";
+@use "../src/search/search.scss";
+@use "../src/button/button.scss";
+@use "../src/navigation/topbar/topbar.scss";
+@use "../src/navigation/navbar/navbar.scss";
 
-@use '../src/views/album/album-view.scss';
-@use '../src/views/artist/artist-view.scss';
-@use '../src/views/search/search-view.scss';
-@use '../src/views/home/home-view.scss';
-@use '../src/views/library/library-view.scss';
-@use '../src/views/view.scss';
-
-@use 'theme.scss';
-@import 'mixins.scss';
+@use "theme.scss";
+@use "../src/shared/_shared.scss";
+@use "../src/views/_views.scss";
+@import "mixins.scss";
 
 * {
-  box-sizing: border-box;
-  margin: 0;
+    box-sizing: border-box;
+    margin: 0;
 }
 
 body {
-  padding-top: env(safe-area-inset-top);
-  background-color: $primary-color-2;
-  color: $secondary-color-4;
-  font-family: 'Roboto', system-ui;
-  font-optical-sizing: auto;
-  font-style: normal;
-  font-weight: 440;
-  @include size-100dvh;
+    padding-top: env(safe-area-inset-top);
+    background-color: $primary-color-2;
+    color: $secondary-color-4;
+    font-family: "Roboto", system-ui;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-weight: 440;
+    @include size-100dvh;
 }
 
 #main {
-  display: flex;
-  flex-direction: column;
-  @include size-100dvh;
-  overflow: hidden;
-  box-sizing: border-box;
-  padding-bottom: $navbar-reserved-space;
+    display: flex;
+    flex-direction: column;
+    @include size-100dvh;
+    overflow: hidden;
+    box-sizing: border-box;
+    padding-bottom: $navbar-reserved-space;
 }
 
 button {
-  all: unset;
-  cursor: pointer;
-  box-sizing: border-box;
-  color: $secondary-color-4;
+    all: unset;
+    cursor: pointer;
+    box-sizing: border-box;
+    color: $secondary-color-4;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  margin: 0;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0;
 }
 
 @supports (scrollbar-width: auto) {
-  :not(:hover) {
-    scrollbar-color: rgb(0 0 0 / 0%) rgb(0 0 0 / 0%);
-  }
+    :not(:hover) {
+        scrollbar-color: rgb(0 0 0 / 0%) rgb(0 0 0 / 0%);
+    }
 
-  :hover {
-    scrollbar-color: $secondary-color-2 rgb(0 0 0 / 0%);
-  }
+    :hover {
+        scrollbar-color: $secondary-color-2 rgb(0 0 0 / 0%);
+    }
 }
 
 /* Legacy browsers with `::-webkit-scrollbar-*` support */
 @supports selector(::-webkit-scrollbar) {
-  :root::-webkit-scrollbar-track {
-    background: transparent;
-  }
+    :root::-webkit-scrollbar-track {
+        background: transparent;
+    }
 }

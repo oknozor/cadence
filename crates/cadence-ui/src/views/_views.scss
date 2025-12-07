@@ -1,0 +1,16 @@
+@use "album/_album.scss";
+@use "home/_home.scss";
+@use "artist/_artist.scss";
+@use "search/_search.scss";
+@use "library/_library.scss";
+@use "now_playing/_now_playing.scss";
+
+@import "../../assets/mixins.scss";
+@import "../../assets/theme.scss";
+
+.view {
+    @include column;
+    box-sizing: border-box;
+    @include size-100pct;
+    @include gutters-x($page-gutter-x);
+}

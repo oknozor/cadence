@@ -1,0 +1,39 @@
+@import "../../../../assets/mixins.scss";
+@import "../../../../assets/theme.scss";
+
+.bottom-modal {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #161616;
+    color: #fff;
+    border-radius: 18px 18px 0 0;
+    box-shadow: 0 -2px 24px rgba(0, 0, 0, 0.3);
+    max-height: 60vh;
+    overflow-y: auto;
+    z-index: 1001;
+    pointer-events: none;
+    padding-bottom: $navbar-reserved-space;
+
+    &.opened {
+        bottom: 0;
+        pointer-events: auto;
+    }
+
+    .grabber {
+        width: 40px;
+        height: 5px;
+        background: #888;
+        margin: 12px auto 16px auto;
+        border-radius: 3px;
+        opacity: 0.4;
+    }
+
+    .modal-content {
+        @include column;
+        padding: 8px;
+        gap: $gap-huge;
+        height: 100%;
+    }
+}

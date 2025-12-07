@@ -1,0 +1,17 @@
+@import "../../../../../assets/mixins.scss";
+@import "../../../../../assets/theme.scss";
+
+.album-title-container {
+    @include column;
+    gap: $gap;
+
+    .album-title {
+        @include ellipsis;
+        @include text-primary(24px);
+    }
+
+    .album-artist {
+        @include ellipsis;
+        @include text-secondary(16px);
+    }
+}

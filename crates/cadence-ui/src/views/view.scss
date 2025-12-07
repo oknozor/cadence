@@ -1,9 +1,0 @@
-@import '../../assets/mixins.scss';
-@import '../../assets/theme.scss';
-
-.view {
-  @include column;
-  box-sizing: border-box;
-  @include size-100pct;
-  @include gutters-x($page-gutter-x);
-}

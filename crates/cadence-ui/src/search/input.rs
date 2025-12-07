@@ -1,6 +1,6 @@
 use dioxus::prelude::*;
 
-use crate::icons::search::SearchIcon;
+use crate::shared::SearchIcon;
 
 #[component]
 pub fn SearchInput(oninput: EventHandler<String>) -> Element {

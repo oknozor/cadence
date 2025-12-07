@@ -1,4 +1,5 @@
-use crate::{album::AlbumList, scroller::VerticalScroller, views::Route};
+use crate::shared::AlbumList;
+use crate::{shared::VerticalScroller, views::Route};
 use cadence_core::hooks::use_artist;
 use dioxus::prelude::*;
 
@@ -30,14 +31,9 @@ pub fn ArtistView(id: String) -> Element {
                     div { class: "artist-title",
                         h1 { class: "artist-name", "{artist.name}" }
                     }
-
-                    div { class: "artist-actions",
-                        button { class: "btn primary", onclick: move |_| {}, "Play" }
-                        button { class: "btn", onclick: move |_| {}, "Shuffle" }
-                    }
                 }
 
-                VerticalScroller { 
+                VerticalScroller {
                     section { class: "artist-section",
                         h2 { "About" }
                         if let Some(bio) = artist.bio {

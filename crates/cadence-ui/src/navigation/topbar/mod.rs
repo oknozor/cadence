@@ -1,6 +1,6 @@
 use crate::{
     button::{ExpandableButton, MenuButton},
-    icons::{close::CloseIcon, gear::GearIcon},
+    shared::{CloseIcon, GearIcon},
 };
 use dioxus::prelude::*;
 

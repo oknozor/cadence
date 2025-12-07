@@ -1,0 +1,87 @@
+@import "../../../assets/mixins.scss";
+@import "../../../assets/theme.scss";
+
+.artist-info {
+    display: flex;
+    flex-direction: column;
+    gap: $gap-big;
+    @include max-h-100pct;
+}
+
+.artist-header {
+    @include column;
+    gap: $gap-medium;
+}
+
+.artist-image {
+    width: 200px;
+    margin: 20px;
+    border-radius: 12px;
+    background-color: $secondary-color-1;
+    display: flex;
+    align-self: center;
+
+    &.placeholder {
+        font-size: 64px;
+    }
+}
+
+.artist-title {
+    display: flex;
+    flex-direction: column;
+    gap: $gap-small;
+}
+
+.artist-name {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.artist-meta {
+    color: $secondary-color-2;
+}
+
+.artist-actions {
+    display: flex;
+    gap: $gap-small;
+
+    .btn {
+        padding: 0.5rem 1rem;
+        border-radius: 999px;
+        background-color: $secondary-color-1;
+        color: $secondary-color-4;
+
+        &.primary {
+            background-color: $secondary-color-2;
+            color: $primary-color-1;
+        }
+    }
+}
+
+.artist-section {
+    display: flex;
+    flex-direction: column;
+    gap: $gap-small;
+}
+
+.wikidata-summary {
+    @include text-secondary(16px);
+    color: $secondary-color-5;
+    line-height: 1.5;
+
+    a {
+        color: #2196f3;
+    }
+}
+
+.scrobz-chart,
+.collabs {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-left: 1rem;
+}
+
+.empty {
+    color: $secondary-color-2;
+}
