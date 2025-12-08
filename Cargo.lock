@@ -379,6 +379,7 @@ version = "0.1.0"
 dependencies = [
  "cadence-core",
  "dioxus",
+ "dioxus-primitives",
  "dioxus-sdk",
  "tracing",
 ]
@@ -1076,7 +1077,7 @@ dependencies = [
  "global-hotkey",
  "infer",
  "jni",
- "lazy-js-bundle",
+ "lazy-js-bundle 0.7.2",
  "libc",
  "muda",
  "ndk",
@@ -1145,7 +1146,7 @@ dependencies = [
  "futures-channel",
  "futures-util",
  "generational-box",
- "lazy-js-bundle",
+ "lazy-js-bundle 0.7.2",
  "serde",
  "serde_json",
  "tracing",
@@ -1295,7 +1296,7 @@ dependencies = [
  "futures-util",
  "generational-box",
  "keyboard-types",
- "lazy-js-bundle",
+ "lazy-js-bundle 0.7.2",
  "rustversion",
  "serde",
  "serde_json",
@@ -1325,7 +1326,7 @@ dependencies = [
  "dioxus-core-types",
  "dioxus-html",
  "js-sys",
- "lazy-js-bundle",
+ "lazy-js-bundle 0.7.2",
  "rustc-hash 2.1.1",
  "serde",
  "sledgehammer_bindgen",
@@ -1345,6 +1346,19 @@ dependencies = [
  "tracing",
  "tracing-subscriber",
  "tracing-wasm",
+]
+
+[[package]]
+name = "dioxus-primitives"
+version = "0.0.1"
+source = "git+https://github.com/DioxusLabs/components#f165b24277a8f04a2d78a6303effb9ba3a86c285"
+dependencies = [
+ "dioxus",
+ "dioxus-time",
+ "lazy-js-bundle 0.6.2",
+ "num-integer",
+ "time",
+ "tracing",
 ]
 
 [[package]]
@@ -1480,6 +1494,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "dioxus-time"
+version = "0.7.0"
+source = "git+https://github.com/ealmloff/dioxus-std?branch=0.7#8c868ac1d60e3232e3f16f6195d6deb3c016de17"
+dependencies = [
+ "dioxus",
+ "futures",
+ "gloo-timers",
+ "tokio",
+]
+
+[[package]]
 name = "dioxus-web"
 version = "0.7.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1499,7 +1524,7 @@ dependencies = [
  "generational-box",
  "gloo-timers",
  "js-sys",
- "lazy-js-bundle",
+ "lazy-js-bundle 0.7.2",
  "rustc-hash 2.1.1",
  "send_wrapper",
  "serde",
@@ -2890,6 +2915,12 @@ dependencies = [
  "indexmap",
  "selectors",
 ]
+
+[[package]]
+name = "lazy-js-bundle"
+version = "0.6.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e49596223b9d9d4947a14a25c142a6e7d8ab3f27eb3ade269d238bb8b5c267e2"
 
 [[package]]
 name = "lazy-js-bundle"

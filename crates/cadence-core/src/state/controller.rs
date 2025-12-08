@@ -1,4 +1,4 @@
-use crate::{model::Song, PlayerCommand};
+use crate::{PlayerCommand, model::Song};
 use dioxus::{
     prelude::{Store, *},
     stores::hashmap::GetWrite,
@@ -162,6 +162,8 @@ impl<Lens> Store<Controller, Lens> {
         let song = self.queue_store().read().get(idx);
         if let Some(song) = song {
             self.current_song_id().set(Some(song.read().1.id.clone()));
+        } else {
+            self.current_song_id().set(None);
         }
     }
 
@@ -176,12 +178,14 @@ impl<Lens> Store<Controller, Lens> {
         let song = self.queue_store().read().get(idx);
         if let Some(song) = song {
             self.current_song_id().set(Some(song.read().1.id.clone()));
+        } else {
+            self.current_song_id().set(None);
         }
     }
 
     fn remains(&self) -> usize {
         let current = *self.current_idx().read();
-        self.queue_store().read().len() - current
+        self.queue_store().read().len() - 1 - current
     }
 
     fn toggle_selected(&mut self) {

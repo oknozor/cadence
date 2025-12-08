@@ -1,0 +1,21 @@
+[
+  {
+    "label": "Dioxus Serve Mobile",
+    "request": "launch",
+    "adapter": "CodeLLDB",
+    "program": "~/.cargo/bin/dx",
+    "args": [
+      "--verbose",
+      "serve",
+      "--hot-patch",
+      "--package",
+      "app",
+      "--platform",
+      "android"
+    ],
+    "env": {
+      "QT_QPA_PLATFORM": "xcb",
+      "ANDROID_NDK_HOME": "/opt/android-ndk"
+    }
+  }
+]

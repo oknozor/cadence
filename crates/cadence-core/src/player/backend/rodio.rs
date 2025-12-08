@@ -60,6 +60,7 @@ impl AudioBackend {
     }
 
     pub(crate) fn seek(&self, duration: Duration) -> Result<(), MusicPlayerError> {
+        tracing::info!("Seeking to {duration:?}");
         self.sink.try_seek(duration)?;
         Ok(())
     }
@@ -91,7 +92,8 @@ impl AudioBackend {
             url.parse()?,
             AdaptiveStorageProvider::new(
                 TempStorageProvider::default(),
-                NonZeroUsize::new(512 * 1024).unwrap(),
+                // 64 MB Buffer Size, if we have a bigger content length, seek won't be avalaible
+                NonZeroUsize::new(64 * 1024 * 1024).unwrap(),
             ),
             Settings::default(),
         )
@@ -100,8 +102,19 @@ impl AudioBackend {
             Ok(reader) => reader,
             Err(e) => return Err(MusicPlayerError::Custom(e.decode_error().await)),
         };
-        let source = Decoder::new(reader)?;
-        self.sink.append(source);
+
+        let decoder = if let Some(lenght) = reader.content_length() {
+            rodio::decoder::DecoderBuilder::default()
+                .with_seekable(true)
+                .with_byte_len(lenght)
+                .with_data(reader)
+                .build()
+        } else {
+            Decoder::new(reader)
+        }
+        .expect("Failed to build audiobackend decoder");
+
+        self.sink.append(decoder);
         self.set_callback();
         Ok(())
     }

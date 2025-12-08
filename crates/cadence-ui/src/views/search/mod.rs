@@ -1,5 +1,5 @@
-use crate::shared::VerticalScroller;
 use crate::search::{SearchInput, SearchResults, SearchResultsEmpty};
+use crate::shared::VerticalScroller;
 use cadence_core::hooks::use_search_results;
 use dioxus::prelude::*;
 

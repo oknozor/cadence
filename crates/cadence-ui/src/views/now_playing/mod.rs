@@ -1,5 +1,5 @@
-use dioxus::prelude::*;
 use components::FullScreenPlayer;
+use dioxus::prelude::*;
 
 mod components;
 
