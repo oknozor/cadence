@@ -1,0 +1,42 @@
+@import "../../../../assets/mixins.scss";
+@import "../../../../assets/theme.scss";
+
+.player-container {
+    @include column;
+    width: 94%;
+    background-color: $primary-color-6;
+    border-radius: 4px;
+    align-self: center;
+
+    .player {
+        @include row;
+        justify-content: space-between;
+        padding: 8px;
+
+        .track-container {
+            @include row;
+            gap: $gap;
+            align-items: center;
+        }
+
+        .player-controls {
+            @include row;
+            gap: $gap;
+            align-items: center;
+            justify-content: space-between;
+
+            button {
+                @include row;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+    }
+
+    .progress-container {
+        @include column;
+        justify-self: center;
+        margin-left: 8px;
+        margin-right: 8px;
+    }
+}

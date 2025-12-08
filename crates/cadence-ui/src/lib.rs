@@ -1,8 +1,6 @@
 pub mod button;
 pub mod login;
 pub mod navigation;
-pub mod player;
-pub mod progress;
 pub mod search;
 pub mod shared;
 pub mod track;

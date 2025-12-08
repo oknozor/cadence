@@ -1,8 +1,6 @@
 // Warning: all import must use full path to our version of dioxus-cli can pick
 // scss files for hot-reload
 @use "../src/track/track.scss";
-@use "../src/progress/progress.scss";
-@use "../src/player/player.scss";
 @use "../src/login/login.scss";
 @use "../src/search/search.scss";
 @use "../src/button/button.scss";

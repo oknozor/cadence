@@ -1,9 +1,8 @@
 use crate::{
-    progress::PlayerProgress,
-    shared::{ItemInfo, ListIcon, PlayIconCircle, Thumbnail},
+    shared::{ItemInfo, ListIcon, PlayIconCircle, PlayerProgress, Thumbnail},
     views::Route,
 };
-use cadence_core::state::{ControllerExt, ControllerStoreExt, CONTROLLER};
+use cadence_core::state::{CONTROLLER, ControllerExt, ControllerStoreExt};
 use dioxus::prelude::*;
 
 #[component]

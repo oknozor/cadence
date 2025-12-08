@@ -9,3 +9,6 @@ pub use icons::*;
 
 mod common;
 pub use common::*;
+
+mod player;
+pub use player::*;

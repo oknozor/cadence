@@ -1,9 +1,6 @@
-use crate::{
-    progress::PlayerProgress,
-    shared::{
-        AlbumCover, ItemInfo,NextIcon, PlayIconCircle, PlusIcon, PreviousIcon,
-        RandomIcon, ShuffleIcon,
-    },
+use crate::shared::{
+    AlbumCover, ItemInfo, NextIcon, PlayIconCircle, PlayerProgress, PlusIcon, PreviousIcon,
+    RandomIcon, ShuffleIcon,
 };
 use cadence_core::state::{CONTROLLER, ControllerExt, ControllerStoreExt};
 use dioxus::prelude::*;
