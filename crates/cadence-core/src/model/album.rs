@@ -20,10 +20,10 @@ impl From<AlbumId3WithSongs> for Album {
         let artist_id = response.artist_id.unwrap_or_default();
 
         Album {
-            id: response.id,
+            id: response.id.clone(),
             name: album.clone(),
             artist: artist.clone(),
-            artist_id,
+            artist_id: artist_id.clone(),
             year: response.year,
             cover_art: cover_art.clone(),
             songs: response
@@ -37,6 +37,8 @@ impl From<AlbumId3WithSongs> for Album {
                     artist: artist.clone(),
                     cover_art: cover_art.clone(),
                     album: album.clone(),
+                    artist_id: Some(artist_id.clone()),
+                    album_id: Some(response.id.clone()),
                 })
                 .collect(),
         }
@@ -46,16 +48,17 @@ impl From<AlbumId3WithSongs> for Album {
 impl From<AlbumId3> for Album {
     fn from(response: AlbumId3) -> Self {
         // FIXME: optionals should not default
+        let id = response.id;
         let artist = response.artist.unwrap_or_default();
         let artist_id = response.artist_id.unwrap_or_default();
         let album = response.name;
         let cover_art = response.cover_art;
 
         Album {
-            id: response.id,
+            id: id.clone(),
             name: album.clone(),
             artist: artist.clone(),
-            artist_id,
+            artist_id: artist_id.clone(),
             year: response.year,
             cover_art: cover_art.clone(),
             songs: response
@@ -69,6 +72,8 @@ impl From<AlbumId3> for Album {
                     artist: artist.clone(),
                     cover_art: cover_art.clone(),
                     album: album.clone(),
+                    artist_id: Some(artist_id.clone()),
+                    album_id: Some(id.clone()),
                 })
                 .collect(),
         }

@@ -11,6 +11,6 @@
 .view {
     @include column;
     box-sizing: border-box;
-    @include size-100pct;
+    @include size-100dvh;
     @include gutters-x($page-gutter-x);
 }

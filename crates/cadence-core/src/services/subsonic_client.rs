@@ -230,14 +230,16 @@ impl SubsonicClient {
                                 SearchResult::Song(Song {
                                     id: song.id,
                                     title: song.title,
-                                    cover_art: song.cover_art.as_deref().map(cover_url),
                                     artist: song
                                         .display_artist
                                         .or(song.artist)
                                         .unwrap_or("Unkown artist".to_string()),
                                     album: song.album.unwrap_or("Unkown album".to_string()),
+                                    cover_art: song.cover_art.as_deref().map(cover_url),
                                     track_number: song.disc_number,
                                     duration: song.duration,
+                                    artist_id: song.artist_id,
+                                    album_id: song.album_id,
                                 })
                             })),
                     )

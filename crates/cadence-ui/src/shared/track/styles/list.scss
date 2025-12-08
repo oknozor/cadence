@@ -1,0 +1,7 @@
+@import "../../../../assets/mixins.scss";
+@import "../../../../assets/theme.scss";
+
+.track-list {
+    @include column;
+    gap: $gap-big;
+}

@@ -9,6 +9,13 @@ mod components;
 pub fn ArtistView(id: ReadSignal<String>) -> Element {
     let mut current_id = use_signal(|| id());
     let artist = use_artist(current_id);
+    let mut scroll = use_signal(|| None);
+    use_effect(move || {
+        // reading the current id, so it becomes a dependency of the effect
+        let _ = current_id.read();
+        scroll.set(Some(0.0));
+    });
+
     let nav = navigator();
 
     let on_artist_card_clicked = move |artist_id| {
@@ -23,6 +30,7 @@ pub fn ArtistView(id: ReadSignal<String>) -> Element {
         rsx! {
             div { class: "artist-info",
                 VerticalScroller {
+                    scroll,
                     div { class: "artist-header",
                         if let Some(src) = artist.cover_art {
                             RoundedThumbnail {

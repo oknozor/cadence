@@ -1,0 +1,8 @@
+@import "../../../../assets/mixins.scss";
+@import "../../../../assets/theme.scss";
+
+.track-row {
+    @include row;
+    align-items: center;
+    justify-content: space-between;
+}

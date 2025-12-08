@@ -4,7 +4,7 @@ use cadence_core::state::{CONTROLLER, ControllerExt, ControllerStoreExt};
 use dioxus::prelude::*;
 
 #[component]
-pub fn TrackRow(song: Song) -> Element {
+pub fn TrackRow(song: Song, action_clicked: EventHandler<Song>) -> Element {
     let mut controller = CONTROLLER.resolve();
     let id = song.id.clone();
     let is_active = use_memo(move || {
@@ -14,11 +14,14 @@ pub fn TrackRow(song: Song) -> Element {
 
     let is_paused = !*controller.is_playing().read();
 
+    // FIXME: we need a song store
+    let song_clone = song.clone();
+
     rsx!(
         div {
             class: "track-row",
             onclick: move |_| {
-                controller.play_now(song.clone());
+                controller.play_now(song_clone.clone());
             },
             ItemInfo {
                 primary: song.title.clone(),
@@ -26,7 +29,13 @@ pub fn TrackRow(song: Song) -> Element {
                 is_active,
                 is_paused,
             }
-            DotIcon { size: 28 }
+            button {
+                onclick: move |event| {
+                    action_clicked.call(song.clone());
+                    event.stop_propagation();
+                },
+                DotIcon { size: 28 }
+            }
         }
     )
 }

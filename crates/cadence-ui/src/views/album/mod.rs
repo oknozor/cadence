@@ -1,6 +1,4 @@
-use crate::shared::VerticalScroller;
-use crate::shared::{AlbumActionBar, AlbumCover};
-use crate::track::TrackList;
+use crate::shared::{AlbumActionBar, AlbumCover, TrackList, TrackMenuModal, VerticalScroller};
 use cadence_core::hooks::use_album;
 use components::{AlbumMenuModal, AlbumTitle};
 use dioxus::prelude::*;
@@ -11,7 +9,15 @@ mod components;
 pub fn AlbumView(id: ReadSignal<String>) -> Element {
     let current_id = use_signal(|| id());
     let album = use_album(current_id);
-    let modal_open = use_signal(|| false);
+    let album_modal_open = use_signal(|| false);
+    let mut song_modal_open = use_signal(|| false);
+    let mut song_selected = use_signal(|| None);
+
+    let action_clicked = move |song| {
+        debug!("Clicked on song: {:?}", song);
+        song_selected.set(Some(song));
+        song_modal_open.toggle();
+    };
 
     rsx! {
         match album() {
@@ -23,11 +29,14 @@ pub fn AlbumView(id: ReadSignal<String>) -> Element {
                         artist: album.artist.clone(),
                         year: album.year,
                     }
-                    AlbumActionBar { songs: album.songs.clone(), modal_open }
+                    AlbumActionBar { songs: album.songs.clone(), modal_open: album_modal_open }
                     VerticalScroller {
-                        TrackList { album: album.clone() }
+                        TrackList { album: album.clone(), action_clicked }
                     }
-                    AlbumMenuModal { open: modal_open, album }
+                    AlbumMenuModal { open: album_modal_open, album }
+                    if let Some(song) = song_selected() {
+                        TrackMenuModal { open: song_modal_open, song }
+                    }
                 }
             },
             None => rsx! {

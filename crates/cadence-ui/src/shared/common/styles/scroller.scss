@@ -19,7 +19,7 @@
     @include overflow-x-hidden-y-auto;
     @include max-h-100pct;
     @include flex-fill;
-    padding-bottom: calc(#{$navbar-reserved-space} * 2);
+    padding-bottom: calc(#{$navbar-reserved-space});
 
     -webkit-mask-image: linear-gradient(
         to bottom,

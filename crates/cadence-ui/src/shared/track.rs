@@ -1,3 +1,6 @@
+mod modal;
+pub use modal::TrackMenuModal;
+
 mod list;
 pub use list::TrackList;
 

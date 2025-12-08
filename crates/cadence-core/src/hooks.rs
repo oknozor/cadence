@@ -54,7 +54,7 @@ pub fn use_saved_credentials() -> Signal<Option<SubSonicLogin>> {
 
 pub fn use_album(id: Signal<String>) -> Resource<Album> {
     use_resource(move || {
-        let id = id.clone();
+        let id = id;
         async move {
             SUBSONIC_CLIENT()
                 .clone()

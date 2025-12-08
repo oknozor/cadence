@@ -1,7 +1,4 @@
-use crate::{
-    button::{ExpandableButton, MenuButton},
-    shared::{CloseIcon, GearIcon},
-};
+use crate::shared::{CloseIcon, ExpandableButton, GearIcon, MenuButton};
 use dioxus::prelude::*;
 
 #[component]

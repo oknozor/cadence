@@ -5,6 +5,7 @@
     display: flex;
     flex-direction: column;
     gap: $gap-big;
+    height: 100%;
     @include max-h-100pct;
 
     .artist-header {

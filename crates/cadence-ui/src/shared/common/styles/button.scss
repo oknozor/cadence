@@ -1,12 +1,12 @@
-@import '../../assets/mixins.scss';
-@import '../../assets/theme.scss';
+@import "../../../../assets/mixins.scss";
+@import "../../../../assets/theme.scss";
 
 .expandable-wrapper {
     @include row;
     gap: 0;
     background-color: grey;
     border-radius: 14px;
-    transition: all  0.3s ease-out;
+    transition: all 0.3s ease-out;
 
     &.expanded {
         background-color: grey;
@@ -29,7 +29,7 @@
     padding: 0.5rem 1rem;
     font-size: 1rem;
     background-color: grey;
-    transition: all  0.3s ease-out;
+    transition: all 0.3s ease-out;
     &.active {
         background-color: green;
     }
@@ -55,5 +55,4 @@
             background-color: seagreen;
         }
     }
-
 }

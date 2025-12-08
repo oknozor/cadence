@@ -14,7 +14,7 @@
     overflow-y: auto;
     z-index: 1001;
     pointer-events: none;
-    padding-bottom: $navbar-reserved-space;
+    padding-bottom: $gap-huge;
 
     &.opened {
         bottom: 0;
