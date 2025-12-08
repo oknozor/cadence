@@ -23,41 +23,19 @@
             }
         }
     }
-}
 
-.artist-meta {
-    color: $secondary-color-2;
-}
+    .artist-section {
+        @include column;
+        gap: $gap-small;
 
-.artist-actions {
-    display: flex;
-    gap: $gap-small;
+        .wikidata-summary {
+            @include text-secondary(16px);
+            color: $secondary-color-5;
+            line-height: 1.5;
 
-    .btn {
-        padding: 0.5rem 1rem;
-        border-radius: 999px;
-        background-color: $secondary-color-1;
-        color: $secondary-color-4;
-
-        &.primary {
-            background-color: $secondary-color-2;
-            color: $primary-color-1;
+            a {
+                color: #2196f3;
+            }
         }
-    }
-}
-
-.artist-section {
-    display: flex;
-    flex-direction: column;
-    gap: $gap-small;
-}
-
-.wikidata-summary {
-    @include text-secondary(16px);
-    color: $secondary-color-5;
-    line-height: 1.5;
-
-    a {
-        color: #2196f3;
     }
 }

@@ -9,3 +9,6 @@ pub use modal::*;
 
 mod scroller;
 pub use scroller::*;
+
+mod progress;
+pub use progress::*;

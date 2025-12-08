@@ -5,9 +5,8 @@ members = [
 ]
 
 [workspace.dependencies]
-dioxus = "0.7.1"
+dioxus = "0.7.2"
 dioxus-sdk = { version = "0.7", features = ["storage", "time"] }
-dioxus-primitives = { git = "https://github.com/DioxusLabs/components", version = "0.0.1", default-features = false }
 opensubsonic-cli = { path = "crates/opensubsonic-cli" }
 cadence-core = { path = "crates/cadence-core" }
 cadence-ui = { path = "crates/cadence-ui" }

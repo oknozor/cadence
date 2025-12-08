@@ -6,14 +6,13 @@ use dioxus::prelude::*;
 mod components;
 
 #[component]
-pub fn ArtistView(id: String) -> Element {
-    let artist = use_artist(id);
+pub fn ArtistView(id: ReadSignal<String>) -> Element {
+    let mut current_id = use_signal(|| id());
+    let artist = use_artist(current_id);
     let nav = navigator();
 
     let on_artist_card_clicked = move |artist_id| {
-        if let Some(a) = nav.push(Route::ArtistView { id: artist_id }) {
-            tracing::debug!("Clicked on artist card with ID: {:?}", a);
-        }
+        current_id.set(artist_id);
     };
 
     let on_album_card_clicked = move |album_id| {

@@ -1,5 +1,6 @@
 use dioxus::prelude::*;
-use dioxus_primitives::progress::{Progress, ProgressIndicator};
+
+use crate::shared::{Progress, ProgressIndicator};
 
 #[component]
 pub fn PlayerProgress(value: ReadSignal<Option<f64>>, max: f64) -> Element {

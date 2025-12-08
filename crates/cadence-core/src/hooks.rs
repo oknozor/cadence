@@ -52,31 +52,28 @@ pub fn use_saved_credentials() -> Signal<Option<SubSonicLogin>> {
     use_storage::<LocalStorage, _>("subsonic_credentials".to_string(), || saved)
 }
 
-pub fn use_album(id: String) -> Resource<Album> {
+pub fn use_album(id: Signal<String>) -> Resource<Album> {
     use_resource(move || {
         let id = id.clone();
         async move {
             SUBSONIC_CLIENT()
                 .clone()
                 .unwrap()
-                .get_album(&id)
+                .get_album(id.read().as_ref())
                 .await
                 .unwrap()
         }
     })
 }
 
-pub fn use_artist(id: String) -> Resource<Artist> {
-    use_resource(move || {
-        let id = id.clone();
-        async move {
-            SUBSONIC_CLIENT()
-                .clone()
-                .unwrap()
-                .get_artist(&id)
-                .await
-                .unwrap()
-        }
+pub fn use_artist(id: Signal<String>) -> Resource<Artist> {
+    use_resource(move || async move {
+        SUBSONIC_CLIENT()
+            .clone()
+            .unwrap()
+            .get_artist(id.read().as_ref())
+            .await
+            .unwrap()
     })
 }
 

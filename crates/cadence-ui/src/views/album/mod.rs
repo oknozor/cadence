@@ -8,8 +8,9 @@ use dioxus::prelude::*;
 mod components;
 
 #[component]
-pub fn AlbumView(id: String) -> Element {
-    let album = use_album(id);
+pub fn AlbumView(id: ReadSignal<String>) -> Element {
+    let current_id = use_signal(|| id());
+    let album = use_album(current_id);
     let modal_open = use_signal(|| false);
 
     rsx! {

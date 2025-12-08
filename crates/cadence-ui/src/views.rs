@@ -14,7 +14,7 @@ mod library;
 mod now_playing;
 mod search;
 
-#[derive(Debug, Clone, Routable, PartialEq)]
+#[derive(Debug, Clone, Routable, PartialEq, Eq)]
 #[rustfmt::skip]
 pub enum Route {
     #[layout(WebNavbar)]
