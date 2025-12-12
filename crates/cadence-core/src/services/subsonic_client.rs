@@ -1,6 +1,9 @@
-use crate::model::{Album, Artist, SearchResult, Song};
+use crate::model::{Album, Artist, PlaylistInfo, SearchResult, Song};
 use dioxus::signals::GlobalSignal;
 use opensubsonic_cli::types::GetArtistInfo2ResponseSubsonicResponse::GetArtistInfo2SuccessResponse;
+use opensubsonic_cli::types::GetPlaylistsResponseSubsonicResponse::{
+    self, GetPlaylistsSuccessResponse,
+};
 use opensubsonic_cli::types::{GetArtistResponseSubsonicResponse, Search3ResponseSubsonicResponse};
 use opensubsonic_cli::{
     Client,
@@ -250,6 +253,35 @@ impl SubsonicClient {
             Search3ResponseSubsonicResponse::SubsonicFailureResponse(failure) => {
                 Err(ClientError::Failure(failure))
             }
+        }
+    }
+
+    pub async fn get_public_playlist(&self) -> Result<Vec<PlaylistInfo>, ClientError> {
+        let response = self
+            .client
+            .get_playlists(None)
+            .await
+            .map(|response| response.into_inner())
+            .map_err(ClientError::OpenSubSonic)?;
+
+        let response = response
+            .subsonic_response
+            .ok_or_else(|| ClientError::Other("Empty response".to_string()))?;
+
+        match response {
+            GetPlaylistsSuccessResponse(playlist) => Ok(playlist
+                .playlists
+                .playlist
+                .into_iter()
+                .map(|playlist| PlaylistInfo {
+                    id: playlist.id,
+                    name: playlist.name,
+                    cover_art: playlist.cover_art.as_deref().map(cover_url),
+                })
+                .collect()),
+            GetPlaylistsResponseSubsonicResponse::SubsonicFailureResponse(
+                subsonic_failure_response,
+            ) => Err(ClientError::Failure(subsonic_failure_response)),
         }
     }
 }

@@ -1,12 +1,11 @@
 // Warning: all import must use full path to our version of dioxus-cli can pick
 // scss files for hot-reload
 @use "../src/login/login.scss";
-@use "../src/search/search.scss";
 @use "../src/navigation/topbar/topbar.scss";
 @use "../src/navigation/navbar/navbar.scss";
 
 @use "theme.scss";
-@use "../src/shared/_shared.scss";
+@use "../src/components/_components.scss";
 @use "../src/views/_views.scss";
 @import "mixins.scss";
 

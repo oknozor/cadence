@@ -1,4 +1,4 @@
-use crate::shared::{AlbumActionBar, AlbumCover, TrackList, TrackMenuModal, VerticalScroller};
+use crate::components::{AlbumActionBar, AlbumCover, TrackList, TrackMenuModal, VerticalScroller};
 use cadence_core::hooks::use_album;
 use components::{AlbumMenuModal, AlbumTitle};
 use dioxus::prelude::*;

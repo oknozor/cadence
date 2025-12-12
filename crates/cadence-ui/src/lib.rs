@@ -1,7 +1,6 @@
+pub mod components;
 pub mod login;
 pub mod navigation;
-pub mod search;
-pub mod shared;
 pub mod views;
 
 use dioxus::prelude::*;

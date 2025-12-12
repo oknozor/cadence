@@ -1,4 +1,4 @@
-use crate::shared::{HomeIcon, LibraryIcon, Player, PlusIcon, SearchIcon};
+use crate::components::{HomeIcon, LibraryIcon, Player, PlusIcon, SearchIcon};
 use crate::views::Route;
 use dioxus::prelude::*;
 use std::time::Duration;

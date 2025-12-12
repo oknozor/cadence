@@ -1,4 +1,4 @@
-use crate::shared::{
+use crate::components::{
     AlbumCover, ItemInfo, NextIcon, PlayIconCircle, PlayerProgress, PlusIcon, PreviousIcon,
     RandomIcon, ShuffleIcon,
 };

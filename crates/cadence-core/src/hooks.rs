@@ -3,7 +3,7 @@ use dioxus_sdk::storage::{get_from_storage, use_storage};
 
 use crate::{
     hooks::effects::initialize_audio_backend,
-    model::{Album, SearchResult},
+    model::{Album, PlaylistInfo, SearchResult},
     services::subsonic_client::{AlbumListType, SUBSONIC_CLIENT, SubsonicClient},
     state::{LoginState, SubSonicLogin},
 };
@@ -83,6 +83,17 @@ pub fn use_recently_released() -> Resource<Result<Vec<Album>, CapturedError>> {
 
 pub fn use_recently_played() -> Resource<Result<Vec<Album>, CapturedError>> {
     use_resource(|| fetch_albums(AlbumListType::RecentlyPlayed))
+}
+
+pub fn use_all_playlist() -> Resource<Result<Vec<PlaylistInfo>, CapturedError>> {
+    use_resource(move || async move {
+        SUBSONIC_CLIENT()
+            .clone()
+            .unwrap()
+            .get_public_playlist()
+            .await
+            .map_err(|err| CapturedError::from_display(format!("{err}")))
+    })
 }
 
 async fn fetch_albums(album_type: AlbumListType) -> dioxus::Result<Vec<Album>, CapturedError> {
