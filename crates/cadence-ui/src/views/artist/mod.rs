@@ -29,8 +29,7 @@ pub fn ArtistView(id: ReadSignal<String>) -> Element {
     if let Some(artist) = artist() {
         rsx! {
             div { class: "artist-info",
-                VerticalScroller {
-                    scroll,
+                VerticalScroller { scroll,
                     div { class: "artist-header",
                         if let Some(src) = artist.cover_art {
                             RoundedThumbnail {

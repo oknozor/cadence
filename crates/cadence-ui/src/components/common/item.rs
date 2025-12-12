@@ -39,9 +39,9 @@ pub fn ItemRow(
     callback: EventHandler,
 ) -> Element {
     rsx! {
-        div { class: "search-item",
+        div { class: "item-row",
             div {
-                class: "search-item-start",
+                class: "item-row-start",
                 onclick: move |_| {
                     callback.call(());
                 },
@@ -51,7 +51,7 @@ pub fn ItemRow(
                 {content}
             }
             if let Some(action) = action {
-                div { class: "search-item-action", {action} }
+                div { class: "item-row-action", {action} }
             }
         }
     }

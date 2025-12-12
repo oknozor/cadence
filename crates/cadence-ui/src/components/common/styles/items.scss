@@ -22,3 +22,20 @@
         @include text-secondary;
     }
 }
+
+.item-row {
+    @include row;
+    justify-content: space-between;
+
+    .item-row-start {
+        @include row;
+        align-items: center;
+        gap: $gap-medium;
+    }
+
+    .item-row-action {
+        @include row;
+        align-items: center;
+        gap: $gap;
+    }
+}

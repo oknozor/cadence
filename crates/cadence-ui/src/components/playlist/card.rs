@@ -11,7 +11,7 @@ pub fn PlaylistCard(playlist: PlaylistInfo, on_card_clicked: EventHandler<String
             key: "{playlist.id}",
             onclick: move |_| on_card_clicked.call(playlist.id.clone()),
             if let Some(src) = playlist.cover_art {
-                Thumbnail {  src, name: playlist.name.clone(), size: 96 }
+                Thumbnail { src, name: playlist.name.clone(), size: 96 }
             } else {
                 div {
                     class: "playlist-placeholder",

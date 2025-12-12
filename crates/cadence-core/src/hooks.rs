@@ -3,7 +3,7 @@ use dioxus_sdk::storage::{get_from_storage, use_storage};
 
 use crate::{
     hooks::effects::initialize_audio_backend,
-    model::{Album, PlaylistInfo, SearchResult},
+    model::{Album, PlaylistInfo, SearchResult, Song},
     services::subsonic_client::{AlbumListType, SUBSONIC_CLIENT, SubsonicClient},
     state::{LoginState, SubSonicLogin},
 };
@@ -91,6 +91,17 @@ pub fn use_all_playlist() -> Resource<Result<Vec<PlaylistInfo>, CapturedError>> 
             .clone()
             .unwrap()
             .get_public_playlist()
+            .await
+            .map_err(|err| CapturedError::from_display(format!("{err}")))
+    })
+}
+
+pub fn use_random_songs(limit: i64) -> Resource<Result<Vec<Song>, CapturedError>> {
+    use_resource(move || async move {
+        SUBSONIC_CLIENT()
+            .clone()
+            .unwrap()
+            .get_random_songs(limit)
             .await
             .map_err(|err| CapturedError::from_display(format!("{err}")))
     })

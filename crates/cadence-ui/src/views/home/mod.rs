@@ -1,6 +1,8 @@
-use crate::components::{AlbumList, PlaylistList};
+use crate::components::{AlbumList, PlaylistList, TrackListWithCover, VerticalScroller};
 use crate::{navigation::topbar::TopBar, views::Route};
-use cadence_core::hooks::{use_all_playlist, use_recently_played, use_recently_released};
+use cadence_core::hooks::{
+    use_all_playlist, use_random_songs, use_recently_played, use_recently_released,
+};
 use dioxus::prelude::*;
 
 #[component]
@@ -9,6 +11,7 @@ pub fn Home() -> Element {
     let recently_released = use_recently_released();
     let recently_played = use_recently_played();
     let playlists = use_all_playlist();
+    let random_songs = use_random_songs(5);
 
     let recently_released = match recently_released() {
         Some(Ok(recently_released)) => recently_released,
@@ -37,6 +40,15 @@ pub fn Home() -> Element {
         }
     };
 
+    let random_songs = match random_songs() {
+        Some(Ok(songs)) => songs,
+        _ => {
+            return rsx!(
+                p { "Failed to load random songs" }
+            );
+        }
+    };
+
     let on_album_clicked = move |album_id| {
         nav.push(Route::AlbumView { id: album_id });
     };
@@ -45,24 +57,30 @@ pub fn Home() -> Element {
 
     rsx! {
         TopBar {}
-        div { class: "music-content",
-            AlbumList {
-                title: "Recently Played",
-                albums: recently_played,
-                on_card_clicked: on_album_clicked,
+        VerticalScroller {
+
+            div { class: "music-content",
+                AlbumList {
+                    title: "Recently Played",
+                    albums: recently_played,
+                    on_card_clicked: on_album_clicked,
+                }
+
+                AlbumList {
+                    title: "Recently Released",
+                    albums: recently_released,
+                    on_card_clicked: on_album_clicked,
+                }
+
+                TrackListWithCover { title: "Play now", songs: random_songs }
+
+                PlaylistList {
+                    title: "Playlists",
+                    playlists,
+                    on_card_clicked: on_playlist_clicked,
+                }
             }
 
-            AlbumList {
-                title: "Recently Released",
-                albums: recently_released,
-                on_card_clicked: on_album_clicked,
-            }
-
-            PlaylistList {
-                title: "Playlists",
-                playlists: playlists,
-                on_card_clicked: on_playlist_clicked,
-            }
         }
     }
 }

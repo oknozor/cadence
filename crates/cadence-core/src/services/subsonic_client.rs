@@ -4,7 +4,10 @@ use opensubsonic_cli::types::GetArtistInfo2ResponseSubsonicResponse::GetArtistIn
 use opensubsonic_cli::types::GetPlaylistsResponseSubsonicResponse::{
     self, GetPlaylistsSuccessResponse,
 };
-use opensubsonic_cli::types::{GetArtistResponseSubsonicResponse, Search3ResponseSubsonicResponse};
+use opensubsonic_cli::types::{
+    GetArtistResponseSubsonicResponse, GetRandomSongsResponseSubsonicResponse,
+    Search3ResponseSubsonicResponse,
+};
 use opensubsonic_cli::{
     Client,
     types::{
@@ -280,6 +283,46 @@ impl SubsonicClient {
                 })
                 .collect()),
             GetPlaylistsResponseSubsonicResponse::SubsonicFailureResponse(
+                subsonic_failure_response,
+            ) => Err(ClientError::Failure(subsonic_failure_response)),
+        }
+    }
+
+    pub async fn get_random_songs(&self, limit: i64) -> Result<Vec<Song>, ClientError> {
+        let response = self
+            .client
+            .get_random_songs(None, None, None, Some(limit), None)
+            .await
+            .map(|response| response.into_inner())
+            .map_err(ClientError::OpenSubSonic)?;
+
+        let response = response
+            .subsonic_response
+            .ok_or_else(|| ClientError::Other("Empty response".to_string()))?;
+
+        match response {
+            GetRandomSongsResponseSubsonicResponse::GetRandomSongsSuccessResponse(songs) => {
+                Ok(songs
+                    .random_songs
+                    .song
+                    .into_iter()
+                    .map(|song| Song {
+                        id: song.id,
+                        title: song.title,
+                        artist: song
+                            .display_artist
+                            .or(song.artist)
+                            .unwrap_or("Unkown artist".to_string()),
+                        album: song.album.unwrap_or("Unkown album".to_string()),
+                        cover_art: song.cover_art.as_deref().map(cover_url),
+                        track_number: song.disc_number,
+                        duration: song.duration,
+                        artist_id: song.artist_id,
+                        album_id: song.album_id,
+                    })
+                    .collect())
+            }
+            GetRandomSongsResponseSubsonicResponse::SubsonicFailureResponse(
                 subsonic_failure_response,
             ) => Err(ClientError::Failure(subsonic_failure_response)),
         }

@@ -25,7 +25,7 @@ pub fn VerticalScroller(children: Element, scroll: ReadSignal<Option<f64>>) -> E
 
     rsx! {
         div {
-            onmounted:move |event| {
+            onmounted: move |event| {
                 data.set(Some(event.data));
             },
             class: "vertical-scroller",

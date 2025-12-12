@@ -15,11 +15,15 @@ pub fn TrackList(album: Album, action_clicked: EventHandler<Song>) -> Element {
 }
 
 #[component]
-pub fn TrackListWithCover(songs: Vec<Song>, action_clicked: EventHandler<Song>) -> Element {
+pub fn TrackListWithCover(title: String, songs: Vec<Song>) -> Element {
     rsx! {
-        div { class: "track-list",
-            for song in songs {
-                SongItemInfo { song }
+        div { class: "track-list-with-cover-container",
+            h2 { "{title}" }
+
+            div { class: "track-list",
+                for song in songs {
+                    SongItemInfo { song }
+                }
             }
         }
     }

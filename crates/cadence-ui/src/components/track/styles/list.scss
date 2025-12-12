@@ -5,3 +5,8 @@
     @include column;
     gap: $gap-big;
 }
+
+.track-list-with-cover-container {
+    @include column;
+    gap: $gap-big;
+}
