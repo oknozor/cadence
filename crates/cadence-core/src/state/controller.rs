@@ -1,4 +1,4 @@
-use crate::{PlayerCommand, model::Song};
+use crate::{PlayerCommand, model::Song, player::NotificationControl};
 use dioxus::{
     prelude::{Store, *},
     stores::hashmap::GetWrite,
@@ -78,6 +78,7 @@ impl<Lens> Store<Controller, Lens> {
         if let Some(id) = self.current_song_id()() {
             self.send(PlayerCommand::QueueNow(id));
         }
+        self.update_notification();
     }
 
     fn previous(&mut self) {
@@ -85,6 +86,7 @@ impl<Lens> Store<Controller, Lens> {
         if let Some(id) = self.current_song_id()() {
             self.send(PlayerCommand::QueueNow(id));
         }
+        self.update_notification();
     }
 
     fn toggle_play(&mut self) {
@@ -94,6 +96,7 @@ impl<Lens> Store<Controller, Lens> {
         } else {
             self.send(PlayerCommand::Pause);
         }
+        self.update_notification();
     }
 
     fn play_now(&mut self, song: Song) {
@@ -105,6 +108,7 @@ impl<Lens> Store<Controller, Lens> {
         let len = self.queue_store().read().len();
         self.current_idx().set(len - 1);
         self.send(PlayerCommand::QueueNow(id));
+        self.update_notification();
     }
 
     fn queue(&mut self, song: Song) {
@@ -131,6 +135,7 @@ impl<Lens> Store<Controller, Lens> {
             self.toggle_play();
             self.position().set(Duration::ZERO);
         }
+        self.update_notification();
     }
 }
 
@@ -144,6 +149,24 @@ impl<Lens> Store<Controller, Lens> {
         tracing::trace!("Sending player command: {:?}", command);
         if let Err(err) = self.sender_unchecked().send(command) {
             tracing::error!("failed to send message to audio backend: {}", err);
+        }
+    }
+
+    fn update_notification(&self) {
+        if let Some(song_store) = self.current() {
+            let song = &song_store.read().1;
+            let position = self.position().read().as_secs() as i64;
+            let duration = song.duration.unwrap_or(0);
+            let is_playing = *self.is_playing().read();
+
+            NotificationControl::update_media_notification(
+                &song.title,
+                &song.artist,
+                duration,
+                position,
+                is_playing,
+                None, // artwork_bytes - could be fetched separately if needed
+            );
         }
     }
 

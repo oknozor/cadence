@@ -147,7 +147,7 @@ pub extern "system" fn Java_dev_dioxus_main_MediaCallbackKt_nativeOnNext(
     _class: JClass,
 ) {
     log::info!("Rust received Next");
-    send_media_message(HostNotificationCommand::Pause)
+    send_media_message(HostNotificationCommand::Next)
 }
 
 #[unsafe(no_mangle)]
