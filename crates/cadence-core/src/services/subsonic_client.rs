@@ -100,7 +100,6 @@ impl SubsonicClient {
                 let mut album = album;
                 let cover = album.cover_art.as_deref().map(cover_url);
                 album.cover_art = cover;
-
                 Ok(Album::from(album))
             }
             GetAlbumResponseSubsonicResponse::SubsonicFailureResponse(

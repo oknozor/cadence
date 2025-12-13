@@ -80,7 +80,7 @@ pub fn Home() -> Element {
                     on_card_clicked: on_playlist_clicked,
                 }
             }
-        
+
         }
     }
 }

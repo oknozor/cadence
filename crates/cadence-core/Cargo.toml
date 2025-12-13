@@ -14,7 +14,6 @@ url.workspace = true
 tracing.workspace = true
 once_cell.workspace = true
 flume.workspace = true
-futures = "0.3.31"
 
 [target.'cfg(target_os = "android")'.dependencies]
 jni.workspace = true

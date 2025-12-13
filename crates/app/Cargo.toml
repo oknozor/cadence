@@ -10,7 +10,6 @@ cadence-ui.workspace = true
 cadence-storage-android= { workspace = true, optional = true}
 dioxus = { workspace = true }
 dioxus-sdk = { workspace = true }
-jni = { workspace = true }
 
 [features]
 default = ["web"]
