@@ -1,9 +1,9 @@
-use crate::components::{AlbumActionBar, AlbumCover, TrackList, TrackMenuModal, VerticalScroller};
+use crate::components::{
+    AlbumActionBar, AlbumCover, AlbumMenuModal, AlbumTitle, TrackList, TrackMenuModal,
+    VerticalScroller,
+};
 use cadence_core::hooks::use_album;
-use components::{AlbumMenuModal, AlbumTitle};
 use dioxus::prelude::*;
-
-mod components;
 
 #[component]
 pub fn AlbumView(id: ReadSignal<String>) -> Element {

@@ -6,7 +6,7 @@ use cadence_core::state::{CONTROLLER, ControllerExt, ControllerStoreExt};
 use dioxus::prelude::*;
 
 #[component]
-pub fn FullScreenPlayer() -> Element {
+pub fn NowPlayingView() -> Element {
     let mut controller = CONTROLLER.resolve();
     let current = controller.current();
     let is_playing = controller.is_playing()();

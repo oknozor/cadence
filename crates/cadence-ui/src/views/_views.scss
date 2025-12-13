@@ -1,9 +1,9 @@
-@use "album/_album.scss";
-@use "home/_home.scss";
-@use "artist/_artist.scss";
-@use "search/_search.scss";
-@use "library/_library.scss";
-@use "now_playing/_now_playing.scss";
+@use "styles/album.scss";
+@use "styles/home.scss";
+@use "styles/artist.scss";
+@use "styles/search.scss";
+@use "styles/library.scss";
+@use "styles/now_playing.scss";
 
 @import "../../assets/mixins.scss";
 @import "../../assets/theme.scss";

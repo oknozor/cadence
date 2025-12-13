@@ -1,9 +1,9 @@
-use crate::components::{AlbumList, ArtistGrid, RoundedThumbnail};
-use crate::{components::VerticalScroller, views::Route};
+use crate::{
+    components::{AlbumList, ArtistGrid, RoundedThumbnail, VerticalScroller},
+    views::Route,
+};
 use cadence_core::hooks::use_artist;
 use dioxus::prelude::*;
-
-mod components;
 
 #[component]
 pub fn ArtistView(id: ReadSignal<String>) -> Element {
