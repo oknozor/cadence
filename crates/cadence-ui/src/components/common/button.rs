@@ -1,5 +1,7 @@
 use dioxus::prelude::*;
 
+use crate::components::BackIcon;
+
 #[derive(Props, Clone, PartialEq)]
 pub struct ExpandableButtonProps {
     pub text: ReadSignal<String>,
@@ -66,6 +68,19 @@ pub fn ExpandableButton(mut props: ExpandableButtonProps) -> Element {
                     "{props.text_expanded}"
                 }
             }
+        }
+    }
+}
+
+#[component]
+pub fn BackButton() -> Element {
+    rsx! {
+        button {
+            class: "back-button",
+            onclick: move |_| {
+                navigator().go_back();
+            },
+            BackIcon {}
         }
     }
 }

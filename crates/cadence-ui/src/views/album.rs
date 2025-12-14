@@ -1,5 +1,5 @@
 use crate::components::{
-    AlbumActionBar, AlbumCover, AlbumMenuModal, AlbumTitle, TrackList, TrackMenuModal,
+    AlbumActionBar, AlbumCover, AlbumMenuModal, AlbumTitle, BackButton, TrackList, TrackMenuModal,
     VerticalScroller,
 };
 use cadence_core::hooks::use_album;
@@ -20,6 +20,7 @@ pub fn AlbumView(id: ReadSignal<String>) -> Element {
     };
 
     rsx! {
+        BackButton {}
         match album() {
             Some(album) => rsx! {
                 div { class: "album-info",

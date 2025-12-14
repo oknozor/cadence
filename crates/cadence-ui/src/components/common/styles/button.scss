@@ -56,3 +56,14 @@
         }
     }
 }
+
+.back-button {
+    position: fixed;
+    left: 0;
+    padding: 0.5rem 1rem;
+    z-index: 1000;
+    border: none;
+    border-radius: 0 0 14px 0;
+    cursor: pointer;
+    transition: all 0.3s ease-out;
+}

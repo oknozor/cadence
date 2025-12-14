@@ -9,7 +9,7 @@
     @include max-h-100pct;
 
     .artist-header {
-        @include row;
+        @include column;
         gap: $gap-big;
         align-items: center;
 

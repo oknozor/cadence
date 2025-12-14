@@ -1,7 +1,8 @@
 use dioxus::prelude::*;
 
 #[component]
-pub fn BackIcon(size: u8) -> Element {
+pub fn BackIcon(size: Option<u8>) -> Element {
+    let size = size.unwrap_or(32);
     rsx! {
         svg {
             class: "icon",

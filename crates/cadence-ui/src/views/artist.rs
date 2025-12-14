@@ -1,5 +1,5 @@
 use crate::{
-    components::{AlbumList, ArtistGrid, RoundedThumbnail, VerticalScroller},
+    components::{AlbumList, ArtistGrid, BackButton, RoundedThumbnail, VerticalScroller},
     views::Route,
 };
 use cadence_core::hooks::use_artist;
@@ -28,6 +28,7 @@ pub fn ArtistView(id: ReadSignal<String>) -> Element {
 
     if let Some(artist) = artist() {
         rsx! {
+            BackButton { }
             div { class: "artist-info",
                 VerticalScroller { scroll,
                     div { class: "artist-header",
