@@ -17,7 +17,7 @@ pub fn PlaylistList(
                 for playlist in playlists {
                     PlaylistCard {
                         playlist,
-                        on_card_clicked: on_card_clicked.clone(),
+                        on_card_clicked
                     }
                 }
             }

@@ -1,18 +1,14 @@
-use crate::model::{Album, Artist, PlaylistInfo, SearchResult, Song};
+use crate::model::{Album, Artist, PlaylistInfo, SearchResult, Song, Starred};
 use dioxus::signals::GlobalSignal;
-use opensubsonic_cli::types::GetArtistInfo2ResponseSubsonicResponse::GetArtistInfo2SuccessResponse;
-use opensubsonic_cli::types::GetPlaylistsResponseSubsonicResponse::{
-    self, GetPlaylistsSuccessResponse,
-};
-use opensubsonic_cli::types::{
-    GetArtistResponseSubsonicResponse, GetRandomSongsResponseSubsonicResponse,
-    Search3ResponseSubsonicResponse,
-};
 use opensubsonic_cli::{
     Client,
     types::{
         GetAlbumList2ResponseSubsonicResponse, GetAlbumResponseSubsonicResponse,
-        SubsonicFailureResponse,
+        GetArtistInfo2ResponseSubsonicResponse::GetArtistInfo2SuccessResponse,
+        GetArtistResponseSubsonicResponse,
+        GetPlaylistsResponseSubsonicResponse::{self, GetPlaylistsSuccessResponse},
+        GetRandomSongsResponseSubsonicResponse, GetStarred2ResponseSubsonicResponse,
+        Search3ResponseSubsonicResponse, SubsonicFailureResponse,
     },
 };
 
@@ -95,12 +91,7 @@ impl SubsonicClient {
 
         match response {
             GetAlbumResponseSubsonicResponse::GetAlbumSuccessResponse(response) => {
-                let album = response.album;
-
-                let mut album = album;
-                let cover = album.cover_art.as_deref().map(cover_url);
-                album.cover_art = cover;
-                Ok(Album::from(album))
+                Ok(Album::from(response.album))
             }
             GetAlbumResponseSubsonicResponse::SubsonicFailureResponse(
                 subsonic_failure_response,
@@ -123,15 +114,7 @@ impl SubsonicClient {
 
         let mut artist = match artist {
             GetArtistResponseSubsonicResponse::GetArtistSuccessResponse(response) => {
-                let mut artist = response.artist;
-                for album in artist.album.iter_mut() {
-                    album.cover_art = album.cover_art.as_deref().map(cover_url)
-                }
-
-                let cover = artist.cover_art.as_deref().map(cover_url);
-                artist.cover_art = cover;
-
-                Artist::from(artist)
+                Artist::from(response.artist)
             }
             GetArtistResponseSubsonicResponse::SubsonicFailureResponse(
                 subsonic_failure_response,
@@ -150,10 +133,6 @@ impl SubsonicClient {
                 .into_iter()
                 .map(Artist::from)
                 .collect();
-
-            for artist in artist.similar.iter_mut() {
-                artist.cover_art = artist.cover_art.as_deref().map(cover_url);
-            }
         }
 
         Ok(artist)
@@ -182,12 +161,6 @@ impl SubsonicClient {
                     .album_list2
                     .album
                     .into_iter()
-                    .map(|a| {
-                        let mut a = a;
-                        let cover = a.cover_art.as_deref().map(cover_url);
-                        a.cover_art = cover;
-                        a
-                    })
                     .map(Album::from)
                     .collect())
             }
@@ -215,38 +188,20 @@ impl SubsonicClient {
                     .search_result3
                     .album
                     .into_iter()
-                    .map(|album| SearchResult::Album {
-                        id: album.id,
-                        name: album.name,
-                        cover: album.cover_art.as_deref().map(cover_url),
-                        artist: album.display_artist.or(album.artist),
-                    })
+                    .map(SearchResult::from)
                     .chain(
                         response
                             .search_result3
                             .artist
                             .into_iter()
-                            .map(|artist| SearchResult::Artist {
-                                id: artist.id,
-                                name: artist.name,
-                                thumbnail: artist.artist_image_url.map(ensure_https),
-                            })
-                            .chain(response.search_result3.song.into_iter().map(|song| {
-                                SearchResult::Song(Song {
-                                    id: song.id,
-                                    title: song.title,
-                                    artist: song
-                                        .display_artist
-                                        .or(song.artist)
-                                        .unwrap_or("Unkown artist".to_string()),
-                                    album: song.album.unwrap_or("Unkown album".to_string()),
-                                    cover_art: song.cover_art.as_deref().map(cover_url),
-                                    track_number: song.disc_number,
-                                    duration: song.duration,
-                                    artist_id: song.artist_id,
-                                    album_id: song.album_id,
-                                })
-                            })),
+                            .map(SearchResult::from)
+                            .chain(
+                                response
+                                    .search_result3
+                                    .song
+                                    .into_iter()
+                                    .map(SearchResult::from),
+                            ),
                     )
                     .collect();
 
@@ -275,11 +230,7 @@ impl SubsonicClient {
                 .playlists
                 .playlist
                 .into_iter()
-                .map(|playlist| PlaylistInfo {
-                    id: playlist.id,
-                    name: playlist.name,
-                    cover_art: playlist.cover_art.as_deref().map(cover_url),
-                })
+                .map(PlaylistInfo::from)
                 .collect()),
             GetPlaylistsResponseSubsonicResponse::SubsonicFailureResponse(
                 subsonic_failure_response,
@@ -305,20 +256,7 @@ impl SubsonicClient {
                     .random_songs
                     .song
                     .into_iter()
-                    .map(|song| Song {
-                        id: song.id,
-                        title: song.title,
-                        artist: song
-                            .display_artist
-                            .or(song.artist)
-                            .unwrap_or("Unkown artist".to_string()),
-                        album: song.album.unwrap_or("Unkown album".to_string()),
-                        cover_art: song.cover_art.as_deref().map(cover_url),
-                        track_number: song.disc_number,
-                        duration: song.duration,
-                        artist_id: song.artist_id,
-                        album_id: song.album_id,
-                    })
+                    .map(Song::from)
                     .collect())
             }
             GetRandomSongsResponseSubsonicResponse::SubsonicFailureResponse(
@@ -326,25 +264,42 @@ impl SubsonicClient {
             ) => Err(ClientError::Failure(subsonic_failure_response)),
         }
     }
-}
 
-fn ensure_https(url: String) -> String {
-    if url.starts_with("https://") {
-        url
-    } else if let Some(rest) = url.strip_prefix("http://") {
-        format!("https://{}", rest)
-    } else {
-        format!("https://{}", url)
+    pub async fn get_starred(&self) -> Result<Starred, ClientError> {
+        let response = self
+            .client
+            .get_starred2(None)
+            .await
+            .map(|response| response.into_inner())
+            .map_err(ClientError::OpenSubSonic)?;
+
+        let response = response
+            .subsonic_response
+            .ok_or_else(|| ClientError::Other("Empty response".to_string()))?;
+
+        match response {
+            GetStarred2ResponseSubsonicResponse::GetStarred2SuccessResponse(response) => {
+                let starred = Starred {
+                    songs: response.starred2.song.into_iter().map(Song::from).collect(),
+                    albums: response
+                        .starred2
+                        .album
+                        .into_iter()
+                        .map(Album::from)
+                        .collect(),
+                    artists: response
+                        .starred2
+                        .artist
+                        .into_iter()
+                        .map(Artist::from)
+                        .collect(),
+                };
+
+                Ok(starred)
+            }
+            GetStarred2ResponseSubsonicResponse::SubsonicFailureResponse(
+                subsonic_failure_response,
+            ) => Err(ClientError::Failure(subsonic_failure_response)),
+        }
     }
-}
-
-fn cover_url(id: &str) -> String {
-    format!(
-        "https://music-api.hoohoot.org/rest/getCoverArt?id={}&f=json&u={}&v={}&p={}&c={}",
-        id,
-        opensubsonic_cli::USERNAME.get().unwrap(),
-        "1.16.1",
-        opensubsonic_cli::PASSWORD.get().unwrap(),
-        "scrobz"
-    )
 }

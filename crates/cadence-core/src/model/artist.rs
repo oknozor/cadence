@@ -1,4 +1,4 @@
-use crate::model::Album;
+use crate::model::{Album, cover_url};
 use opensubsonic_cli::types;
 use opensubsonic_cli::types::ArtistId3;
 use types::ArtistWithAlbumsId3;
@@ -15,16 +15,16 @@ pub struct Artist {
 }
 
 impl From<ArtistWithAlbumsId3> for Artist {
-    fn from(response: ArtistWithAlbumsId3) -> Self {
-        let albums = response.album;
-        let cover_art = response.cover_art;
+    fn from(value: ArtistWithAlbumsId3) -> Self {
+        let albums = value.album;
+        let cover_art = value.cover_art.as_deref().map(cover_url);
 
         Artist {
-            id: response.id,
-            name: response.name,
+            id: value.id,
+            name: value.name,
             cover_art: cover_art.clone(),
             albums: albums.into_iter().map(Album::from).collect(),
-            starred: response.starred.is_some(),
+            starred: value.starred.is_some(),
             bio: None,
             similar: vec![],
         }
@@ -36,7 +36,7 @@ impl From<ArtistId3> for Artist {
         Artist {
             id: value.id,
             name: value.name,
-            cover_art: value.cover_art,
+            cover_art: value.cover_art.as_deref().map(cover_url),
             albums: vec![],
             starred: value.starred.is_some(),
             bio: None,

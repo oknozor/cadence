@@ -1,4 +1,4 @@
-use crate::model::song::Song;
+use crate::model::{cover_url, song::Song};
 use opensubsonic_cli::types::{AlbumId3, AlbumId3WithSongs};
 
 #[derive(Clone, PartialEq)]
@@ -16,7 +16,7 @@ impl From<AlbumId3WithSongs> for Album {
     fn from(response: AlbumId3WithSongs) -> Self {
         let artist = response.artist.unwrap_or_default();
         let album = response.name;
-        let cover_art = response.cover_art;
+        let cover_art = response.cover_art.as_deref().map(cover_url);
         let artist_id = response.artist_id.unwrap_or_default();
 
         Album {
@@ -52,7 +52,7 @@ impl From<AlbumId3> for Album {
         let artist = response.artist.unwrap_or_default();
         let artist_id = response.artist_id.unwrap_or_default();
         let album = response.name;
-        let cover_art = response.cover_art;
+        let cover_art = response.cover_art.as_deref().map(cover_url);
 
         Album {
             id: id.clone(),
