@@ -7,8 +7,9 @@ use dioxus::prelude::*;
 use crate::components::{DotIcon, ItemInfo, ItemRow, PlusIcon, Thumbnail};
 
 #[component]
-pub fn SongItemInfo(song: Song) -> Element {
+pub fn SongItemInfo(song: Song, thumbnail_size: Option<u32>) -> Element {
     let mut controller = CONTROLLER.resolve();
+    let size = thumbnail_size.unwrap_or(50);
     let id = song.id.clone();
     let is_active = use_memo(move || {
         let current = controller.current_song_id()();
@@ -25,7 +26,7 @@ pub fn SongItemInfo(song: Song) -> Element {
 
     let thumbnail = cover_art.map(|src| {
         rsx! {
-            Thumbnail { size: 50, name: title.clone(), src }
+            Thumbnail { size, name: title.clone(), src }
         }
     });
 

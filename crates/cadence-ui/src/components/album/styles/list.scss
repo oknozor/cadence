@@ -3,12 +3,5 @@
 
 .tracklist-container {
     @include column;
-    gap: 6px;
-
-    h2 {
-        margin: 0;
-        @include text-primary;
-        font-size: 16px;
-        color: $secondary-color-1;
-    }
+    gap: $gap-medium;
 }

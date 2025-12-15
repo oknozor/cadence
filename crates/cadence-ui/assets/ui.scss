@@ -50,6 +50,12 @@ h6 {
     margin: 0;
 }
 
+h2 {
+    @include text-primary;
+    font-size: 22px;
+    color: $secondary-color-1;
+}
+
 @supports (scrollbar-width: auto) {
     :not(:hover) {
         scrollbar-color: rgb(0 0 0 / 0%) rgb(0 0 0 / 0%);

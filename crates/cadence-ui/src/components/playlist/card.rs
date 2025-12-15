@@ -15,7 +15,6 @@ pub fn PlaylistCard(playlist: PlaylistInfo, on_card_clicked: EventHandler<String
             } else {
                 div {
                     class: "playlist-placeholder",
-                    style: "width: 96px; height: 96px; border-radius: 50%; background: #ccc; display: flex; align-items: center; justify-content: center;",
                     "{playlist.name.chars().next().unwrap_or_default()}"
                 }
             }
