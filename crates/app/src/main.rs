@@ -1,3 +1,5 @@
+use cadence_core::hooks::effects::use_audio_backend;
+use cadence_core::hooks::effects::use_audio_backend_state_update;
 use cadence_core::hooks::effects::use_notification_control;
 use cadence_core::hooks::init_global_context;
 use cadence_core::hooks::use_login_state;
@@ -28,6 +30,8 @@ fn App() -> Element {
     use_notification_control();
 
     let mut saved_credentials = use_saved_credentials();
+    use_audio_backend();
+    use_audio_backend_state_update();
     let login_state = use_login_state();
 
     let handle_login = move |(server_url, username, password): (String, String, String)| {

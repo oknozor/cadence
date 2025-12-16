@@ -10,9 +10,8 @@ use crate::{
     state::LoginState,
 };
 
-pub fn initialize_audio_backend() {
+pub fn use_audio_backend() {
     let saved_credentials = use_saved_credentials();
-    use_audio_backend_state_update();
 
     use_effect(move || {
         if let Some(credentials) = saved_credentials.read().cloned() {
@@ -82,7 +81,7 @@ pub fn use_notification_control() {
     });
 }
 
-fn use_audio_backend_state_update() {
+pub fn use_audio_backend_state_update() {
     use_effect(move || {
         let rx: flume::Receiver<AudioBackendStateUpdate> = use_context();
 

@@ -2,7 +2,7 @@ use dioxus::{CapturedError, prelude::*};
 use dioxus_sdk::storage::{get_from_storage, use_storage};
 
 use crate::{
-    hooks::effects::initialize_audio_backend,
+    hooks::effects::use_audio_backend,
     model::{Album, PlaylistInfo, SearchResult, Song},
     services::subsonic_client::{AlbumListType, SUBSONIC_CLIENT, SubsonicClient},
     state::{LoginState, SubSonicLogin},
@@ -29,7 +29,6 @@ pub fn use_search_results() -> Action<(String,), Vec<SearchResult>> {
 }
 
 pub fn use_login_state() -> LoginState {
-    initialize_audio_backend();
     consume_context()
 }
 
