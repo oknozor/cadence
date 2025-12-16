@@ -7,14 +7,13 @@ use dioxus::prelude::*;
 use crate::{
     hooks::use_saved_credentials,
     services::subsonic_client::{SUBSONIC_CLIENT, SubsonicClient},
-    state::LoginState,
 };
 
-pub fn use_audio_backend() {
-    let saved_credentials = use_saved_credentials();
-
+pub fn use_audio_backend(ready: Signal<bool>, mut logged_in: Signal<bool>) {
     use_effect(move || {
-        if let Some(credentials) = saved_credentials.read().cloned() {
+        let _ = ready();
+        if let Some(credentials) = use_saved_credentials()() {
+            tracing::info!("Saved credentials changed");
             let client = SubsonicClient::new(
                 &credentials.server_url,
                 &credentials.username,
@@ -23,12 +22,9 @@ pub fn use_audio_backend() {
 
             *SUBSONIC_CLIENT.write() = Some(client.clone());
 
-            let mut login_state = consume_context::<LoginState>();
             spawn(async move {
                 match client.ping().await {
                     Ok(ok) if ok => {
-                        info!("Logged in");
-                        login_state.set(true);
                         let mut player = AudioBackend::build(
                             &credentials.server_url,
                             &credentials.username,
@@ -37,17 +33,17 @@ pub fn use_audio_backend() {
                             use_context(),
                         )
                         .expect("Player start failed");
-
+                        logged_in.set(true);
                         CONTROLLER.resolve().attach_sender(use_context());
                         if let Err(err) = player.run().await {
                             error!("Audio backend error: {}", err);
                         }
                     }
                     Ok(ko) => {
-                        login_state.set_error(Some(format!("Login failed: {}", ko)));
+                        error!("failed to ping subsonic server");
                     }
                     Err(err) => {
-                        login_state.set_error(Some(format!("Login failed: {}", err)));
+                        error!("subsonic server error: {}", err);
                     }
                 }
             });

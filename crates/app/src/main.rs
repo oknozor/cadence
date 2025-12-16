@@ -2,7 +2,6 @@ use cadence_core::hooks::effects::use_audio_backend;
 use cadence_core::hooks::effects::use_audio_backend_state_update;
 use cadence_core::hooks::effects::use_notification_control;
 use cadence_core::hooks::init_global_context;
-use cadence_core::hooks::use_login_state;
 use cadence_core::player::NotificationControl;
 use cadence_core::{hooks::use_saved_credentials, state::SubSonicLogin};
 use cadence_ui::UI_CSS;
@@ -30,16 +29,19 @@ fn App() -> Element {
     use_notification_control();
 
     let mut saved_credentials = use_saved_credentials();
-    use_audio_backend();
+    let mut ready = use_signal(|| false);
+    let logged_in = use_signal(|| false);
+    use_audio_backend(ready, logged_in);
     use_audio_backend_state_update();
-    let login_state = use_login_state();
 
     let handle_login = move |(server_url, username, password): (String, String, String)| {
+        info!("Saving credentials");
         saved_credentials.set(Some(SubSonicLogin {
             server_url: server_url.clone(),
             username: username.clone(),
             password: password.clone(),
         }));
+        ready.set(true);
     };
 
     rsx! {
@@ -58,13 +60,10 @@ fn App() -> Element {
             content: "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover",
             name: "viewport",
         }
-        if *login_state.logged_in().read() {
+        if *logged_in.read() {
             Router::<Route> {}
         } else {
             Login { on_login: handle_login }
-            if let Some(err) = login_state.errored().read().as_ref() {
-                div { class: "error", "{err}" }
-            }
         }
     }
 }

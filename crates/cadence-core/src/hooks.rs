@@ -2,10 +2,9 @@ use dioxus::{CapturedError, prelude::*};
 use dioxus_sdk::storage::{get_from_storage, use_storage};
 
 use crate::{
-    hooks::effects::use_audio_backend,
     model::{Album, PlaylistInfo, SearchResult, Song},
     services::subsonic_client::{AlbumListType, SUBSONIC_CLIENT, SubsonicClient},
-    state::{LoginState, SubSonicLogin},
+    state::SubSonicLogin,
 };
 
 mod context;
@@ -26,10 +25,6 @@ pub fn use_search_results() -> Action<(String,), Vec<SearchResult>> {
             .await
             .map_err(CapturedError::from_display)
     })
-}
-
-pub fn use_login_state() -> LoginState {
-    consume_context()
 }
 
 pub fn use_subsonic_client() -> Option<SubsonicClient> {

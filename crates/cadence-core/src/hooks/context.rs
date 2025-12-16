@@ -1,5 +1,5 @@
 use crate::player::{AudioBackendStateUpdate, PlayerCommand};
-use crate::state::{HostNotificationCommand, LoginState};
+use crate::state::HostNotificationCommand;
 use dioxus::prelude::*;
 
 pub fn init_global_context() {
@@ -15,5 +15,4 @@ pub fn init_global_context() {
     let _ = use_context_provider(|| notification_rx);
     let _ = use_context_provider(|| audio_backend_state_tx);
     let _ = use_context_provider(|| audio_backend_state_rx);
-    let _ = use_context_provider(LoginState::default);
 }
