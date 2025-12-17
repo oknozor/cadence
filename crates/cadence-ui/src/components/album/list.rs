@@ -21,7 +21,11 @@ pub fn AlbumList(props: AlbumListProps) -> Element {
 
             HorizontalScroller {
                 for album in props.albums {
-                    AlbumCard { album, on_click: props.on_click, on_press: props.on_press,  }
+                    AlbumCard {
+                        album,
+                        on_click: props.on_click,
+                        on_press: props.on_press,
+                    }
                 }
             }
         }

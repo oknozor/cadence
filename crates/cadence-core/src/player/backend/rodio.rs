@@ -3,9 +3,7 @@ use std::{num::NonZeroUsize, time::Duration};
 use stream_download::{
     Settings, StreamDownload,
     source::DecodeError,
-    storage::{
-        adaptive::AdaptiveStorageProvider, memory::MemoryStorageProvider, temp::TempStorageProvider,
-    },
+    storage::{adaptive::AdaptiveStorageProvider, memory::MemoryStorageProvider},
 };
 
 use crate::{
@@ -96,7 +94,7 @@ impl AudioBackend {
                 // FIXME: Here we need temp storage provider
                 //  this works fine for native/browser, but for android we need
                 //  to manually set the path to the non priviledged app cache dir
-                MemoryStorageProvider::default(),
+                MemoryStorageProvider,
                 // 64 MB Buffer Size, if we have a bigger content length, seek won't be avalaible
                 NonZeroUsize::new(64 * 1024 * 1024).unwrap(),
             ),

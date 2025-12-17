@@ -15,10 +15,7 @@ pub fn PlaylistList(
 
             HorizontalScroller {
                 for playlist in playlists {
-                    PlaylistCard {
-                        playlist,
-                        on_card_clicked
-                    }
+                    PlaylistCard { playlist, on_card_clicked }
                 }
             }
         }
