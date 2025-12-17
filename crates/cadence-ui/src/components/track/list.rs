@@ -22,7 +22,7 @@ pub fn TrackListWithCover(title: String, songs: Vec<Song>) -> Element {
 
             div { class: "track-list",
                 for song in songs {
-                    SongItemInfo { song, thumbnail_size: Some(10) }
+                    SongItemInfo { song, thumbnail_size: Some(32) }
                 }
             }
         }

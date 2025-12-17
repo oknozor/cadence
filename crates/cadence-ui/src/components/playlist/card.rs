@@ -1,7 +1,7 @@
 use cadence_core::model::PlaylistInfo;
 use dioxus::prelude::*;
 
-use crate::components::Thumbnail;
+use crate::components::ItemInfo;
 
 #[component]
 pub fn PlaylistCard(playlist: PlaylistInfo, on_card_clicked: EventHandler<String>) -> Element {
@@ -10,15 +10,23 @@ pub fn PlaylistCard(playlist: PlaylistInfo, on_card_clicked: EventHandler<String
             class: "playlist-card",
             key: "{playlist.id}",
             onclick: move |_| on_card_clicked.call(playlist.id.clone()),
-            if let Some(src) = playlist.cover_art {
-                Thumbnail { src, name: playlist.name.clone(), size: 96 }
-            } else {
-                div {
-                    class: "playlist-placeholder",
-                    "{playlist.name.chars().next().unwrap_or_default()}"
+            if let Some(cover) = playlist.cover_art.as_ref() {
+                img {
+                    src: "{cover}",
+                    alt: "{playlist.name}",
+                    width: "100px",
+                    height: "100px",
                 }
+            } else {
+                div { class: "no-cover", "🎵" }
             }
-            span { class: "playlist-name", "{playlist.name}" }
+
+            ItemInfo {
+                primary: playlist.name,
+                secondary: playlist.owner.map(|owner| format!("By {owner}")).unwrap_or_default(),
+                is_active: false,
+                is_paused: false,
+            }
         }
     }
 }

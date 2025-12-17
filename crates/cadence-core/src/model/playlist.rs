@@ -6,6 +6,7 @@ use crate::model::cover_url;
 pub struct PlaylistInfo {
     pub id: String,
     pub name: String,
+    pub owner: Option<String>,
     pub cover_art: Option<String>,
 }
 
@@ -14,6 +15,7 @@ impl From<Playlist> for PlaylistInfo {
         PlaylistInfo {
             id: value.id,
             name: value.name,
+            owner: value.owner,
             cover_art: value.cover_art.as_deref().map(cover_url),
         }
     }

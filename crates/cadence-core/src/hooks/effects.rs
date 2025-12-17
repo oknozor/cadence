@@ -39,10 +39,12 @@ pub fn use_audio_backend(ready: Signal<bool>, mut logged_in: Signal<bool>) {
                             error!("Audio backend error: {}", err);
                         }
                     }
-                    Ok(ko) => {
+                    Ok(_) => {
+                        // TODO: this should be stored into error store and displayed to the user
                         error!("failed to ping subsonic server");
                     }
                     Err(err) => {
+                        // TODO: this should be stored into error store and displayed to the user
                         error!("subsonic server error: {}", err);
                     }
                 }
