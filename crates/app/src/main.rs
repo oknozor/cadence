@@ -22,7 +22,7 @@ fn App() -> Element {
     dioxus_sdk::storage::set_dir("~/.local/share/cadence");
 
     #[cfg(feature = "mobile")]
-    let dir = cadence_storage_android::internal_storage_dir();
+    let _ = cadence_storage_android::internal_storage_dir();
 
     init_global_context();
     NotificationControl::init(consume_context());

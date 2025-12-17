@@ -32,15 +32,6 @@ pub fn send_media_message(msg: HostNotificationCommand) {
     tx.send(msg).expect("Failed to send media message");
 }
 
-#[derive(Debug)]
-pub enum MediaMsg {
-    Play,
-    Pause,
-    Next,
-    Previous,
-    SeekTo(i64),
-}
-
 // Runs background management through foreground service ran function
 #[unsafe(no_mangle)]
 pub extern "C" fn Java_dev_dioxus_main_KeepAliveService_startRustBackground(
