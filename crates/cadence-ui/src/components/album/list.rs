@@ -4,19 +4,24 @@ use dioxus::prelude::*;
 use super::card::AlbumCard;
 use crate::components::HorizontalScroller;
 
+#[derive(Props, Clone, PartialEq)]
+pub struct AlbumListProps {
+    pub title: String,
+    pub albums: Vec<Album>,
+    pub on_click: EventHandler<String>,
+    #[props(default = |_| {})]
+    pub on_press: EventHandler<Album>,
+}
+
 #[component]
-pub fn AlbumList(
-    title: String,
-    albums: Vec<Album>,
-    on_card_clicked: EventHandler<String>,
-) -> Element {
+pub fn AlbumList(props: AlbumListProps) -> Element {
     rsx! {
         div { class: "tracklist-container",
-            h2 { "{title}" }
+            h2 { "{props.title}" }
 
             HorizontalScroller {
-                for album in albums {
-                    AlbumCard { album, on_card_clicked }
+                for album in props.albums {
+                    AlbumCard { album, on_click: props.on_click, on_press: props.on_press,  }
                 }
             }
         }

@@ -53,7 +53,7 @@ pub fn ArtistView(id: ReadSignal<String>) -> Element {
                         AlbumList {
                             title: "Albums".to_string(),
                             albums: artist.albums,
-                            on_card_clicked: on_album_card_clicked,
+                            on_click: on_album_card_clicked,
                         }
                     }
 
