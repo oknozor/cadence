@@ -302,4 +302,36 @@ impl SubsonicClient {
             ) => Err(ClientError::Failure(subsonic_failure_response)),
         }
     }
+
+    pub async fn star(&self, star: Star) -> Result<(), ClientError> {
+        let (album_id, artist_id, id) = match star {
+            Star::Album(album_id) => (Some(&vec![album_id]), None, None),
+            Star::Song(id) => (None, None, Some(&vec![id])),
+            Star::Artist(artist_id) => (None, Some(&vec![artist_id]), None),
+        };
+
+        let response = self
+            .client
+            .star(album_id, artist_id, id)
+            .await
+            .map(|response| response.into_inner())
+            .map_err(ClientError::OpenSubSonic)?;
+
+        let response = response
+            .subsonic_response
+            .ok_or_else(|| ClientError::Other("Empty response".to_string()))?;
+
+        match response {
+            opensubsonic_cli::types::SubsonicResponseSubsonicResponse::SuccessResponse(_) => Ok(()),
+            opensubsonic_cli::types::SubsonicResponseSubsonicResponse::FailureResponse(
+                subsonic_failure_response,
+            ) => Err(ClientError::Failure(subsonic_failure_response)),
+        }
+    }
+}
+
+pub enum Star {
+    Album(String),
+    Song(String),
+    Artist(String),
 }

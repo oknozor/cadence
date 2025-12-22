@@ -13,6 +13,7 @@ pub struct Song {
     pub cover_art: Option<String>,
     pub track_number: Option<i64>,
     pub duration: Option<i64>,
+    pub starred: bool,
 }
 
 impl From<Child> for Song {
@@ -30,6 +31,7 @@ impl From<Child> for Song {
             duration: value.duration,
             artist_id: value.artist_id,
             album_id: value.album_id,
+            starred: value.starred.is_some(),
         }
     }
 }

@@ -10,6 +10,7 @@ pub struct Album {
     pub year: Option<i64>,
     pub cover_art: Option<String>,
     pub songs: Vec<Song>,
+    pub starred: bool,
 }
 
 impl From<AlbumId3WithSongs> for Album {
@@ -39,8 +40,10 @@ impl From<AlbumId3WithSongs> for Album {
                     album: album.clone(),
                     artist_id: Some(artist_id.clone()),
                     album_id: Some(response.id.clone()),
+                    starred: song.starred.is_some(),
                 })
                 .collect(),
+            starred: response.starred.is_some(),
         }
     }
 }
@@ -61,6 +64,7 @@ impl From<AlbumId3> for Album {
             artist_id: artist_id.clone(),
             year: response.year,
             cover_art: cover_art.clone(),
+            starred: response.starred.is_some(),
             songs: response
                 .song
                 .into_iter()
@@ -74,6 +78,7 @@ impl From<AlbumId3> for Album {
                     album: album.clone(),
                     artist_id: Some(artist_id.clone()),
                     album_id: Some(id.clone()),
+                    starred: song.starred.is_some(),
                 })
                 .collect(),
         }

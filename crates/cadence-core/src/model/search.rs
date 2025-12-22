@@ -54,6 +54,7 @@ impl From<Child> for SearchResult {
             duration: song.duration,
             artist_id: song.artist_id,
             album_id: song.album_id,
+            starred: song.starred.is_some(),
         })
     }
 }
