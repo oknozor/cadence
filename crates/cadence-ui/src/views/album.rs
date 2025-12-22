@@ -41,7 +41,7 @@ pub fn AlbumView(id: ReadSignal<String>) -> Element {
                 }
             },
             None => rsx! {
-                div { class: "loading", "Loading album..." }
+                div { class: "loading" }
             },
         }
     }

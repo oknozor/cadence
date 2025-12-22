@@ -40,36 +40,28 @@ pub fn Home() -> Element {
     let recently_released = match recently_released() {
         Some(Ok(recently_released)) => recently_released,
         _ => {
-            return rsx!(
-                p { "Failed to load recently released albums" }
-            );
+            return rsx!();
         }
     };
 
     let recently_played = match recently_played() {
         Some(Ok(recently_played)) => recently_played,
         _ => {
-            return rsx!(
-                p { "Failed to load recently played albums" }
-            );
+            return rsx!();
         }
     };
 
     let playlists = match playlists() {
         Some(Ok(playlists)) => playlists,
         _ => {
-            return rsx!(
-                p { "Failed to load playlists" }
-            );
+            return rsx!();
         }
     };
 
     let random_songs = match random_songs() {
         Some(Ok(songs)) => songs,
         _ => {
-            return rsx!(
-                p { "Failed to load random songs" }
-            );
+            return rsx!();
         }
     };
 

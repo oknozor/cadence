@@ -68,7 +68,9 @@ pub fn ArtistView(id: ReadSignal<String>) -> Element {
             }
         }
     } else {
-        rsx! { "Loading" }
+        rsx! {
+            div { class: "loading" }
+        }
     }
 }
 
