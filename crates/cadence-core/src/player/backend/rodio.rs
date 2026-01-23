@@ -3,8 +3,13 @@ use std::{num::NonZeroUsize, time::Duration};
 use stream_download::{
     Settings, StreamDownload,
     source::DecodeError,
-    storage::{adaptive::AdaptiveStorageProvider, memory::MemoryStorageProvider},
+    storage::{
+        adaptive::AdaptiveStorageProvider, memory::MemoryStorageProvider, temp::TempStorageProvider,
+    },
 };
+
+#[cfg(all(target_os = "android", feature = "mobile"))]
+use cadence_storage_android;
 
 use crate::{
     PlayerCommand,
@@ -82,6 +87,14 @@ impl AudioBackend {
         self.open_stream(track_id).await
     }
 
+    pub(crate) async fn play_radio(&self, stream_url: &str) -> Result<(), MusicPlayerError> {
+        tracing::info!("Playing radio stream: {stream_url}");
+        self.sink.clear();
+        self.sink.play();
+
+        self.open_radio_stream(stream_url).await
+    }
+
     async fn open_stream(&self, track_id: &str) -> Result<(), MusicPlayerError> {
         let username = &self.username;
         let password = &self.password;
@@ -119,6 +132,39 @@ impl AudioBackend {
 
         self.sink.append(decoder);
         self.set_callback();
+        Ok(())
+    }
+
+    async fn open_radio_stream(&self, stream_url: &str) -> Result<(), MusicPlayerError> {
+        // On Android, use the app's cache directory for temp files
+        // On other platforms, use the default system temp directory
+        #[cfg(all(target_os = "android", feature = "mobile"))]
+        let storage_provider = TempStorageProvider::new_in(cadence_storage_android::cache_dir());
+
+        #[cfg(not(all(target_os = "android", feature = "mobile")))]
+        let storage_provider = TempStorageProvider::default();
+
+        // Use a small prefetch for radio streams to minimize startup delay.
+        // Default is 256KB which causes ~10+ second delays on live streams.
+        // 8KB is enough for the decoder to start while keeping latency low.
+        let settings = Settings::default().prefetch_bytes(8 * 1024);
+
+        let reader = match StreamDownload::new_http(
+            stream_url.parse()?,
+            storage_provider,
+            settings,
+        )
+        .await
+        {
+            Ok(reader) => reader,
+            Err(e) => return Err(MusicPlayerError::Custom(e.decode_error().await)),
+        };
+
+        let decoder = Decoder::new(reader).map_err(|e| {
+            MusicPlayerError::Custom(format!("Failed to build radio decoder: {}", e))
+        })?;
+
+        self.sink.append(decoder);
         Ok(())
     }
 

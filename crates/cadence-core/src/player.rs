@@ -15,6 +15,7 @@ pub enum PlayerCommand {
     Seek(Duration),
     Queue(String),
     QueueNow(String),
+    PlayRadio(String),
 }
 
 #[derive(Debug)]
@@ -46,6 +47,7 @@ impl AudioBackend {
                         PlayerCommand::Pause => self.pause()?,
                         PlayerCommand::Next => self.next()?,
                         PlayerCommand::Seek(duration) => self.seek(duration)?,
+                        PlayerCommand::PlayRadio(url) => self.play_radio(&url).await?,
                     }
                 }
             }

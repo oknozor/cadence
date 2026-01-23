@@ -2,8 +2,8 @@ use dioxus::prelude::debug;
 use dioxus_sdk::storage::StorageBacking;
 use once_cell::sync::Lazy;
 use redb::{ReadableTable, TableDefinition};
-use serde::Serialize;
 use serde::de::DeserializeOwned;
+use serde::Serialize;
 use std::fmt::Debug;
 use std::sync::Arc;
 use thiserror::Error;
@@ -128,6 +128,33 @@ pub fn internal_storage_dir() -> std::path::PathBuf {
             .into();
         let files_dir: String = env.get_string(&files_dir)?.into();
         Ok(PathBuf::from(files_dir))
+    }
+
+    dioxus::mobile::wry::prelude::dispatch(move |env, activity, _webview| {
+        tx.send(run(env, activity).unwrap()).unwrap()
+    });
+
+    rx.recv().unwrap()
+}
+
+#[cfg(all(target_os = "android", feature = "mobile"))]
+pub fn cache_dir() -> std::path::PathBuf {
+    use jni::JNIEnv;
+    use jni::objects::{JObject, JString};
+    use std::path::PathBuf;
+
+    let (tx, rx) = std::sync::mpsc::channel();
+
+    fn run(env: &mut JNIEnv<'_>, activity: &JObject<'_>) -> Result<PathBuf, StorageError> {
+        let cache_dir = env
+            .call_method(activity, "getCacheDir", "()Ljava/io/File;", &[])?
+            .l()?;
+        let cache_dir: JString<'_> = env
+            .call_method(cache_dir, "getAbsolutePath", "()Ljava/lang/String;", &[])?
+            .l()?
+            .into();
+        let cache_dir: String = env.get_string(&cache_dir)?.into();
+        Ok(PathBuf::from(cache_dir))
     }
 
     dioxus::mobile::wry::prelude::dispatch(move |env, activity, _webview| {

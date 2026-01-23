@@ -84,6 +84,19 @@ impl AudioBackend {
         Ok(())
     }
 
+    pub async fn play_radio(&self, stream_url: &str) -> Result<(), MusicPlayerError> {
+        tracing::info!("Playing radio stream: {stream_url}");
+
+        // Clear the queue and play the radio stream
+        self.queue.borrow_mut().clear();
+
+        let howl = JsHowl::new(stream_url.to_string());
+        howl.play();
+
+        self.queue.borrow_mut().push_back(howl);
+        Ok(())
+    }
+
     pub fn seek(&self, duration: Duration) -> Result<(), MusicPlayerError> {
         let queue = self.queue.borrow_mut();
         let current = queue.back();

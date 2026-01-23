@@ -9,12 +9,14 @@ use cadence_core::hooks::{
     use_all_playlist, use_internet_radio_stations, use_random_songs, use_recently_played,
     use_recently_released,
 };
+use cadence_core::state::{ControllerExt, CONTROLLER};
 use dioxus::prelude::*;
-use dioxus_sdk::time::{TimeoutHandle, use_timeout};
+use dioxus_sdk::time::{use_timeout, TimeoutHandle};
 
 #[component]
 pub fn Home() -> Element {
     let nav = navigator();
+    let mut controller = CONTROLLER.resolve();
     let active_filter = use_signal(|| TopBarFilter::All);
     let recently_released = use_recently_released();
     let recently_played = use_recently_played();
@@ -42,9 +44,12 @@ pub fn Home() -> Element {
     };
 
     let on_playlist_clicked = move |_playlist_id: String| tracing::debug!("unimplemented");
-    let on_radio_station_clicked = move |_station_id: String| tracing::debug!("radio station clicked");
+    let on_radio_station_clicked = move |stream_url: String| {
+        info!("Playing radio station with stream URL: {}", stream_url);
+        controller.play_radio(stream_url);
+    };
 
-    // If radio filter is active, show radio stations view
+    // If the radio filter is active, show radio stations view
     if active_filter() == TopBarFilter::Radio {
         let stations = match radio_stations() {
             Some(Ok(stations)) => stations,
@@ -58,13 +63,9 @@ pub fn Home() -> Element {
 
         return rsx! {
             TopBar { active_filter }
-            VerticalScroller {
+            VerticalScroller { 
                 div { class: "music-content",
-                    RadioStationList {
-                        title: "Radio Stations",
-                        stations,
-                        on_click: on_radio_station_clicked,
-                    }
+                    RadioStationList { title: "Radio Stations", stations, on_click: on_radio_station_clicked }
                 }
             }
         };
@@ -109,30 +110,26 @@ pub fn Home() -> Element {
 
     rsx! {
         TopBar { active_filter }
-        VerticalScroller {
+        VerticalScroller { 
 
             div { class: "music-content",
                 AlbumList {
                     title: "Recently Played",
                     albums: recently_played,
                     on_press: on_album_pressed,
-                    on_click: on_album_clicked,
+                    on_click: on_album_clicked
                 }
 
                 AlbumList {
                     title: "Recently Released",
                     albums: recently_released,
                     on_click: on_album_clicked,
-                    on_press: on_album_pressed,
+                    on_press: on_album_pressed
                 }
 
                 TrackListWithCover { title: "Play now", songs: random_songs }
 
-                PlaylistList {
-                    title: "Playlists",
-                    playlists,
-                    on_card_clicked: on_playlist_clicked,
-                }
+                PlaylistList { title: "Playlists", playlists, on_card_clicked: on_playlist_clicked }
             }
         }
         if let Some(album) = album_selected() {

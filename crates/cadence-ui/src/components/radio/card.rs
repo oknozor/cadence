@@ -5,7 +5,7 @@ use crate::components::{ItemInfo, ItemRow, RadioIcon};
 
 #[component]
 pub fn RadioStationItem(station: RadioStation, on_click: EventHandler<String>) -> Element {
-    let station_id = station.id.clone();
+    let stream_url = station.stream_url.clone();
 
     let thumbnail = rsx! {
         div { class: "radio-thumbnail",
@@ -22,7 +22,7 @@ pub fn RadioStationItem(station: RadioStation, on_click: EventHandler<String>) -
         }
     };
 
-    let callback = move |_| on_click.call(station_id.clone());
+    let callback = move |_| on_click.call(stream_url.clone());
 
     rsx! {
         ItemRow {

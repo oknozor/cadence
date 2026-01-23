@@ -137,6 +137,15 @@ impl<Lens> Store<Controller, Lens> {
         }
         self.update_notification();
     }
+
+    fn play_radio(&mut self, stream_url: String) {
+        tracing::info!("Playing radio stream: {}", stream_url);
+        // Clear the queue when playing radio
+        self.clear_queue();
+        self.is_playing().set(true);
+        self.position().set(Duration::ZERO);
+        self.send(PlayerCommand::PlayRadio(stream_url));
+    }
 }
 
 #[store(name = ControllerStorePrivate)]
