@@ -17,6 +17,10 @@
             @include row;
             gap: $gap;
             align-items: center;
+            // Prevent the track info from pushing controls off screen
+            overflow: hidden;
+            flex: 1;
+            min-width: 0;
         }
 
         .player-controls {
@@ -30,6 +34,22 @@
                 align-items: center;
                 justify-content: center;
             }
+        }
+    }
+
+    .radio-player {
+        .radio-player-thumbnail {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .item-info {
+            overflow: hidden;
+            min-width: 0;
         }
     }
 

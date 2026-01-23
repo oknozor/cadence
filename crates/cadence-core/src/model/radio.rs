@@ -1,6 +1,6 @@
 use opensubsonic_cli::types::InternetRadioStation;
 
-#[derive(Clone, PartialEq)]
+#[derive(Clone, PartialEq, Debug)]
 pub struct RadioStation {
     pub id: String,
     pub name: String,

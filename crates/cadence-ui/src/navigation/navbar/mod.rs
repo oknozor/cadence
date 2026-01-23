@@ -1,5 +1,6 @@
-use crate::components::{HomeIcon, LibraryIcon, Player, PlusIcon, SearchIcon};
+use crate::components::{HomeIcon, LibraryIcon, Player, PlusIcon, RadioPlayer, SearchIcon};
 use crate::views::Route;
+use cadence_core::state::{ControllerStoreExt, CONTROLLER};
 use dioxus::prelude::*;
 use std::time::Duration;
 
@@ -20,9 +21,16 @@ pub fn Navbar() -> Element {
 
     let nav = navigator();
 
+    let controller = CONTROLLER.resolve();
+    let is_radio_playing = controller.current_radio().read().is_some();
+
     rsx! {
         div { class: "navbar-container",
-            Player {}
+            if is_radio_playing {
+                RadioPlayer {}
+            } else {
+                Player {}
+            }
             div { id: "navbar",
                 NavbarItem {
                     label: "Home".to_string(),

@@ -7,7 +7,7 @@ use crate::components::RadioStationItem;
 pub fn RadioStationList(
     title: String,
     stations: Vec<RadioStation>,
-    on_click: EventHandler<String>,
+    on_click: EventHandler<RadioStation>,
 ) -> Element {
     rsx! {
         div { class: "radio-station-list",

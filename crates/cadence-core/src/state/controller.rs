@@ -1,4 +1,5 @@
-use crate::{PlayerCommand, model::Song, player::NotificationControl};
+use crate::model::RadioStation;
+use crate::{model::Song, player::NotificationControl, PlayerCommand};
 use dioxus::{
     prelude::{Store, *},
     stores::hashmap::GetWrite,
@@ -25,6 +26,7 @@ pub struct Controller {
     pub shuffle: bool,
     pub random: bool,
     pub position: Duration,
+    pub current_radio: Option<RadioStation>,
     current_idx: usize,
     sender: Option<Sender<PlayerCommand>>,
     current_song_id: Option<String>,
@@ -41,6 +43,7 @@ impl Default for Controller {
             queue_store: Store::new(HashMap::default()),
             sender: None,
             current_song_id: None,
+            current_radio: None,
             random: false,
         }
     }
@@ -104,6 +107,8 @@ impl<Lens> Store<Controller, Lens> {
         let id = song.id.clone();
         self.is_playing().set(true);
         self.current_song_id().set(Some(id.clone()));
+        // Clear radio URL when playing a regular track
+        self.current_radio().set(None);
         self.queue(song);
         let len = self.queue_store().read().len();
         self.current_idx().set(len - 1);
@@ -138,13 +143,15 @@ impl<Lens> Store<Controller, Lens> {
         self.update_notification();
     }
 
-    fn play_radio(&mut self, stream_url: String) {
-        tracing::info!("Playing radio stream: {}", stream_url);
+    fn play_radio(&mut self, radio: RadioStation) {
+        tracing::info!("Playing radio stream: {}", radio.name);
         // Clear the queue when playing radio
         self.clear_queue();
         self.is_playing().set(true);
         self.position().set(Duration::ZERO);
-        self.send(PlayerCommand::PlayRadio(stream_url));
+        // Store the current radio URL for UI display
+        self.current_radio().set(Some(radio.clone()));
+        self.send(PlayerCommand::PlayRadio(radio));
     }
 }
 

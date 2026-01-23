@@ -9,6 +9,7 @@ use cadence_core::hooks::{
     use_all_playlist, use_internet_radio_stations, use_random_songs, use_recently_played,
     use_recently_released,
 };
+use cadence_core::model::RadioStation;
 use cadence_core::state::{ControllerExt, CONTROLLER};
 use dioxus::prelude::*;
 use dioxus_sdk::time::{use_timeout, TimeoutHandle};
@@ -44,9 +45,9 @@ pub fn Home() -> Element {
     };
 
     let on_playlist_clicked = move |_playlist_id: String| tracing::debug!("unimplemented");
-    let on_radio_station_clicked = move |stream_url: String| {
-        info!("Playing radio station with stream URL: {}", stream_url);
-        controller.play_radio(stream_url);
+    let on_radio_station_clicked = move |radio: RadioStation| {
+        info!("Playing radio station with stream URL: {}", radio.stream_url);
+        controller.play_radio(radio);
     };
 
     // If the radio filter is active, show radio stations view
@@ -63,9 +64,13 @@ pub fn Home() -> Element {
 
         return rsx! {
             TopBar { active_filter }
-            VerticalScroller { 
+            VerticalScroller {
                 div { class: "music-content",
-                    RadioStationList { title: "Radio Stations", stations, on_click: on_radio_station_clicked }
+                    RadioStationList {
+                        title: "Radio Stations",
+                        stations,
+                        on_click: on_radio_station_clicked,
+                    }
                 }
             }
         };
@@ -110,26 +115,30 @@ pub fn Home() -> Element {
 
     rsx! {
         TopBar { active_filter }
-        VerticalScroller { 
+        VerticalScroller {
 
             div { class: "music-content",
                 AlbumList {
                     title: "Recently Played",
                     albums: recently_played,
                     on_press: on_album_pressed,
-                    on_click: on_album_clicked
+                    on_click: on_album_clicked,
                 }
 
                 AlbumList {
                     title: "Recently Released",
                     albums: recently_released,
                     on_click: on_album_clicked,
-                    on_press: on_album_pressed
+                    on_press: on_album_pressed,
                 }
 
                 TrackListWithCover { title: "Play now", songs: random_songs }
 
-                PlaylistList { title: "Playlists", playlists, on_card_clicked: on_playlist_clicked }
+                PlaylistList {
+                    title: "Playlists",
+                    playlists,
+                    on_card_clicked: on_playlist_clicked,
+                }
             }
         }
         if let Some(album) = album_selected() {

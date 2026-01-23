@@ -137,7 +137,7 @@ pub fn internal_storage_dir() -> std::path::PathBuf {
     rx.recv().unwrap()
 }
 
-#[cfg(all(target_os = "android", feature = "mobile"))]
+#[cfg(target_os = "android")]
 pub fn cache_dir() -> std::path::PathBuf {
     use jni::JNIEnv;
     use jni::objects::{JObject, JString};

@@ -4,6 +4,7 @@ pub use backend::{AudioBackend, MusicPlayerError};
 mod notification;
 pub use notification::NotificationControl;
 
+use crate::model::RadioStation;
 use std::time::Duration;
 use tracing::info;
 
@@ -15,7 +16,7 @@ pub enum PlayerCommand {
     Seek(Duration),
     Queue(String),
     QueueNow(String),
-    PlayRadio(String),
+    PlayRadio(RadioStation),
 }
 
 #[derive(Debug)]
@@ -47,7 +48,7 @@ impl AudioBackend {
                         PlayerCommand::Pause => self.pause()?,
                         PlayerCommand::Next => self.next()?,
                         PlayerCommand::Seek(duration) => self.seek(duration)?,
-                        PlayerCommand::PlayRadio(url) => self.play_radio(&url).await?,
+                        PlayerCommand::PlayRadio(radio) => self.play_radio(&radio).await?,
                     }
                 }
             }

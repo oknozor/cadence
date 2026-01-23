@@ -9,3 +9,27 @@
     align-items: center;
     justify-content: center;
 }
+
+.radio-url-container {
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 100%;
+
+    .radio-url {
+        display: inline-block;
+    }
+
+    &.rolling .radio-url {
+        animation: roll-text 12s linear infinite;
+        padding-right: 50px; // Gap before text repeats visually
+    }
+}
+
+@keyframes roll-text {
+    0% {
+        transform: translateX(0%);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}

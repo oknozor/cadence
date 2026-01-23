@@ -1,19 +1,20 @@
 use rodio::{Decoder, OutputStream, OutputStreamBuilder, Sink};
 use std::{num::NonZeroUsize, time::Duration};
 use stream_download::{
-    Settings, StreamDownload,
-    source::DecodeError,
-    storage::{
+    source::DecodeError, storage::{
         adaptive::AdaptiveStorageProvider, memory::MemoryStorageProvider, temp::TempStorageProvider,
     },
+    Settings,
+    StreamDownload,
 };
 
 #[cfg(all(target_os = "android", feature = "mobile"))]
 use cadence_storage_android;
 
+use crate::model::RadioStation;
 use crate::{
+    player::{stream_url, AudioBackendStateUpdate},
     PlayerCommand,
-    player::{AudioBackendStateUpdate, stream_url},
 };
 
 pub struct AudioBackend {
@@ -87,12 +88,12 @@ impl AudioBackend {
         self.open_stream(track_id).await
     }
 
-    pub(crate) async fn play_radio(&self, stream_url: &str) -> Result<(), MusicPlayerError> {
-        tracing::info!("Playing radio stream: {stream_url}");
+    pub(crate) async fn play_radio(&self, radio: &RadioStation) -> Result<(), MusicPlayerError> {
+        tracing::info!("Playing radio stream: {}", radio.stream_url);
         self.sink.clear();
         self.sink.play();
 
-        self.open_radio_stream(stream_url).await
+        self.open_radio_stream(&radio.stream_url).await
     }
 
     async fn open_stream(&self, track_id: &str) -> Result<(), MusicPlayerError> {
@@ -113,7 +114,7 @@ impl AudioBackend {
             ),
             Settings::default(),
         )
-        .await
+            .await
         {
             Ok(reader) => reader,
             Err(e) => return Err(MusicPlayerError::Custom(e.decode_error().await)),
@@ -128,7 +129,7 @@ impl AudioBackend {
         } else {
             Decoder::new(reader)
         }
-        .expect("Failed to build audiobackend decoder");
+            .expect("Failed to build audiobackend decoder");
 
         self.sink.append(decoder);
         self.set_callback();
@@ -154,7 +155,7 @@ impl AudioBackend {
             storage_provider,
             settings,
         )
-        .await
+            .await
         {
             Ok(reader) => reader,
             Err(e) => return Err(MusicPlayerError::Custom(e.decode_error().await)),
