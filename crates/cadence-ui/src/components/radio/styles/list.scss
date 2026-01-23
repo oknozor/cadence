@@ -1,0 +1,12 @@
+@import "../../../../assets/mixins.scss";
+@import "../../../../assets/theme.scss";
+
+.radio-station-list {
+    @include column;
+    gap: $gap-medium;
+
+    .radio-station-items {
+        @include column;
+        gap: $gap;
+    }
+}

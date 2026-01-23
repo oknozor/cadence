@@ -20,24 +20,13 @@ pub fn SettingsView() -> Element {
             }
             VerticalScroller {
                 div { class: "settings-content",
-                    SettingsSection {
-                        title: "Account",
-                        SettingsItem {
-                            label: "Server",
-                            value: server_url,
-                        }
-                        SettingsItem {
-                            label: "Username",
-                            value: username,
-                        }
+                    SettingsSection { title: "Account",
+                        SettingsItem { label: "Server", value: server_url }
+                        SettingsItem { label: "Username", value: username }
                     }
 
-                    SettingsSection {
-                        title: "About",
-                        SettingsItem {
-                            label: "Version",
-                            value: VERSION,
-                        }
+                    SettingsSection { title: "About",
+                        SettingsItem { label: "Version", value: VERSION }
                     }
                 }
             }

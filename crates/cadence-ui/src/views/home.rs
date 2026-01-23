@@ -1,11 +1,13 @@
 use std::time::Duration;
 
 use crate::components::{
-    AlbumList, AlbumMenuModal, PlaylistList, TrackListWithCover, VerticalScroller,
+    AlbumList, AlbumMenuModal, PlaylistList, RadioStationList, TrackListWithCover, VerticalScroller,
 };
-use crate::{navigation::topbar::TopBar, views::Route};
+use crate::navigation::topbar::{TopBar, TopBarFilter};
+use crate::views::Route;
 use cadence_core::hooks::{
-    use_all_playlist, use_random_songs, use_recently_played, use_recently_released,
+    use_all_playlist, use_internet_radio_stations, use_random_songs, use_recently_played,
+    use_recently_released,
 };
 use dioxus::prelude::*;
 use dioxus_sdk::time::{TimeoutHandle, use_timeout};
@@ -13,10 +15,12 @@ use dioxus_sdk::time::{TimeoutHandle, use_timeout};
 #[component]
 pub fn Home() -> Element {
     let nav = navigator();
+    let active_filter = use_signal(|| TopBarFilter::All);
     let recently_released = use_recently_released();
     let recently_played = use_recently_played();
     let playlists = use_all_playlist();
     let random_songs = use_random_songs(5);
+    let radio_stations = use_internet_radio_stations();
     let mut album_modal_open = use_signal(|| false);
     let mut album_selected = use_signal(|| None);
     let mut album_modal_timeout_handle: Signal<Option<TimeoutHandle>> = use_signal(|| None);
@@ -37,38 +41,74 @@ pub fn Home() -> Element {
         nav.push(Route::AlbumView { id: album_id });
     };
 
+    let on_playlist_clicked = move |_playlist_id: String| tracing::debug!("unimplemented");
+    let on_radio_station_clicked = move |_station_id: String| tracing::debug!("radio station clicked");
+
+    // If radio filter is active, show radio stations view
+    if active_filter() == TopBarFilter::Radio {
+        let stations = match radio_stations() {
+            Some(Ok(stations)) => stations,
+            _ => {
+                return rsx! {
+                    TopBar { active_filter }
+                    div { class: "music-content", "Loading radio stations..." }
+                };
+            }
+        };
+
+        return rsx! {
+            TopBar { active_filter }
+            VerticalScroller {
+                div { class: "music-content",
+                    RadioStationList {
+                        title: "Radio Stations",
+                        stations,
+                        on_click: on_radio_station_clicked,
+                    }
+                }
+            }
+        };
+    }
+
+    // Normal home view
     let recently_released = match recently_released() {
         Some(Ok(recently_released)) => recently_released,
         _ => {
-            return rsx!();
+            return rsx! {
+                TopBar { active_filter }
+            };
         }
     };
 
     let recently_played = match recently_played() {
         Some(Ok(recently_played)) => recently_played,
         _ => {
-            return rsx!();
+            return rsx! {
+                TopBar { active_filter }
+            };
         }
     };
 
     let playlists = match playlists() {
         Some(Ok(playlists)) => playlists,
         _ => {
-            return rsx!();
+            return rsx! {
+                TopBar { active_filter }
+            };
         }
     };
 
     let random_songs = match random_songs() {
         Some(Ok(songs)) => songs,
         _ => {
-            return rsx!();
+            return rsx! {
+                TopBar { active_filter }
+            };
         }
     };
 
-    let on_playlist_clicked = move |_playlist_id: String| tracing::debug!("unimplemented");
-
     rsx! {
-        TopBar {}
+        TopBar { active_filter }
         VerticalScroller {
 
             div { class: "music-content",

@@ -1,4 +1,4 @@
-use crate::model::{Album, Artist, PlaylistInfo, SearchResult, Song, Starred};
+use crate::model::{Album, Artist, PlaylistInfo, RadioStation, SearchResult, Song, Starred};
 use dioxus::signals::GlobalSignal;
 use opensubsonic_cli::{
     Client,
@@ -6,6 +6,7 @@ use opensubsonic_cli::{
         GetAlbumList2ResponseSubsonicResponse, GetAlbumResponseSubsonicResponse,
         GetArtistInfo2ResponseSubsonicResponse::GetArtistInfo2SuccessResponse,
         GetArtistResponseSubsonicResponse,
+        GetInternetRadioStationsResponseSubsonicResponse,
         GetPlaylistsResponseSubsonicResponse::{self, GetPlaylistsSuccessResponse},
         GetRandomSongsResponseSubsonicResponse, GetStarred2ResponseSubsonicResponse,
         Search3ResponseSubsonicResponse, SubsonicFailureResponse,
@@ -324,6 +325,33 @@ impl SubsonicClient {
         match response {
             opensubsonic_cli::types::SubsonicResponseSubsonicResponse::SuccessResponse(_) => Ok(()),
             opensubsonic_cli::types::SubsonicResponseSubsonicResponse::FailureResponse(
+                subsonic_failure_response,
+            ) => Err(ClientError::Failure(subsonic_failure_response)),
+        }
+    }
+
+    pub async fn get_internet_radio_stations(&self) -> Result<Vec<RadioStation>, ClientError> {
+        let response = self
+            .client
+            .get_internet_radio_stations()
+            .await
+            .map(|response| response.into_inner())
+            .map_err(ClientError::OpenSubSonic)?;
+
+        let response = response
+            .subsonic_response
+            .ok_or_else(|| ClientError::Other("Empty response".to_string()))?;
+
+        match response {
+            GetInternetRadioStationsResponseSubsonicResponse::GetInternetRadioStationsSuccessResponse(response) => {
+                Ok(response
+                    .internet_radio_stations
+                    .internet_radio_station
+                    .into_iter()
+                    .map(RadioStation::from)
+                    .collect())
+            }
+            GetInternetRadioStationsResponseSubsonicResponse::SubsonicFailureResponse(
                 subsonic_failure_response,
             ) => Err(ClientError::Failure(subsonic_failure_response)),
         }

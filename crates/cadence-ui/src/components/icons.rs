@@ -54,3 +54,6 @@ pub use share::ShareIcon;
 
 mod shuffle;
 pub use shuffle::ShuffleIcon;
+
+mod radio;
+pub use radio::RadioIcon;

@@ -19,5 +19,8 @@ pub use player::*;
 mod playlist;
 pub use playlist::*;
 
+mod radio;
+pub use radio::*;
+
 mod search;
 pub use search::*;

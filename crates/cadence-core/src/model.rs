@@ -1,6 +1,7 @@
 mod album;
 mod artist;
 mod playlist;
+mod radio;
 mod search;
 mod song;
 mod starred;
@@ -8,6 +9,7 @@ mod starred;
 pub use album::Album;
 pub use artist::Artist;
 pub use playlist::PlaylistInfo;
+pub use radio::RadioStation;
 pub use search::SearchResult;
 pub use song::Song;
 pub use starred::Starred;

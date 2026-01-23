@@ -2,7 +2,7 @@ use dioxus::{CapturedError, prelude::*};
 use dioxus_sdk::storage::{get_from_storage, use_storage};
 
 use crate::{
-    model::{Album, PlaylistInfo, SearchResult, Song},
+    model::{Album, PlaylistInfo, RadioStation, SearchResult, Song},
     services::subsonic_client::{AlbumListType, SUBSONIC_CLIENT, Star, SubsonicClient},
     state::SubSonicLogin,
 };
@@ -126,6 +126,17 @@ pub fn use_star_artist() -> Action<(String,), ()> {
         SUBSONIC_CLIENT()
             .unwrap()
             .star(Star::Album(id))
+            .await
+            .map_err(|err| CapturedError::from_display(format!("{err}")))
+    })
+}
+
+pub fn use_internet_radio_stations() -> Resource<Result<Vec<RadioStation>, CapturedError>> {
+    use_resource(move || async move {
+        SUBSONIC_CLIENT()
+            .clone()
+            .unwrap()
+            .get_internet_radio_stations()
             .await
             .map_err(|err| CapturedError::from_display(format!("{err}")))
     })
