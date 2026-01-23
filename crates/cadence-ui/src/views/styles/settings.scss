@@ -1,0 +1,72 @@
+@import "../../../assets/mixins.scss";
+@import "../../../assets/theme.scss";
+
+.settings-view {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: $gap-medium;
+    @include max-h-100pct;
+}
+
+.settings-header {
+    @include row;
+    align-items: center;
+    gap: $gap-medium;
+    padding: $gap-medium 0;
+    padding-left: 40px;
+
+    h1 {
+        margin: 0;
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: $secondary-color;
+    }
+}
+
+.settings-content {
+    @include column;
+    gap: $gap-big;
+    padding-bottom: $gap-huge;
+}
+
+.settings-section {
+    @include column;
+    gap: $gap;
+}
+
+.settings-section-title {
+    margin: 0;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: $secondary-color-5;
+    letter-spacing: 0.05em;
+}
+
+.settings-section-content {
+    @include column;
+    background: $primary-color-4;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.settings-item {
+    @include row;
+    justify-content: space-between;
+    align-items: center;
+    padding: $gap-medium;
+    border-bottom: 1px solid $primary-color-5;
+
+    &:last-child {
+        border-bottom: none;
+    }
+}
+
+.settings-item-label {
+    @include text-primary;
+}
+
+.settings-item-value {
+    @include text-secondary;
+}

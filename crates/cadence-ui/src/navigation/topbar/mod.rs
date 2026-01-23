@@ -1,8 +1,10 @@
 use crate::components::{CloseIcon, ExpandableButton, GearIcon, MenuButton};
+use crate::views::Route;
 use dioxus::prelude::*;
 
 #[component]
 pub fn TopBar() -> Element {
+    let nav = navigator();
     let mut all_active = use_signal(|| true);
     let mut music_active = use_signal(|| false);
     let mut music_followed_active = use_signal(|| false);
@@ -21,7 +23,11 @@ pub fn TopBar() -> Element {
 
     rsx! {
         div { class: "topbar",
-            div { class: "settings-icons",
+            button {
+                class: "settings-icons",
+                onclick: move |_| {
+                    nav.push(Route::SettingsView {});
+                },
                 GearIcon { filled: false }
             }
             div { class: "topbar-menu",

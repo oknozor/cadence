@@ -6,6 +6,7 @@ use home::Home;
 use library::LibraryView;
 use now_playing::NowPlayingView;
 use search::SearchView;
+use settings::SettingsView;
 
 mod album;
 mod artist;
@@ -13,6 +14,7 @@ mod home;
 mod library;
 mod now_playing;
 mod search;
+mod settings;
 
 #[derive(Debug, Clone, Routable, PartialEq, Eq)]
 #[rustfmt::skip]
@@ -35,6 +37,9 @@ pub enum Route {
 
     #[route("/artist/:id")]
     ArtistView { id: String },
+
+    #[route("/settings")]
+    SettingsView { },
 }
 
 #[component]
