@@ -1,3 +1,4 @@
+pub mod lidarr_client;
 #[cfg(target_os = "android")]
 pub mod shazam_bridge;
 pub mod shazam_client;

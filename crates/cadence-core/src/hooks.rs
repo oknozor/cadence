@@ -4,7 +4,7 @@ use dioxus_sdk::storage::{get_from_storage, use_storage};
 use crate::{
     model::{Album, PlaylistInfo, RadioStation, SearchResult, ShazamMusic, Song},
     services::subsonic_client::{AlbumListType, SUBSONIC_CLIENT, Star, SubsonicClient},
-    state::SubSonicLogin,
+    state::{LidarrSettings, SubSonicLogin},
 };
 
 #[cfg(target_os = "android")]
@@ -50,6 +50,21 @@ pub fn use_saved_credentials() -> Signal<Option<SubSonicLogin>> {
     );
 
     use_storage::<LocalStorage, _>("subsonic_credentials".to_string(), || saved)
+}
+
+pub fn use_lidarr_settings() -> Signal<LidarrSettings> {
+    #[cfg(feature = "mobile")]
+    use cadence_storage_android::LocalStorage;
+
+    #[cfg(not(feature = "mobile"))]
+    use dioxus_sdk::storage::LocalStorage;
+
+    let saved = get_from_storage::<LocalStorage, LidarrSettings>(
+        "lidarr_settings".to_string(),
+        LidarrSettings::default,
+    );
+
+    use_storage::<LocalStorage, _>("lidarr_settings".to_string(), || saved)
 }
 
 pub fn use_album(id: Signal<String>) -> Resource<Album> {
@@ -219,5 +234,51 @@ pub fn use_shazam_identify() -> Action<(i32,), ShazamMusic> {
                 }
             }
         }
+    })
+}
+
+pub fn use_lidarr_queue_album() -> Action<(String, String), String> {
+    use crate::services::lidarr_client::LidarrClient;
+
+    use_action(move |artist: String, album: String| async move {
+        // Get lidarr settings from storage
+        #[cfg(feature = "mobile")]
+        use cadence_storage_android::LocalStorage;
+        #[cfg(not(feature = "mobile"))]
+        use dioxus_sdk::storage::LocalStorage;
+
+        let settings = get_from_storage::<LocalStorage, LidarrSettings>(
+            "lidarr_settings".to_string(),
+            LidarrSettings::default,
+        );
+
+        if !settings.is_configured() {
+            return Err(CapturedError::from_display("Lidarr not configured. Please set URL and API key in Settings."));
+        }
+
+        let client = LidarrClient::new(&settings);
+
+        // Search for the album
+        tracing::info!("[Lidarr Hook] Searching for album: {} - {}", artist, album);
+        let albums = client
+            .search_album(&artist, &album)
+            .await
+            .map_err(|e| CapturedError::from_display(format!("{e}")))?;
+
+        let target_album = albums.into_iter().next()
+            .ok_or_else(|| CapturedError::from_display(format!("Album not found: {} - {}", artist, album)))?;
+
+        tracing::info!("[Lidarr Hook] Found album: {:?}", target_album.title);
+
+        // Add album to Lidarr (this also triggers a search)
+        let added = client
+            .add_album(&target_album)
+            .await
+            .map_err(|e| CapturedError::from_display(format!("{e}")))?;
+
+        let album_title = added.title.unwrap_or_else(|| "Unknown".to_string());
+        tracing::info!("[Lidarr Hook] Album queued: {}", album_title);
+
+        Ok(format!("Queued: {}", album_title))
     })
 }
