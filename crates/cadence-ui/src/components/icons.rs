@@ -57,3 +57,6 @@ pub use shuffle::ShuffleIcon;
 
 mod radio;
 pub use radio::RadioIcon;
+
+mod audio_identification;
+pub use audio_identification::AudioIdentificationIcon;
