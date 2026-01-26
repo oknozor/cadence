@@ -350,6 +350,7 @@ dependencies = [
  "reqwest",
  "rodio",
  "serde",
+ "serde_json",
  "shazam-fingerprint",
  "stream-download",
  "thiserror 1.0.69",

@@ -54,9 +54,7 @@ impl ShazamClient {
         sample_ms: i32,
     ) -> Result<ShazamMusic, ShazamError> {
         // Generate random seed for UUIDs
-        let seed: String = (0..16)
-            .map(|_| rand::random::<char>())
-            .collect();
+        let seed: String = (0..16).map(|_| rand::random::<char>()).collect();
 
         // Generate namespace-based UUIDs (SHA1)
         let uuid_dns = Uuid::new_v5(&Uuid::NAMESPACE_DNS, seed.as_bytes()).to_string();
@@ -114,13 +112,22 @@ impl ShazamClient {
             .await
             .map_err(ShazamError::Http)?;
 
-        let shazam_response: ShazamResponse =
-            response.json().await.map_err(ShazamError::Http)?;
+        // Get raw response text for debugging
+        let raw_response = response.text().await.map_err(ShazamError::Http)?;
+
+        // Log in chunks to avoid Android logcat truncation (limit ~4000 chars)
+        tracing::info!("[Shazam] Raw API response length: {} bytes", raw_response.len());
+        for (i, chunk) in raw_response.as_bytes().chunks(3000).enumerate() {
+            if let Ok(s) = std::str::from_utf8(chunk) {
+                tracing::info!("[Shazam] Response part {}: {}", i + 1, s);
+            }
+        }
+
+        let shazam_response: ShazamResponse = serde_json::from_str(&raw_response)
+            .map_err(|e| ShazamError::InvalidResponse(format!("JSON parse error: {}", e)))?;
 
         // Extract track from response
-        let track = shazam_response
-            .track
-            .ok_or(ShazamError::NoMatch)?;
+        let track = shazam_response.track.ok_or(ShazamError::NoMatch)?;
 
         Ok(ShazamMusic::from(track))
     }
@@ -155,4 +162,3 @@ const USER_AGENTS: &[&str] = &[
     "Dalvik/2.1.0 (Linux; U; Android 6.0.1; D6603 Build/23.5.A.0.570)",
     "Dalvik/2.1.0 (Linux; U; Android 5.1.1; SM-J700H Build/LMY48B)",
 ];
-

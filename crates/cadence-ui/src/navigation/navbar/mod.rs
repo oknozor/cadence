@@ -71,14 +71,17 @@ pub fn Navbar() -> Element {
                     },
                     PlusIcon { size: 32, filled: plus_active }
                 }
-                NavbarItem {
-                    label: "Listen".to_string(),
-                    active: listen_active,
-                    onclick: move || {
-                        nav.replace(Route::ShazamView {});
-                        set_active(&mut listen_active);
-                    },
-                    AudioIdentificationIcon { size: 32, filled: listen_active }
+                if cfg!(target_os = "android") {
+                    NavbarItem {
+                        label: "Listen".to_string(),
+                        active: listen_active,
+                        onclick: move || {
+                            #[cfg(target_os = "android")]
+                            nav.replace(Route::ShazamView {});
+                            set_active(&mut listen_active);
+                        },
+                        AudioIdentificationIcon { size: 32, filled: listen_active }
+                    }
                 }
             }
         }

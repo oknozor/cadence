@@ -43,7 +43,6 @@ pub fn ShazamView() -> Element {
         }
         None if is_listening() => rsx! {
             div { class: "shazam-listening",
-                div { class: "shazam-pulse" }
                 p { "Listening..." }
             }
         },
@@ -55,14 +54,34 @@ pub fn ShazamView() -> Element {
     };
 
     rsx! {
-        div { class: "shazam-view",
-            {content}
-            button {
-                class: "shazam-button",
-                class: if is_listening() { "listening" },
-                disabled: is_listening(),
-                onclick: start_listening,
-                div { class: "shazam-icon" }
+        div {
+            class: "shazam-view",
+            class: if is_listening() { "shazam-view--listening" },
+            // Sinewave background overlay when listening
+            if is_listening() {
+                div { class: "shazam-sinewave-container",
+                    div { class: "shazam-sinewave-fill" }
+                    svg {
+                        class: "shazam-sinewave",
+                        view_box: "0 0 200 20",
+                        preserve_aspect_ratio: "none",
+                        // Two identical wave cycles for seamless looping
+                        path {
+                            class: "shazam-sinewave-path",
+                            d: "M0,10 Q25,0 50,10 T100,10 T150,10 T200,10 L200,20 L0,20 Z"
+                        }
+                    }
+                }
+            }
+            div { class: "shazam-content",
+                {content}
+                button {
+                    class: "shazam-button",
+                    class: if is_listening() { "listening" },
+                    disabled: is_listening(),
+                    onclick: start_listening,
+                    div { class: "shazam-icon" }
+                }
             }
         }
     }
