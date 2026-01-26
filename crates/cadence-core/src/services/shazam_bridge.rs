@@ -3,11 +3,12 @@
 //! This module handles communication between Rust and Kotlin for audio recording.
 //! Audio fingerprinting is now done entirely in Rust using the shazam-fingerprint crate.
 
+use std::sync::Mutex;
+
 use flume::Sender;
 use jni::JNIEnv;
 use jni::objects::{JClass, JObject, JShortArray, JString, JValue};
 use jni::sys::jint;
-use once_cell::sync::OnceCell;
 
 /// Result from Shazam signature generation
 #[derive(Debug, Clone)]
@@ -28,21 +29,28 @@ pub enum ShazamBridgeMessage {
 }
 
 /// Global sender for Shazam messages from Kotlin to Rust
-pub static SHAZAM_MSG_TX: OnceCell<Sender<ShazamBridgeMessage>> = OnceCell::new();
+/// Uses Mutex instead of OnceCell so it can be replaced on each identification
+static SHAZAM_MSG_TX: Mutex<Option<Sender<ShazamBridgeMessage>>> = Mutex::new(None);
 
 /// Initialize the Shazam bridge with a message sender
 pub fn init(sender: Sender<ShazamBridgeMessage>) {
-    SHAZAM_MSG_TX.get_or_init(|| sender);
+    if let Ok(mut guard) = SHAZAM_MSG_TX.lock() {
+        *guard = Some(sender);
+    }
 }
 
 /// Send a Shazam message from JNI callback to Rust
 fn send_shazam_message(msg: ShazamBridgeMessage) {
-    if let Some(tx) = SHAZAM_MSG_TX.get() {
-        if let Err(e) = tx.send(msg) {
-            log::error!("Failed to send Shazam message: {}", e);
+    if let Ok(guard) = SHAZAM_MSG_TX.lock() {
+        if let Some(tx) = guard.as_ref() {
+            if let Err(e) = tx.send(msg) {
+                log::error!("Failed to send Shazam message: {}", e);
+            }
+        } else {
+            log::warn!("Shazam bridge not initialized");
         }
     } else {
-        log::warn!("Shazam bridge not initialized");
+        log::error!("Failed to lock Shazam message sender");
     }
 }
 
