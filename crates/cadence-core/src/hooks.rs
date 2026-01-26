@@ -2,9 +2,15 @@ use dioxus::{CapturedError, prelude::*};
 use dioxus_sdk::storage::{get_from_storage, use_storage};
 
 use crate::{
-    model::{Album, PlaylistInfo, RadioStation, SearchResult, Song},
+    model::{Album, PlaylistInfo, RadioStation, SearchResult, ShazamMusic, Song},
     services::subsonic_client::{AlbumListType, SUBSONIC_CLIENT, Star, SubsonicClient},
     state::SubSonicLogin,
+};
+
+#[cfg(target_os = "android")]
+use crate::services::{
+    shazam_bridge::{self, ShazamBridgeMessage},
+    shazam_client::ShazamClient,
 };
 
 mod context;
@@ -149,4 +155,69 @@ async fn fetch_albums(album_type: AlbumListType) -> dioxus::Result<Vec<Album>, C
         .await
         .map_err(|err| CapturedError::from_display(format!("{err}")))?;
     Ok(response)
+}
+
+
+
+/// State for Shazam identification process
+#[derive(Debug, Clone, PartialEq)]
+pub enum ShazamState {
+    Idle,
+    Recording,
+    Identifying,
+    Success(ShazamMusic),
+    Error(String),
+    NoMatch,
+}
+
+#[cfg(target_os = "android")]
+pub fn use_shazam_identify() -> Action<(i32,), ShazamMusic> {
+    use_action(move |duration_seconds: i32| async move {
+        tracing::info!("[Shazam Hook] use_shazam_identify action called with duration={}", duration_seconds);
+
+        // Initialize channel
+        let (tx, rx) = flume::unbounded();
+        shazam_bridge::init(tx);
+        tracing::info!("[Shazam Hook] Bridge initialized");
+
+        // Start recording
+        tracing::info!("[Shazam Hook] Calling start_identification...");
+        shazam_bridge::start_identification(duration_seconds)
+            .map_err(|e| {
+                tracing::error!("[Shazam Hook] start_identification failed: {e}");
+                CapturedError::from_display(format!("Failed to start: {e}"))
+            })?;
+        tracing::info!("[Shazam Hook] start_identification returned OK, waiting for messages...");
+
+        // Wait for signature
+        loop {
+            tracing::info!("[Shazam Hook] Waiting for message from bridge...");
+            match rx.recv_async().await {
+                Ok(ShazamBridgeMessage::SignatureReady { signature, sample_ms }) => {
+                    tracing::info!("[Shazam Hook] Received SignatureReady ({} ms, {} bytes)", sample_ms, signature.len());
+                    let client = ShazamClient::new();
+                    tracing::info!("[Shazam Hook] Calling Shazam API...");
+                    return client
+                        .identify(&signature, sample_ms)
+                        .await
+                        .map_err(|e| {
+                            tracing::error!("[Shazam Hook] Shazam API error: {e:?}");
+                            CapturedError::from_display(format!("{e:?}"))
+                        });
+                }
+                Ok(ShazamBridgeMessage::Error(e)) => {
+                    tracing::error!("[Shazam Hook] Received Error: {e}");
+                    return Err(CapturedError::from_display(e));
+                }
+                Ok(msg) => {
+                    tracing::info!("[Shazam Hook] Received message: {:?}", msg);
+                    continue;
+                }
+                Err(e) => {
+                    tracing::error!("[Shazam Hook] Channel receive error: {e}");
+                    return Err(CapturedError::from_display(format!("Channel error: {e}")));
+                }
+            }
+        }
+    })
 }

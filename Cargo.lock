@@ -335,6 +335,7 @@ dependencies = [
 name = "cadence-core"
 version = "0.1.0"
 dependencies = [
+ "base64",
  "cadence-storage-android",
  "dioxus",
  "dioxus-sdk",
@@ -345,13 +346,17 @@ dependencies = [
  "ndk-context",
  "once_cell",
  "opensubsonic-cli",
+ "rand 0.8.5",
+ "reqwest",
  "rodio",
  "serde",
+ "shazam-fingerprint",
  "stream-download",
  "thiserror 1.0.69",
  "tokio",
  "tracing",
  "url",
+ "uuid",
  "wasmtimer",
  "web-time",
 ]
@@ -463,6 +468,16 @@ checksum = "f1f927b07c74ba84c7e5fe4db2baeb3e996ab2688992e39ac68ce3220a677c7e"
 dependencies = [
  "base64",
  "encoding_rs",
+]
+
+[[package]]
+name = "chfft"
+version = "0.3.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "103be009e532bf7f2cdbf24dc76953f55c83f03bac8a8ced0d2a21b639907dc0"
+dependencies = [
+ "num-complex",
+ "num-traits",
 ]
 
 [[package]]
@@ -3311,6 +3326,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "num-complex"
+version = "0.4.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "73f88a1307638156682bada9d7604135552957b7818057dcef22705b4d509495"
+dependencies = [
+ "num-traits",
+]
+
+[[package]]
 name = "num-conv"
 version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4815,6 +4839,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "sha1_smol"
+version = "1.0.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bbfa15b3dddfee50a0fff136974b3e1bde555604ba463834a7eb7deb6417705d"
+
+[[package]]
 name = "sha2"
 version = "0.10.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4832,6 +4862,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f40ca3c46823713e0d4209592e8d6e826aa57e928f09752619fc696c499637f6"
 dependencies = [
  "lazy_static",
+]
+
+[[package]]
+name = "shazam-fingerprint"
+version = "0.1.0"
+dependencies = [
+ "base64",
+ "byteorder",
+ "chfft",
+ "crc32fast",
 ]
 
 [[package]]
@@ -5867,6 +5907,7 @@ checksum = "e2e054861b4bd027cd373e18e8d8d8e6548085000e41290d95ce0c373a654b4a"
 dependencies = [
  "js-sys",
  "serde_core",
+ "sha1_smol",
  "wasm-bindgen",
 ]
 

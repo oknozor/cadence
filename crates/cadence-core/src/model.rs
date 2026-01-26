@@ -3,6 +3,7 @@ mod artist;
 mod playlist;
 mod radio;
 mod search;
+mod shazam;
 mod song;
 mod starred;
 
@@ -11,6 +12,9 @@ pub use artist::Artist;
 pub use playlist::PlaylistInfo;
 pub use radio::RadioStation;
 pub use search::SearchResult;
+pub use shazam::{
+    Geolocation, ShazamMusic, ShazamRequestBody, ShazamResponse, ShazamSignature, Track,
+};
 pub use song::Song;
 pub use starred::Starred;
 

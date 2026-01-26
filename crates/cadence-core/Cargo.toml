@@ -14,12 +14,17 @@ url.workspace = true
 tracing.workspace = true
 once_cell.workspace = true
 flume.workspace = true
+reqwest.workspace = true
+uuid.workspace = true
+rand.workspace = true
+base64.workspace = true
 
 [target.'cfg(target_os = "android")'.dependencies]
 jni.workspace = true
 ndk-context.workspace = true
 once_cell.workspace = true
 log.workspace = true
+shazam-fingerprint.workspace = true
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 tokio = { version = "1", features = ["rt", "macros", "time"] }

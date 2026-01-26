@@ -7,6 +7,8 @@ use library::LibraryView;
 use now_playing::NowPlayingView;
 use search::SearchView;
 use settings::SettingsView;
+#[cfg(target_os = "android")]
+use shazam::ShazamView;
 
 mod album;
 mod artist;
@@ -15,6 +17,8 @@ mod library;
 mod now_playing;
 mod search;
 mod settings;
+#[cfg(target_os = "android")]
+mod shazam;
 
 #[derive(Debug, Clone, Routable, PartialEq, Eq)]
 #[rustfmt::skip]
@@ -40,6 +44,10 @@ pub enum Route {
 
     #[route("/settings")]
     SettingsView { },
+
+    #[cfg(target_os = "android")]
+    #[route("/shazam")]
+    ShazamView { },
 }
 
 #[component]

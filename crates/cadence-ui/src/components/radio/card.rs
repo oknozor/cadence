@@ -8,8 +8,6 @@ use crate::components::{AnimatedBars, ItemRow, RadioIcon};
 
 #[component]
 pub fn RadioStationItem(station: RadioStation, on_click: EventHandler<RadioStation>) -> Element {
-    let stream_url = station.stream_url.clone();
-
     let controller = CONTROLLER.resolve();
     let name = station.name.clone();
     let is_active = use_memo(move || {
@@ -32,12 +30,7 @@ pub fn RadioStationItem(station: RadioStation, on_click: EventHandler<RadioStati
     let callback = move |_| on_click.call(station.clone());
 
     rsx! {
-        ItemRow {
-            thumbnail,
-            content,
-            action: None,
-            callback,
-        }
+        ItemRow { thumbnail, content, action: None, callback }
     }
 }
 

@@ -8,6 +8,7 @@ use std::time::Duration;
 pub fn Navbar() -> Element {
     let mut search_active = use_signal(|| false);
     let mut plus_active = use_signal(|| false);
+    let mut listen_active = use_signal(|| false);
     let mut home_active = use_signal(|| false);
     let mut library_active = use_signal(|| false);
 
@@ -16,6 +17,7 @@ pub fn Navbar() -> Element {
         plus_active.set(false);
         home_active.set(false);
         library_active.set(false);
+        listen_active.set(false);
         active_signal.set(true);
     };
 
@@ -67,6 +69,15 @@ pub fn Navbar() -> Element {
                     },
                     PlusIcon { size: 32, filled: plus_active }
                 }
+                NavbarItem {
+                    label: "Listen".to_string(),
+                    active: listen_active,
+                    onclick: move || {
+                        nav.replace(Route::ShazamView {});
+                        set_active(&mut listen_active);
+                    },
+                    PlusIcon { size: 32, filled: listen_active }
+                }
             }
         }
     }
@@ -92,9 +103,7 @@ pub fn NavbarItem(
                 });
                 onclick.call(())
             },
-            div { class: if animate() { "navbar-item-icon active" } else { "navbar-item-icon" },
-                {children}
-            }
+            div { class: if animate() { "navbar-item-icon active" } else { "navbar-item-icon" }, {children} }
             div { class: "navbar-item-label", "{label}" }
         }
     }
