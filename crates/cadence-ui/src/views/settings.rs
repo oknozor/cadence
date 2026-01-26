@@ -1,5 +1,5 @@
 use crate::components::{BackButton, VerticalScroller};
-use cadence_core::hooks::{use_lidarr_settings, use_saved_credentials};
+use cadence_core::hooks::{use_lidarr_settings, use_saved_credentials, use_ticketmaster_settings};
 use dioxus::prelude::*;
 
 const VERSION: &str = env!("CARGO_PKG_VERSION");
@@ -8,6 +8,7 @@ const VERSION: &str = env!("CARGO_PKG_VERSION");
 pub fn SettingsView() -> Element {
     let credentials = use_saved_credentials();
     let mut lidarr_settings = use_lidarr_settings();
+    let mut ticketmaster_settings = use_ticketmaster_settings();
 
     let (server_url, username) = credentials()
         .map(|c| (c.server_url, c.username))
@@ -16,10 +17,25 @@ pub fn SettingsView() -> Element {
     let lidarr_url = use_signal(|| lidarr_settings().url.clone());
     let lidarr_api_key = use_signal(|| lidarr_settings().api_key.clone());
 
+    let ticketmaster_api_key = use_signal(|| ticketmaster_settings().api_key.clone());
+    let ticketmaster_cities = use_signal(|| ticketmaster_settings().preferred_cities.join(", "));
+    let ticketmaster_radius = use_signal(|| ticketmaster_settings().radius_km.to_string());
+
     let save_lidarr = move |_| {
         let mut settings = lidarr_settings.write();
         settings.url = lidarr_url().clone();
         settings.api_key = lidarr_api_key().clone();
+    };
+
+    let save_ticketmaster = move |_| {
+        let mut settings = ticketmaster_settings.write();
+        settings.api_key = ticketmaster_api_key().clone();
+        settings.preferred_cities = ticketmaster_cities()
+            .split(',')
+            .map(|s| s.trim().to_string())
+            .filter(|s| !s.is_empty())
+            .collect();
+        settings.radius_km = ticketmaster_radius().parse().unwrap_or(50);
     };
 
     rsx! {
@@ -50,6 +66,34 @@ pub fn SettingsView() -> Element {
                             button {
                                 class: "settings-save-button",
                                 onclick: save_lidarr,
+                                "Save"
+                            }
+                        }
+                    }
+
+                    SettingsSection { title: "Ticketmaster",
+                        SettingsInput {
+                            label: "API Key",
+                            value: ticketmaster_api_key,
+                            placeholder: "Your Ticketmaster API key",
+                        }
+                        SettingsInput {
+                            label: "Cities",
+                            value: ticketmaster_cities,
+                            placeholder: "Paris, London, Berlin",
+                        }
+                        SettingsInput {
+                            label: "Radius (km)",
+                            value: ticketmaster_radius,
+                            placeholder: "50",
+                        }
+                        div { class: "settings-item settings-hint",
+                            "Enter cities separated by commas. Radius defines the search area around each city."
+                        }
+                        div { class: "settings-item",
+                            button {
+                                class: "settings-save-button",
+                                onclick: save_ticketmaster,
                                 "Save"
                             }
                         }

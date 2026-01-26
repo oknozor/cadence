@@ -3,8 +3,11 @@ use dioxus_sdk::storage::{get_from_storage, use_storage};
 
 use crate::{
     model::{Album, PlaylistInfo, RadioStation, SearchResult, ShazamMusic, Song},
-    services::subsonic_client::{AlbumListType, SUBSONIC_CLIENT, Star, SubsonicClient},
-    state::{LidarrSettings, SubSonicLogin},
+    services::{
+        subsonic_client::{AlbumListType, SUBSONIC_CLIENT, Star, SubsonicClient},
+        ticketmaster_client::Concert,
+    },
+    state::{LidarrSettings, SubSonicLogin, TicketmasterSettings},
 };
 
 #[cfg(target_os = "android")]
@@ -172,8 +175,6 @@ async fn fetch_albums(album_type: AlbumListType) -> dioxus::Result<Vec<Album>, C
     Ok(response)
 }
 
-
-
 /// State for Shazam identification process
 #[derive(Debug, Clone, PartialEq)]
 pub enum ShazamState {
@@ -188,7 +189,10 @@ pub enum ShazamState {
 #[cfg(target_os = "android")]
 pub fn use_shazam_identify() -> Action<(i32,), ShazamMusic> {
     use_action(move |duration_seconds: i32| async move {
-        tracing::info!("[Shazam Hook] use_shazam_identify action called with duration={}", duration_seconds);
+        tracing::info!(
+            "[Shazam Hook] use_shazam_identify action called with duration={}",
+            duration_seconds
+        );
 
         // Initialize channel
         let (tx, rx) = flume::unbounded();
@@ -197,28 +201,31 @@ pub fn use_shazam_identify() -> Action<(i32,), ShazamMusic> {
 
         // Start recording
         tracing::info!("[Shazam Hook] Calling start_identification...");
-        shazam_bridge::start_identification(duration_seconds)
-            .map_err(|e| {
-                tracing::error!("[Shazam Hook] start_identification failed: {e}");
-                CapturedError::from_display(format!("Failed to start: {e}"))
-            })?;
+        shazam_bridge::start_identification(duration_seconds).map_err(|e| {
+            tracing::error!("[Shazam Hook] start_identification failed: {e}");
+            CapturedError::from_display(format!("Failed to start: {e}"))
+        })?;
         tracing::info!("[Shazam Hook] start_identification returned OK, waiting for messages...");
 
         // Wait for signature
         loop {
             tracing::info!("[Shazam Hook] Waiting for message from bridge...");
             match rx.recv_async().await {
-                Ok(ShazamBridgeMessage::SignatureReady { signature, sample_ms }) => {
-                    tracing::info!("[Shazam Hook] Received SignatureReady ({} ms, {} bytes)", sample_ms, signature.len());
+                Ok(ShazamBridgeMessage::SignatureReady {
+                    signature,
+                    sample_ms,
+                }) => {
+                    tracing::info!(
+                        "[Shazam Hook] Received SignatureReady ({} ms, {} bytes)",
+                        sample_ms,
+                        signature.len()
+                    );
                     let client = ShazamClient::new();
                     tracing::info!("[Shazam Hook] Calling Shazam API...");
-                    return client
-                        .identify(&signature, sample_ms)
-                        .await
-                        .map_err(|e| {
-                            tracing::error!("[Shazam Hook] Shazam API error: {e:?}");
-                            CapturedError::from_display(format!("{e:?}"))
-                        });
+                    return client.identify(&signature, sample_ms).await.map_err(|e| {
+                        tracing::error!("[Shazam Hook] Shazam API error: {e:?}");
+                        CapturedError::from_display(format!("{e:?}"))
+                    });
                 }
                 Ok(ShazamBridgeMessage::Error(e)) => {
                     tracing::error!("[Shazam Hook] Received Error: {e}");
@@ -253,7 +260,9 @@ pub fn use_lidarr_queue_album() -> Action<(String, String), String> {
         );
 
         if !settings.is_configured() {
-            return Err(CapturedError::from_display("Lidarr not configured. Please set URL and API key in Settings."));
+            return Err(CapturedError::from_display(
+                "Lidarr not configured. Please set URL and API key in Settings.",
+            ));
         }
 
         let client = LidarrClient::new(&settings);
@@ -265,8 +274,9 @@ pub fn use_lidarr_queue_album() -> Action<(String, String), String> {
             .await
             .map_err(|e| CapturedError::from_display(format!("{e}")))?;
 
-        let target_album = albums.into_iter().next()
-            .ok_or_else(|| CapturedError::from_display(format!("Album not found: {} - {}", artist, album)))?;
+        let target_album = albums.into_iter().next().ok_or_else(|| {
+            CapturedError::from_display(format!("Album not found: {} - {}", artist, album))
+        })?;
 
         tracing::info!("[Lidarr Hook] Found album: {:?}", target_album.title);
 
@@ -280,5 +290,96 @@ pub fn use_lidarr_queue_album() -> Action<(String, String), String> {
         tracing::info!("[Lidarr Hook] Album queued: {}", album_title);
 
         Ok(format!("Queued: {}", album_title))
+    })
+}
+
+pub fn use_ticketmaster_settings() -> Signal<TicketmasterSettings> {
+    #[cfg(feature = "mobile")]
+    use cadence_storage_android::LocalStorage;
+
+    #[cfg(not(feature = "mobile"))]
+    use dioxus_sdk::storage::LocalStorage;
+
+    let saved = get_from_storage::<LocalStorage, TicketmasterSettings>(
+        "ticketmaster_settings".to_string(),
+        TicketmasterSettings::default,
+    );
+
+    use_storage::<LocalStorage, _>("ticketmaster_settings".to_string(), || saved)
+}
+
+pub fn use_artist_concerts(
+    artist_name: Signal<String>,
+) -> Resource<Result<Vec<Concert>, CapturedError>> {
+    use crate::services::ticketmaster_client::TicketmasterClient;
+
+    tracing::info!("[Ticketmaster] use_artist_concerts hook called");
+
+    use_resource(move || {
+        let artist = artist_name();
+        tracing::info!("[Ticketmaster] Resource triggered for artist: '{}'", artist);
+        async move {
+            tracing::info!("[Ticketmaster] Async block started for artist: '{}'", artist);
+
+            if artist.is_empty() {
+                tracing::info!("[Ticketmaster] Artist name is empty, returning empty list");
+                return Ok(vec![]);
+            }
+
+            // Get settings from storage
+            #[cfg(feature = "mobile")]
+            use cadence_storage_android::LocalStorage;
+            #[cfg(not(feature = "mobile"))]
+            use dioxus_sdk::storage::LocalStorage;
+
+            let settings = get_from_storage::<LocalStorage, TicketmasterSettings>(
+                "ticketmaster_settings".to_string(),
+                TicketmasterSettings::default,
+            );
+
+            tracing::info!(
+                "[Ticketmaster] Settings loaded - api_key: '{}', cities: {:?}, radius: {}km, configured: {}",
+                settings.api_key,
+                settings.preferred_cities,
+                settings.radius_km,
+                settings.is_configured()
+            );
+
+            if !settings.is_configured() {
+                tracing::info!("[Ticketmaster] Not configured, skipping concert search");
+                return Ok(vec![]);
+            }
+
+            let client = TicketmasterClient::new(&settings.api_key);
+            let mut all_concerts = Vec::new();
+            let radius = if settings.radius_km > 0 {
+                Some(settings.radius_km)
+            } else {
+                None
+            };
+
+            // Search for events in each preferred city
+            for city in &settings.preferred_cities {
+                tracing::info!("[Ticketmaster] Searching for '{}' in '{}' (radius: {:?} km)", artist, city, radius);
+                match client.search_events(&artist, city, radius).await {
+                    Ok(concerts) => {
+                        tracing::info!("[Ticketmaster] Found {} concerts in {}", concerts.len(), city);
+                        all_concerts.extend(concerts);
+                    }
+                    Err(e) => {
+                        tracing::warn!("[Ticketmaster] Error searching {}: {}", city, e);
+                    }
+                }
+            }
+
+            // Sort by date
+            all_concerts.sort_by(|a, b| a.date.cmp(&b.date));
+
+            // Remove duplicates (same event might appear in multiple city searches)
+            all_concerts.dedup_by(|a, b| a.url == b.url);
+
+            tracing::info!("[Ticketmaster] Total concerts found: {}", all_concerts.len());
+            Ok(all_concerts)
+        }
     })
 }
