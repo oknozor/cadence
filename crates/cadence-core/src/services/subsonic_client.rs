@@ -5,8 +5,7 @@ use opensubsonic_cli::{
     types::{
         GetAlbumList2ResponseSubsonicResponse, GetAlbumResponseSubsonicResponse,
         GetArtistInfo2ResponseSubsonicResponse::GetArtistInfo2SuccessResponse,
-        GetArtistResponseSubsonicResponse,
-        GetInternetRadioStationsResponseSubsonicResponse,
+        GetArtistResponseSubsonicResponse, GetInternetRadioStationsResponseSubsonicResponse,
         GetPlaylistsResponseSubsonicResponse::{self, GetPlaylistsSuccessResponse},
         GetRandomSongsResponseSubsonicResponse, GetStarred2ResponseSubsonicResponse,
         Search3ResponseSubsonicResponse, SubsonicFailureResponse,

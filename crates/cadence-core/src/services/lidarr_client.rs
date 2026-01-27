@@ -111,13 +111,18 @@ impl LidarrClient {
     }
 
     /// Search for an album by artist and title
-    pub async fn search_album(&self, artist: &str, album: &str) -> Result<Vec<AlbumResource>, LidarrError> {
+    pub async fn search_album(
+        &self,
+        artist: &str,
+        album: &str,
+    ) -> Result<Vec<AlbumResource>, LidarrError> {
         let term = format!("{} {}", artist, album);
         let url = format!("{}/api/v1/album/lookup", self.base_url);
-        
+
         tracing::info!("[Lidarr] Searching for album: {}", term);
-        
-        let response = self.client
+
+        let response = self
+            .client
             .get(&url)
             .header("X-Api-Key", &self.api_key)
             .query(&[("term", &term)])
@@ -128,7 +133,10 @@ impl LidarrClient {
             let status = response.status();
             let text = response.text().await.unwrap_or_default();
             tracing::error!("[Lidarr] Search failed: {} - {}", status, text);
-            return Err(LidarrError::ApiError(format!("Status {}: {}", status, text)));
+            return Err(LidarrError::ApiError(format!(
+                "Status {}: {}",
+                status, text
+            )));
         }
 
         let albums: Vec<AlbumResource> = response.json().await?;
@@ -139,8 +147,9 @@ impl LidarrClient {
     /// Get root folders (to determine default paths and profiles)
     pub async fn get_root_folders(&self) -> Result<Vec<RootFolderResource>, LidarrError> {
         let url = format!("{}/api/v1/rootfolder", self.base_url);
-        
-        let response = self.client
+
+        let response = self
+            .client
             .get(&url)
             .header("X-Api-Key", &self.api_key)
             .send()
@@ -149,7 +158,10 @@ impl LidarrClient {
         if !response.status().is_success() {
             let status = response.status();
             let text = response.text().await.unwrap_or_default();
-            return Err(LidarrError::ApiError(format!("Status {}: {}", status, text)));
+            return Err(LidarrError::ApiError(format!(
+                "Status {}: {}",
+                status, text
+            )));
         }
 
         Ok(response.json().await?)
@@ -159,16 +171,23 @@ impl LidarrClient {
     pub async fn add_album(&self, album: &AlbumResource) -> Result<AlbumResource, LidarrError> {
         // Get root folder for defaults
         let root_folders = self.get_root_folders().await?;
-        let root_folder = root_folders.first()
-            .ok_or_else(|| LidarrError::NotFound("No root folder configured in Lidarr".to_string()))?;
+        let root_folder = root_folders.first().ok_or_else(|| {
+            LidarrError::NotFound("No root folder configured in Lidarr".to_string())
+        })?;
 
-        let foreign_album_id = album.foreign_album_id.as_ref()
+        let foreign_album_id = album
+            .foreign_album_id
+            .as_ref()
             .ok_or_else(|| LidarrError::NotFound("Album has no foreign ID".to_string()))?;
 
-        let artist = album.artist.as_ref()
+        let artist = album
+            .artist
+            .as_ref()
             .ok_or_else(|| LidarrError::NotFound("Album has no artist info".to_string()))?;
 
-        let foreign_artist_id = artist.foreign_artist_id.as_ref()
+        let foreign_artist_id = artist
+            .foreign_artist_id
+            .as_ref()
             .ok_or_else(|| LidarrError::NotFound("Artist has no foreign ID".to_string()))?;
 
         let url = format!("{}/api/v1/album", self.base_url);
@@ -190,7 +209,8 @@ impl LidarrClient {
 
         tracing::info!("[Lidarr] Adding album: {:?}", album.title);
 
-        let response = self.client
+        let response = self
+            .client
             .post(&url)
             .header("X-Api-Key", &self.api_key)
             .json(&request)
@@ -201,7 +221,10 @@ impl LidarrClient {
             let status = response.status();
             let text = response.text().await.unwrap_or_default();
             tracing::error!("[Lidarr] Add album failed: {} - {}", status, text);
-            return Err(LidarrError::ApiError(format!("Status {}: {}", status, text)));
+            return Err(LidarrError::ApiError(format!(
+                "Status {}: {}",
+                status, text
+            )));
         }
 
         let added_album: AlbumResource = response.json().await?;
@@ -220,7 +243,8 @@ impl LidarrClient {
 
         tracing::info!("[Lidarr] Triggering search for album ID: {}", album_id);
 
-        let response = self.client
+        let response = self
+            .client
             .post(&url)
             .header("X-Api-Key", &self.api_key)
             .json(&request)
@@ -231,11 +255,13 @@ impl LidarrClient {
             let status = response.status();
             let text = response.text().await.unwrap_or_default();
             tracing::error!("[Lidarr] Search command failed: {} - {}", status, text);
-            return Err(LidarrError::ApiError(format!("Status {}: {}", status, text)));
+            return Err(LidarrError::ApiError(format!(
+                "Status {}: {}",
+                status, text
+            )));
         }
 
         tracing::info!("[Lidarr] Search command queued successfully");
         Ok(())
     }
 }
-

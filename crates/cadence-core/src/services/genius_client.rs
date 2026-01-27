@@ -144,7 +144,10 @@ impl LyricsClient {
         // Try LrcLib first (provides synchronized lyrics)
         match self.get_lrclib_lyrics(artist, title, duration_secs).await {
             Ok(result) => {
-                tracing::info!("[Lyrics] Found lyrics from LrcLib (synced: {})", result.is_synced());
+                tracing::info!(
+                    "[Lyrics] Found lyrics from LrcLib (synced: {})",
+                    result.is_synced()
+                );
                 return Ok(result);
             }
             Err(e) => {
@@ -170,7 +173,10 @@ impl LyricsClient {
             let response = self
                 .client
                 .get(LRCLIB_GET_URL)
-                .header("User-Agent", "Cadence/1.0 (https://github.com/oknozor/cadence)")
+                .header(
+                    "User-Agent",
+                    "Cadence/1.0 (https://github.com/oknozor/cadence)",
+                )
                 .query(&[
                     ("track_name", title),
                     ("artist_name", artist),
@@ -181,7 +187,12 @@ impl LyricsClient {
 
             if response.status().is_success() {
                 let track: LrcLibTrackResponse = response.json().await?;
-                return self.parse_lrclib_result(track.name, track.artist_name, track.plain_lyrics, track.synced_lyrics);
+                return self.parse_lrclib_result(
+                    track.name,
+                    track.artist_name,
+                    track.plain_lyrics,
+                    track.synced_lyrics,
+                );
             }
         }
 
@@ -189,7 +200,10 @@ impl LyricsClient {
         let results: Vec<LrcLibSearchResult> = self
             .client
             .get(LRCLIB_SEARCH_URL)
-            .header("User-Agent", "Cadence/1.0 (https://github.com/oknozor/cadence)")
+            .header(
+                "User-Agent",
+                "Cadence/1.0 (https://github.com/oknozor/cadence)",
+            )
             .query(&[("q", &format!("{} {}", artist, title))])
             .send()
             .await?
@@ -224,7 +238,11 @@ impl LyricsClient {
 
         // If we have synced lyrics, extract plain text from them
         let plain_text = if let Some(ref synced_lines) = synced {
-            synced_lines.iter().map(|l| l.text.as_str()).collect::<Vec<_>>().join("\n")
+            synced_lines
+                .iter()
+                .map(|l| l.text.as_str())
+                .collect::<Vec<_>>()
+                .join("\n")
         } else {
             lyrics
         };
@@ -269,13 +287,20 @@ impl LyricsClient {
         let minutes: u64 = parts[0].parse().ok()?;
         let seconds_parts: Vec<&str> = parts[1].split('.').collect();
         let seconds: u64 = seconds_parts[0].parse().ok()?;
-        let centiseconds: u64 = seconds_parts.get(1).and_then(|s| s.parse().ok()).unwrap_or(0);
+        let centiseconds: u64 = seconds_parts
+            .get(1)
+            .and_then(|s| s.parse().ok())
+            .unwrap_or(0);
 
         Some(minutes * 60 * 1000 + seconds * 1000 + centiseconds * 10)
     }
 
     /// Get lyrics from Genius (plain text only)
-    async fn get_genius_lyrics(&self, artist: &str, title: &str) -> Result<LyricsResult, LyricsError> {
+    async fn get_genius_lyrics(
+        &self,
+        artist: &str,
+        title: &str,
+    ) -> Result<LyricsResult, LyricsError> {
         let search_query = format!("{} {}", artist, title);
         tracing::info!("[Genius] Searching for: {}", search_query);
 
@@ -336,7 +361,9 @@ impl LyricsClient {
             .join("\n");
 
         if lyrics.is_empty() {
-            return Err(LyricsError::NotFound("Lyrics not found on page".to_string()));
+            return Err(LyricsError::NotFound(
+                "Lyrics not found on page".to_string(),
+            ));
         }
 
         Ok(lyrics.trim().to_string())

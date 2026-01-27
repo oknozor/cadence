@@ -76,8 +76,7 @@ pub fn Navbar() -> Element {
                         label: "Listen".to_string(),
                         active: listen_active,
                         onclick: move || {
-                            #[cfg(target_os = "android")]
-                            nav.replace(Route::ShazamView {});
+                            #[cfg(target_os = "android")] nav.replace(Route::ShazamView {});
                             set_active(&mut listen_active);
                         },
                         AudioIdentificationIcon { size: 32, filled: listen_active }
@@ -108,7 +107,9 @@ pub fn NavbarItem(
                 });
                 onclick.call(())
             },
-            div { class: if animate() { "navbar-item-icon active" } else { "navbar-item-icon" }, {children} }
+            div { class: if animate() { "navbar-item-icon active" } else { "navbar-item-icon" },
+                {children}
+            }
             div { class: "navbar-item-label", "{label}" }
         }
     }

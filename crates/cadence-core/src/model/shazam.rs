@@ -129,4 +129,3 @@ impl From<Track> for ShazamMusic {
         }
     }
 }
-

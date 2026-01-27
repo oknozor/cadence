@@ -10,9 +10,9 @@ use cadence_core::hooks::{
     use_recently_released,
 };
 use cadence_core::model::RadioStation;
-use cadence_core::state::{ControllerExt, CONTROLLER};
+use cadence_core::state::{CONTROLLER, ControllerExt};
 use dioxus::prelude::*;
-use dioxus_sdk::time::{use_timeout, TimeoutHandle};
+use dioxus_sdk::time::{TimeoutHandle, use_timeout};
 
 #[component]
 pub fn Home() -> Element {
@@ -46,7 +46,10 @@ pub fn Home() -> Element {
 
     let on_playlist_clicked = move |_playlist_id: String| tracing::debug!("unimplemented");
     let on_radio_station_clicked = move |radio: RadioStation| {
-        info!("Playing radio station with stream URL: {}", radio.stream_url);
+        info!(
+            "Playing radio station with stream URL: {}",
+            radio.stream_url
+        );
         controller.play_radio(radio);
     };
 

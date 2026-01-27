@@ -159,7 +159,11 @@ pub extern "system" fn Java_dev_dioxus_main_ShazamBridgeKt_nativeOnAudioReady(
 
     // Debug: Check if audio data is silent or has actual content
     // Use i32 to avoid overflow when calling abs() on i16::MIN
-    let max_amplitude = audio_buffer.iter().map(|s| (*s as i32).abs()).max().unwrap_or(0);
+    let max_amplitude = audio_buffer
+        .iter()
+        .map(|s| (*s as i32).abs())
+        .max()
+        .unwrap_or(0);
     let avg_amplitude: i32 =
         audio_buffer.iter().map(|s| (*s as i32).abs()).sum::<i32>() / len as i32;
     log::info!(

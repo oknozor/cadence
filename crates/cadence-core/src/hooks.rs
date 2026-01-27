@@ -320,7 +320,10 @@ pub fn use_artist_concerts(
         let artist = artist_name();
         tracing::info!("[Ticketmaster] Resource triggered for artist: '{}'", artist);
         async move {
-            tracing::info!("[Ticketmaster] Async block started for artist: '{}'", artist);
+            tracing::info!(
+                "[Ticketmaster] Async block started for artist: '{}'",
+                artist
+            );
 
             if artist.is_empty() {
                 tracing::info!("[Ticketmaster] Artist name is empty, returning empty list");
@@ -361,10 +364,19 @@ pub fn use_artist_concerts(
 
             // Search for events in each preferred city
             for city in &settings.preferred_cities {
-                tracing::info!("[Ticketmaster] Searching for '{}' in '{}' (radius: {:?} km)", artist, city, radius);
+                tracing::info!(
+                    "[Ticketmaster] Searching for '{}' in '{}' (radius: {:?} km)",
+                    artist,
+                    city,
+                    radius
+                );
                 match client.search_events(&artist, city, radius).await {
                     Ok(concerts) => {
-                        tracing::info!("[Ticketmaster] Found {} concerts in {}", concerts.len(), city);
+                        tracing::info!(
+                            "[Ticketmaster] Found {} concerts in {}",
+                            concerts.len(),
+                            city
+                        );
                         all_concerts.extend(concerts);
                     }
                     Err(e) => {
@@ -379,7 +391,10 @@ pub fn use_artist_concerts(
             // Remove duplicates (same event might appear in multiple city searches)
             all_concerts.dedup_by(|a, b| a.url == b.url);
 
-            tracing::info!("[Ticketmaster] Total concerts found: {}", all_concerts.len());
+            tracing::info!(
+                "[Ticketmaster] Total concerts found: {}",
+                all_concerts.len()
+            );
             Ok(all_concerts)
         }
     })
@@ -402,7 +417,12 @@ pub fn use_lyrics(
                 return Err(CapturedError::from_display("No song playing"));
             }
 
-            tracing::info!("[Lyrics] Fetching lyrics for: {} - {} (duration: {:?}s)", artist_name, song_title, duration);
+            tracing::info!(
+                "[Lyrics] Fetching lyrics for: {} - {} (duration: {:?}s)",
+                artist_name,
+                song_title,
+                duration
+            );
 
             let client = LyricsClient::new();
             let result = client

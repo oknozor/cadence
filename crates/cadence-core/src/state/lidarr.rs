@@ -11,4 +11,3 @@ impl LidarrSettings {
         !self.url.is_empty() && !self.api_key.is_empty()
     }
 }
-

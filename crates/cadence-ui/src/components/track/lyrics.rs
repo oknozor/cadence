@@ -1,6 +1,6 @@
 use cadence_core::services::genius_client::{LyricsResult, SyncedLyricLine};
-use dioxus::prelude::*;
 use dioxus::CapturedError;
+use dioxus::prelude::*;
 
 #[component]
 pub fn LyricsCard(
@@ -14,12 +14,15 @@ pub fn LyricsCard(
                     SynchronizedLyrics {
                         lines: synced_lyrics.clone(),
                         position_ms,
-                        source: result.source.to_string()
+                        source: result.source.to_string(),
                     }
                 }
             } else {
                 rsx! {
-                    UnsynchronizedLyrics { lyrics: result.lyrics.clone(), source: result.source.to_string() }
+                    UnsynchronizedLyrics {
+                        lyrics: result.lyrics.clone(),
+                        source: result.source.to_string(),
+                    }
                 }
             }
         }
@@ -39,7 +42,6 @@ pub fn LyricsCard(
         }
     }
 }
-
 
 #[component]
 fn UnsynchronizedLyrics(lyrics: String, source: String) -> Element {
@@ -79,7 +81,12 @@ fn SynchronizedLyrics(
         div { class: "lyrics-container synchronized",
             div { class: "lyrics-text synchronized",
                 for (idx , line) in lines.iter().enumerate() {
-                    p { key: "{idx}", id: "lyric-{idx}", class: if idx == current_index() { "lyric-line active" } else { "lyric-line" }, "{line.text}" }
+                    p {
+                        key: "{idx}",
+                        id: "lyric-{idx}",
+                        class: if idx == current_index() { "lyric-line active" } else { "lyric-line" },
+                        "{line.text}"
+                    }
                 }
             }
         }

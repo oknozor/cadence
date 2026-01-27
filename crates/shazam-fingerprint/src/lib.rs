@@ -99,4 +99,3 @@ mod tests {
         assert!(total_peaks > 0, "Should detect peaks in a tone");
     }
 }
-

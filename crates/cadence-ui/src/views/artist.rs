@@ -48,7 +48,8 @@ pub fn ArtistView(id: ReadSignal<String>) -> Element {
     if let Some(artist) = artist() {
         // Log concert resource state
         let concerts_state = concerts();
-        tracing::info!("[ArtistView] Concerts resource state: {:?}",
+        tracing::info!(
+            "[ArtistView] Concerts resource state: {:?}",
             match &concerts_state {
                 Some(Ok(list)) => format!("Ok({} concerts)", list.len()),
                 Some(Err(e)) => format!("Err({})", e),

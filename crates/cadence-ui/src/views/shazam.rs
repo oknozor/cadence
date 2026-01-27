@@ -110,13 +110,13 @@ pub fn ShazamView() -> Element {
                         // Two identical wave cycles for seamless looping
                         path {
                             class: "shazam-sinewave-path",
-                            d: "M0,10 Q25,0 50,10 T100,10 T150,10 T200,10 L200,20 L0,20 Z"
+                            d: "M0,10 Q25,0 50,10 T100,10 T150,10 T200,10 L200,20 L0,20 Z",
                         }
                     }
                 }
             }
             div { class: "shazam-content",
-                {content},
+                {content}
                 button {
                     class: "shazam-button",
                     class: if is_listening() { "listening" },

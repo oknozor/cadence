@@ -18,4 +18,3 @@ impl From<InternetRadioStation> for RadioStation {
         }
     }
 }
-

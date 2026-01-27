@@ -201,7 +201,10 @@ mod tests {
 
         match result {
             Ok(ref concerts) => {
-                println!("Found {} concerts for Orelsan in Lille (50km radius):", concerts.len());
+                println!(
+                    "Found {} concerts for Orelsan in Lille (50km radius):",
+                    concerts.len()
+                );
                 for concert in concerts {
                     println!(
                         "  - {} on {} at {} ({}, {})",

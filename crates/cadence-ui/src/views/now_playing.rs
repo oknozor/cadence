@@ -1,6 +1,9 @@
-use crate::components::{AlbumCover, ItemInfo, LyricsCard, NextIcon, PlayIconCircle, PlayerProgress, PlusIcon, PreviousIcon, RandomIcon, ShuffleIcon};
+use crate::components::{
+    AlbumCover, ItemInfo, LyricsCard, NextIcon, PlayIconCircle, PlayerProgress, PlusIcon,
+    PreviousIcon, RandomIcon, ShuffleIcon,
+};
 use cadence_core::hooks::use_lyrics;
-use cadence_core::state::{ControllerExt, ControllerStoreExt, CONTROLLER};
+use cadence_core::state::{CONTROLLER, ControllerExt, ControllerStoreExt};
 use dioxus::prelude::*;
 
 #[component]
@@ -70,13 +73,16 @@ pub fn NowPlayingView() -> Element {
                     }
                     LyricsCard { lyrics, position_ms }
                     div { class: "track-info",
-                        ItemInfo { primary: track.read().1.title.clone(), secondary: track.read().1.artist.clone() }
+                        ItemInfo {
+                            primary: track.read().1.title.clone(),
+                            secondary: track.read().1.artist.clone(),
+                        }
                         PlusIcon { filled: false }
                     }
 
                     PlayerProgress {
                         value: controller.position_f64(),
-                        max: track.read().1.duration.unwrap_or_default() as f64
+                        max: track.read().1.duration.unwrap_or_default() as f64,
                     }
 
                     div { class: "timing-progress",
@@ -132,4 +138,3 @@ pub fn NowPlayingView() -> Element {
         }
     }
 }
-

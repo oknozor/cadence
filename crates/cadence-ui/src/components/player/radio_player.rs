@@ -1,6 +1,6 @@
 use crate::components::{PlayIconCircle, RadioIcon};
 use cadence_core::model::RadioStation;
-use cadence_core::state::{ControllerExt, ControllerStoreExt, CONTROLLER};
+use cadence_core::state::{CONTROLLER, ControllerExt, ControllerStoreExt};
 use dioxus::prelude::*;
 
 /// A mini player for radio streams, similar to the track Player but without
@@ -51,4 +51,3 @@ fn RadioPlayerInfo(radio: RadioStation) -> Element {
         }
     }
 }
-

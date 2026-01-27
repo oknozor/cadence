@@ -30,4 +30,3 @@ impl TicketmasterSettings {
         !self.api_key.is_empty() && !self.preferred_cities.is_empty()
     }
 }
-

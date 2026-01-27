@@ -1,11 +1,11 @@
 use rodio::{Decoder, OutputStream, OutputStreamBuilder, Sink};
 use std::{num::NonZeroUsize, time::Duration};
 use stream_download::{
-    source::DecodeError, storage::{
+    Settings, StreamDownload,
+    source::DecodeError,
+    storage::{
         adaptive::AdaptiveStorageProvider, memory::MemoryStorageProvider, temp::TempStorageProvider,
     },
-    Settings,
-    StreamDownload,
 };
 
 #[cfg(all(target_os = "android", feature = "mobile"))]
@@ -13,8 +13,8 @@ use cadence_storage_android;
 
 use crate::model::RadioStation;
 use crate::{
-    player::{stream_url, AudioBackendStateUpdate},
     PlayerCommand,
+    player::{AudioBackendStateUpdate, stream_url},
 };
 
 pub struct AudioBackend {
@@ -114,7 +114,7 @@ impl AudioBackend {
             ),
             Settings::default(),
         )
-            .await
+        .await
         {
             Ok(reader) => reader,
             Err(e) => return Err(MusicPlayerError::Custom(e.decode_error().await)),
@@ -129,7 +129,7 @@ impl AudioBackend {
         } else {
             Decoder::new(reader)
         }
-            .expect("Failed to build audiobackend decoder");
+        .expect("Failed to build audiobackend decoder");
 
         self.sink.append(decoder);
         self.set_callback();
@@ -150,16 +150,11 @@ impl AudioBackend {
         // 8KB is enough for the decoder to start while keeping latency low.
         let settings = Settings::default().prefetch_bytes(8 * 1024);
 
-        let reader = match StreamDownload::new_http(
-            stream_url.parse()?,
-            storage_provider,
-            settings,
-        )
-            .await
-        {
-            Ok(reader) => reader,
-            Err(e) => return Err(MusicPlayerError::Custom(e.decode_error().await)),
-        };
+        let reader =
+            match StreamDownload::new_http(stream_url.parse()?, storage_provider, settings).await {
+                Ok(reader) => reader,
+                Err(e) => return Err(MusicPlayerError::Custom(e.decode_error().await)),
+            };
 
         let decoder = Decoder::new(reader).map_err(|e| {
             MusicPlayerError::Custom(format!("Failed to build radio decoder: {}", e))

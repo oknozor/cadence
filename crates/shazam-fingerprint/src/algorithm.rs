@@ -105,7 +105,9 @@ impl SignatureGenerator {
         }
 
         // Perform Fast Fourier transform
-        let complex_fft_results = self.fft_object.forward(&self.reordered_ring_buffer_of_samples);
+        let complex_fft_results = self
+            .fft_object
+            .forward(&self.reordered_ring_buffer_of_samples);
         assert_eq!(complex_fft_results.len(), 1025);
 
         // Turn complex into reals, and put the results into a local array
@@ -187,11 +189,14 @@ impl SignatureGenerator {
                         for other_offset in &[
                             -53, -45, 165, 172, 179, 186, 193, 200, 214, 221, 228, 235, 242, 249,
                         ] {
-                            let other_fft = &self.spread_fft_outputs
-                                [((self.spread_fft_outputs_index as i32 + other_offset) & 255)
-                                    as usize];
+                            let other_fft = &self.spread_fft_outputs[((self.spread_fft_outputs_index
+                                as i32
+                                + other_offset)
+                                & 255)
+                                as usize];
                             max_neighbor_in_other_adjacent_ffts =
-                                max_neighbor_in_other_adjacent_ffts.max(other_fft[bin_position - 1]);
+                                max_neighbor_in_other_adjacent_ffts
+                                    .max(other_fft[bin_position - 1]);
                         }
 
                         if fft_minus_46[bin_position] > max_neighbor_in_other_adjacent_ffts {

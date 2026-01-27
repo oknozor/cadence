@@ -1,6 +1,6 @@
 use cadence_core::{
     model::RadioStation,
-    state::{ControllerStoreExt, CONTROLLER},
+    state::{CONTROLLER, ControllerStoreExt},
 };
 use dioxus::prelude::*;
 
@@ -30,7 +30,12 @@ pub fn RadioStationItem(station: RadioStation, on_click: EventHandler<RadioStati
     let callback = move |_| on_click.call(station.clone());
 
     rsx! {
-        ItemRow { thumbnail, content, action: None, callback }
+        ItemRow {
+            thumbnail,
+            content,
+            action: None,
+            callback,
+        }
     }
 }
 

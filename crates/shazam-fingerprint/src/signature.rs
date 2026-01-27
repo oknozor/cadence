@@ -47,15 +47,15 @@ impl PartialOrd for FrequencyBand {
 /// Raw header structure for the binary signature format.
 #[allow(dead_code)]
 struct RawSignatureHeader {
-    magic1: u32, // Fixed 0xcafe2580 - 80 25 fe ca
+    magic1: u32,                                  // Fixed 0xcafe2580 - 80 25 fe ca
     crc32: u32, // CRC-32 for all of the following (so excluding these first 8 bytes)
     size_minus_header: u32, // Total size of the message, minus the size of the current header (which is 48 bytes)
-    magic2: u32, // Fixed 0x94119c00 - 00 9c 11 94
-    _void1: [u32; 3], // Void
+    magic2: u32,            // Fixed 0x94119c00 - 00 9c 11 94
+    _void1: [u32; 3],       // Void
     shifted_sample_rate_id: u32, // A member of SampleRate (usually 3 for 16000 Hz), left-shifted by 27
-    _void2: [u32; 2], // Void
+    _void2: [u32; 2],            // Void
     number_samples_plus_divided_sample_rate: u32, // int(number_of_samples + sample_rate * 0.24)
-    _fixed_value: u32, // Calculated as ((15 << 19) + 0x40000) - 0x7c0000
+    _fixed_value: u32,           // Calculated as ((15 << 19) + 0x40000) - 0x7c0000
 }
 
 /// A decoded Shazam audio signature.
@@ -160,16 +160,17 @@ impl DecodedSignature {
                     _ => {
                         fft_pass_number += fft_pass_offset as u32;
 
-                        if !frequency_band_to_sound_peaks.contains_key(&frequency_band) {
-                            frequency_band_to_sound_peaks.insert(frequency_band, vec![]);
-                        }
+                        frequency_band_to_sound_peaks
+                            .entry(frequency_band)
+                            .or_insert_with(|| vec![]);
 
                         frequency_band_to_sound_peaks
                             .get_mut(&frequency_band)
                             .unwrap()
                             .push(FrequencyPeak {
                                 fft_pass_number,
-                                peak_magnitude: frequency_peaks_cursor.read_u16::<LittleEndian>()?,
+                                peak_magnitude: frequency_peaks_cursor
+                                    .read_u16::<LittleEndian>()?,
                                 corrected_peak_frequency_bin: frequency_peaks_cursor
                                     .read_u16::<LittleEndian>()?,
                             });
@@ -194,8 +195,8 @@ impl DecodedSignature {
     pub fn decode_from_uri(uri: &str) -> Result<Self, Box<dyn std::error::Error>> {
         assert!(uri.starts_with(DATA_URI_PREFIX));
 
-        let decoded = base64::engine::general_purpose::STANDARD
-            .decode(&uri[DATA_URI_PREFIX.len()..])?;
+        let decoded =
+            base64::engine::general_purpose::STANDARD.decode(&uri[DATA_URI_PREFIX.len()..])?;
         DecodedSignature::decode_from_binary(&decoded)
     }
 
@@ -257,7 +258,8 @@ impl DecodedSignature {
                 peaks_cursor.write_u8((frequency_peak.fft_pass_number - fft_pass_number) as u8)?;
 
                 peaks_cursor.write_u16::<LittleEndian>(frequency_peak.peak_magnitude)?;
-                peaks_cursor.write_u16::<LittleEndian>(frequency_peak.corrected_peak_frequency_bin)?;
+                peaks_cursor
+                    .write_u16::<LittleEndian>(frequency_peak.corrected_peak_frequency_bin)?;
 
                 fft_pass_number = frequency_peak.fft_pass_number;
             }
@@ -297,4 +299,3 @@ impl DecodedSignature {
         ))
     }
 }
-

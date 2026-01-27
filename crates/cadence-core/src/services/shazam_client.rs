@@ -116,7 +116,10 @@ impl ShazamClient {
         let raw_response = response.text().await.map_err(ShazamError::Http)?;
 
         // Log in chunks to avoid Android logcat truncation (limit ~4000 chars)
-        tracing::info!("[Shazam] Raw API response length: {} bytes", raw_response.len());
+        tracing::info!(
+            "[Shazam] Raw API response length: {} bytes",
+            raw_response.len()
+        );
         for (i, chunk) in raw_response.as_bytes().chunks(3000).enumerate() {
             if let Ok(s) = std::str::from_utf8(chunk) {
                 tracing::info!("[Shazam] Response part {}: {}", i + 1, s);
