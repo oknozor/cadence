@@ -3,7 +3,7 @@ name = "Cadence"
 out_dir = "dist"
 asset_dir = "public"
 android_min_sdk_version = 35
-android_main_activity = "../../android/MainActivity.kt"
+android_main_activity = "../../android/sources/MainActivity.kt"
 android_manifest = "../../AndroidManifest.xml"
 
 [web.app]

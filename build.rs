@@ -4,7 +4,6 @@ use std::path::PathBuf;
 fn main() {
     println!("cargo::rerun-if-changed=.");
     watch_dir("./android/".into());
-    watch_dir("./res".into());
 
     #[cfg(debug_assertions)]
     let dest = PathBuf::from(
@@ -17,7 +16,7 @@ fn main() {
     ));
 
     fs::create_dir_all(&dest).unwrap();
-    for entry in fs::read_dir("../../android").unwrap() {
+    for entry in fs::read_dir("../../android/sources").unwrap() {
         let entry = entry.unwrap();
         fs::copy(entry.path(), dest.join(entry.file_name())).unwrap();
     }
@@ -28,7 +27,20 @@ fn main() {
     #[cfg(not(debug_assertions))]
     let res_dest = PathBuf::from("../../target/dx/app/release/android/app/app/src/main/res");
 
-    copy_dir_recursive(PathBuf::from("./res"), res_dest);
+    let paths = [
+        "mipmap-hdpi",
+        "mipmap-mdpi",
+        "mipmap-xhdpi",
+        "mipmap-xxhdpi",
+        "mipmap-xxxhdpi",
+        "mipmap-anydpi-v26",
+    ];
+
+    for path in paths {
+        fs::remove_dir_all(res_dest.join(path)).unwrap()
+    }
+
+    copy_dir_recursive(PathBuf::from("../../android/res"), res_dest);
 }
 
 fn watch_dir(path: PathBuf) {
