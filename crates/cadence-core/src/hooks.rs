@@ -4,6 +4,7 @@ use dioxus_sdk::storage::{get_from_storage, use_storage};
 use crate::{
     model::{Album, PlaylistInfo, RadioStation, SearchResult, ShazamMusic, Song},
     services::{
+        genius_client::{LyricsClient, LyricsResult},
         subsonic_client::{AlbumListType, SUBSONIC_CLIENT, Star, SubsonicClient},
         ticketmaster_client::Concert,
     },
@@ -380,6 +381,42 @@ pub fn use_artist_concerts(
 
             tracing::info!("[Ticketmaster] Total concerts found: {}", all_concerts.len());
             Ok(all_concerts)
+        }
+    })
+}
+
+/// Hook to fetch lyrics for a song
+/// Takes artist, title, and duration signals that trigger refetch when changed
+/// Duration is optional but helps LrcLib find exact matches
+pub fn use_lyrics(
+    artist: Signal<String>,
+    title: Signal<String>,
+    duration_secs: Signal<Option<u64>>,
+) -> Resource<Result<LyricsResult, CapturedError>> {
+    use_resource(move || {
+        let artist_name = artist();
+        let song_title = title();
+        let duration = duration_secs();
+        async move {
+            if artist_name.is_empty() || song_title.is_empty() {
+                return Err(CapturedError::from_display("No song playing"));
+            }
+
+            tracing::info!("[Lyrics] Fetching lyrics for: {} - {} (duration: {:?}s)", artist_name, song_title, duration);
+
+            let client = LyricsClient::new();
+            let result = client
+                .get_lyrics(&artist_name, &song_title, duration)
+                .await
+                .map_err(CapturedError::from_display)?;
+
+            tracing::info!(
+                "[Lyrics] Found lyrics from {}: {} chars, synced: {}",
+                result.source,
+                result.lyrics.len(),
+                result.is_synced()
+            );
+            Ok(result)
         }
     })
 }
