@@ -42,6 +42,7 @@ abstract class WryActivity : AppCompatActivity() {
 
     fun setWebView(webView: RustWebView) {
         mWebView = webView
+        KeepAliveService.webView = webView  // Store in service for persistence
         onWebViewCreate(webView)
     }
 
@@ -97,9 +98,25 @@ abstract class WryActivity : AppCompatActivity() {
             }
             Log.i("com.example.Music", "started KeepAliveService")
 
+            // Only create WebView on first launch
             create(this)
         } else {
-            Log.i("com.example.Trackfish", "Keep Alive Service already exists")
+            Log.i("org.hoohoot.Cadence", "Keep Alive Service already exists - reattaching WebView")
+
+            // Retrieve the WebView from the service and reattach it
+            KeepAliveService.webView?.let { webView ->
+                // Remove WebView from its previous parent if it has one
+                (webView.parent as? android.view.ViewGroup)?.removeView(webView)
+
+                // Store reference and set as content view
+                mWebView = webView
+                setContentView(webView)
+
+                Log.i("org.hoohoot.Cadence", "WebView successfully reattached")
+            } ?: run {
+                Log.e("org.hoohoot.Cadence", "WebView not found in service, creating new one")
+                create(this)
+            }
         }
     }
 
@@ -121,11 +138,17 @@ abstract class WryActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        if (::mWebView.isInitialized) {
+            mWebView.onResume()
+        }
         resume()
     }
 
     override fun onPause() {
         super.onPause()
+        if (::mWebView.isInitialized) {
+            mWebView.onPause()
+        }
         pause()
     }
 

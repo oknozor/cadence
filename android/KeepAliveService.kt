@@ -40,6 +40,9 @@ class KeepAliveService : Service() {
         @JvmStatic
         var serviceInstance: KeepAliveService? = null
 
+        @JvmStatic
+        var webView: dev.dioxus.main.RustWebView? = null
+
         init {
             System.loadLibrary("dioxusmain")
         }
