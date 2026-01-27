@@ -1,5 +1,5 @@
 use dioxus::prelude::debug;
-use dioxus_sdk::storage::StorageBacking;
+use dioxus_sdk::storage::{set_dir, StorageBacking};
 use once_cell::sync::Lazy;
 use redb::{ReadableTable, TableDefinition};
 use serde::de::DeserializeOwned;

@@ -9,6 +9,7 @@ pub struct ExpandableButtonProps {
     pub active: Signal<bool>,
     pub inner_active: Signal<bool>,
     pub onclick: Option<EventHandler<MouseEvent>>,
+    pub onclick_inner: Option<EventHandler<MouseEvent>>,
     #[props(extends = GlobalAttributes)]
     pub attributes: Vec<Attribute>,
 }
@@ -64,7 +65,11 @@ pub fn ExpandableButton(mut props: ExpandableButtonProps) -> Element {
                 MenuButton {
                     id: "inner",
                     active: props.inner_active,
-                    onclick: move |_| {},
+                    onclick: move |evt| {
+                        if let Some(onclick_inner) = props.onclick_inner {
+                            onclick_inner.call(evt);
+                        }
+                    },
                     "{props.text_expanded}"
                 }
             }

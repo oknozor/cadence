@@ -9,3 +9,6 @@ pub use row::TrackRow;
 
 mod info;
 pub use info::SongItemInfo;
+
+mod lyrics;
+pub use lyrics::LyricsCard;

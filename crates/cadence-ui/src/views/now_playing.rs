@@ -1,9 +1,6 @@
-use crate::components::{
-    AlbumCover, ItemInfo, NextIcon, PlayIconCircle, PlayerProgress, PlusIcon, PreviousIcon,
-    RandomIcon, ShuffleIcon,
-};
+use crate::components::{AlbumCover, ItemInfo, LyricsCard, NextIcon, PlayIconCircle, PlayerProgress, PlusIcon, PreviousIcon, RandomIcon, ShuffleIcon};
 use cadence_core::hooks::use_lyrics;
-use cadence_core::state::{CONTROLLER, ControllerExt, ControllerStoreExt};
+use cadence_core::state::{ControllerExt, ControllerStoreExt, CONTROLLER};
 use dioxus::prelude::*;
 
 #[component]
@@ -37,10 +34,8 @@ pub fn NowPlayingView() -> Element {
         }
     });
 
-    // Fetch lyrics (called unconditionally at top level)
     let lyrics = use_lyrics(current_artist, current_title, current_duration);
 
-    // Current playback position in milliseconds for synced lyrics
     let position_ms = use_memo(move || (controller.position().read().as_millis()) as u64);
 
     let has_next = use_memo(move || {
@@ -68,24 +63,20 @@ pub fn NowPlayingView() -> Element {
             div { class: "controls-container",
                 if let Some(track) = current {
                     // Toggle between album art and lyrics
-                    div {
-                        class: "player-visual",
+                    div { class: "player-visual",
                         if let Some(src) = track.read().1.cover_art.clone() {
                             AlbumCover { src, width: "100%" }
                         }
                     }
-                    LyricsView { lyrics, position_ms }
+                    LyricsCard { lyrics, position_ms }
                     div { class: "track-info",
-                        ItemInfo {
-                            primary: track.read().1.title.clone(),
-                            secondary: track.read().1.artist.clone(),
-                        }
+                        ItemInfo { primary: track.read().1.title.clone(), secondary: track.read().1.artist.clone() }
                         PlusIcon { filled: false }
                     }
 
                     PlayerProgress {
                         value: controller.position_f64(),
-                        max: track.read().1.duration.unwrap_or_default() as f64,
+                        max: track.read().1.duration.unwrap_or_default() as f64
                     }
 
                     div { class: "timing-progress",
@@ -142,106 +133,3 @@ pub fn NowPlayingView() -> Element {
     }
 }
 
-use cadence_core::services::genius_client::{LyricsResult, SyncedLyricLine};
-use dioxus::CapturedError;
-
-#[component]
-fn LyricsView(
-    lyrics: Resource<Result<LyricsResult, CapturedError>>,
-    position_ms: Memo<u64>,
-) -> Element {
-    match lyrics() {
-        Some(Ok(result)) => {
-            if let Some(synced_lyrics) = &result.synced_lyrics {
-                rsx! {
-                    SynchronizedLyrics {
-                        lines: synced_lyrics.clone(),
-                        position_ms,
-                        source: result.source.to_string(),
-                    }
-                }
-            } else {
-                rsx! {
-                    UnsynchronizedLyrics {
-                        lyrics: result.lyrics.clone(),
-                        source: result.source.to_string(),
-                    }
-                }
-            }
-        }
-        Some(Err(_)) => {
-            rsx! {
-                div { class: "lyrics-container lyrics-error",
-                    div { class: "lyrics-message",
-                        "Lyrics not available"
-                    }
-                }
-            }
-        }
-        None => {
-            rsx! {
-                div { class: "lyrics-container lyrics-loading",
-                    div { class: "lyrics-message",
-                        "Loading lyrics..."
-                    }
-                }
-            }
-        }
-    }
-}
-
-/// Component for unsynchronized (plain text) lyrics
-#[component]
-fn UnsynchronizedLyrics(lyrics: String, source: String) -> Element {
-    rsx! {
-        div { class: "lyrics-container",
-            div { class: "lyrics-source", "Provided by {source}" }
-            div { class: "lyrics-text unsynchronized",
-                for (idx, line) in lyrics.lines().enumerate() {
-                    p { key: "{idx}", class: "lyric-line", "{line}" }
-                }
-            }
-        }
-    }
-}
-
-/// Component for synchronized lyrics with timestamp-based highlighting
-#[component]
-fn SynchronizedLyrics(
-    lines: Vec<SyncedLyricLine>,
-    position_ms: Memo<u64>,
-    source: String,
-) -> Element {
-    // Clone lines for use in memo closure
-    let lines_for_memo = lines.clone();
-
-    // Find the current active lyric index based on playback position
-    let current_index = use_memo(move || {
-        let pos = position_ms();
-        let mut active_idx = 0;
-        for (idx, line) in lines_for_memo.iter().enumerate() {
-            if pos >= line.time_ms {
-                active_idx = idx;
-            } else {
-                break;
-            }
-        }
-        active_idx
-    });
-
-    rsx! {
-        div { class: "lyrics-container synchronized",
-            div { class: "lyrics-source", "Provided by {source}" }
-            div { class: "lyrics-text synchronized",
-                for (idx, line) in lines.iter().enumerate() {
-                    p {
-                        key: "{idx}",
-                        id: "lyric-{idx}",
-                        class: if idx == current_index() { "lyric-line active" } else { "lyric-line" },
-                        "{line.text}"
-                    }
-                }
-            }
-        }
-    }
-}

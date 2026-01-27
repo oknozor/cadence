@@ -70,6 +70,9 @@ pub fn TopBar(props: TopBarProps) -> Element {
                     onclick: move |_| {
                         active_filter.set(TopBarFilter::Music);
                     },
+                    onclick_inner: move |_| {
+                        active_filter.set(TopBarFilter::MusicFollowed);
+                    },
                     text: "Music",
                     text_expanded: "Followed",
                 }
