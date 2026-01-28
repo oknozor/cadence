@@ -8,7 +8,7 @@ mod list;
 pub use list::AlbumList;
 
 mod cover;
-pub use cover::AlbumCover;
+pub use cover::{AlbumCover, AlbumCoverBackground};
 
 mod info;
 pub use info::AlbumItemInfo;

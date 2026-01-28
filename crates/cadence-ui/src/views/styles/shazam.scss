@@ -3,6 +3,7 @@
 
 .shazam-view {
   @include column;
+  @include gutters-x($page-gutter-x);
   align-items: center;
   justify-content: center;
   flex: 1;

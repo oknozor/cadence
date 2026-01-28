@@ -10,9 +10,9 @@ use cadence_core::hooks::{
     use_recently_released,
 };
 use cadence_core::model::RadioStation;
-use cadence_core::state::{CONTROLLER, ControllerExt};
+use cadence_core::state::{ControllerExt, CONTROLLER};
 use dioxus::prelude::*;
-use dioxus_sdk::time::{TimeoutHandle, use_timeout};
+use dioxus_sdk::time::{use_timeout, TimeoutHandle};
 
 #[component]
 pub fn Home() -> Element {
@@ -119,8 +119,7 @@ pub fn Home() -> Element {
     rsx! {
         TopBar { active_filter }
         VerticalScroller {
-
-            div { class: "music-content",
+            div { class: "home-view",
                 AlbumList {
                     title: "Recently Played",
                     albums: recently_played,

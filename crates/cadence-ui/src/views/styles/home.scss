@@ -1,8 +1,8 @@
 @import '../../../assets/mixins.scss';
 @import '../../../assets/theme.scss';
 
-.music-content {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
+.home-view {
+  @include gutters-x($page-gutter-x);
+  @include column;
+  gap: 30px;
 }

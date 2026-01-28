@@ -23,7 +23,7 @@ pub fn AlbumView(id: ReadSignal<String>) -> Element {
         BackButton {}
         match album() {
             Some(album) => rsx! {
-                div { class: "album-info",
+                div { class: "album-view",
                     AlbumCover { src: album.cover_art.clone().unwrap_or_default(), width: "200px" }
                     AlbumTitle {
                         name: album.name.clone(),

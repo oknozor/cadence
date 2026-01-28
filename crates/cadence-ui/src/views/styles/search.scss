@@ -2,9 +2,9 @@
 @import '../../../assets/theme.scss';
 
 .search-empty {
-  display: flex;
+  @include gutters-x($page-gutter-x);
+  @include column;
   height: 100%;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
   flex: 1;

@@ -2,118 +2,118 @@
 @import "../../../assets/theme.scss";
 
 .settings-view {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: $gap-medium;
-    @include max-h-100pct;
+  @include column;
+  @include max-h-100pct;
+  @include gutters-x($page-gutter-x);
+  justify-content: center;
+  gap: $gap-medium;
 }
 
 .settings-header {
-    @include row;
-    align-items: center;
-    gap: $gap-medium;
-    padding: $gap-medium 0;
-    padding-left: 40px;
+  @include row;
+  align-items: center;
+  gap: $gap-medium;
+  padding: $gap-medium 0;
+  padding-left: 40px;
 
-    h1 {
-        margin: 0;
-        font-size: 1.5rem;
-        font-weight: 600;
-        color: $secondary-color;
-    }
+  h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: $secondary-color;
+  }
 }
 
 .settings-content {
-    @include column;
-    gap: $gap-big;
-    padding-bottom: $gap-huge;
+  @include column;
+  gap: $gap-big;
+  padding-bottom: $gap-huge;
 }
 
 .settings-section {
-    @include column;
-    gap: $gap;
+  @include column;
+  gap: $gap;
 }
 
 .settings-section-title {
-    margin: 0;
-    font-size: 0.875rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    color: $secondary-color-5;
-    letter-spacing: 0.05em;
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: $secondary-color-5;
+  letter-spacing: 0.05em;
 }
 
 .settings-section-content {
-    @include column;
-    background: $primary-color-4;
-    border-radius: 8px;
-    overflow: hidden;
+  @include column;
+  background: $primary-color-4;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .settings-item {
-    @include row;
-    justify-content: space-between;
-    align-items: center;
-    padding: $gap-medium;
-    border-bottom: 1px solid $primary-color-5;
+  @include row;
+  justify-content: space-between;
+  align-items: center;
+  padding: $gap-medium;
+  border-bottom: 1px solid $primary-color-5;
 
-    &:last-child {
-        border-bottom: none;
-    }
+  &:last-child {
+    border-bottom: none;
+  }
 }
 
 .settings-item-label {
-    @include text-primary;
+  @include text-primary;
 }
 
 .settings-item-value {
-    @include text-secondary;
+  @include text-secondary;
 }
 
 .settings-item--input {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: $gap;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: $gap;
 }
 
 .settings-item-input {
-    width: 100%;
-    padding: $gap;
-    background: $primary-color-3;
-    border: 1px solid $primary-color-5;
-    border-radius: 4px;
-    color: $secondary-color;
-    font-size: 0.9rem;
+  width: 100%;
+  padding: $gap;
+  background: $primary-color-3;
+  border: 1px solid $primary-color-5;
+  border-radius: 4px;
+  color: $secondary-color;
+  font-size: 0.9rem;
 
-    &::placeholder {
-        color: $secondary-color-5;
-    }
+  &::placeholder {
+    color: $secondary-color-5;
+  }
 
-    &:focus {
-        outline: none;
-        border-color: $secondary-color-2;
-    }
+  &:focus {
+    outline: none;
+    border-color: $secondary-color-2;
+  }
 }
 
 .settings-save-button {
-    padding: $gap $gap-medium;
-    background: $secondary-color-2;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: opacity 0.2s;
+  padding: $gap $gap-medium;
+  background: $secondary-color-2;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.2s;
 
-    &:hover {
-        opacity: 0.9;
-    }
+  &:hover {
+    opacity: 0.9;
+  }
 }
 
 .settings-hint {
-    font-size: 0.8rem;
-    color: $secondary-color-5;
-    font-style: italic;
+  font-size: 0.8rem;
+  color: $secondary-color-5;
+  font-style: italic;
 }

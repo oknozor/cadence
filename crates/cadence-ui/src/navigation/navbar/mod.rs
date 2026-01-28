@@ -109,7 +109,9 @@ pub fn NavbarItem(
                 });
                 onclick.call(())
             },
-            div { class: if animate() { "navbar-item-icon active" } else { "navbar-item-icon" }, {children} }
+            div { class: if animate() { "navbar-item-icon active" } else { "navbar-item-icon" },
+                {children}
+            }
             div { class: "navbar-item-label", "{label}" }
         }
     }

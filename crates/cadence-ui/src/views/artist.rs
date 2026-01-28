@@ -59,7 +59,7 @@ pub fn ArtistView(id: ReadSignal<String>) -> Element {
 
         rsx! {
             BackButton {}
-            div { class: "artist-info",
+            div { class: "artist-view",
                 VerticalScroller { scroll,
                     div { class: "artist-header",
                         if let Some(src) = artist.cover_art {

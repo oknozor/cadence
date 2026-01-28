@@ -2,16 +2,28 @@
 @import "../../../../assets/theme.scss";
 
 .album-cover {
-    @include column;
-    margin: 10px;
-    align-self: center;
-    justify-content: center;
-    align-items: center;
+  @include column;
+  margin: 10px;
+  align-self: center;
+  justify-content: center;
+  align-items: center;
 
-    img {
-        max-width: 100%;
-        max-height: 100%;
-        box-sizing: border-box;
-        border-radius: 8px;
-    }
+  img {
+    max-width: 100%;
+    max-height: 100%;
+    box-sizing: border-box;
+    border-radius: 8px;
+  }
+}
+
+.album-cover-background {
+  @include column;
+  padding-bottom: 30px;
+  padding-top: 30px;
+  justify-content: space-between;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 90dvh;
+  width: 100dvw;
 }
