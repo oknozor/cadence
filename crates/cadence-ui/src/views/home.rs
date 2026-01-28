@@ -10,9 +10,9 @@ use cadence_core::hooks::{
     use_recently_released,
 };
 use cadence_core::model::RadioStation;
-use cadence_core::state::{ControllerExt, CONTROLLER};
+use cadence_core::state::{CONTROLLER, ControllerExt};
 use dioxus::prelude::*;
-use dioxus_sdk::time::{use_timeout, TimeoutHandle};
+use dioxus_sdk::time::{TimeoutHandle, use_timeout};
 
 #[component]
 pub fn Home() -> Element {

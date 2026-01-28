@@ -56,6 +56,8 @@ fn UnsynchronizedLyrics(lyrics: String, source: String) -> Element {
     }
 }
 
+const VISIBLE_LINES: usize = 5;
+
 #[component]
 fn SynchronizedLyrics(
     lines: Vec<SyncedLyricLine>,
@@ -77,18 +79,42 @@ fn SynchronizedLyrics(
         active_idx
     });
 
+    let visible_data = use_memo(move || {
+        let idx = current_index();
+        let total = lines.len();
+        let half = VISIBLE_LINES / 2;
+
+        let mut start = idx.saturating_sub(half);
+        let end = (start + VISIBLE_LINES).min(total);
+        start = end.saturating_sub(VISIBLE_LINES);
+
+        let active_in_visible = idx - start;
+
+        let visible = lines
+            .iter()
+            .skip(start)
+            .take(VISIBLE_LINES.min(total))
+            .cloned()
+            .collect::<Vec<_>>();
+
+        (visible, active_in_visible)
+    });
+
     rsx! {
-        div { class: "lyrics-container synchronized",
-            div { class: "lyrics-text synchronized",
-                for (idx , line) in lines.iter().enumerate() {
+        div { class: "lyrics-preview",
+            div { class: "lyrics-preview-header",
+                span { "Lyrics preview" }
+            }
+            div { class: "lyrics-preview-lines",
+                for (idx , line) in visible_data().0.iter().enumerate() {
                     p {
                         key: "{idx}",
-                        id: "lyric-{idx}",
-                        class: if idx == current_index() { "lyric-line active" } else { "lyric-line" },
+                        class: if idx == visible_data().1 { "lyric-line active" } else { "lyric-line" },
                         "{line.text}"
                     }
                 }
             }
+            button { class: "lyrics-show-button", "Show lyrics" }
         }
     }
 }

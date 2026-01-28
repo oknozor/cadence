@@ -4,7 +4,7 @@ use crate::components::{
 };
 use crate::navigation::navbar::HIDE_PLAYER;
 use cadence_core::hooks::use_lyrics;
-use cadence_core::state::{ControllerExt, ControllerStoreExt, CONTROLLER};
+use cadence_core::state::{CONTROLLER, ControllerExt, ControllerStoreExt};
 use dioxus::document::eval;
 use dioxus::prelude::*;
 
@@ -45,10 +45,7 @@ pub fn NowPlayingView() -> Element {
 
     let gradient_style = use_memo(move || {
         let color = dominant_color();
-        format!(
-            "background: {}",
-            color
-        )
+        format!("background: {}", color)
     });
 
     rsx! {
@@ -293,5 +290,7 @@ async fn extract_vibrant_color() -> String {
 
     let mut eval = eval(js_code);
 
-    eval.recv::<String>().await.unwrap_or_else(|_| String::from("rgba(0, 0, 0, 0.3)"))
+    eval.recv::<String>()
+        .await
+        .unwrap_or_else(|_| String::from("rgba(0, 0, 0, 0.3)"))
 }

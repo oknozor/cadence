@@ -1,6 +1,6 @@
-use crate::model::RadioStation;
-use crate::player::{stream_url, AudioBackendStateUpdate};
 use crate::PlayerCommand;
+use crate::model::RadioStation;
+use crate::player::{AudioBackendStateUpdate, stream_url};
 use howler_wasm::JsHowl;
 use std::cell::RefCell;
 use std::collections::VecDeque;

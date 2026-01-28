@@ -2,7 +2,7 @@ use crate::components::{
     AudioIdentificationIcon, HomeIcon, LibraryIcon, Player, PlusIcon, RadioPlayer, SearchIcon,
 };
 use crate::views::Route;
-use cadence_core::state::{ControllerStoreExt, CONTROLLER};
+use cadence_core::state::{CONTROLLER, ControllerStoreExt};
 use dioxus::prelude::*;
 use std::time::Duration;
 
