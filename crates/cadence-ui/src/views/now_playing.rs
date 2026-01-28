@@ -1,11 +1,10 @@
 use crate::components::{
-    AlbumCover, AlbumCoverBackground, BackButton, DotIcon, ItemInfo, LyricsCard, NextIcon,
-    PlayIconCircle, PlayerProgress, PlusIcon, PreviousIcon, RandomIcon, ShuffleIcon,
-    VerticalScroller,
+    BackButton, DotIcon, ItemInfo, LyricsCard, NextIcon, PlayIconCircle, PlayerProgress, PlusIcon,
+    PreviousIcon, RandomIcon, ShuffleIcon, VerticalScroller,
 };
 use crate::navigation::navbar::HIDE_PLAYER;
 use cadence_core::hooks::use_lyrics;
-use cadence_core::state::{ControllerExt, ControllerStoreExt, CONTROLLER};
+use cadence_core::state::{CONTROLLER, ControllerExt, ControllerStoreExt};
 use dioxus::prelude::*;
 
 #[component]
@@ -13,7 +12,7 @@ pub fn NowPlayingView() -> Element {
     use_hook(|| *HIDE_PLAYER.write() = true);
     use_drop(|| *HIDE_PLAYER.write() = false);
 
-    let mut controller = CONTROLLER.resolve();
+    let controller = CONTROLLER.resolve();
     let current = controller.current();
 
     // Signals for current track info (for lyrics hook)
@@ -44,11 +43,11 @@ pub fn NowPlayingView() -> Element {
 
     rsx! {
         BackButton {}
-        VerticalScroller { 
+        VerticalScroller {
             div { class: "now-playing-view",
                 if let Some(track) = current {
                     if let Some(src) = track.read().1.cover_art.clone() {
-                        AlbumCoverBackground { src: track.read().1.cover_art.clone().unwrap_or_default(),
+                        AlbumCoverBackground {
                             div { class: "now-playing-header",
                                 div { class: "now-playing-header-title",
                                     span { "PLAYING FROM ALBUM" }
@@ -56,6 +55,8 @@ pub fn NowPlayingView() -> Element {
                                 }
                                 div { class: "header-end", DotIcon {} }
                             }
+
+                            img { class: "album-cover-image", src, alt: "Album cover" }
 
                             div { class: "track-control",
                                 div { class: "track-info",
@@ -75,9 +76,27 @@ pub fn NowPlayingView() -> Element {
     }
 }
 
+#[derive(Props, Clone, PartialEq)]
+pub struct AlbumCoverBackgroundProps {
+    #[props(extends = GlobalAttributes)]
+    pub attributes: Vec<Attribute>,
+    pub children: Element,
+}
+
+#[component]
+pub fn AlbumCoverBackground(props: AlbumCoverBackgroundProps) -> Element {
+    rsx! {
+        div {
+            class: "album-cover-background",
+            ..props.attributes,
+            {props.children}
+        }
+    }
+}
+
 #[component]
 fn PlayerProgressAndTiming() -> Element {
-    let mut controller = CONTROLLER.resolve();
+    let controller = CONTROLLER.resolve();
     let current = controller.current();
 
     let track_duration = current
@@ -102,7 +121,7 @@ fn PlayerProgressAndTiming() -> Element {
             }
         }
     } else {
-        rsx! {  }
+        rsx! {}
     }
 }
 
