@@ -1,0 +1,17 @@
+@import "../../../../assets/mixins.scss";
+@import "../../../../assets/theme.scss";
+
+.artist-about {
+  @include column;
+  gap: $gap-small;
+
+  .wikidata-summary {
+    @include text-secondary(16px);
+    color: $secondary-color-5;
+    line-height: 1.5;
+
+    a {
+      color: #2196f3;
+    }
+  }
+}

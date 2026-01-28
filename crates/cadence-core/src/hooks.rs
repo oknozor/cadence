@@ -314,19 +314,19 @@ pub fn use_artist_concerts(
 ) -> Resource<Result<Vec<Concert>, CapturedError>> {
     use crate::services::ticketmaster_client::TicketmasterClient;
 
-    tracing::info!("[Ticketmaster] use_artist_concerts hook called");
+    info!("[Ticketmaster] use_artist_concerts hook called");
 
     use_resource(move || {
         let artist = artist_name();
-        tracing::info!("[Ticketmaster] Resource triggered for artist: '{}'", artist);
+        info!("[Ticketmaster] Resource triggered for artist: '{}'", artist);
         async move {
-            tracing::info!(
+            info!(
                 "[Ticketmaster] Async block started for artist: '{}'",
                 artist
             );
 
             if artist.is_empty() {
-                tracing::info!("[Ticketmaster] Artist name is empty, returning empty list");
+                info!("[Ticketmaster] Artist name is empty, returning empty list");
                 return Ok(vec![]);
             }
 
@@ -341,7 +341,7 @@ pub fn use_artist_concerts(
                 TicketmasterSettings::default,
             );
 
-            tracing::info!(
+            debug!(
                 "[Ticketmaster] Settings loaded - api_key: '{}', cities: {:?}, radius: {}km, configured: {}",
                 settings.api_key,
                 settings.preferred_cities,
@@ -350,7 +350,7 @@ pub fn use_artist_concerts(
             );
 
             if !settings.is_configured() {
-                tracing::info!("[Ticketmaster] Not configured, skipping concert search");
+                info!("[Ticketmaster] Not configured, skipping concert search");
                 return Ok(vec![]);
             }
 

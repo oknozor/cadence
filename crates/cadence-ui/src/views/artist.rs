@@ -1,3 +1,4 @@
+use crate::components::{ArtistAbout, ArtistLiveEvents};
 use crate::{
     components::{AlbumList, ArtistGrid, BackButton, RoundedThumbnail, VerticalScroller},
     views::Route,
@@ -12,11 +13,8 @@ pub fn ArtistView(id: ReadSignal<String>) -> Element {
     let artist = use_artist(current_id);
     let mut scroll = use_signal(|| None);
 
-    // Create a signal for artist name that updates when artist changes
-    // This must be at the top level, not inside conditional blocks
     let mut artist_name_signal = use_signal(String::new);
 
-    // Update artist name when artist data is available
     use_effect(move || {
         if let Some(ref a) = artist() {
             if artist_name_signal() != a.name {
@@ -26,11 +24,9 @@ pub fn ArtistView(id: ReadSignal<String>) -> Element {
         }
     });
 
-    // Call the concerts hook unconditionally at the top level
     let concerts = use_artist_concerts(artist_name_signal);
 
     use_effect(move || {
-        // reading the current id, so it becomes a dependency of the effect
         let _ = current_id.read();
         scroll.set(Some(0.0));
     });
@@ -46,7 +42,6 @@ pub fn ArtistView(id: ReadSignal<String>) -> Element {
     };
 
     if let Some(artist) = artist() {
-        // Log concert resource state
         let concerts_state = concerts();
         tracing::info!(
             "[ArtistView] Concerts resource state: {:?}",
@@ -82,7 +77,7 @@ pub fn ArtistView(id: ReadSignal<String>) -> Element {
                     // Concert section
                     if let Some(Ok(concert_list)) = concerts_state {
                         if !concert_list.is_empty() {
-                            ArtistConcerts { concerts: concert_list }
+                            ArtistLiveEvents { concerts: concert_list }
                         }
                     }
 
@@ -107,42 +102,6 @@ pub fn ArtistView(id: ReadSignal<String>) -> Element {
     } else {
         rsx! {
             div { class: "loading" }
-        }
-    }
-}
-
-#[component]
-pub fn ArtistAbout(bio: String) -> Element {
-    rsx! {
-        section { class: "artist-section",
-            h2 { "About" }
-            div { class: "wikidata-summary", dangerous_inner_html: bio }
-        }
-    }
-}
-
-#[component]
-pub fn ArtistConcerts(concerts: Vec<Concert>) -> Element {
-    rsx! {
-        section { class: "artist-section artist-concerts",
-            h2 { "Upcoming Concerts" }
-            div { class: "concerts-list",
-                for concert in concerts {
-                    a {
-                        class: "concert-item",
-                        href: "{concert.url}",
-                        target: "_blank",
-                        rel: "noopener noreferrer",
-                        div { class: "concert-date", "{concert.date}" }
-                        div { class: "concert-details",
-                            div { class: "concert-name", "{concert.name}" }
-                            div { class: "concert-venue", "{concert.venue}" }
-                            div { class: "concert-location", "{concert.city}, {concert.country}" }
-                        }
-                        div { class: "concert-tickets", "Get Tickets →" }
-                    }
-                }
-            }
         }
     }
 }

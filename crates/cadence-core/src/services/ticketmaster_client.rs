@@ -1,3 +1,4 @@
+use chrono::NaiveDate;
 use reqwest::Client;
 use serde::Deserialize;
 
@@ -63,7 +64,7 @@ pub struct EventDates {
 #[derive(Debug, Deserialize)]
 pub struct EventStart {
     #[serde(rename = "localDate")]
-    pub local_date: Option<String>,
+    pub local_date: Option<NaiveDate>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -92,7 +93,7 @@ pub struct VenueCountry {
 #[derive(Debug, Clone, PartialEq)]
 pub struct Concert {
     pub name: String,
-    pub date: String,
+    pub date: NaiveDate,
     pub venue: String,
     pub city: String,
     pub country: String,
@@ -157,6 +158,7 @@ impl TicketmasterClient {
             Some(embedded) => embedded
                 .events
                 .into_iter()
+                .filter(|concert| concert.dates.start.local_date.is_some())
                 .map(|event| {
                     let (venue, city, country) = event
                         .embedded
@@ -172,7 +174,7 @@ impl TicketmasterClient {
 
                     Concert {
                         name: event.name,
-                        date: event.dates.start.local_date.unwrap_or_default(),
+                        date: event.dates.start.local_date.expect("Date should be set"),
                         venue,
                         city,
                         country,

@@ -1,0 +1,43 @@
+@import "../../../../assets/mixins.scss";
+@import "../../../../assets/theme.scss";
+
+.artist-events {
+  @include column;
+  gap: $gap-big;
+
+  .concerts-list {
+    @include column;
+    gap: $gap-small;
+  }
+
+  .concert-item {
+    text-decoration: none;
+    color: inherit;
+
+    .concert-item-content {
+      @include row;
+      gap: $gap-medium;
+    }
+  }
+}
+
+.event-date-card {
+  @include column;
+  gap: $gap-small;
+  border-radius: 4px;
+  background-color: $primary-color-4;
+  color: $secondary-color-1;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+
+  .event-date-month {
+    font-size: 12px;
+  }
+
+  .event-date-day {
+    font-size: 18px;
+    font-weight: 600;
+  }
+}

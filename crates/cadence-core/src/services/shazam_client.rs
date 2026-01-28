@@ -1,4 +1,5 @@
 use crate::model::{Geolocation, ShazamMusic, ShazamRequestBody, ShazamResponse, ShazamSignature};
+use rand::prelude::IndexedRandom;
 use rand::seq::SliceRandom;
 use reqwest::Client;
 use uuid::Uuid;
@@ -60,7 +61,7 @@ impl ShazamClient {
         let uuid_dns = Uuid::new_v5(&Uuid::NAMESPACE_DNS, seed.as_bytes()).to_string();
         let uuid_url = Uuid::new_v5(&Uuid::NAMESPACE_URL, seed.as_bytes()).to_string();
 
-        // Select random user agent
+        // Select a random user agent
         let user_agent = USER_AGENTS
             .choose(&mut rand::thread_rng())
             .unwrap_or(&USER_AGENTS[0]);
