@@ -47,7 +47,8 @@
 
   .album-cover-background {
     @include column;
-    padding-bottom: 30px;
+    @include gutters-x($page-gutter-x);
+    margin-bottom: $navbar-reserved-space;
     padding-top: 30px;
     justify-content: space-between;
     background-size: contain;
