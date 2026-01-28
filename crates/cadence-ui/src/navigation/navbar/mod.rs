@@ -2,9 +2,11 @@ use crate::components::{
     AudioIdentificationIcon, HomeIcon, LibraryIcon, Player, PlusIcon, RadioPlayer, SearchIcon,
 };
 use crate::views::Route;
-use cadence_core::state::{CONTROLLER, ControllerStoreExt};
+use cadence_core::state::{ControllerStoreExt, CONTROLLER};
 use dioxus::prelude::*;
 use std::time::Duration;
+
+pub static HIDE_PLAYER: GlobalSignal<bool> = Signal::global(|| false);
 
 #[component]
 pub fn Navbar() -> Element {
@@ -32,7 +34,7 @@ pub fn Navbar() -> Element {
         div { class: "navbar-container",
             if is_radio_playing {
                 RadioPlayer {}
-            } else {
+            } else if !HIDE_PLAYER() {
                 Player {}
             }
             div { id: "navbar",
@@ -107,9 +109,7 @@ pub fn NavbarItem(
                 });
                 onclick.call(())
             },
-            div { class: if animate() { "navbar-item-icon active" } else { "navbar-item-icon" },
-                {children}
-            }
+            div { class: if animate() { "navbar-item-icon active" } else { "navbar-item-icon" }, {children} }
             div { class: "navbar-item-label", "{label}" }
         }
     }
