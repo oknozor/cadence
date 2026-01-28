@@ -4,7 +4,8 @@ use crate::components::{
 };
 use crate::navigation::navbar::HIDE_PLAYER;
 use cadence_core::hooks::use_lyrics;
-use cadence_core::state::{CONTROLLER, ControllerExt, ControllerStoreExt};
+use cadence_core::state::{ControllerExt, ControllerStoreExt, CONTROLLER};
+use dioxus::document::eval;
 use dioxus::prelude::*;
 
 #[component]
@@ -19,6 +20,7 @@ pub fn NowPlayingView() -> Element {
     let mut current_artist = use_signal(String::new);
     let mut current_title = use_signal(String::new);
     let mut current_duration = use_signal(|| None::<u64>);
+    let mut dominant_color = use_signal(|| String::from("rgba(0, 0, 0, 0.3)"));
 
     // Update signals when track changes
     use_effect(move || {
@@ -41,10 +43,18 @@ pub fn NowPlayingView() -> Element {
     let lyrics = use_lyrics(current_artist, current_title, current_duration);
     let position_ms = use_memo(move || (controller.position().read().as_millis()) as u64);
 
+    let gradient_style = use_memo(move || {
+        let color = dominant_color();
+        format!(
+            "background: {}",
+            color
+        )
+    });
+
     rsx! {
         BackButton {}
         VerticalScroller {
-            div { class: "now-playing-view",
+            div { class: "now-playing-view", style: "{gradient_style}",
                 if let Some(track) = current {
                     if let Some(src) = track.read().1.cover_art.clone() {
                         AlbumCoverBackground {
@@ -56,11 +66,26 @@ pub fn NowPlayingView() -> Element {
                                 div { class: "header-end", DotIcon {} }
                             }
 
-                            img { class: "album-cover-image", src, alt: "Album cover" }
+                            img {
+                                class: "album-cover-image",
+                                id: "now-playing-cover",
+                                crossorigin: "anonymous",
+                                src,
+                                alt: "Album cover",
+                                onload: move |_| {
+                                    spawn(async move {
+                                        let color = extract_vibrant_color().await;
+                                        dominant_color.set(color);
+                                    });
+                                },
+                            }
 
                             div { class: "track-control",
                                 div { class: "track-info",
-                                    ItemInfo { primary: track.read().1.title.clone(), secondary: track.read().1.artist.clone() }
+                                    ItemInfo {
+                                        primary: track.read().1.title.clone(),
+                                        secondary: track.read().1.artist.clone(),
+                                    }
                                     PlusIcon { filled: false }
                                 }
                                 PlayerProgressAndTiming {}
@@ -86,11 +111,7 @@ pub struct AlbumCoverBackgroundProps {
 #[component]
 pub fn AlbumCoverBackground(props: AlbumCoverBackgroundProps) -> Element {
     rsx! {
-        div {
-            class: "album-cover-background",
-            ..props.attributes,
-            {props.children}
-        }
+        div { class: "album-cover-background", ..props.attributes, {props.children} }
     }
 }
 
@@ -112,7 +133,7 @@ fn PlayerProgressAndTiming() -> Element {
         rsx! {
             PlayerProgress {
                 value: controller.position_f64(),
-                max: track.read().1.duration.unwrap_or_default() as f64
+                max: track.read().1.duration.unwrap_or_default() as f64,
             }
 
             div { class: "timing-progress",
@@ -188,4 +209,89 @@ fn PlayerControls() -> Element {
             }
         }
     }
+}
+
+/// Extract the most vibrant color from an image element using eval
+async fn extract_vibrant_color() -> String {
+    let js_code = r#"
+        try {
+            const img = document.getElementById('now-playing-cover');
+            if (!img || !img.complete) {
+                dioxus.send('rgba(0, 0, 0, 0.3)');
+                return;
+            }
+
+            // Create an off-screen canvas
+            const canvas = document.createElement('canvas');
+            const sampleSize = 50;
+            canvas.width = sampleSize;
+            canvas.height = sampleSize;
+
+            const ctx = canvas.getContext('2d');
+            if (!ctx) {
+                dioxus.send('rgba(0, 0, 0, 0.3)');
+                return;
+            }
+
+            // Draw the image scaled down
+            ctx.drawImage(img, 0, 0, sampleSize, sampleSize);
+
+            // Get image data
+            const imageData = ctx.getImageData(0, 0, sampleSize, sampleSize);
+            const data = imageData.data;
+
+            // Find the most vibrant (highest saturation) color
+            let bestR = 0, bestG = 0, bestB = 0;
+            let maxSaturation = 0;
+
+            for (let i = 0; i < data.length; i += 4) {
+                const r = data[i];
+                const g = data[i + 1];
+                const b = data[i + 2];
+
+                // Calculate saturation (difference between max and min RGB values)
+                const max = Math.max(r, g, b);
+                const min = Math.min(r, g, b);
+                const lightness = (max + min) / 2;
+
+                // Skip very dark or very light pixels
+                if (lightness < 30 || lightness > 220) continue;
+
+                // Calculate saturation (HSL formula)
+                let saturation = 0;
+                if (max !== min) {
+                    saturation = lightness > 127
+                        ? (max - min) / (510 - max - min)
+                        : (max - min) / (max + min);
+                }
+
+                if (saturation > maxSaturation) {
+                    maxSaturation = saturation;
+                    bestR = r;
+                    bestG = g;
+                    bestB = b;
+                }
+            }
+
+            // If no vibrant color found, fall back to default
+            if (maxSaturation === 0) {
+                dioxus.send('rgba(0, 0, 0, 0.3)');
+                return;
+            }
+
+            // Slightly darken the color for a rich gradient effect
+            const rDark = Math.floor(bestR * 0.7);
+            const gDark = Math.floor(bestG * 0.7);
+            const bDark = Math.floor(bestB * 0.7);
+
+            dioxus.send(`rgba(${rDark}, ${gDark}, ${bDark}, 0.85)`);
+        } catch (e) {
+            console.error('Error extracting color:', e);
+            dioxus.send('rgba(0, 0, 0, 0.3)');
+        }
+    "#;
+
+    let mut eval = eval(js_code);
+
+    eval.recv::<String>().await.unwrap_or_else(|_| String::from("rgba(0, 0, 0, 0.3)"))
 }

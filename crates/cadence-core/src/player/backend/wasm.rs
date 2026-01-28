@@ -1,5 +1,6 @@
+use crate::model::RadioStation;
+use crate::player::{stream_url, AudioBackendStateUpdate};
 use crate::PlayerCommand;
-use crate::player::{AudioBackendStateUpdate, stream_url};
 use howler_wasm::JsHowl;
 use std::cell::RefCell;
 use std::collections::VecDeque;
@@ -84,13 +85,13 @@ impl AudioBackend {
         Ok(())
     }
 
-    pub async fn play_radio(&self, stream_url: &str) -> Result<(), MusicPlayerError> {
-        tracing::info!("Playing radio stream: {stream_url}");
+    pub async fn play_radio(&self, radio: &RadioStation) -> Result<(), MusicPlayerError> {
+        tracing::info!("Playing radio stream: {}", radio.name);
 
         // Clear the queue and play the radio stream
         self.queue.borrow_mut().clear();
 
-        let howl = JsHowl::new(stream_url.to_string());
+        let howl = JsHowl::new(radio.stream_url.to_string());
         howl.play();
 
         self.queue.borrow_mut().push_back(howl);

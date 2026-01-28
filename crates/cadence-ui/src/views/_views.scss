@@ -11,9 +11,9 @@
 @import "../../assets/theme.scss";
 
 .view {
-    @include column;
-    box-sizing: border-box;
-    flex: 1;
-    min-height: 0;
-    overflow: hidden;
+  @include column;
+  box-sizing: border-box;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
 }
