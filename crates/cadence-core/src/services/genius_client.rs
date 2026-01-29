@@ -51,7 +51,7 @@ impl std::fmt::Display for LyricSource {
     }
 }
 
-/// A single line of synchronized lyrics with timestamp in milliseconds
+/// A single line of synchronized lyrics with a timestamp in milliseconds
 #[derive(Debug, Clone, PartialEq)]
 pub struct SyncedLyricLine {
     pub time_ms: u64,
