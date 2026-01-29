@@ -1,6 +1,6 @@
 use cadence_core::services::genius_client::{LyricsResult, SyncedLyricLine};
-use dioxus::CapturedError;
 use dioxus::prelude::*;
+use dioxus::CapturedError;
 
 #[component]
 pub fn LyricsCard(
@@ -14,29 +14,20 @@ pub fn LyricsCard(
                     SynchronizedLyrics {
                         lines: synced_lyrics.clone(),
                         position_ms,
-                        source: result.source.to_string(),
+                        source: result.source.to_string()
                     }
                 }
             } else {
                 rsx! {
-                    UnsynchronizedLyrics {
-                        lyrics: result.lyrics.clone(),
-                        source: result.source.to_string(),
-                    }
+                    UnsynchronizedLyrics { lyrics: result.lyrics.clone(), source: result.source.to_string() }
                 }
             }
         }
-        Some(Err(_)) => {
+        _ => {
             rsx! {
-                div { class: "lyrics-container lyrics-error",
-                    div { class: "lyrics-message", "Lyrics not available" }
-                }
-            }
-        }
-        None => {
-            rsx! {
-                div { class: "lyrics-container lyrics-loading",
-                    div { class: "lyrics-message", "Loading lyrics..." }
+                div { class: "lyrics-container",
+                    div { class: "lyrics-spinner" }
+                    div { class: "lyrics-message", "Lyrics Loading..." }
                 }
             }
         }
@@ -101,17 +92,13 @@ fn SynchronizedLyrics(
     });
 
     rsx! {
-        div { class: "lyrics-preview",
-            div { class: "lyrics-preview-header",
+        div { class: "lyrics-container",
+            div { class: "lyrics-container-header",
                 span { "Lyrics preview" }
             }
-            div { class: "lyrics-preview-lines",
+            div { class: "lyrics-lines-container",
                 for (idx , line) in visible_data().0.iter().enumerate() {
-                    p {
-                        key: "{idx}",
-                        class: if idx == visible_data().1 { "lyric-line active" } else { "lyric-line" },
-                        "{line.text}"
-                    }
+                    p { key: "{idx}", class: if idx == visible_data().1 { "lyric-line active" } else { "lyric-line" }, "{line.text}" }
                 }
             }
             button { class: "lyrics-show-button", "Show lyrics" }

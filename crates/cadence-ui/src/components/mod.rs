@@ -24,3 +24,6 @@ pub use radio::*;
 
 mod search;
 pub use search::*;
+
+mod queue;
+pub use queue::*;

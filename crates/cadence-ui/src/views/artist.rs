@@ -4,7 +4,6 @@ use crate::{
     views::Route,
 };
 use cadence_core::hooks::{use_artist, use_artist_concerts};
-use cadence_core::services::ticketmaster_client::Concert;
 use dioxus::prelude::*;
 
 #[component]

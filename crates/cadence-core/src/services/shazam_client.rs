@@ -1,5 +1,4 @@
 use crate::model::{Geolocation, ShazamMusic, ShazamRequestBody, ShazamResponse, ShazamSignature};
-use rand::prelude::IndexedRandom;
 use rand::seq::SliceRandom;
 use reqwest::Client;
 use uuid::Uuid;

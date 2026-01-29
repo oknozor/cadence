@@ -1,10 +1,10 @@
 use crate::components::{
-    BackButton, DotIcon, ItemInfo, LyricsCard, NextIcon, PlayIconCircle, PlayerProgress, PlusIcon,
-    PreviousIcon, RandomIcon, ShuffleIcon, VerticalScroller,
+    BackButton, DotIcon, ItemInfo, LibraryIcon, LyricsCard, NextIcon, PlayIconCircle,
+    PlayerProgress, PlusIcon, PreviousIcon, QueueModal, RandomIcon, ShuffleIcon, VerticalScroller,
 };
 use crate::navigation::navbar::HIDE_PLAYER;
 use cadence_core::hooks::use_lyrics;
-use cadence_core::state::{CONTROLLER, ControllerExt, ControllerStoreExt};
+use cadence_core::state::{ControllerExt, ControllerStoreExt, CONTROLLER};
 use dioxus::document::eval;
 use dioxus::prelude::*;
 
@@ -21,6 +21,7 @@ pub fn NowPlayingView() -> Element {
     let mut current_title = use_signal(String::new);
     let mut current_duration = use_signal(|| None::<u64>);
     let mut dominant_color = use_signal(|| String::from("rgba(0, 0, 0, 0.3)"));
+    let mut queue_open = use_signal(|| false);
 
     // Update signals when track changes
     use_effect(move || {
@@ -60,7 +61,12 @@ pub fn NowPlayingView() -> Element {
                                     span { "PLAYING FROM ALBUM" }
                                     h2 { "{track.read().1.album}" }
                                 }
-                                div { class: "header-end", DotIcon {} }
+                                div { class: "header-end",
+                                    button { onclick: move |_| queue_open.set(true),
+                                        LibraryIcon { filled: false }
+                                    }
+                                    DotIcon {}
+                                }
                             }
 
                             img {
@@ -95,6 +101,7 @@ pub fn NowPlayingView() -> Element {
                 }
             }
         }
+        QueueModal { open: queue_open }
     }
 }
 

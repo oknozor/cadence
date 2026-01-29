@@ -44,5 +44,5 @@ thiserror = "2.0.18"
 url = "2.5.7"
 dirs = "6.0.0"
 uuid = { version = "1.0", features = ["v5"] }
-rand = "0.9"
+rand = "0.8"
 base64 = "0.22"
